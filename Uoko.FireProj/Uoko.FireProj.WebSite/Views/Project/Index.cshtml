@@ -37,6 +37,29 @@
                             </div>
                         </div>
                         <div class="form-group form-md-line-input">
+                            <label class="col-md-2 control-label" for="form_control_1">IIS站点名称</label>
+                            <div class="col-md-10">
+                                <input type="text" class="form-control" id="form_control_1" ng-model="model.SiteNmae" placeholder="请输入IIS站点名称" required>
+                                <div class="form-control-focus">
+                                </div>
+                                <span class="help-block">IIS站点名称是必填</span>
+                            </div>
+
+                        </div>
+
+                        <div class="form-group form-md-line-input">
+                            <label class="col-md-2 control-label" for="form_control_1">Project Repo</label>
+                            <div class="col-md-10">
+                                <select class="form-control" id="form_control_1" ng-model="model.ProjectRepo">
+                                    <option ng-repeat="project in ProjectList" value="{{project.http_url_to_repo}}" ng-selected="project.http_url_to_repo == project.http_url_to_repo">{{project.name}}</option>
+                                </select>
+                                <div class="form-control-focus">
+                                </div>
+                                <span class="help-block">IIS站点名称是必填</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group form-md-line-input">
                             <label class="col-md-2 control-label" for="form_control_1">项目描述</label>
                             <div class="col-md-10">
                                 <textarea class="form-control" rows="3" ng-model="model.ProjectDesc"></textarea>

@@ -40,8 +40,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IprojectSvc.cs" />
+    <Compile Include="IProjectSvc.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Uoko.FireProj.DataAccess\Uoko.FireProj.DataAccess.csproj">
+      <Project>{efb5f078-cf15-41f0-89d1-dba2c9fb975d}</Project>
+      <Name>Uoko.FireProj.DataAccess</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Uoko.FireProj.Infrastructure\Uoko.FireProj.Infrastructure.csproj">
+      <Project>{0f9b4279-5539-4035-8764-36e4cfa3a361}</Project>
+      <Name>Uoko.FireProj.Infrastructure</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -7,7 +7,7 @@ using System.Web.Http;
 
 namespace Uoko.FireProj.WebSite.ControllerApi
 {
-    public class BaseControllerApi : ApiController
+    public class BaseApiController : ApiController
     {
     }
 }
