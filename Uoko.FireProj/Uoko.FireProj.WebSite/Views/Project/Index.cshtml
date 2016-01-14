@@ -51,7 +51,7 @@
                             <label class="col-md-2 control-label" for="form_control_1">Project Repo</label>
                             <div class="col-md-10">
                                 <select class="form-control" id="form_control_1" ng-model="model.ProjectRepo">
-                                    <option ng-repeat="project in ProjectList" value="{{project.http_url_to_repo}}" ng-selected="project.http_url_to_repo == project.http_url_to_repo">{{project.name}}</option>
+                                    <option ng-repeat="project in ProjectList" value="{{project.http_url_to_repo}}" ng-selected="project.http_url_to_repo == model.http_url_to_repo">{{project.name}}</option>
                                 </select>
                                 <div class="form-control-focus">
                                 </div>

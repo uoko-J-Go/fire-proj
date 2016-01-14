@@ -120,6 +120,7 @@ fireproj.controller("ProjectController", function ($scope, $http, ProjectService
     $scope.OpenForm = function () {
         $scope.formTile = "项目新增";
         $scope.isShowForm = true;
+        $scope.model = null;
     }
 
     $scope.CancelForm = function () {
