@@ -56,13 +56,37 @@
     <Compile Include="AutoMapper\AutoMapper.cs" />
     <Compile Include="Dto\ProjectDto.cs" />
     <Compile Include="Entity\BaseEntity.cs" />
+    <Compile Include="Entity\Dictionary.cs" />
     <Compile Include="Entity\Project.cs" />
+    <Compile Include="Entity\ResourceInfo.cs" />
+    <Compile Include="Entity\Task.cs" />
+    <Compile Include="Entity\TaskLogs.cs" />
+    <Compile Include="Enum\DeployEnum.cs" />
+    <Compile Include="Enum\DicEnum.cs" />
+    <Compile Include="Enum\ResourceEnum.cs" />
+    <Compile Include="Enum\TaskEnum.cs" />
     <Compile Include="Extensions\DbContextExtensions.cs" />
     <Compile Include="FireProjDbContext.cs" />
+    <Compile Include="FluentAPI\DictionaryMap.cs" />
     <Compile Include="FluentAPI\ProjectMap.cs" />
+    <Compile Include="FluentAPI\ResourceInfoMap.cs" />
+    <Compile Include="FluentAPI\TaskLogsMap.cs" />
+    <Compile Include="FluentAPI\TaskInfoMap.cs" />
     <Compile Include="Migrations\201601140333406_addproject.cs" />
     <Compile Include="Migrations\201601140333406_addproject.Designer.cs">
       <DependentUpon>201601140333406_addproject.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201601140907522_updateprojectserverip.cs" />
+    <Compile Include="Migrations\201601140907522_updateprojectserverip.Designer.cs">
+      <DependentUpon>201601140907522_updateprojectserverip.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201601190318591_updateentity.cs" />
+    <Compile Include="Migrations\201601190318591_updateentity.Designer.cs">
+      <DependentUpon>201601190318591_updateentity.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201601190323094_updatetable.cs" />
+    <Compile Include="Migrations\201601190323094_updatetable.Designer.cs">
+      <DependentUpon>201601190323094_updatetable.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -76,6 +100,15 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201601140333406_addproject.resx">
       <DependentUpon>201601140333406_addproject.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201601140907522_updateprojectserverip.resx">
+      <DependentUpon>201601140907522_updateprojectserverip.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201601190318591_updateentity.resx">
+      <DependentUpon>201601190318591_updateentity.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201601190323094_updatetable.resx">
+      <DependentUpon>201601190323094_updatetable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

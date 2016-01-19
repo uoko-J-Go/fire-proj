@@ -27,7 +27,7 @@ fireproj.service("ProjectService", function ($http) {
     };
 
     //获取gitlab所有项目信息
-    this.getGitlbProject=function(){
+    this.getGitlbProject = function () {
         return $http.get("http://gitlab.uoko.ioc:12015/api/v3/projects?private_token=JX4Gb7W_gfp7PdzpBjpG");
     };
 });
@@ -41,10 +41,10 @@ fireproj.controller("ProjectController", function ($scope, $http, ProjectService
     $scope.tableOptions = {
         url: '/api/ProjectApi',
         columns: [
-            { field: 'Id', title: 'Id', align: 'center', width: 280 },
+            { field: 'Id', title: 'Id', align: 'center', width: 50 },
             { field: 'ProjectName', title: '项目名称', align: 'center' },
-            { field: 'SiteNmae', title: '站点名称', align: 'center' },
-            { field: 'ProjectRepo', title: 'Repo', align: 'center' },
+            { field: 'ProjectFileName', title: '项目文件', align: 'center' },
+            { field: 'ProjectRepo', title: '项目地址', align: 'center' },
             { field: 'ProjectDesc', title: '项目描述', align: 'center' },
             {
                 title: '操作', align: 'center', width: 200, formatter: function (value, row, index) {

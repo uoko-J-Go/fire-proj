@@ -36,7 +36,7 @@ namespace Uoko.FireProj.Concretes
                 using (var dbScope = _dbScopeFactory.Create())
                 {
                     var db = dbScope.DbContexts.Get<FireProjDbContext>();
-                    var data = db.Companies.Add(entity);
+                    var data = db.Project.Add(entity);
                     db.SaveChanges();
                 }
             }
@@ -54,8 +54,8 @@ namespace Uoko.FireProj.Concretes
                 {
                     var db = dbScope.DbContexts.Get<FireProjDbContext>();
                     Project entity = new Project() { Id = projectId };
-                    db.Companies.Attach(entity);
-                    db.Companies.Remove(entity);
+                    db.Project.Attach(entity);
+                    db.Project.Remove(entity);
                     db.SaveChanges();
                 }
             }
@@ -74,7 +74,7 @@ namespace Uoko.FireProj.Concretes
                 using (var dbScope = _dbScopeFactory.Create())
                 {
                     var db = dbScope.DbContexts.Get<FireProjDbContext>();
-                    db.Update(entity, r => new { r.ProjectDesc,r.ProjectName,r.ProjectRepo,r.SiteNmae });
+                    db.Update(entity, r => new { r.ProjectDesc, r.ProjectName, r.ProjectRepo, r.ProjectFileName });
                     db.SaveChanges();
                 }
             }
@@ -89,13 +89,14 @@ namespace Uoko.FireProj.Concretes
             using (var dbScope = _dbScopeFactory.CreateReadOnly())
             {
                 var db = dbScope.DbContexts.Get<FireProjDbContext>();
-                var data = db.Companies.Where(r => r.Id == projectId).Select(r => new ProjectDto()
+                var data = db.Project.Where(r => r.Id == projectId).Select(r => new ProjectDto()
                 {
                     Id = r.Id,
                     ProjectName = r.ProjectName,
-                    SiteNmae = r.SiteNmae,
                     ProjectRepo = r.ProjectRepo,
                     ProjectDesc = r.ProjectDesc,
+                    ProjectFileName = r.ProjectFileName,
+
                 }).FirstOrDefault();
 
                 return data;
@@ -107,13 +108,13 @@ namespace Uoko.FireProj.Concretes
             using (var dbScope = _dbScopeFactory.CreateReadOnly())
             {
                 var db = dbScope.DbContexts.Get<FireProjDbContext>();
-                var data = db.Companies.Select(r => new ProjectDto
+                var data = db.Project.Select(r => new ProjectDto
                 {
                     Id = r.Id,
                     ProjectName = r.ProjectName,
-                    SiteNmae = r.SiteNmae,
                     ProjectRepo = r.ProjectRepo,
                     ProjectDesc = r.ProjectDesc,
+                    ProjectFileName = r.ProjectFileName,
                 });
                 if (!string.IsNullOrEmpty(query.Search))
                 {

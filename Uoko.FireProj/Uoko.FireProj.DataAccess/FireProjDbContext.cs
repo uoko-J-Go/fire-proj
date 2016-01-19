@@ -12,15 +12,21 @@ namespace Uoko.FireProj.Model
     public class FireProjDbContext : DbContext
     {
         #region DbSet 
-        public DbSet<Project> Companies { get; set; }
-       
+        public DbSet<Project> Project { get; set; }
+        public DbSet<Dictionary> Dictionary { get; set; }
+        public DbSet<ResourceInfo> ResourceInfo { get; set; }
+        public DbSet<TaskInfo> TaskInfo { get; set; }
+        public DbSet<TaskLogs> TaskLogs { get; set; }
         #endregion
 
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Configurations.Add(new ProjectMap());
-         
+            modelBuilder.Configurations.Add(new DictionaryMap());
+            modelBuilder.Configurations.Add(new ResourceInfoMap());
+            modelBuilder.Configurations.Add(new TaskInfoMap());
+            modelBuilder.Configurations.Add(new TaskLogsMap());
         }
     }
 }

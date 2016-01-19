@@ -5,11 +5,12 @@
 }
 
 <div ng-controller="ProjectController">
+    <!-- Grid -->
     <div ng-hide="isShowForm">
         <h1><button class="btn btn-primary btn-lg" role="button" ng-click="OpenForm()">新增</button></h1>
         <table init-Table="tableOptions" bs-table-control> </table>
     </div>
-
+    <!-- Grid -->
 
     <!-- Form -->
     <div ng-show="isShowForm">
@@ -37,25 +38,25 @@
                             </div>
                         </div>
                         <div class="form-group form-md-line-input">
-                            <label class="col-md-2 control-label" for="form_control_1">IIS站点名称</label>
+                            <label class="col-md-2 control-label" for="form_control_1">项目文件</label>
                             <div class="col-md-10">
-                                <input type="text" class="form-control" id="form_control_1" ng-model="model.SiteNmae" placeholder="请输入IIS站点名称" required>
+                                <input type="text" class="form-control" id="form_control_1" ng-model="model.ProjectFileName" placeholder="请输入项目文件" required>
                                 <div class="form-control-focus">
                                 </div>
-                                <span class="help-block">IIS站点名称是必填</span>
+                                <span class="help-block">项目文件是必填</span>
                             </div>
 
                         </div>
-
+                       
                         <div class="form-group form-md-line-input">
-                            <label class="col-md-2 control-label" for="form_control_1">Project Repo</label>
+                            <label class="col-md-2 control-label" for="form_control_1">项目地址</label>
                             <div class="col-md-10">
                                 <select class="form-control" id="form_control_1" ng-model="model.ProjectRepo">
                                     <option ng-repeat="project in ProjectList" value="{{project.http_url_to_repo}}" ng-selected="project.http_url_to_repo == model.http_url_to_repo">{{project.name}}</option>
                                 </select>
                                 <div class="form-control-focus">
                                 </div>
-                                <span class="help-block">IIS站点名称是必填</span>
+                                <span class="help-block">项目地址是必填</span>
                             </div>
                         </div>
 
