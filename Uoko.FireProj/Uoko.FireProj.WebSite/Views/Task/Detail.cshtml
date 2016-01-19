@@ -1,0 +1,42 @@
+﻿
+@{
+    ViewBag.Title = "任务详细";
+}
+
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <i class="fa fa-home"></i>
+            <a href="@Url.Action("Index","Home")">首页</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="@Url.Action("Index", "Task")">我的任务</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="#">任务详细</a>
+        </li>
+    </ul>
+</div>
+<div class="row" ng-controller="TaskController">
+    <div class="col-md-12">
+        <!-- BEGIN EXAMPLE TABLE PORTLET-->
+        <div class="portlet box blue">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-clipboard"></i>任务详细
+                </div>
+
+            </div>
+            <div class="portlet-body">
+
+            </div>
+        </div>
+        <!-- END EXAMPLE TABLE PORTLET-->
+    </div>
+</div>
+@section Scripts {
+    <script src="~/app/service/TaskEdit.js"></script>
+}
+

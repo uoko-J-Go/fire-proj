@@ -169,6 +169,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="ControllerApi\BaseApiController.cs" />
     <Compile Include="ControllerApi\ProjectApiController.cs" />
+    <Compile Include="ControllerApi\TaskApiController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ProjectController.cs" />
@@ -182,6 +183,10 @@
   <ItemGroup>
     <Content Include="app\global.js" />
     <Content Include="app\service\project.js" />
+    <Content Include="app\service\TaskCreate.js" />
+    <Content Include="app\service\TaskDetail.js" />
+    <Content Include="app\service\TaskEdit.js" />
+    <Content Include="app\service\TaskList.js" />
     <Content Include="Content\bootstrap-table-zh-CN.min.js" />
     <Content Include="Content\bootstrap-table.min.css" />
     <Content Include="Content\bootstrap-table.min.js" />
@@ -867,6 +872,7 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
+    <Content Include="Views\Task\Index.cshtml" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -882,7 +888,9 @@
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Project\Index.cshtml" />
-    <Content Include="Views\Task\Index.cshtml" />
+    <Content Include="Views\Task\Create.cshtml" />
+    <Content Include="Views\Task\Edit.cshtml" />
+    <Content Include="Views\Task\Detail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

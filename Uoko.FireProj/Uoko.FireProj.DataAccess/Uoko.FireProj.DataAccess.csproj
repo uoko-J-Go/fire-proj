@@ -55,6 +55,8 @@
   <ItemGroup>
     <Compile Include="AutoMapper\AutoMapper.cs" />
     <Compile Include="Dto\ProjectDto.cs" />
+    <Compile Include="Dto\TaskDto.cs" />
+    <Compile Include="Dto\UserDto.cs" />
     <Compile Include="Entity\BaseEntity.cs" />
     <Compile Include="Entity\Dictionary.cs" />
     <Compile Include="Entity\Project.cs" />
@@ -91,6 +93,7 @@
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Query\BaseQuery.cs" />
+    <Compile Include="Query\TaskQuery.cs" />
     <Compile Include="Query\ProjectQuery.cs" />
   </ItemGroup>
   <ItemGroup>

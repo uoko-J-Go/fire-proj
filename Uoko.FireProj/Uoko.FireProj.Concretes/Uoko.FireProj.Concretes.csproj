@@ -59,6 +59,7 @@
   <ItemGroup>
     <Compile Include="ProjectSvc.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TaskSvc.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Uoko.FireProj.Abstracts\Uoko.FireProj.Abstracts.csproj">
