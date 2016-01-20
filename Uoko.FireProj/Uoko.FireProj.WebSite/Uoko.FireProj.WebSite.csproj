@@ -187,9 +187,7 @@
     <Content Include="app\service\TaskDetail.js" />
     <Content Include="app\service\TaskEdit.js" />
     <Content Include="app\service\TaskList.js" />
-    <Content Include="Content\bootstrap-table-zh-CN.min.js" />
     <Content Include="Content\bootstrap-table.min.css" />
-    <Content Include="Content\bootstrap-table.min.js" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Images\add-tag.png" />
@@ -803,6 +801,9 @@
     <Content Include="Scripts\angular-mocks.js" />
     <Content Include="Scripts\angular.js" />
     <Content Include="Scripts\angular.min.js" />
+    <Content Include="Scripts\bootstrap-table-zh-CN.min.js" />
+    <Content Include="Scripts\bootstrap-table.js" />
+    <Content Include="Scripts\bootstrap-table.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Metronic\assets\global\css\components-md.css.map" />
