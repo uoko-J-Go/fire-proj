@@ -31,6 +31,13 @@ namespace Uoko.FireProj.WebSite.Controllers
                     MenuLevel=1,
                     Controller="Task",
                     Action="Index"
+                },
+                  new MenuTreeVM()
+                {
+                    MenuName = "数据字典",
+                    MenuLevel=1,
+                    Controller="Dictionary",
+                    Action="Index"
                 }
             };
             var  activeMenu= nodes.FirstOrDefault(t=>t.MenuLevel==1&&t.Controller.Equals(currentController,StringComparison.CurrentCultureIgnoreCase));
