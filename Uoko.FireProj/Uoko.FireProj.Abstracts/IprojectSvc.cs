@@ -44,5 +44,10 @@ namespace Uoko.FireProj.Abstracts
         /// </summary>
         /// <param name="projectId"></param>
         ProjectDto GetProjectById(int projectId);
+        /// <summary>
+        /// 获取所有项目
+        /// </summary>
+        /// <returns></returns>
+        IList<ProjectDto> GetAllProject();
     }
 }

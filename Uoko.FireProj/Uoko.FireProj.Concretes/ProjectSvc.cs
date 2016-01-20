@@ -84,6 +84,24 @@ namespace Uoko.FireProj.Concretes
             }
         }
 
+        public IList<ProjectDto> GetAllProject()
+        {
+            using (var dbScope = _dbScopeFactory.CreateReadOnly())
+            {
+                var db = dbScope.DbContexts.Get<FireProjDbContext>();
+                var data = db.Project.Select(r => new ProjectDto
+                {
+                    Id = r.Id,
+                    ProjectName = r.ProjectName,
+                    ProjectRepo = r.ProjectRepo,
+                    ProjectDesc = r.ProjectDesc,
+                    ProjectFileName = r.ProjectFileName,
+                });
+                var result = data.ToList();
+                return result;
+            }
+        }
+
         public ProjectDto GetProjectById(int projectId)
         {
             using (var dbScope = _dbScopeFactory.CreateReadOnly())

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Uoko.FireProj.DataAccess.Dto;
-using Uoko.FireProj.DataAccess.Entity;
 using Uoko.FireProj.DataAccess.Query;
 using Uoko.FireProj.Infrastructure.Data;
 
@@ -15,13 +14,13 @@ namespace Uoko.FireProj.Abstracts
         /// 新增任务
         /// </summary>
         /// <param name="task"></param>
-        void CreatTask(TaskInfo task);
+        void CreatTask(TaskDto task);
 
         /// <summary>
         /// 任务编辑
         /// </summary>
         /// <param name="task"></param>
-        void EditTask(TaskInfo task);
+        void EditTask(TaskDto task);
 
         /// <summary>
         /// 根据任务id删除任务信息

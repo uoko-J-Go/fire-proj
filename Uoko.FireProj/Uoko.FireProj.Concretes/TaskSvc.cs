@@ -27,11 +27,11 @@ namespace Uoko.FireProj.Concretes
             _dbScopeFactory = dbScopeFactory;
         }
         #endregion
-        public void CreatTask(TaskInfo task)
+        public void CreatTask(TaskDto task)
         {
             try
             {
-                var entity = task;
+                var entity = Mapper.Map<TaskDto,TaskInfo>(task);
                 using (var dbScope = _dbScopeFactory.Create())
                 {
                     var db = dbScope.DbContexts.Get<FireProjDbContext>();
@@ -64,11 +64,11 @@ namespace Uoko.FireProj.Concretes
             }
         }
 
-        public void EditTask(TaskInfo task)
+        public void EditTask(TaskDto task)
         {
             try
             {
-                var entity = task;
+                var entity = Mapper.Map<TaskDto, TaskInfo>(task); ;
                 using (var dbScope = _dbScopeFactory.Create())
                 {
                     var db = dbScope.DbContexts.Get<FireProjDbContext>();
@@ -102,7 +102,7 @@ namespace Uoko.FireProj.Concretes
             using (var dbScope = _dbScopeFactory.CreateReadOnly())
             {
                 var db = dbScope.DbContexts.Get<FireProjDbContext>();
-               
+                
 
                 return new PageGridData<TaskDto>();
             }

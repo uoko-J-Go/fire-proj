@@ -5,7 +5,7 @@ fireproj.service("TaskService", function ($http) {
 fireproj.service("ProjectService", function ($http) {
     //获取gitlab所有项目信息
     this.getAllProject = function (successCallBack) {
-        $http.get("api/ProjectApi").success(function (data) {
+        $http.get("api/ProjectApi/GetAll").success(function (data) {
             if (successCallBack != undefined) {
                 successCallBack(data);
             }
@@ -33,7 +33,6 @@ fireproj.controller("TaskController", function ($scope, $http, TaskService, Proj
     $scope.serverList = ["192.168.200.26", "192.168.200.28", "192.168.200.29"];
     $scope.siteList = ["sso.uoko.ioc", "etadmin.uoko.ioc"];
     $scope.GetProjectList = function() {
-        $scope.projectList = [{ Id: 1, ProjectName: "单点登录" }, { Id: 2, ProjectName: "波多系统" }];
         ProjectService.getAllProject(function(data) {
             $scope.ProjectList = data;
         });

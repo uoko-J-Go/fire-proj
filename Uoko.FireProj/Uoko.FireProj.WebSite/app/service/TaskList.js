@@ -2,8 +2,26 @@
 fireproj.service("TaskService", function ($http) {
     
 });
+fireproj.service("ProjectService", function ($http) {
+    //获取gitlab所有项目信息
+    this.getAllProject = function (successCallBack) {
+        $http.get("api/ProjectApi/GetAll").success(function (data) {
+            if (successCallBack != undefined) {
+                successCallBack(data);
+            }
+        }).error(function (data) {
+            //错误处理
+        });
+    };
+});
+fireproj.controller("TaskController", function ($scope, $http, TaskService, ProjectService) {
+    $scope.projectList = [];
+    $scope.GetProjectList = function () {
 
-fireproj.controller("TaskController", function ($scope, $http, TaskService) {
+        ProjectService.getAllProject(function (data) {
+            $scope.projectList = data;
+        });
+    };
     $scope.tableOptions = {
         url: '/api/TaskApi',
         columns: [
@@ -37,9 +55,14 @@ fireproj.controller("TaskController", function ($scope, $http, TaskService) {
         pagination: true,
         idField: true,
         pageList: [10, 25, 50, 100],
-        sidePagination: 'server',
+        sidePagination: 'server'
     };
 
+    $scope.Init = function () {
+        $scope.GetProjectList();
+    }
+
+    $scope.Init();
 });
 
 
