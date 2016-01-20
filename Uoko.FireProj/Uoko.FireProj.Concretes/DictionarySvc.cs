@@ -16,28 +16,25 @@ using Uoko.FireProj.Model;
 
 namespace Uoko.FireProj.Concretes
 {
-    public class ProjectSvc : IProjectSvc
+    public class DictionarySvc : IDictionarySvc
     {
-        #region 构造函数注册上下文
-
         private readonly IDbContextScopeFactory _dbScopeFactory;
 
-        public ProjectSvc(IDbContextScopeFactory dbScopeFactory)
+        public DictionarySvc(IDbContextScopeFactory dbScopeFactory)
         {
             _dbScopeFactory = dbScopeFactory;
         }
-        #endregion
 
-        public void CreatProject(ProjectDto dto)
+        public void CreatDictionary(DictionaryDto dto)
         {
             try
             {
-                var entity = Mapper.Map<ProjectDto, Project>(dto);
+                var entity = Mapper.Map<DictionaryDto, Dictionary>(dto);
                 entity.CreateDate = DateTime.Now;
                 using (var dbScope = _dbScopeFactory.Create())
                 {
                     var db = dbScope.DbContexts.Get<FireProjDbContext>();
-                    var data = db.Project.Add(entity);
+                    db.Dictionary.Add(entity);
                     db.SaveChanges();
                 }
             }
@@ -47,16 +44,16 @@ namespace Uoko.FireProj.Concretes
             }
         }
 
-        public void DeleteProject(int projectId)
+        public void DeleteDictionary(int id)
         {
             try
             {
                 using (var dbScope = _dbScopeFactory.Create())
                 {
                     var db = dbScope.DbContexts.Get<FireProjDbContext>();
-                    Project entity = new Project() { Id = projectId };
-                    db.Project.Attach(entity);
-                    db.Project.Remove(entity);
+                    Dictionary entity = new Dictionary() { Id = id };
+                    db.Dictionary.Attach(entity);
+                    db.Dictionary.Remove(entity);
                     db.SaveChanges();
                 }
             }
@@ -66,16 +63,16 @@ namespace Uoko.FireProj.Concretes
             }
         }
 
-        public void EditProject(ProjectDto dto)
+        public void EditDictionary(DictionaryDto dto)
         {
             try
             {
-                var entity = Mapper.Map<ProjectDto, Project>(dto);
-               
+                var entity = Mapper.Map<DictionaryDto, Dictionary>(dto);
+
                 using (var dbScope = _dbScopeFactory.Create())
                 {
                     var db = dbScope.DbContexts.Get<FireProjDbContext>();
-                    db.Update(entity, r => new { r.ProjectDesc, r.ProjectName, r.ProjectRepo, r.ProjectFileName });
+                    db.Update(entity, r => new { r.Description, r.ModifyBy, r.ModifyDate, r.Name, r.ParentId, r.Value });
                     db.SaveChanges();
                 }
             }
@@ -85,45 +82,61 @@ namespace Uoko.FireProj.Concretes
             }
         }
 
-        public ProjectDto GetProjectById(int projectId)
+        public DictionaryDto GetDictionaryById(int id)
         {
             using (var dbScope = _dbScopeFactory.CreateReadOnly())
             {
                 var db = dbScope.DbContexts.Get<FireProjDbContext>();
-                var data = db.Project.Where(r => r.Id == projectId).Select(r => new ProjectDto()
+                var data = db.Dictionary.Where(r => r.Id == id).Select(r => new DictionaryDto()
                 {
                     Id = r.Id,
-                    ProjectName = r.ProjectName,
-                    ProjectRepo = r.ProjectRepo,
-                    ProjectDesc = r.ProjectDesc,
-                    ProjectFileName = r.ProjectFileName,
-
+                    Name = r.Name,
+                    Value = r.Value,
+                    Description = r.Description,
+                    Status = r.Status
                 }).FirstOrDefault();
 
                 return data;
             }
         }
 
-        public PageGridData<ProjectDto> GetProjectPage(ProjectQuery query)
+        public PageGridData<DictionaryDto> GetDictionaryPage(DictionaryQuery query)
         {
             using (var dbScope = _dbScopeFactory.CreateReadOnly())
             {
                 var db = dbScope.DbContexts.Get<FireProjDbContext>();
-                var data = db.Project.Select(r => new ProjectDto
+                var data = db.Dictionary.Select(r => new DictionaryDto
                 {
                     Id = r.Id,
-                    ProjectName = r.ProjectName,
-                    ProjectRepo = r.ProjectRepo,
-                    ProjectDesc = r.ProjectDesc,
-                    ProjectFileName = r.ProjectFileName,
+                    Name = r.Name,
+                    Value = r.Value,
+                    Description = r.Description,
+                    Status = r.Status
                 });
                 if (!string.IsNullOrEmpty(query.Search))
                 {
-                    data = data.Where(r => r.ProjectName.Contains(query.Search));
+                    data = data.Where(r => r.Name.Contains(query.Search));
                 }
-                var result = data.OrderBy(r => r.Id).Skip(query.Offset).Take(query.Limit).ToList();
+                var result = data.OrderBy(r => r.Id).ToList();
                 var total = data.Count();
-                return new PageGridData<ProjectDto> { rows = result, total = total };
+                return new PageGridData<DictionaryDto> { rows = result, total = total };
+            }
+        }
+
+        public List<DictionaryDto> GetDictionaryParent()
+        {
+            using (var dbScope = _dbScopeFactory.CreateReadOnly())
+            {
+                var db = dbScope.DbContexts.Get<FireProjDbContext>();
+                var data = db.Dictionary.Where(r => r.ParentId==0).Select(r => new DictionaryDto()
+                {
+                    Id = r.Id,
+                    Name = r.Name,
+                    Value = r.Value,
+                    Description = r.Description,
+                    Status = r.Status
+                }).ToList();
+                return data;
             }
         }
     }

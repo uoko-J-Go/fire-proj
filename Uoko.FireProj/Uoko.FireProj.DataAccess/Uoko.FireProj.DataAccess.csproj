@@ -54,7 +54,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AutoMapper\AutoMapper.cs" />
+    <Compile Include="Dto\DictionaryDto.cs" />
     <Compile Include="Dto\ProjectDto.cs" />
+    <Compile Include="Dto\ResourceInfoDto.cs" />
+    <Compile Include="Dto\TaskLogsDto.cs" />
     <Compile Include="Entity\BaseEntity.cs" />
     <Compile Include="Entity\Dictionary.cs" />
     <Compile Include="Entity\Project.cs" />
@@ -88,10 +91,16 @@
     <Compile Include="Migrations\201601190323094_updatetable.Designer.cs">
       <DependentUpon>201601190323094_updatetable.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201601200813566_updatedictionary.cs" />
+    <Compile Include="Migrations\201601200813566_updatedictionary.Designer.cs">
+      <DependentUpon>201601200813566_updatedictionary.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Query\BaseQuery.cs" />
+    <Compile Include="Query\DictionaryQuery.cs" />
     <Compile Include="Query\ProjectQuery.cs" />
+    <Compile Include="Query\TaskLogsQuery.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -109,6 +118,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201601190323094_updatetable.resx">
       <DependentUpon>201601190323094_updatetable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201601200813566_updatedictionary.resx">
+      <DependentUpon>201601200813566_updatedictionary.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -26,7 +26,7 @@ fireproj.directive('initTable', ['$compile', function ($compile) {
 //表单提交成功事件通用操作
 var formSubmitSuccessClick = function () {
     bootbox.alert("提交成功", function (data) {
-        location.reload();//刷新分页
+        window.location.href = document.referrer;
     });
 }
 

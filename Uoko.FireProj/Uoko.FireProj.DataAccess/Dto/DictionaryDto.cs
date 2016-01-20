@@ -5,13 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 using Uoko.FireProj.DataAccess.Enum;
 
-namespace Uoko.FireProj.DataAccess.Entity
+namespace Uoko.FireProj.DataAccess.Dto
 {
-    /// <summary>
-    /// 数据字段实体
-    /// </summary>
-    public class Dictionary : BaseEntity
+   public class DictionaryDto
     {
+        public int Id { get; set; }
+
         /// <summary>
         /// 字典名称
         /// </summary>
@@ -25,8 +24,8 @@ namespace Uoko.FireProj.DataAccess.Entity
         /// <summary>
         /// 父节点
         /// </summary>
-        public int ParentId { get; set; }
-        
+        public string ParentId { get; set; }
+
         /// <summary>
         /// 描述
         /// </summary>

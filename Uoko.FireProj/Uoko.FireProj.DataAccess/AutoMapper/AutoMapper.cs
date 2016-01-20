@@ -14,6 +14,8 @@ namespace Uoko.FireProj.DataAccess.AutoMapper
         public static void MapperRegister()
         {
             Mapper.CreateMap<ProjectDto, Project>();
+            Mapper.CreateMap<TaskLogsDto, TaskLogs>();
+            Mapper.CreateMap<DictionaryDto, Dictionary>();
         }
     }
 }

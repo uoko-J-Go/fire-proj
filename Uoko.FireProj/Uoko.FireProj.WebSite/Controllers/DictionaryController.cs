@@ -6,14 +6,13 @@ using System.Web.Mvc;
 
 namespace Uoko.FireProj.WebSite.Controllers
 {
-    public class ProjectController : BaseController
+    public class DictionaryController : BaseController
     {
-
+        // GET: Dictionary
         public ActionResult Index()
         {
             return View();
         }
-
         public ActionResult Form()
         {
             return View();

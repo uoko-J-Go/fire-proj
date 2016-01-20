@@ -1,8 +1,8 @@
 ﻿
 @{
-    ViewBag.Title = "项目管理";
-   
+    ViewBag.Title = "Form";
 }
+
 <div class="col-md-12">
     <div ng-controller="ProjectController">
         <!-- BEGIN  HEADER-->
@@ -22,33 +22,9 @@
 
         </div>
         <!-- END  HEADER-->
-        <!-- BEGIN  TABLE -->
-        <div class="portlet box green" ng-hide="isShowForm">
-            <div class="portlet-title">
-                <div class="caption">
-                    <i class="fa fa-windows"></i>项目列表
-                </div>
 
-            </div>
-            <div class="portlet-body">
-                <div class="table-toolbar">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="btn-group">
-                                <button id="sample_editable_1_new" class="btn green" ng-click="OpenForm()">
-                                    新增 <i class="fa fa-plus"></i>
-                                </button>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-                <table init-Table="tableOptions" bs-table-control> </table>
-            </div>
-        </div>
-        <!-- END  TABLE -->
         <!--BEGIN Form -->
-        <div ng-show="isShowForm">
+        <div >
             <div class="portlet light">
                 <div class="portlet-title">
                     <div class="caption font-green-haze">
@@ -110,7 +86,7 @@
                             <div class="row">
                                 <div class="col-md-offset-2 col-md-10">
                                     <button type="button" class="btn blue btn-lg" ng-disabled="serverForm.$invalid" ng-click="SubmitFrom(model)">提交</button>
-                                    <button type="button" class="btn default btn-lg" ng-click="CancelForm()">取消</button>
+                                    <a type="button" class="btn default btn-lg" href="@Url.Action("Index","Project")">取消</a>
                                 </div>
                             </div>
                         </div>
@@ -122,6 +98,7 @@
         <!--END Form -->
     </div>
 </div>
-    @section Scripts {
-        <script src="~/app/service/project.js"></script>
-    }
+@section Scripts {
+    <script src="~/app/service/project.js"></script>
+}
+

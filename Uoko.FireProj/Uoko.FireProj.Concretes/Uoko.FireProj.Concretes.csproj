@@ -57,8 +57,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DictionarySvc.cs" />
     <Compile Include="ProjectSvc.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ResourceInfoSvc.cs" />
+    <Compile Include="TaskLogsSvc.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Uoko.FireProj.Abstracts\Uoko.FireProj.Abstracts.csproj">

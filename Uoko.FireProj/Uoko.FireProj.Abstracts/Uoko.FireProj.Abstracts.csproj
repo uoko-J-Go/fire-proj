@@ -40,7 +40,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IDictionary.cs" />
     <Compile Include="IProjectSvc.cs" />
+    <Compile Include="IResourceInfoSvc.cs" />
+    <Compile Include="ITaskLogsSvc.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

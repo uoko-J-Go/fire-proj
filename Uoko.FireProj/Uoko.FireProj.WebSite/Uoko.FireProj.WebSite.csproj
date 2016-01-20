@@ -168,8 +168,11 @@
     <Compile Include="App_Start\SimpleInjectorWebApiInitializer.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="ControllerApi\BaseApiController.cs" />
+    <Compile Include="ControllerApi\DictionaryApiController.cs" />
     <Compile Include="ControllerApi\ProjectApiController.cs" />
+    <Compile Include="ControllerApi\TaskLogsApiController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\DictionaryController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ProjectController.cs" />
     <Compile Include="Global.asax.cs">
@@ -179,12 +182,16 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="app\global.js" />
+    <Content Include="app\service\dictionaryForm.js" />
+    <Content Include="app\service\dictionary.js" />
     <Content Include="app\service\project.js" />
     <Content Include="Content\bootstrap-table-zh-CN.min.js" />
     <Content Include="Content\bootstrap-table.min.css" />
     <Content Include="Content\bootstrap-table.min.js" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\tree-grid-directive.js" />
+    <Content Include="Content\treeGrid.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -904,6 +911,9 @@
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Project\Index.cshtml" />
+    <Content Include="Views\Project\Form.cshtml" />
+    <Content Include="Views\Dictionary\Index.cshtml" />
+    <Content Include="Views\Dictionary\Form.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
