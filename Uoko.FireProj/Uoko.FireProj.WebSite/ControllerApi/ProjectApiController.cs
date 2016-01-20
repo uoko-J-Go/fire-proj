@@ -41,7 +41,12 @@ namespace Uoko.FireProj.WebSite.ControllerApi
             var result = _projectSvc.GetProjectPage(query);
             return Ok(result);
         }
-
+        [Route("GetAll")]
+        public IHttpActionResult GetAll()
+        {
+            var result = _projectSvc.GetAllProject();
+            return Ok(result);
+        }
         /// <summary>
         /// 新增项目
         /// </summary>

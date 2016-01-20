@@ -1,0 +1,175 @@
+﻿
+@{
+    ViewBag.Title = "新建任务";
+}
+@section Css {
+    <link href="~/Content/TaskCreate.css" rel="stylesheet" />
+}
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <i class="fa fa-home"></i>
+            <a href="@Url.Action("Index","Home")">首页</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="@Url.Action("Index", "Task")">我的任务</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="#">新建任务</a>
+        </li>
+    </ul>
+</div>
+<div class="row" ng-controller="TaskController">
+    <div class="col-md-12">
+        <!-- BEGIN EXAMPLE TABLE PORTLET-->
+        <div class="portlet box blue">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-plus"></i>新建任务
+                </div>
+
+            </div>
+            <div class="portlet-body form">
+                <div class="form-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">任务名</label>
+                                <input type="text" ng-model="taskInfo.TaskName" class="form-control" placeholder="请输入任务名">
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">项目</label>
+                                <select class="form-control" ng-model="taskInfo.Project" ng-selected="project.Id==taskInfo.Project.Id">
+                                    <option ng-repeat="project in projectList" value="{{project}}">{{project.ProjectName}}</option>
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">分支</label>
+                                <select class="form-control" ng-model="taskInfo.Branch">
+                                    <option ng-repeat="branch in branchList" value="{{branch}}" ng-selected="branch==taskInfo.Branch">{{branch}}</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">发布环境</label>
+                                <select class="form-control" ng-model="taskInfo.DeployEnvironment">
+                                    <option ng-repeat="environment in environmentList" value="{{environment.Name}}" ng-selected="environment.Id==taskInfo.DeployEnvironment">{{environment.Name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">部署机器IP</label>
+                                <select class="form-control" ng-model="taskInfo.DeployIP">
+                                    <option ng-repeat="server in serverList" value="{{server}}" ng-selected="server==taskInfo.DeployIP">{{server}}</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">IIS站点名称</label>
+                                <select class="form-control" ng-model="taskInfo.SiteName">
+                                    <option ng-repeat="site in siteList" value="{{site}}" ng-selected="site==taskInfo.SiteName">{{site}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">验收人员</label>
+                                <div class="form-control-wrap">
+                                    <ul class="tags">
+                                        <li ng-repeat="item in taskInfo.CheckUsers">
+                                            <img ng-src="{{item.Profile}}" title="{{item.Name}}"/>
+                                            <a class="close" ng-click="removeCheckUser($index)">x</a>
+                                        </li>
+                                        <li class="add-tag" title="添加人员" ng-click="selectCheckUser()"></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">相关人员</label>
+                                <div class="form-control-wrap">
+                                    <ul class="tags">
+                                        <li ng-repeat="item in taskInfo.NoticeUses">
+                                            <img ng-src="{{item.Profile}}" title="{{item.Name}}"/>
+                                            <a class="close" ng-click="removeNoticeUser($index)">x</a>
+                                        </li>
+                                        <li class="add-tag" title="添加人员" ng-click="selectNoticeUser()"></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">备注</label>
+                                <div class="form-control-wrap">
+                                    <textarea rows="4"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="form-actions right">
+                    <button type="button" class="btn default" ng-click="Cancel()">取消</button>
+                    <button type="button" class="btn blue" ng-click="Save()"><i class="fa fa-check"></i> 保存</button>
+                </div>
+
+            </div>
+        </div>
+        <!-- END EXAMPLE TABLE PORTLET-->
+    </div>
+</div>
+<!--------------------------选择人员的弹出层---------------------------->
+<div id="selectUserModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title">
+                    <i class="icon-bar"></i>
+                    <span id="lblAddTitle" style="font-weight:bold">选择人员</span>
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                   用户列表
+
+                </div>
+            </div>
+            <div class="modal-footer bg-info">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="submit" class="btn btn-primary">确定</button>
+              
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script src="~/app/service/TaskCreate.js"></script>
+}
+

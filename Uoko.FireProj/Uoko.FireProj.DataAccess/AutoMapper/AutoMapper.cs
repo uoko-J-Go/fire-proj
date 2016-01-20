@@ -16,6 +16,7 @@ namespace Uoko.FireProj.DataAccess.AutoMapper
             Mapper.CreateMap<ProjectDto, Project>();
             Mapper.CreateMap<TaskLogsDto, TaskLogs>();
             Mapper.CreateMap<DictionaryDto, Dictionary>();
+            Mapper.CreateMap<TaskDto, TaskInfo>();
         }
     }
 }
