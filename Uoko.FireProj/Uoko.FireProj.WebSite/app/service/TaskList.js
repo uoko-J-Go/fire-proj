@@ -5,7 +5,7 @@ fireproj.service("TaskService", function ($http) {
 fireproj.service("ProjectService", function ($http) {
     //获取gitlab所有项目信息
     this.getAllProject = function (successCallBack) {
-        $http.get("api/ProjectApi/GetAll").success(function (data) {
+        $http.get("/api/ProjectApi/GetAll").success(function (data) {
             if (successCallBack != undefined) {
                 successCallBack(data);
             }
@@ -17,7 +17,6 @@ fireproj.service("ProjectService", function ($http) {
 fireproj.controller("TaskController", function ($scope, $http, TaskService, ProjectService) {
     $scope.projectList = [];
     $scope.GetProjectList = function () {
-
         ProjectService.getAllProject(function (data) {
             $scope.projectList = data;
         });
@@ -25,7 +24,7 @@ fireproj.controller("TaskController", function ($scope, $http, TaskService, Proj
     $scope.tableOptions = {
         url: '/api/TaskApi',
         columns: [
-            { field: 'Id', title: 'Id', align: 'center', width: 50 },
+            { field: 'Id', title: 'Id', align: 'center', width: 50, visible: false, cardVisible: false, switchable: false },
             { field: 'TaskName', title: '任务名称', align: 'center' },
             { field: 'DeployEnvironment', title: '环境', align: 'center' },
             { field: 'Branch', title: '分支', align: 'center' },
@@ -43,7 +42,7 @@ fireproj.controller("TaskController", function ($scope, $http, TaskService, Proj
                             '删除',
                         '</a>'].join('');
                 }
-            },
+            }
         ],
         search: true,
         showRefresh: true,

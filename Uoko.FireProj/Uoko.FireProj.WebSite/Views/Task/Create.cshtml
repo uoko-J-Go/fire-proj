@@ -145,7 +145,7 @@
     </div>
 </div>
 <!--------------------------选择人员的弹出层---------------------------->
-<div id="selectUserModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div id="selectUserModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" ng-controller="TaskController">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header bg-primary">
@@ -157,7 +157,7 @@
             </div>
             <div class="modal-body">
                 <div class="row">
-                   用户列表
+                    <table init-Table="userTableOptions"> </table>
 
                 </div>
             </div>

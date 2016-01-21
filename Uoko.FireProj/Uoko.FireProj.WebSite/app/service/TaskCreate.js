@@ -1,11 +1,22 @@
 ﻿
+fireproj.service("CommonService", function ($http) {
+
+    this.getAllUsers = function (successCallBack) {
+        $http.get('http://gitlab.uoko.ioc:12015/api/v3/users?private_token=JX4Gb7W_gfp7PdzpBjpG').success(function (data) {
+            if (successCallBack != undefined) {
+                successCallBack(data);
+            }
+        }).error(function (data) {
+            //错误处理
+        });;
+    };
+});
 fireproj.service("TaskService", function ($http) {
 
 });
 fireproj.service("ProjectService", function ($http) {
-    //获取gitlab所有项目信息
     this.getAllProject = function (successCallBack) {
-        $http.get("api/ProjectApi/GetAll").success(function (data) {
+        $http.get("/api/ProjectApi/GetAll").success(function (data) {
             if (successCallBack != undefined) {
                 successCallBack(data);
             }
@@ -15,7 +26,7 @@ fireproj.service("ProjectService", function ($http) {
     };
 });
 
-fireproj.controller("TaskController", function ($scope, $http, TaskService, ProjectService) {
+fireproj.controller("TaskController", function ($scope, $http, TaskService, ProjectService, CommonService) {
     $scope.taskInfo = {
         TaskName: "",
         Project: { Id: 1, ProjectName: "单点登录" },
@@ -27,6 +38,7 @@ fireproj.controller("TaskController", function ($scope, $http, TaskService, Proj
         NoticeUses: [{ Id: 2, Name: "庆攀", Profile: "http://img5.duitang.com/uploads/item/201406/07/20140607182730_sNGAS.thumb.700_0.jpeg" }],
         TaskDesc:""
     };
+    $scope.userList = [];
     $scope.projectList = [];
     $scope.branchList = ["Dev", "Master"];
     $scope.environmentList = [{ Id: 1, Name: "IOC环境" }, { Id: 2, Name: "Pre环境" }, { Id: 3, Name: "生产环境" }];
@@ -34,10 +46,26 @@ fireproj.controller("TaskController", function ($scope, $http, TaskService, Proj
     $scope.siteList = ["sso.uoko.ioc", "etadmin.uoko.ioc"];
     $scope.GetProjectList = function() {
         ProjectService.getAllProject(function(data) {
-            $scope.ProjectList = data;
+            $scope.projectList = data;
         });
     };
+    //获取所有用户
 
+    $scope.userTableOptions = {
+        url: 'http://gitlab.uoko.ioc:12015/api/v3/users?private_token=JX4Gb7W_gfp7PdzpBjpG',
+        columns: [
+            { field: 'id', title: 'id', align: 'center', width: 50, visible: false, cardVisible: false, switchable: false },
+            { field: 'selected', checkbox: true, align: 'center', width: 200 },
+            { field: 'name', title: '名称', align: 'center' }
+
+        ],
+        height: 200,
+        search: false,
+        showRefresh: false,
+        showToggle: false,
+        showColumns: false,
+        pagination: false
+    };
     //选择审核人
     $scope.selectCheckUser = function () {
         $("#selectUserModal").modal('show');
