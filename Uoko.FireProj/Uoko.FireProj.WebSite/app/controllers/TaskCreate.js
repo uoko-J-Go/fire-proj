@@ -26,7 +26,7 @@ fireproj.service("ProjectService", function ($http) {
 fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskService, ProjectService) {
     $scope.taskInfo = {
         TaskName: "",
-        Project: { Id: 1, ProjectName: "单点登录" },
+        Project: {},
         Branch: "",
         DeployEnvironment: "",
         DeployIP: "",
@@ -88,6 +88,10 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
         $scope.$evalAsync();
     }
     $scope.Save = function () {
+        var project = $scope.taskInfo.Project;
+        if (typeof project == "string") {
+            $scope.taskInfo.Project = JSON.parse(project);
+        } 
         TaskService.CreateTask($scope.taskInfo, function() {
             location.href = "/Task/Index";
         });
