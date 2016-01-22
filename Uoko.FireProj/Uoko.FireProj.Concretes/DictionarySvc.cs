@@ -51,6 +51,11 @@ namespace Uoko.FireProj.Concretes
                 using (var dbScope = _dbScopeFactory.Create())
                 {
                     var db = dbScope.DbContexts.Get<FireProjDbContext>();
+                    var result = db.Dictionary.Where(r => r.ParentId == id).Count();
+                    if (result > 0)
+                    {
+                        throw new TipInfoException("还有子集,无法删除!");
+                    }
                     Dictionary entity = new Dictionary() { Id = id };
                     db.Dictionary.Attach(entity);
                     db.Dictionary.Remove(entity);

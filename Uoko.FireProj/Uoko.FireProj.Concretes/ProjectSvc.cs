@@ -75,7 +75,7 @@ namespace Uoko.FireProj.Concretes
                 using (var dbScope = _dbScopeFactory.Create())
                 {
                     var db = dbScope.DbContexts.Get<FireProjDbContext>();
-                    db.Update(entity, r => new { r.ProjectDesc, r.ProjectName, r.ProjectRepo, r.ProjectFileName });
+                    db.Update(entity, r => new { r.ProjectDesc, r.ProjectName, r.ProjectRepo,r.ProjectId, r.ProjectFileName });
                     db.SaveChanges();
                 }
             }
@@ -97,6 +97,7 @@ namespace Uoko.FireProj.Concretes
                     ProjectRepo = r.ProjectRepo,
                     ProjectDesc = r.ProjectDesc,
                     ProjectFileName = r.ProjectFileName,
+                    ProjectId = r.ProjectId,
                 });
                 var result = data.ToList();
                 return result;
@@ -115,7 +116,7 @@ namespace Uoko.FireProj.Concretes
                     ProjectRepo = r.ProjectRepo,
                     ProjectDesc = r.ProjectDesc,
                     ProjectFileName = r.ProjectFileName,
-
+                    ProjectId = r.ProjectId,
                 }).FirstOrDefault();
 
                 return data;
@@ -134,6 +135,7 @@ namespace Uoko.FireProj.Concretes
                     ProjectRepo = r.ProjectRepo,
                     ProjectDesc = r.ProjectDesc,
                     ProjectFileName = r.ProjectFileName,
+                    ProjectId = r.ProjectId,
                 });
                 if (!string.IsNullOrEmpty(query.Search))
                 {

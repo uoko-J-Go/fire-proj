@@ -21,6 +21,15 @@ fireproj.service("ProjectService", function ($http) {
             //错误处理
         });;
     };
+    this.getProjectBranch = function (id, successCallBack) {
+        $http.get("http://gitlab.uoko.ioc:12015/api/v3/projects/" + id + "/repository/branches?private_token=JX4Gb7W_gfp7PdzpBjpG").success(function (data) {
+            if (successCallBack != undefined) {
+                successCallBack(data);
+            }
+        }).error(function (data) {
+            //错误处理
+        });;
+    };
 });
 
 fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskService, ProjectService) {
@@ -97,6 +106,15 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
             location.href = "/Task/Index";
         });
     }
+
+    //根据项目Id或者分支列表
+    $scope.getBranch = function (project) {
+        project = JSON.parse(project)
+        ProjectService.getProjectBranch(project.ProjectId, function (data) {
+            $scope.branchList = data;
+        });
+    }
+
     $scope.Cancel = function () {
         location.href = "/Task/Index";
     }
