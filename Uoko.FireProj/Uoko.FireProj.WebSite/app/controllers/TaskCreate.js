@@ -1,8 +1,8 @@
 ﻿
-fireproj.service("CommonService", function ($http) {
+fireproj.service("TaskService", function ($http) {
 
-    this.getAllUsers = function (successCallBack) {
-        $http.get('http://gitlab.uoko.ioc:12015/api/v3/users?private_token=JX4Gb7W_gfp7PdzpBjpG').success(function (data) {
+    this.CreateTask = function (task,successCallBack) {
+        $http.post("/api/TaskApi/Create",task).success(function (data) {
             if (successCallBack != undefined) {
                 successCallBack(data);
             }
@@ -10,9 +10,6 @@ fireproj.service("CommonService", function ($http) {
             //错误处理
         });;
     };
-});
-fireproj.service("TaskService", function ($http) {
-
 });
 fireproj.service("ProjectService", function ($http) {
     this.getAllProject = function (successCallBack) {
@@ -26,19 +23,18 @@ fireproj.service("ProjectService", function ($http) {
     };
 });
 
-fireproj.controller("TaskController", function ($scope, $http, TaskService, ProjectService, CommonService) {
+fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskService, ProjectService) {
     $scope.taskInfo = {
         TaskName: "",
-        Project: { Id: 1, ProjectName: "单点登录" },
+        Project: {},
         Branch: "",
         DeployEnvironment: "",
         DeployIP: "",
         SiteName: "",
-        CheckUsers: [{ Id: 1, Name: "山姆", Profile: "http://img5.duitang.com/uploads/item/201406/07/20140607182836_8MEhe.jpeg" }],
-        NoticeUses: [{ Id: 2, Name: "庆攀", Profile: "http://img5.duitang.com/uploads/item/201406/07/20140607182730_sNGAS.thumb.700_0.jpeg" }],
+        CheckUsers: [],
+        NoticeUses: [],
         TaskDesc:""
     };
-    $scope.userList = [];
     $scope.projectList = [];
     $scope.branchList = ["Dev", "Master"];
     $scope.environmentList = [{ Id: 1, Name: "IOC环境" }, { Id: 2, Name: "Pre环境" }, { Id: 3, Name: "生产环境" }];
@@ -49,30 +45,37 @@ fireproj.controller("TaskController", function ($scope, $http, TaskService, Proj
             $scope.projectList = data;
         });
     };
-    //获取所有用户
-
-    $scope.userTableOptions = {
-        url: 'http://gitlab.uoko.ioc:12015/api/v3/users?private_token=JX4Gb7W_gfp7PdzpBjpG',
-        columns: [
-            { field: 'id', title: 'id', align: 'center', width: 50, visible: false, cardVisible: false, switchable: false },
-            { field: 'selected', checkbox: true, align: 'center', width: 200 },
-            { field: 'name', title: '名称', align: 'center' }
-
-        ],
-        height: 200,
-        search: false,
-        showRefresh: false,
-        showToggle: false,
-        showColumns: false,
-        pagination: false
-    };
     //选择审核人
     $scope.selectCheckUser = function () {
-        $("#selectUserModal").modal('show');
+        var modalInstance = $uibModal.open({
+            templateUrl: '/app/modals/SelectUser.html',
+            controller: 'SelectUserController',
+            resolve: {
+                selectedUsers: function () {
+                    return $scope.taskInfo.CheckUsers;
+                }
+            }
+        });
+
+        modalInstance.result.then(function (selectedUsers) {
+            $scope.taskInfo.CheckUsers = selectedUsers;
+        });
     }
     //选择相关人
     $scope.selectNoticeUser = function () {
-        $("#selectUserModal").modal('show');
+        var modalInstance = $uibModal.open({
+            templateUrl: '/app/modals/SelectUser.html',
+            controller: 'SelectUserController',
+            resolve: {
+                selectedUsers: function () {
+                    return $scope.taskInfo.NoticeUses;
+                }
+            }
+        });
+
+        modalInstance.result.then(function (selectedUsers) {
+            $scope.taskInfo.NoticeUses = selectedUsers;
+        });
     }
     //移除审核人
     $scope.removeCheckUser = function (index) {
@@ -85,7 +88,13 @@ fireproj.controller("TaskController", function ($scope, $http, TaskService, Proj
         $scope.$evalAsync();
     }
     $scope.Save = function () {
-        alert(JSON.stringify($scope.taskInfo));
+        var project = $scope.taskInfo.Project;
+        if (typeof project == "string") {
+            $scope.taskInfo.Project = JSON.parse(project);
+        } 
+        TaskService.CreateTask($scope.taskInfo, function() {
+            location.href = "/Task/Index";
+        });
     }
     $scope.Cancel = function () {
         location.href = "/Task/Index";

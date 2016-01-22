@@ -32,6 +32,9 @@ namespace Uoko.FireProj.Concretes
             try
             {
                 var entity = Mapper.Map<TaskDto,TaskInfo>(task);
+                entity.ProjectId = task.Project.Id;
+                entity.CheckUserId = string.Join(",", task.CheckUsers.Select(t => t.Id));
+                entity.NoticeUseId= string.Join(",", task.NoticeUses.Select(t => t.Id));
                 using (var dbScope = _dbScopeFactory.Create())
                 {
                     var db = dbScope.DbContexts.Get<FireProjDbContext>();

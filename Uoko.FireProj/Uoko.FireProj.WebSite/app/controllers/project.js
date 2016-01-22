@@ -41,6 +41,7 @@ fireproj.controller("ProjectController", function ($scope, $http, ProjectService
     $scope.tableOptions = {
         url: '/api/ProjectApi',
         columns: [
+            { field: 'selected', checkbox: true, align: 'center', width: 200 },
             { field: 'Id', title: 'Id', align: 'center', width: 50 },
             { field: 'ProjectName', title: '项目名称', align: 'center' },
             { field: 'ProjectFileName', title: '项目文件', align: 'center' },

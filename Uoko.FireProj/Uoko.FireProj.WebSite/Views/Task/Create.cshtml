@@ -98,8 +98,9 @@
                                 <div class="form-control-wrap">
                                     <ul class="tags">
                                         <li ng-repeat="item in taskInfo.CheckUsers">
-                                            <img ng-src="{{item.Profile}}" title="{{item.Name}}"/>
-                                            <a class="close" ng-click="removeCheckUser($index)">x</a>
+                                            <span class="label label-sm label-success" ng-click="removeCheckUser($index)">
+                                                {{item.name}}
+                                            </span>
                                         </li>
                                         <li class="add-tag" title="添加人员" ng-click="selectCheckUser()"></li>
                                     </ul>
@@ -113,8 +114,9 @@
                                 <div class="form-control-wrap">
                                     <ul class="tags">
                                         <li ng-repeat="item in taskInfo.NoticeUses">
-                                            <img ng-src="{{item.Profile}}" title="{{item.Name}}"/>
-                                            <a class="close" ng-click="removeNoticeUser($index)">x</a>
+                                            <span class="label label-sm label-success" ng-click="removeNoticeUser($index)">
+                                                {{item.name}}
+                                            </span>
                                         </li>
                                         <li class="add-tag" title="添加人员" ng-click="selectNoticeUser()"></li>
                                     </ul>
@@ -127,7 +129,7 @@
                             <div class="form-group">
                                 <label class="control-label">备注</label>
                                 <div class="form-control-wrap">
-                                    <textarea rows="4"></textarea>
+                                    <textarea rows="4" ng-model="taskInfo.TaskDesc"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -144,32 +146,10 @@
         <!-- END EXAMPLE TABLE PORTLET-->
     </div>
 </div>
-<!--------------------------选择人员的弹出层---------------------------->
-<div id="selectUserModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" ng-controller="TaskController">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header bg-primary">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                <h4 class="modal-title">
-                    <i class="icon-bar"></i>
-                    <span id="lblAddTitle" style="font-weight:bold">选择人员</span>
-                </h4>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <table init-Table="userTableOptions"> </table>
 
-                </div>
-            </div>
-            <div class="modal-footer bg-info">
-                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                <button type="submit" class="btn btn-primary">确定</button>
-              
-            </div>
-        </div>
-    </div>
-</div>
 @section Scripts {
-    <script src="~/app/service/TaskCreate.js"></script>
+    <script src="~/app/services/CommonService.js"></script>
+    <script src="~/app/controllers/TaskCreate.js"></script>
+    <script src="~/app/modals/SelectUser.js"></script>
 }
 
