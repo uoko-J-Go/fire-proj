@@ -37,7 +37,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">任务名</label>
-                                <input type="text" ng-model="taskInfo.TaskName" class="form-control" placeholder="请输入任务名">
+                                <input type="text" ng-model="taskInfo.TaskName" class="form-control" placeholder="请输入任务名" required>
 
                             </div>
                         </div>
@@ -45,7 +45,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">项目</label>
-                                <select class="form-control" ng-model="taskInfo.Project" ng-selected="project.Id==taskInfo.Project.Id">
+                                <select class="form-control" ng-model="taskInfo.Project" ng-selected="project.Id==taskInfo.Project.Id" required>
                                     <option ng-repeat="project in projectList" value="{{project}}">{{project.ProjectName}}</option>
                                 </select>
                             </div>
@@ -57,7 +57,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">分支</label>
-                                <select class="form-control" ng-model="taskInfo.Branch">
+                                <select class="form-control" ng-model="taskInfo.Branch" required>
                                     <option ng-repeat="branch in branchList" value="{{branch}}" ng-selected="branch==taskInfo.Branch">{{branch}}</option>
                                 </select>
                             </div>
@@ -66,7 +66,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">发布环境</label>
-                                <select class="form-control" ng-model="taskInfo.DeployEnvironment">
+                                <select class="form-control" ng-model="taskInfo.DeployEnvironment" required>
                                     <option ng-repeat="environment in environmentList" value="{{environment.Name}}" ng-selected="environment.Id==taskInfo.DeployEnvironment">{{environment.Name}}</option>
                                 </select>
                             </div>
@@ -76,7 +76,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">部署机器IP</label>
-                                <select class="form-control" ng-model="taskInfo.DeployIP">
+                                <select class="form-control" ng-model="taskInfo.DeployIP" required>
                                     <option ng-repeat="server in serverList" value="{{server}}" ng-selected="server==taskInfo.DeployIP">{{server}}</option>
                                 </select>
                             </div>
@@ -85,9 +85,17 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">IIS站点名称</label>
-                                <select class="form-control" ng-model="taskInfo.SiteName">
+                                <select class="form-control" ng-model="taskInfo.SiteName" required>
                                     <option ng-repeat="site in siteList" value="{{site}}" ng-selected="site==taskInfo.SiteName">{{site}}</option>
                                 </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">部署地址</label>
+                                <input type="text" ng-model="taskInfo.DeployAddress" class="form-control" placeholder="部署地址 例如 https://WIN-DEVTEST-002:8172/msdeploy.axd" required>
                             </div>
                         </div>
                     </div>
