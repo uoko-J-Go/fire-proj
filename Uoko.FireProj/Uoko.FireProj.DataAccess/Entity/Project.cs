@@ -22,6 +22,11 @@ namespace Uoko.FireProj.DataAccess.Entity
         public string ProjectRepo { get; set; }
 
         /// <summary>
+        /// gitlab项目的id
+        /// </summary>
+        public int ProjectId { get; set; }
+
+        /// <summary>
         /// 项目文件(csproj)相对路径
         /// </summary>
         public string ProjectFileName { get; set; }

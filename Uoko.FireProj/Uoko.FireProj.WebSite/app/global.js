@@ -38,20 +38,16 @@ var formSubmitSuccessClick = function (operation) {
 //表单提交失败事件通用操作
 var formSubmitFailClick = function (data) {
     var msgInfo = new Array();
-    if (data.ErrorInfo == undefined) {
+    if (data.Message != null) {
+        msgInfo.push(data.Message);
+    } else {
         angular.forEach(data.ModelState, function (data) {
             msgInfo.push(data);
         });
-    } else {
-        msgInfo.push(data.Message);
     }
     for (var i = 0; i < msgInfo.length; i++) {
-        Metronic.alert({
-            container: "#bootstrap_alerts_demo",
-            message: msgInfo[i],
-            icon: "warning",
-            type: "warning",
-            reset: false,
+        bootbox.alert(msgInfo[i], function (data) {
+
         });
     }
 }
