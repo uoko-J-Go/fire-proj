@@ -1,6 +1,15 @@
 ﻿
 fireproj.service("TaskService", function ($http) {
 
+    this.CreateTask = function (task,successCallBack) {
+        $http.post("/api/TaskApi/Create",task).success(function (data) {
+            if (successCallBack != undefined) {
+                successCallBack(data);
+            }
+        }).error(function (data) {
+            //错误处理
+        });;
+    };
 });
 fireproj.service("ProjectService", function ($http) {
     this.getAllProject = function (successCallBack) {
@@ -79,7 +88,9 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
         $scope.$evalAsync();
     }
     $scope.Save = function () {
-        alert(JSON.stringify($scope.taskInfo));
+        TaskService.CreateTask($scope.taskInfo, function() {
+            location.href = "/Task/Index";
+        });
     }
     $scope.Cancel = function () {
         location.href = "/Task/Index";

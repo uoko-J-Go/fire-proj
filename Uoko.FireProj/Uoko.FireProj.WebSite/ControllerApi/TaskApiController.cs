@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Uoko.FireProj.Abstracts;
+using Uoko.FireProj.DataAccess.Dto;
 using Uoko.FireProj.DataAccess.Query;
 
 namespace Uoko.FireProj.WebSite.ControllerApi
@@ -22,6 +23,13 @@ namespace Uoko.FireProj.WebSite.ControllerApi
         {
             var result = _taskSvc.GetTaskPage(query);
             return Ok(result);
+        }
+        [Route("Create")]
+        [HttpPost]
+        public IHttpActionResult Create([FromBody]TaskDto task)
+        {
+            _taskSvc.CreatTask(task);
+            return Ok();
         }
     }
 }
