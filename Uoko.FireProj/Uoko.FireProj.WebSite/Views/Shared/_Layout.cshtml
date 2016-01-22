@@ -25,7 +25,10 @@
     <link href="~/Metronic/assets/global/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
     <link href="~/Metronic/assets/global/plugins/simple-line-icons/simple-line-icons.min.css" rel="stylesheet" type="text/css">
     <link href="~/Metronic/assets/global/plugins/uniform/css/uniform.default.css" rel="stylesheet" type="text/css" />
-    <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+    <link href="~/Content/bootstrap-table.min.css" rel="stylesheet"/>
+    <link href="~/Metronic/assets/global/plugins/icheck/skins/all.css" rel="stylesheet" />
+
     <!-- END GLOBAL MANDATORY STYLES -->
     <!-- BEGIN THEME STYLES -->
     <link href="~/Metronic/assets/global/css/components-md.css" id="style_components" rel="stylesheet" type="text/css" />
@@ -33,7 +36,7 @@
     <link href="~/Metronic/assets/admin/layout/css/layout.css" rel="stylesheet" type="text/css" />
     <link href="~/Metronic/assets/admin/layout/css/themes/blue.css" rel="stylesheet" type="text/css" id="style_color" />
     <link href="~/Metronic/assets/admin/layout/css/custom.css" rel="stylesheet" type="text/css" />
-    <link href="~/Content/bootstrap-table.min.css" rel="stylesheet" />
+    
     @RenderSection("css", required: false)
     <!-- END THEME STYLES -->
 </head>
@@ -170,15 +173,17 @@
     <script src="~/Metronic/assets/global/plugins/bootbox/bootbox.min.js" type="text/javascript"></script>
     <script src="~/Metronic/assets/global/plugins/uniform/jquery.uniform.min.js" type="text/javascript"></script>
     <script src="~/Metronic/assets/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js" type="text/javascript"></script>
+    <script src="~/Scripts/angular.min.js"></script>
+    <script src="~/Scripts/angular-messages.min.js"></script>
+    <script src="~/Scripts/ui-bootstrap-tpls-1.1.0.min.js"></script>
+    <script src="~/Scripts/bootstrap-table.min.js"></script>
+    <script src="~/Scripts/bootstrap-table-zh-CN.min.js"></script>
+    <script src="~/Metronic/assets/global/plugins/icheck/icheck.min.js"></script>
 
     <script src="~/Metronic/assets/global/scripts/metronic.js" type="text/javascript"></script>
     <script src="~/Metronic/assets/admin/layout2/scripts/layout.js" type="text/javascript"></script>
 
-    <script src="~/Scripts/angular.min.js"></script>
-    <script src="~/Scripts/angular-messages.min.js"></script>
-
-    <script src="~/Scripts/bootstrap-table.min.js"></script>
-    <script src="~/Scripts/bootstrap-table-zh-CN.min.js"></script>
+   
     <script src="~/app/global.js"></script>
     @RenderSection("scripts", required: false)
     <script>

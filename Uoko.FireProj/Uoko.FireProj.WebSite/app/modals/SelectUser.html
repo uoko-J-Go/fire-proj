@@ -1,0 +1,26 @@
+﻿
+<div class="modal-header bg-primary">
+    <button type="button" class="close" ng-click="Cancel()"></button>
+    <h4 class="modal-title">
+        <i class="icon-bar"></i>
+        <span id="lblAddTitle" style="font-weight:bold">选择人员</span>
+    </h4>
+</div>
+<div class="modal-body">
+    <div class="row">
+        <div class="input-group">
+            <div class="icheck-list" ng-repeat="user in userList">
+                <label>
+                    <input type="checkbox" class="icheck" ng-model="user.selected">{{user.Name}}
+                </label>
+                
+            </div>
+        </div>
+  
+    </div>
+</div>
+<div class="modal-footer bg-info">
+    <button type="button" class="btn btn-default" ng-click="Cancel()">取消</button>
+    <button type="button" class="btn btn-primary"  ng-click="Ok()">确定</button>
+
+</div>
