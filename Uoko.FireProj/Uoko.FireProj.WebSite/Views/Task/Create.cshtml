@@ -98,8 +98,9 @@
                                 <div class="form-control-wrap">
                                     <ul class="tags">
                                         <li ng-repeat="item in taskInfo.CheckUsers">
-                                            <img ng-src="{{item.Profile}}" title="{{item.Name}}"/>
-                                            <a class="close" ng-click="removeCheckUser($index)">x</a>
+                                            <span class="label label-sm label-success" ng-click="removeCheckUser($index)">
+                                                {{item.name}}
+                                            </span>
                                         </li>
                                         <li class="add-tag" title="添加人员" ng-click="selectCheckUser()"></li>
                                     </ul>
@@ -113,8 +114,9 @@
                                 <div class="form-control-wrap">
                                     <ul class="tags">
                                         <li ng-repeat="item in taskInfo.NoticeUses">
-                                            <img ng-src="{{item.Profile}}" title="{{item.Name}}"/>
-                                            <a class="close" ng-click="removeNoticeUser($index)">x</a>
+                                            <span class="label label-sm label-success" ng-click="removeNoticeUser($index)">
+                                                {{item.name}}
+                                            </span>
                                         </li>
                                         <li class="add-tag" title="添加人员" ng-click="selectNoticeUser()"></li>
                                     </ul>
@@ -146,7 +148,8 @@
 </div>
 
 @section Scripts {
-    <script src="~/app/service/TaskCreate.js"></script>
+    <script src="~/app/services/CommonService.js"></script>
+    <script src="~/app/controllers/TaskCreate.js"></script>
     <script src="~/app/modals/SelectUser.js"></script>
 }
 

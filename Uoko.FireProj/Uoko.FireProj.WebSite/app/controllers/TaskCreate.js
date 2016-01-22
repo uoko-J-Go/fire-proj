@@ -1,16 +1,4 @@
 ﻿
-fireproj.service("CommonService", function ($http) {
-
-    this.getAllUsers = function (successCallBack) {
-        $http.get('http://gitlab.uoko.ioc:12015/api/v3/users?private_token=JX4Gb7W_gfp7PdzpBjpG').success(function (data) {
-            if (successCallBack != undefined) {
-                successCallBack(data);
-            }
-        }).error(function (data) {
-            //错误处理
-        });;
-    };
-});
 fireproj.service("TaskService", function ($http) {
 
 });
@@ -26,7 +14,7 @@ fireproj.service("ProjectService", function ($http) {
     };
 });
 
-fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskService, ProjectService, CommonService) {
+fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskService, ProjectService) {
     $scope.taskInfo = {
         TaskName: "",
         Project: { Id: 1, ProjectName: "单点登录" },
@@ -34,8 +22,8 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
         DeployEnvironment: "",
         DeployIP: "",
         SiteName: "",
-        CheckUsers: [{ Id: 1, Name: "山姆", Profile: "http://img5.duitang.com/uploads/item/201406/07/20140607182836_8MEhe.jpeg" }],
-        NoticeUses: [{ Id: 2, Name: "庆攀", Profile: "http://img5.duitang.com/uploads/item/201406/07/20140607182730_sNGAS.thumb.700_0.jpeg" }],
+        CheckUsers: [],
+        NoticeUses: [],
         TaskDesc:""
     };
     $scope.projectList = [];
