@@ -105,9 +105,22 @@ namespace Uoko.FireProj.Concretes
             using (var dbScope = _dbScopeFactory.CreateReadOnly())
             {
                 var db = dbScope.DbContexts.Get<FireProjDbContext>();
-                
-
-                return new PageGridData<TaskDto>();
+                var data = db.TaskInfo.Select(r => new TaskDto
+                {
+                    Id = r.Id,
+                    TaskName = r.TaskName,
+                    DeployEnvironment = r.DeployEnvironment,
+                    Branch = r.Branch,
+                    TaskDesc = r.TaskDesc,
+                    Status = r.Status,
+                });
+                if (!string.IsNullOrEmpty(query.Search))
+                {
+                    data = data.Where(r => r.TaskName.Contains(query.Search));
+                }
+                var result = data.OrderBy(r => r.Id).Skip(query.Offset).Take(query.Limit).ToList();
+                var total = data.Count();
+                return new PageGridData<TaskDto> { rows = result, total = total };
             }
         }
     }
