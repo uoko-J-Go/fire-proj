@@ -14,7 +14,7 @@ fireproj.service("ProjectService", function ($http) {
         });
     };
 });
-fireproj.controller("TaskController", function ($scope, $http, TaskService, ProjectService) {
+fireproj.controller("TaskController", function ($scope, $http, TaskService, ProjectService, CommonService) {
     $scope.projectList = [];
     $scope.GetProjectList = function () {
         ProjectService.getAllProject(function (data) {
@@ -34,12 +34,12 @@ fireproj.controller("TaskController", function ($scope, $http, TaskService, Proj
             {
                 title: '操作', align: 'center', width: 200, formatter: function (value, row, index) {
                     return [
-                        '<a class="btn btn-primary editor" ng-click="edit(' + row.Id + ')" title="编辑">',
-                            '编辑',
+                        '<a class="btn btn-primary editor" ng-click="Deploy(' + row.Id + ')" title="编译部署">',
+                            '编译部署',
                         '</a>',
 
-                        '<a class="btn btn-primary delete" ng-click="delete(' + row.Id + ')" title="删除">',
-                            '删除',
+                        '<a class="btn btn-primary delete" ng-click="CommitToTest(' + row.Id + ')" title="提交测试">',
+                            '提交测试',
                         '</a>'].join('');
                 }
             }
@@ -56,7 +56,16 @@ fireproj.controller("TaskController", function ($scope, $http, TaskService, Proj
         pageList: [10, 25, 50, 100],
         sidePagination: 'server'
     };
+    $scope.Deploy=function(id) {
+        CommonService.TriggerBuild(function() {
+            
 
+        });
+    }
+
+    $scope.CommitToTest = function () {
+
+    }
     $scope.Init = function () {
         $scope.GetProjectList();
     }
