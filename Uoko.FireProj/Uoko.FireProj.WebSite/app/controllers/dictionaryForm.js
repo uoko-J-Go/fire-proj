@@ -26,14 +26,26 @@ fireproj.service("DictionaryService", function ($http) {
 fireproj.controller("DictionaryController", function ($scope, $http, DictionaryService) {
     $scope.ParentList;
     $scope.formTile = "字典新增";
-   
     
-    //获取gitlab所有项目信息
+    
+    var id = $("#id").val();
+    if (typeof id != "") {
+        DictionaryService.getById(id).success(function (data) {
+            $scope.model = data;
+        }).error(function (data) {
+            formSubmitFailClick(data);
+        });
+    }
+   
+
+    //获取所有父级字典
     DictionaryService.getParent().success(function (data) {
         $scope.ParentList = data;
     }).error(function (data) {
         formSubmitFailClick(data);
     });
+
+    
 
     //声明表单提交事件
     $scope.SubmitFrom = function (model) {

@@ -34,11 +34,11 @@ fireproj.controller("TaskController", function ($scope, $http, TaskService, Proj
             {
                 title: '操作', align: 'center', width: 200, formatter: function (value, row, index) {
                     return [
-                        '<a class=" editor" ng-click="edit(' + row.Id + ')" title="编辑">',
+                        '<a class="btn btn-primary editor" ng-click="edit(' + row.Id + ')" title="编辑">',
                             '编辑',
                         '</a>',
 
-                        '<a class=" delete" ng-click="delete(' + row.Id + ')" title="删除">',
+                        '<a class="btn btn-primary delete" ng-click="delete(' + row.Id + ')" title="删除">',
                             '删除',
                         '</a>'].join('');
                 }

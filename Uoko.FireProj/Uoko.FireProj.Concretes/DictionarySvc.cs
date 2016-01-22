@@ -93,7 +93,8 @@ namespace Uoko.FireProj.Concretes
                     Name = r.Name,
                     Value = r.Value,
                     Description = r.Description,
-                    Status = r.Status
+                    Status = r.Status,
+                    ParentId = r.ParentId,
                 }).FirstOrDefault();
 
                 return data;
@@ -111,7 +112,8 @@ namespace Uoko.FireProj.Concretes
                     Name = r.Name,
                     Value = r.Value,
                     Description = r.Description,
-                    Status = r.Status
+                    Status = r.Status,
+                    ParentId = r.ParentId,
                 });
                 if (!string.IsNullOrEmpty(query.Search))
                 {
@@ -128,13 +130,14 @@ namespace Uoko.FireProj.Concretes
             using (var dbScope = _dbScopeFactory.CreateReadOnly())
             {
                 var db = dbScope.DbContexts.Get<FireProjDbContext>();
-                var data = db.Dictionary.Where(r => r.ParentId==0).Select(r => new DictionaryDto()
+                var data = db.Dictionary.Where(r => r.ParentId == 0).Select(r => new DictionaryDto()
                 {
                     Id = r.Id,
                     Name = r.Name,
                     Value = r.Value,
                     Description = r.Description,
-                    Status = r.Status
+                    Status = r.Status,
+                  
                 }).ToList();
                 return data;
             }

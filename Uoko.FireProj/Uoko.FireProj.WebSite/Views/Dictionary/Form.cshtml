@@ -3,8 +3,23 @@
     ViewBag.Title = "Form";
     
 }
+
 <div class="col-md-12">
     <div ng-controller="DictionaryController">
+        <!-- BEGIN  HEADER-->
+        <div class="page-bar">
+            <ul class="page-breadcrumb">
+                <li>
+                    <i class="fa fa-home"></i>
+                    <a href="/">主页</a>
+                    <i class="fa fa-angle-right"></i>
+                </li>
+                <li>
+                    <a href="#">数据字典</a>
+                </li>
+            </ul>
+        </div>
+        <!-- END  HEADER-->
         <!--BEGIN Form -->
         <div>
             <div class="portlet light">
@@ -77,6 +92,7 @@
             </div>
         </div>
         <!--END Form -->
+        <input  type="hidden" id="id" value="@Html.ViewContext.RouteData.Values["id"]"/>
     </div>
 </div>
 @section Scripts {

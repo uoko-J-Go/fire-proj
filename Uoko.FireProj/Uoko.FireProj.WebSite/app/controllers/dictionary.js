@@ -75,16 +75,27 @@ fireproj.controller("DictionaryController", function ($scope, $http, DictionaryS
             sortingType : "number"
         },
         {
-            field: "",
+            field: "Id",
             displayName: "操作",
             sortable: true,
-            sortingType: "number"
+            cellTemplate: "<a class='btn btn-primary editor' title='编辑' href='/Dictionary/Form/{{ row.branch[col.field] }}'>编辑</a><a class='btn btn-primary editor' title='删除' ng-click='cellTemplateScope.click(row.branch[col.field])'>删除</a>",
+            cellTemplateScope: {
+                click: function (data) {         
+                    DictionaryService.delete(data).success(function (data) {
+                        formSubmitSuccessClick("refresh");
+                    }).error(function (data) {
+                        formSubmitFailClick(data);
+                    });
+                }
+            }
         }
 
     ];
     $scope.my_tree_handler = function (branch) {
         console.log('you clicked on', branch)
     }
+
+   
 
     function getTree(data, primaryIdName, parentIdName) {
         if (!data || data.length == 0 || !primaryIdName || !parentIdName)
