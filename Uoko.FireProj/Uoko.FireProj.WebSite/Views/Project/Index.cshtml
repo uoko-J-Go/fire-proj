@@ -3,6 +3,8 @@
     ViewBag.Title = "项目管理";
    
 }
+
+
 <div class="page-bar">
     <ul class="page-breadcrumb">
         <li>
@@ -22,11 +24,32 @@
 <div ng-controller="ProjectController">
     <!-- Grid -->
     <div ng-hide="isShowForm">
-        <h1><button class="btn btn-primary btn-lg" role="button" ng-click="OpenForm()">新增</button></h1>
-        <table init-Table="tableOptions" bs-table-control> </table>
+        <div class="portlet box blue" ng-hide="isShowForm">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-windows"></i>项目列表
+                </div>
+
+            </div>
+            <div class="portlet-body">
+                <div class="table-toolbar">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="btn-group">
+                                <button id="sample_editable_1_new" class="btn green" ng-click="OpenForm()">
+                                    新增 <i class="fa fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <table init-Table="tableOptions" bs-table-control> </table>
+            </div>
+        </div>
     </div>
     <!-- Grid -->
-
     <!-- Form -->
     <div ng-show="isShowForm">
         <div class="portlet light">
@@ -62,7 +85,7 @@
                             </div>
 
                         </div>
-                       
+
                         <div class="form-group form-md-line-input">
                             <label class="col-md-2 control-label" for="form_control_1">项目地址</label>
                             <div class="col-md-10">
@@ -101,6 +124,8 @@
     </div>
     <!-- Form -->
 </div>
+
+
 @section Scripts {
     <script src="~/app/service/project.js"></script>
 }

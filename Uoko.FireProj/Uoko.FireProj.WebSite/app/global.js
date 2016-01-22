@@ -24,9 +24,14 @@ fireproj.directive('initTable', ['$compile', function ($compile) {
 }]);
 
 //表单提交成功事件通用操作
-var formSubmitSuccessClick = function () {
+var formSubmitSuccessClick = function (operation) {
     bootbox.alert("提交成功", function (data) {
-        window.location.href = document.referrer;
+        if (operation == "refresh") {
+            window.location.href = window.location.href
+        }
+        else {
+            window.location.href = document.referrer;
+        }
     });
 }
 
@@ -49,4 +54,10 @@ var formSubmitFailClick = function (data) {
             reset: false,
         });
     }
+}
+
+function GetQueryString(name) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+    var r = window.location.search.substr(1).match(reg);
+    if (r != null) return unescape(r[2]); return null;
 }

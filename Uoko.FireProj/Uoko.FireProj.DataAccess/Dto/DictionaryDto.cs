@@ -24,7 +24,7 @@ namespace Uoko.FireProj.DataAccess.Dto
         /// <summary>
         /// 父节点
         /// </summary>
-        public string ParentId { get; set; }
+        public int ParentId { get; set; }
 
         /// <summary>
         /// 描述
