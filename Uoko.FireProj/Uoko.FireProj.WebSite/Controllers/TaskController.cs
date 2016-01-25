@@ -18,13 +18,15 @@ namespace Uoko.FireProj.WebSite.Controllers
         {
             return View();
         }
-
         public ActionResult Edit(int taskId)
         {
+            ViewBag.TaskId = taskId;
             return View();
         }
+
         public ActionResult Detail(int taskId)
         {
+            ViewBag.TaskId = taskId;
             return View();
         }
     }

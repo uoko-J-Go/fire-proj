@@ -69,7 +69,7 @@ namespace Uoko.FireProj.Concretes
             }
         }
 
-        public void EditTask(TaskDto task)
+        public void UpdateTask(TaskDto task)
         {
             try
             {
@@ -97,7 +97,26 @@ namespace Uoko.FireProj.Concretes
                 var project=db.Project.FirstOrDefault(t => t.Id == taskInfo.ProjectId);
                 var data = Mapper.Map<TaskInfo, TaskDto>(taskInfo);
                 data.Project= Mapper.Map<Project, ProjectDto>(project);
+                
+                var checkUsers = new List<UserDto>();
+                taskInfo.CheckUserId.Split(',').ToList().ForEach((item)=>
+                {
+                    checkUsers.Add(new UserDto
+                    {
+                        Id = int.Parse(item)
+                    });
+                });
+                data.CheckUsers = checkUsers;
 
+                var noticeUsers = new List<UserDto>();
+                taskInfo.NoticeUseId.Split(',').ToList().ForEach((item) =>
+                {
+                    noticeUsers.Add(new UserDto
+                    {
+                        Id = int.Parse(item)
+                    });
+                });
+                data.NoticeUses = noticeUsers;
                 return data;
             }
         }
