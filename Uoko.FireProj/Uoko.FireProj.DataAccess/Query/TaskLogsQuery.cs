@@ -8,6 +8,6 @@ namespace Uoko.FireProj.DataAccess.Query
 {
     public class TaskLogsQuery : BaseQuery
     {
-
+        public int TaskId { get; set; }
     }
 }

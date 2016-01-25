@@ -183,6 +183,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="app\controllers\TaskLogs.js" />
     <Content Include="app\global.js" />
     <Content Include="app\modals\SelectUser.html" />
     <Content Include="app\modals\SelectUser.js" />
@@ -1058,6 +1059,7 @@
     <Content Include="Views\Task\Create.cshtml" />
     <Content Include="Views\Task\Edit.cshtml" />
     <Content Include="Views\Task\Detail.cshtml" />
+    <Content Include="Views\Task\Logs.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="app\directives\" />
