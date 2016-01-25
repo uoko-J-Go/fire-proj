@@ -1,19 +1,4 @@
 ﻿
-fireproj.service("TaskService", function ($http) {
-    
-});
-fireproj.service("ProjectService", function ($http) {
-    //获取gitlab所有项目信息
-    this.getAllProject = function (successCallBack) {
-        $http.get("/api/ProjectApi/GetAll").success(function (data) {
-            if (successCallBack != undefined) {
-                successCallBack(data);
-            }
-        }).error(function (data) {
-            //错误处理
-        });
-    };
-});
 fireproj.controller("TaskController", function ($scope, $http, TaskService, ProjectService, CommonService) {
     $scope.projectList = [];
     $scope.GetProjectList = function () {
@@ -48,6 +33,8 @@ fireproj.controller("TaskController", function ($scope, $http, TaskService, Proj
 
                         '<a class="btn btn-primary delete" href="/Task/Logs/' + row.Id + '" title="任务记录">',
                             '任务记录',
+                        '<a class="btn btn-primary delete" ng-click="ShowDetail(' + row.Id + ')" title="详细">',
+                            '详细',
                         '</a>'].join('');
                 }
             }
@@ -64,15 +51,19 @@ fireproj.controller("TaskController", function ($scope, $http, TaskService, Proj
         pageList: [10, 25, 50, 100],
         sidePagination: 'server'
     };
-    $scope.Deploy=function(id) {
-        CommonService.TriggerBuild(function() {
-            
+    $scope.Deploy = function (taskId) {
 
+        TaskService.GetTaskInfo(taskId, function (data) {
+            var taskInfo = data;
+            CommonService.TriggerBuild(taskInfo.Project.ProjectId, function (data) {
+                bootbox.alert("已经成功发起部署任务，点击详细进行查看!");
+            });
         });
+       
     }
 
-    $scope.CommitToTest = function () {
-
+    $scope.ShowDetail = function (taskId) {
+        location.href = "/Task/Detail?taskId=" + taskId;
     }
     $scope.Init = function () {
         $scope.GetProjectList();

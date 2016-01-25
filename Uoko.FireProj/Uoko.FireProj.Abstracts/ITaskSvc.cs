@@ -20,7 +20,7 @@ namespace Uoko.FireProj.Abstracts
         /// 任务编辑
         /// </summary>
         /// <param name="task"></param>
-        void EditTask(TaskDto task);
+        void UpdateTask(TaskDto task);
 
         /// <summary>
         /// 根据任务id删除任务信息

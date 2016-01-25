@@ -194,10 +194,14 @@
     <Content Include="app\controllers\TaskDetail.js" />
     <Content Include="app\controllers\TaskEdit.js" />
     <Content Include="app\controllers\TaskList.js" />
+    <Content Include="app\services\ProjectService.js" />
+    <Content Include="app\services\TaskService.js" />
     <Content Include="app\services\CommonService.js" />
     <Content Include="Content\bootstrap-table.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\TaskEdit.css" />
+    <Content Include="Content\TaskDetail.css" />
     <Content Include="Content\tree-grid-directive.js" />
     <Content Include="Content\treeGrid.css" />
     <Content Include="Content\Images\add-tag.png" />

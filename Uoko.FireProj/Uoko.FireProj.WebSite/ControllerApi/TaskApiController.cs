@@ -24,6 +24,20 @@ namespace Uoko.FireProj.WebSite.ControllerApi
             var result = _taskSvc.GetTaskPage(query);
             return Ok(result);
         }
+        [Route("{taskId}")]
+        public IHttpActionResult Get(int taskId)
+        {
+            var result = _taskSvc.GetTaskById(taskId);
+            return Ok(result);
+        }
+        [Route("Update")]
+        [HttpPost]
+        public IHttpActionResult Update([FromBody]TaskDto task)
+        {
+            _taskSvc.UpdateTask(task);
+            return Ok();
+        }
+
         [Route("Create")]
         [HttpPost]
         public IHttpActionResult Create([FromBody]TaskDto task)
