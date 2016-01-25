@@ -89,9 +89,8 @@
                                 <div class="form-control-wrap">
                                     <ul class="tags">
                                         <li ng-repeat="item in taskInfo.CheckUsers">
-                                            <span class="label label-sm label-success" >
-                                                {{item.name}}
-                                            </span>
+                                            <img ng-src="{{item.avatar_url}}" title="{{item.name}}" alt="{{item.name}}" />
+                                           
                                         </li>
                                     </ul>
                                 </div>
@@ -104,9 +103,7 @@
                                 <div class="form-control-wrap">
                                     <ul class="tags">
                                         <li ng-repeat="item in taskInfo.NoticeUses">
-                                            <span class="label label-sm label-success">
-                                                {{item.name}}
-                                            </span>
+                                            <img ng-src="{{item.avatar_url}}" title="{{item.name}}" alt="{{item.name}}" />
                                         </li>
                                     </ul>
                                 </div>

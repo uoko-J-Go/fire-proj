@@ -106,9 +106,8 @@
                                 <div class="form-control-wrap">
                                     <ul class="tags">
                                         <li ng-repeat="item in taskInfo.CheckUsers">
-                                            <span class="label label-sm label-success" ng-click="removeCheckUser($index)">
-                                                {{item.name}}
-                                            </span>
+                                            <img ng-src="{{item.avatar_url}}" title="{{item.name}}" alt="{{item.name}}" />
+                                            <a class="close" ng-click="removeCheckUser($index)">x</a>
                                         </li>
                                         <li class="add-tag" title="添加人员" ng-click="selectCheckUser()"></li>
                                     </ul>
@@ -122,9 +121,8 @@
                                 <div class="form-control-wrap">
                                     <ul class="tags">
                                         <li ng-repeat="item in taskInfo.NoticeUses">
-                                            <span class="label label-sm label-success" ng-click="removeNoticeUser($index)">
-                                                {{item.name}}
-                                            </span>
+                                            <img ng-src="{{item.avatar_url}}" title="{{item.name}}" alt="{{item.name}}" />
+                                            <a class="close" ng-click="removeNoticeUser($index)">x</a>
                                         </li>
                                         <li class="add-tag" title="添加人员" ng-click="selectNoticeUser()"></li>
                                     </ul>

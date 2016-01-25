@@ -29,7 +29,7 @@
     };
     this.TriggerBuild = function (id,successCallBack) {
         var params = {
-            "Solution": "UOKO.SSOA.sln",
+            "Solution": "UOKO.SSOAA.sln",
             "CsprojName": "UOKO.SSO.Server\UOKO.SSO.Server.csproj"
         }
         $http.post('http://gitlab.uoko.ioc:12015/api/v3/projects/'+id+'/trigger/builds?private_token=gQM5yK7r32iPsDcmNy8-', { token: "f51b995894982acda6cc24accbb780", ref: "master", variables: params }).success(function (data) {
