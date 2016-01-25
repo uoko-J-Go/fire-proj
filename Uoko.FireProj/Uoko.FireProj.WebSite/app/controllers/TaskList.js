@@ -19,10 +19,6 @@ fireproj.controller("TaskController", function ($scope, $http, TaskService, Proj
             {
                 title: '操作', align: 'center', width: 400, formatter: function (value, row, index) {
                     return [
-                       '<a class="btn btn-primary delete" href="/Task/Detail/' + row.Id + '" title="详情">',
-                            '详情',
-                        '</a>',
-
                         '<a class="btn btn-primary editor" ng-click="Deploy(' + row.Id + ')" title="编译部署">',
                             '编译部署',
                         '</a>',
