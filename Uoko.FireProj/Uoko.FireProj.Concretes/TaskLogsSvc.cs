@@ -69,7 +69,7 @@ namespace Uoko.FireProj.Concretes
             using (var dbScope = _dbScopeFactory.CreateReadOnly())
             {
                 var db = dbScope.DbContexts.Get<FireProjDbContext>();
-                var data = db.TaskLogs.Select(r => new TaskLogsDto
+                var data = db.TaskLogs.Where(r => r.TaskId == query.TaskId).Select(r => new TaskLogsDto
                 {
                     Id = r.Id,
                     Branch = r.Branch,

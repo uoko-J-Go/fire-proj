@@ -23,7 +23,11 @@ namespace Uoko.FireProj.WebSite.Controllers
         {
             return View();
         }
-        public ActionResult Detail(int taskId)
+        public ActionResult Detail()
+        {
+            return View();
+        }
+        public ActionResult Logs()
         {
             return View();
         }

@@ -31,5 +31,17 @@ namespace Uoko.FireProj.WebSite.ControllerApi
             _taskSvc.CreatTask(task);
             return Ok();
         }
+
+        /// <summary>
+        /// 根据id获取详细信息
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [Route("{id}/ById")]
+        public IHttpActionResult GetById(int id)
+        {
+            var result = _taskSvc.GetTaskById(id);
+            return Ok(result);
+        }
     }
 }

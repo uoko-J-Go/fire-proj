@@ -1,0 +1,56 @@
+﻿
+@{
+    ViewBag.Title = "任务记录";
+}
+
+@section Css {
+   
+}
+<div class="col-md-12">
+    <div ng-controller="TaskController">
+        <!-- BEGIN  HEADER-->
+        <div class="page-bar">
+            <ul class="page-breadcrumb">
+                <li>
+                    <i class="fa fa-home"></i>
+                    <a href="/">主页</a>
+                    <i class="fa fa-angle-right"></i>
+                </li>
+                <li>
+                    <a href="@Url.Action("Index","Task")">我的任务</a>
+                    <i class="fa fa-angle-right"></i>
+                </li>
+                <li>
+                    <a href="#">任务记录</a>
+                </li>
+            </ul>
+        </div>
+        <!-- END  HEADER-->
+        <!-- BEGIN  TABLE -->
+        <div class="portlet box blue">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-tasks"></i>记录列表
+                </div>
+
+            </div>
+            <div class="portlet-body">
+                <div class="table-toolbar">
+                    <div class="row">
+                        <div class="col-md-6">
+                           
+                        </div>
+
+                    </div>
+                </div>
+                <table init-Table="tableOptions" bs-table-control> </table>
+            </div>
+        </div>
+        <!-- END  TABLE -->
+        <input type="hidden" id="id" value="@Html.ViewContext.RouteData.Values["id"]" />
+    </div>
+</div>
+@section Scripts {
+<script src="~/app/controllers/TaskLogs.js"></script>
+}
+
