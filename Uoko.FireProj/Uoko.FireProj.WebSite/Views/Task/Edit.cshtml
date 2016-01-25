@@ -46,8 +46,8 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">项目</label>
-                                <select class="form-control" ng-model="taskInfo.Project" ng-selected="project.Id==taskInfo.Project.Id" ng-change="getBranch(taskInfo.Project)" required>
-                                    <option ng-repeat="project in projectList" value="{{project}}">{{project.ProjectName}}</option>
+                                <select class="form-control" ng-model="taskInfo.Project"  ng-change="getBranch(taskInfo.Project)" required>
+                                    <option ng-repeat="project in projectList" value="{{project}}" ng-selected="project.Id == taskInfo.Project.Id">{{project.ProjectName}}</option>
                                 </select>
                             </div>
                         </div>

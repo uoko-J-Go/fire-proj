@@ -16,6 +16,7 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
         var taskId = $("#taskIdParam").val();
         TaskService.GetTaskInfo(taskId, function (data) {
             $scope.taskInfo = data;
+            $scope.getBranch($scope.taskInfo.Project);
             $scope.GetAllUserDetail($scope.taskInfo.CheckUsers, 0);
             $scope.GetAllUserDetail($scope.taskInfo.NoticeUses, 0);
 
