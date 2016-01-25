@@ -5,21 +5,23 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
         var taskId = $("#taskIdParam").val();
         TaskService.GetTaskInfo(taskId, function (data) {
             $scope.taskInfo = data;
-            for (var i = 0; i < $scope.taskInfo.CheckUsers.length; i++) {
-                var user = $scope.taskInfo.CheckUsers[i];
-                CommonService.getSingleUser(user.Id, function (data) {
-                    user = data;
-                    //$scope.$apply();
-                });
-            }
-            for (var i = 0; i < $scope.taskInfo.NoticeUses.length; i++) {
-                var user = $scope.taskInfo.NoticeUses[i];
-                CommonService.getSingleUser(user.Id, function (data) {
-                    user = data;
-                });
-            }
+            $scope.GetAllUserDetail($scope.taskInfo.CheckUsers, 0);
+            $scope.GetAllUserDetail($scope.taskInfo.NoticeUses, 0);
+         
         });
-    };
+    }
+    $scope.GetAllUserDetail = function (userList, index) {
+        if (index < userList.length) {
+            var user = userList[index];
+            CommonService.getSingleUser(user.Id, function (data) {
+                userList.splice(index, 1, data);
+                if (index < userList.length) {
+                    ++index;
+                    $scope.GetAllUserDetail(userList, index);
+                }
+            });
+        }
+    }
 
     
     $scope.Edit = function () {

@@ -77,7 +77,9 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
 
     //根据项目Id或者分支列表
     $scope.getBranch = function (project) {
-        project = JSON.parse(project);
+        if (typeof project == "string") {
+            project = JSON.parse(project);
+        }
         CommonService.getProjectBranch(project.ProjectId, function (data) {
             $scope.branchList = data;
         });

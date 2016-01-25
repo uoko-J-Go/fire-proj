@@ -73,12 +73,17 @@ namespace Uoko.FireProj.Concretes
         {
             try
             {
-                var entity = Mapper.Map<TaskDto, TaskInfo>(task); ;
+                var entity = Mapper.Map<TaskDto, TaskInfo>(task);
+                entity.ProjectId = task.Project.Id;
+                entity.CheckUserId = string.Join(",", task.CheckUsers.Select(t => t.Id));
+                entity.NoticeUseId = string.Join(",", task.NoticeUses.Select(t => t.Id));
+                entity.ModifyBy = 1;
+                entity.ModifyDate = DateTime.Now;
                 using (var dbScope = _dbScopeFactory.Create())
                 {
                     var db = dbScope.DbContexts.Get<FireProjDbContext>();
                     //根据实际情况修改
-                    db.Update(entity, t => new { t.TaskName, t.Branch, t.DeployEnvironment, t.DeployIP,t.SiteName,t.DeployAddress,t.TaskDesc,t.Status });
+                    db.Update(entity, t => new { t.TaskName,t.ProjectId, t.Branch, t.DeployEnvironment, t.DeployIP,t.SiteName,t.DeployAddress,t.TaskDesc,t.CheckUserId,t.NoticeUseId,t.Status,t.ModifyBy,t.ModifyDate });
                     db.SaveChanges();
                 }
             }

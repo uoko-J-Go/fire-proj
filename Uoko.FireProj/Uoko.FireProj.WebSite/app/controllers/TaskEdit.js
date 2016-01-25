@@ -16,21 +16,23 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
         var taskId = $("#taskIdParam").val();
         TaskService.GetTaskInfo(taskId, function (data) {
             $scope.taskInfo = data;
-            for (var i = 0; i < $scope.taskInfo.CheckUsers.length; i++) {
-                var user = $scope.taskInfo.CheckUsers[i];
-                CommonService.getSingleUser(user.Id, function (data) {
-                    user = data;
-                    //$scope.$apply();
-                });
-            }
-            for (var i = 0; i < $scope.taskInfo.NoticeUses.length; i++) {
-                var user = $scope.taskInfo.NoticeUses[i];
-                CommonService.getSingleUser(user.Id, function (data) {
-                    user = data;
-                });
-            }
+            $scope.GetAllUserDetail($scope.taskInfo.CheckUsers, 0);
+            $scope.GetAllUserDetail($scope.taskInfo.NoticeUses, 0);
+
         });
-    };
+    }
+    $scope.GetAllUserDetail = function (userList, index) {
+        if (index < userList.length) {
+            var user = userList[index];
+            CommonService.getSingleUser(user.Id, function (data) {
+                userList.splice(index, 1, data);
+                if (index < userList.length) {
+                    ++index;
+                    $scope.GetAllUserDetail(userList, index);
+                }
+            });
+        }
+    }
     //选择审核人
     $scope.selectCheckUser = function () {
         var modalInstance = $uibModal.open({
@@ -85,7 +87,9 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
 
     //根据项目Id或者分支列表
     $scope.getBranch = function (project) {
-        project = JSON.parse(project);
+        if (typeof project == "string") {
+            project = JSON.parse(project);
+        }
         CommonService.getProjectBranch(project.ProjectId, function (data) {
             $scope.branchList = data;
         });
