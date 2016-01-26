@@ -63,7 +63,11 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
         $scope.taskInfo.NoticeUses.splice(index, 1);
         $scope.$evalAsync();
     }
-    $scope.Save = function () {
+    $scope.Save = function (isValid) {
+        if (!isValid) {
+            bootbox.alert("表单验证未通过");
+            return;
+        }
         var project = $scope.taskInfo.Project;
         if (typeof project == "string") {
             $scope.taskInfo.Project = JSON.parse(project);
