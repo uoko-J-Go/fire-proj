@@ -18,7 +18,7 @@ namespace Uoko.FireProj.Abstracts
         /// 新增项目
         /// </summary>
         /// <param name="dto"></param>
-        void CreatProject(ProjectDto dto);
+        int CreatProject(ProjectDto dto);
 
         /// <summary>
         /// 项目编辑

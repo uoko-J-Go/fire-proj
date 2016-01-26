@@ -32,6 +32,7 @@ namespace Uoko.FireProj.Concretes
                     var db = dbScope.DbContexts.Get<FireProjDbContext>();
                     foreach (var item in entity)
                     {
+                        item.CreateDate = DateTime.Now;
                         db.ResourceInfo.Add(item);
                     }
                     db.SaveChanges();

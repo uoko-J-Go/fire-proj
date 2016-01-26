@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -14,9 +15,11 @@ namespace Uoko.FireProj.WebSite.ControllerApi
     public class ProjectApiController : BaseApiController
     {
         private IProjectSvc _projectSvc { get; set; }
-        public ProjectApiController(IProjectSvc projectSvc)
+        private IResourceInfoSvc _resourceInfoSvc { get; set; }
+        public ProjectApiController(IProjectSvc projectSvc, IResourceInfoSvc resourceInfoSvc)
         {
             _projectSvc = projectSvc;
+            _resourceInfoSvc = resourceInfoSvc;
         }
 
         /// <summary>
@@ -58,7 +61,29 @@ namespace Uoko.FireProj.WebSite.ControllerApi
             {
                 return BadRequest(ModelState);
             }
-            _projectSvc.CreatProject(dto);
+            var projectId = _projectSvc.CreatProject(dto);
+            if (projectId > 0)
+            {
+                //创建内部测试环境地址: 域名+端口号
+                List<ResourceInfoDto> resourceInfoList = new List<ResourceInfoDto>();
+                Hashtable hashtable = new Hashtable();
+                Random rm = new Random();
+                for (int i = 0; hashtable.Count < 10; i++)
+                {
+                    int nValue = rm.Next(1000, 10000);
+                    if (!hashtable.ContainsValue(nValue) && nValue != 0)
+                    {
+                        hashtable.Add(nValue, nValue);
+                        resourceInfoList.Add(
+                        new ResourceInfoDto()
+                        {
+                            ProjectId = projectId,
+                            Url = string.Format("http://{0}.uoko.ioc:{1}", dto.ProjectGitlabName, nValue),
+                        });
+                    }
+                }
+                _resourceInfoSvc.CreatResource(resourceInfoList);
+            }
             return Ok();
         }
 

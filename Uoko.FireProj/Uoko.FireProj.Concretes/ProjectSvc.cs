@@ -28,7 +28,7 @@ namespace Uoko.FireProj.Concretes
         }
         #endregion
 
-        public void CreatProject(ProjectDto dto)
+        public int CreatProject(ProjectDto dto)
         {
             try
             {
@@ -40,6 +40,7 @@ namespace Uoko.FireProj.Concretes
                     var data = db.Project.Add(entity);
                     db.SaveChanges();
                 }
+                return entity.Id;
             }
             catch (Exception ex)
             {

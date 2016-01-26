@@ -105,6 +105,10 @@
     <Compile Include="Migrations\201601220809439_addprojectIdtoproject.Designer.cs">
       <DependentUpon>201601220809439_addprojectIdtoproject.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201601250905453_updateResourceInfo.cs" />
+    <Compile Include="Migrations\201601250905453_updateResourceInfo.Designer.cs">
+      <DependentUpon>201601250905453_updateResourceInfo.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Query\BaseQuery.cs" />
@@ -138,6 +142,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201601220809439_addprojectIdtoproject.resx">
       <DependentUpon>201601220809439_addprojectIdtoproject.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201601250905453_updateResourceInfo.resx">
+      <DependentUpon>201601250905453_updateResourceInfo.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

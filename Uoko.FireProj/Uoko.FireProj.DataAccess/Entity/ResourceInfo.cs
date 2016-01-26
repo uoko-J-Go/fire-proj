@@ -17,6 +17,16 @@ namespace Uoko.FireProj.DataAccess.Entity
         /// </summary>
         public string Url { get; set; }
 
+        /// <summary>
+        /// 项目Id
+        /// </summary>
+        public int ProjectId { get; set; }
+
+        /// <summary>
+        /// 任务Id
+        /// </summary>
+        public int TaskId { get; set; }
+
         public ResourceEnum Status { get; set; }
     }
 }

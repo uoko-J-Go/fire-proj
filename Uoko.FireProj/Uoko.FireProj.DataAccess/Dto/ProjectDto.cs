@@ -20,6 +20,11 @@ namespace Uoko.FireProj.DataAccess.Dto
         public string ProjectRepo { get; set; }
 
         /// <summary>
+        /// 站点对应的gitlab的名称
+        /// </summary>
+        public string ProjectGitlabName { get; set; }
+
+        /// <summary>
         /// gitlab项目的id
         /// </summary>
         public int ProjectId { get; set; }

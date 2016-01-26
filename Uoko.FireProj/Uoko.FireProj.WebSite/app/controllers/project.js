@@ -87,7 +87,7 @@ fireproj.controller("ProjectController", function ($scope, $http, ProjectService
     //删除事件
     $scope.delete = function (id) {
         ProjectService.delete(id).success(function (data) {
-            formSubmitSuccessClick();
+            formSubmitSuccessClick("refresh");
         }).error(function (data) {
             formSubmitFailClick(data);
         });
@@ -98,6 +98,7 @@ fireproj.controller("ProjectController", function ($scope, $http, ProjectService
         var gitlabInfo = JSON.parse(model.Project);
         model.ProjectRepo = gitlabInfo.http_url_to_repo;
         model.ProjectId = gitlabInfo.id;
+        model.ProjectGitlabName = gitlabInfo.name;
         if (typeof model.Id == "undefined") {
             ProjectService.post(model).success(function (data) {
                 formSubmitSuccessClick();
