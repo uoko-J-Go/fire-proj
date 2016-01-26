@@ -3,10 +3,8 @@
 fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskService, ProjectService,CommonService) {
     $scope.taskInfo = {};
     $scope.projectList = [];
-    $scope.branchList = ["Dev", "Master"];
+    $scope.branchList = [];
     $scope.environmentList = [{ Id: 1, Name: "IOC环境" }, { Id: 2, Name: "Pre环境" }, { Id: 3, Name: "生产环境" }];
-    $scope.serverList = ["192.168.200.26", "192.168.200.28", "192.168.200.29"];
-    $scope.siteList = ["ids.uoko.ioc", "sso.uoko.ioc", "etadmin.uoko.ioc"];
     $scope.GetProjectList = function () {
         ProjectService.getAllProject(function (data) {
             $scope.projectList = data;
@@ -76,7 +74,11 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
         $scope.taskInfo.NoticeUses.splice(index, 1);
         $scope.$evalAsync();
     }
-    $scope.Save = function () {
+    $scope.Save = function (isValid) {
+        if (!isValid) {
+            bootbox.alert("表单验证未通过");
+            return;
+        }
         var project = $scope.taskInfo.Project;
         if (typeof project == "string") {
             $scope.taskInfo.Project = JSON.parse(project);
