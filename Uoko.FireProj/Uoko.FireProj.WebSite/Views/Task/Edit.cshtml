@@ -77,18 +77,13 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">部署机器IP</label>
-                                <select class="form-control" ng-model="taskInfo.DeployIP" required>
-                                    <option ng-repeat="server in serverList" value="{{server}}" ng-selected="server==taskInfo.DeployIP">{{server}}</option>
-                                </select>
+                                <input type="text" ng-model="taskInfo.DeployIP" class="form-control" placeholder="请输入部署机器IP" required>
                             </div>
                         </div>
-
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">IIS站点名称</label>
-                                <select class="form-control" ng-model="taskInfo.SiteName" required>
-                                    <option ng-repeat="site in siteList" value="{{site}}" ng-selected="site==taskInfo.SiteName">{{site}}</option>
-                                </select>
+                                <input type="text" ng-model="taskInfo.SiteName" class="form-control" placeholder="请输入IIS站点名称" required>
                             </div>
                         </div>
                     </div>
