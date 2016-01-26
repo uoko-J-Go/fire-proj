@@ -48,11 +48,11 @@ fireproj.controller("TaskController", function ($scope, $http, TaskService, Proj
         sidePagination: 'server'
     };
     $scope.Deploy = function (taskId) {
-
         TaskService.GetTaskInfo(taskId, function (data) {
             var taskInfo = data;
-            CommonService.TriggerBuild(taskInfo.Project.ProjectId, function (data) {
+            CommonService.TriggerBuild(taskInfo, function (data) {
                 bootbox.alert("已经成功发起部署任务，点击详细进行查看!");
+                //todo 添加记录 状态更改
             });
         });
        
