@@ -40,5 +40,11 @@ namespace Uoko.FireProj.Abstracts
         /// </summary>
         /// <param name="taskId"></param>
         TaskDto GetTaskById(int taskId);
+
+        /// <summary>
+        /// 更新任务状态
+        /// </summary>
+        /// <param name="task"></param>
+        void UpdateTaskStatus(TaskDto task);
     }
 }

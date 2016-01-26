@@ -26,4 +26,13 @@
             //错误处理
         });;
     };
+    this.UpdateTaskStatus = function (param, successCallBack) {
+        $http.post("/api/TaskApi/Put", param).success(function (data) {
+            if (successCallBack != undefined) {
+                successCallBack(data);
+            }
+        }).error(function (data) {
+            //错误处理
+        });
+    };
 });

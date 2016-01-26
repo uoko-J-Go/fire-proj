@@ -59,9 +59,9 @@ namespace Uoko.FireProj.DataAccess.Dto
         public string DeployAddress { get; set; }
 
         /// <summary>
-        /// 任务状态
+        /// 任务状态值
         /// </summary>
-        public TaskEnum Status { get; set; }
+        public string Status { get; set; }
 
         /// <summary>
         /// 任务描述

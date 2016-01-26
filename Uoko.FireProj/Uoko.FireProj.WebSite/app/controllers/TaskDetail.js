@@ -27,10 +27,31 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
     $scope.Edit = function () {
         location.href = "/Task/Edit?taskId=" + $scope.taskInfo.Id;
     }
+
     $scope.Cancel = function () {
         location.href = "/Task/Index";
     }
-    
+
+    $scope.TestFails = function () {
+        var param = {
+            id: $scope.taskInfo.Id,
+            Status: 4
+        };
+        TaskService.UpdateTaskStatus(param, function (data) {
+            formSubmitSuccessClick();
+        });
+    }
+
+    $scope.Tested = function () {
+        var param = {
+            id: $scope.taskInfo.Id,
+            Status: 5
+        };
+        TaskService.UpdateTaskStatus(param, function (data) {
+            formSubmitSuccessClick();
+        });
+    }
+
     $scope.Init = function () {
         $scope.GetTaskInfo();
     }

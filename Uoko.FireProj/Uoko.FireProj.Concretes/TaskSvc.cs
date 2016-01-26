@@ -12,6 +12,8 @@ using Uoko.FireProj.DataAccess.Query;
 using Uoko.FireProj.Infrastructure.Data;
 using Uoko.FireProj.Infrastructure.Exception;
 using Uoko.FireProj.Model;
+using Uoko.FireProj.DataAccess.Enum;
+using Uoko.FireProj.Infrastructure.Extensions;
 
 namespace Uoko.FireProj.Concretes
 {
@@ -131,22 +133,46 @@ namespace Uoko.FireProj.Concretes
             using (var dbScope = _dbScopeFactory.CreateReadOnly())
             {
                 var db = dbScope.DbContexts.Get<FireProjDbContext>();
-                var data = db.TaskInfo.Select(r => new TaskDto
+                var data = db.TaskInfo.AsQueryable();
+                if (!string.IsNullOrEmpty(query.Search))
+                {
+                    data = data.Where(r => r.TaskName.Contains(query.Search));
+                }
+                var result = data.OrderBy(r => r.Id).Skip(query.Offset).Take(query.Limit).ToList().Select(r => new TaskDto
                 {
                     Id = r.Id,
                     TaskName = r.TaskName,
                     DeployEnvironment = r.DeployEnvironment,
                     Branch = r.Branch,
                     TaskDesc = r.TaskDesc,
-                    Status = r.Status,
+                    Status = r.Status.ToDescription(),
                 });
-                if (!string.IsNullOrEmpty(query.Search))
-                {
-                    data = data.Where(r => r.TaskName.Contains(query.Search));
-                }
-                var result = data.OrderBy(r => r.Id).Skip(query.Offset).Take(query.Limit).ToList();
                 var total = data.Count();
                 return new PageGridData<TaskDto> { rows = result, total = total };
+            }
+        }
+
+        public void UpdateTaskStatus(TaskDto task)
+        {
+            try
+            {
+                var entity = new TaskInfo()
+                {
+                    Id = task.Id,
+                    Status = (TaskEnum)int.Parse(task.Status),
+                    ModifyDate = DateTime.Now,
+                };
+                using (var dbScope = _dbScopeFactory.Create())
+                {
+                    var db = dbScope.DbContexts.Get<FireProjDbContext>();
+                    //根据实际情况修改
+                    db.Update(entity, r => new { r.Status });
+                    db.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new TipInfoException(ex.Message);
             }
         }
     }

@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Web.Http;
 using Uoko.FireProj.Abstracts;
 using Uoko.FireProj.DataAccess.Dto;
+using Uoko.FireProj.DataAccess.Enum;
 using Uoko.FireProj.DataAccess.Query;
 
 namespace Uoko.FireProj.WebSite.ControllerApi
@@ -57,5 +58,19 @@ namespace Uoko.FireProj.WebSite.ControllerApi
             var result = _taskSvc.GetTaskById(id);
             return Ok(result);
         }
+
+        /// <summary>
+        /// 根据id修改任务状态
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [Route("Put")]
+        [HttpPost]
+        public IHttpActionResult Put([FromBody]TaskDto task)
+        {
+            _taskSvc.UpdateTaskStatus(task);
+            return Ok();
+        }
+
     }
 }

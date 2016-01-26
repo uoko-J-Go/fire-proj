@@ -6,6 +6,7 @@ fireproj.controller("TaskController", function ($scope, $http, TaskService, Proj
             $scope.projectList = data;
         });
     };
+
     $scope.tableOptions = {
         url: '/api/TaskApi',
         columns: [
@@ -19,7 +20,7 @@ fireproj.controller("TaskController", function ($scope, $http, TaskService, Proj
             {
                 title: '操作', align: 'center', width: 400, formatter: function (value, row, index) {
                     return [
-                        '<a class="btn btn-primary editor" ng-click="Deploy(' + row.Id + ')" title="编译部署">',
+                        '<a class="btn btn-primary editor" ng-click="Deploy(' + row.Id + ',)" title="编译部署">',
                             '编译部署',
                         '</a>',
 
@@ -51,11 +52,21 @@ fireproj.controller("TaskController", function ($scope, $http, TaskService, Proj
         TaskService.GetTaskInfo(taskId, function (data) {
             var taskInfo = data;
             CommonService.TriggerBuild(taskInfo, function (data) {
-                bootbox.alert("已经成功发起部署任务，点击详细进行查看!");
-                //todo 添加记录 状态更改
+                bootbox.alert("已经成功发起部署任务，点击详细进行查看!", function () {
+                    //todo 添加记录 状态更改,这里判断是否部署成功
+                    var param = {
+                        id:taskId,
+                        Status: 2
+                    };
+                    TaskService.UpdateTaskStatus(param, function (data) {
+
+                    });
+                    // 保存部署记录
+
+                });
+                
             });
         });
-       
     }
 
     $scope.ShowDetail = function (taskId) {
@@ -63,6 +74,16 @@ fireproj.controller("TaskController", function ($scope, $http, TaskService, Proj
     }
     $scope.Init = function () {
         $scope.GetProjectList();
+    }
+    ///提交测试,状态改为3测试中
+    $scope.CommitToTest = function (taskId) {
+        var param = {
+            id: taskId,
+            Status: 3
+        };
+        TaskService.UpdateTaskStatus(param, function (data) {
+
+        });
     }
 
     $scope.Init();
