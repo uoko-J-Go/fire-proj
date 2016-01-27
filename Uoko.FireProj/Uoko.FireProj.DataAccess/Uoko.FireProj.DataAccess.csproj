@@ -77,6 +77,7 @@
     <Compile Include="FluentAPI\ResourceInfoMap.cs" />
     <Compile Include="FluentAPI\TaskLogsMap.cs" />
     <Compile Include="FluentAPI\TaskInfoMap.cs" />
+    <Compile Include="Gitlab\BuildHookRequest.cs" />
     <Compile Include="Migrations\201601140333406_addproject.cs" />
     <Compile Include="Migrations\201601140333406_addproject.Designer.cs">
       <DependentUpon>201601140333406_addproject.cs</DependentUpon>
