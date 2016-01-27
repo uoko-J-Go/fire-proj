@@ -57,3 +57,10 @@ function GetQueryString(name) {
     var r = window.location.search.substr(1).match(reg);
     if (r != null) return unescape(r[2]); return null;
 }
+
+String.prototype.Format = function () {
+    var args = arguments;
+    return this.replace(/{(\d{1})}/g, function () {
+        return args[arguments[1]];
+    });
+}
