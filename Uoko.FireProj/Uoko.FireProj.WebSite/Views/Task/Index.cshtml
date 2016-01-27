@@ -40,7 +40,45 @@
                         </div>
                     </div>
                 </div>
-                <table init-Table="tableOptions" bs-table-control> </table>
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th>任务名称</th>
+                            <th>环境</th>
+                            <th>分支</th>
+                            <th>状态</th>
+                            <th>任务描述</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="item in items">
+                            <td><a href="/Task/Detail?taskId={{item.Id}}">{{item.TaskName}}</a></td>
+                            <td>{{item.DeployEnvironment|environmentFilter}}</td>
+                            <td>{{item.Branch}}</td>
+                            <td>{{item.Status|taskStatusFilter}}</td>
+                            <td>{{item.TaskDesc}}</td>
+                            <td>
+                                <div>
+                                    <a class="btn btn-primary editor" ng-show="item.Status==0" ng-click="Deploy(item)">编译部署</a>
+                                    <a class="btn btn-primary delete" ng-show="item.Status==6" ng-click="CommitToTest(item)">提交测试</a>
+                                    <a class="btn btn-primary delete" href="/Task/Logs/{{item.Id}}">任务记录</a>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="pull-right" >
+                                <uib-pagination total-items="totalItems" ng-model="currentPage" ng-change="Query()" first-text="首页" last-text="末页"
+                                                previous-text="上一页" next-text="下一页" items-per-page="pageSize" max-size="5" boundary-links="true" boundary-link-numbers="true" rotate="false"></uib-pagination>
+                            </div>
+                        </div>
+                    </div>
+                   
+                </div>
             </div>
         </div>
         <!-- END EXAMPLE TABLE PORTLET-->
@@ -50,6 +88,7 @@
    <script src="~/app/services/CommonService.js"></script>
     <script src="~/app/services/ProjectService.js"></script>
     <script src="~/app/services/TaskService.js"></script>
+    <script src="~/app/filters/CommonFilter.js"></script>
     <script src="~/app/controllers/TaskList.js"></script>
 }
 

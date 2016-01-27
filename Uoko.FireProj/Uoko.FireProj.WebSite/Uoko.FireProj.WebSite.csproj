@@ -186,6 +186,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="app\controllers\TaskLogs.js" />
+    <Content Include="app\filters\CommonFilter.js" />
     <Content Include="app\global.js" />
     <Content Include="app\modals\SelectUser.html" />
     <Content Include="app\modals\SelectUser.js" />

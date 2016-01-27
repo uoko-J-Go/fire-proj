@@ -6,22 +6,6 @@ var fireproj;
     fireproj = angular.module("FireProj", ['ngMessages','ui.bootstrap']);
 })();
 
-//bootstrap-table的angular指令
-fireproj.directive('initTable', ['$compile', function ($compile) {
-    return {
-        restrict: 'A',
-        link: function (scope, el, attrs) {
-            var opts = scope.$eval(attrs.initTable);
-
-            opts.onLoadSuccess = function () {
-                $compile(el.contents())(scope);
-            };
-
-            el.bootstrapTable(opts);
-        }
-
-    };
-}]);
 
 //表单提交成功事件通用操作
 var formSubmitSuccessClick = function (operation) {
