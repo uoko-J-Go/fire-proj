@@ -39,6 +39,7 @@ namespace Uoko.FireProj.Concretes
                 entity.NoticeUseId= string.Join(",", task.NoticeUses.Select(t => t.Id));
                 entity.CreateBy = 1;
                 entity.CreateDate = DateTime.Now;
+                entity.Status = TaskEnum.WaitingDeploy;
                 using (var dbScope = _dbScopeFactory.Create())
                 {
                     var db = dbScope.DbContexts.Get<FireProjDbContext>();
@@ -159,7 +160,7 @@ namespace Uoko.FireProj.Concretes
                 var entity = new TaskInfo()
                 {
                     Id = task.Id,
-                    Status = (TaskEnum)int.Parse(task.Status),
+                    Status = (TaskEnum)Enum.Parse(typeof(TaskEnum), task.Status).GetHashCode(),
                     ModifyDate = DateTime.Now,
                 };
                 using (var dbScope = _dbScopeFactory.Create())

@@ -56,7 +56,7 @@ fireproj.controller("TaskController", function ($scope, $http, TaskService, Proj
                     //todo 添加记录 状态更改,这里判断是否部署成功
                     var param = {
                         id:taskId,
-                        Status: 2
+                        Status: "Deployment"
                     };
                     TaskService.UpdateTaskStatus(param, function (data) {
 
