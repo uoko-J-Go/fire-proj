@@ -19,7 +19,7 @@ namespace Uoko.FireProj.DataAccess.Enum
         /// CI记录
         /// </summary>
         [Description("CI记录")]
-        CI = 2,
+        CI =1,
 
         /// <summary>
         /// YML记录

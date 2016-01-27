@@ -35,4 +35,14 @@
             //错误处理
         });
     };
+
+    this.BeginDeploy = function (taskId,triggerId,successCallBack) {
+        $http.post("/api/TaskApi/BeginDeploy?taskId=" + taskId + "&triggerId=" + triggerId).success(function (data) {
+            if (successCallBack != undefined) {
+                successCallBack(data);
+            }
+        }).error(function (data) {
+            //错误处理
+        });
+    };
 });

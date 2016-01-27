@@ -53,15 +53,10 @@ fireproj.controller("TaskController", function ($scope, $http, TaskService, Proj
             var taskInfo = data;
             CommonService.TriggerBuild(taskInfo, function (data) {
                 bootbox.alert("已经成功发起部署任务，点击详细进行查看!", function () {
-                    //todo 添加记录 状态更改,这里判断是否部署成功
-                    var param = {
-                        id:taskId,
-                        Status: "Deployment"
-                    };
-                    TaskService.UpdateTaskStatus(param, function (data) {
 
+                    TaskService.BeginDeploy(taskId, data.id, function (data) {
+                        location.reload();
                     });
-                    // 保存部署记录
 
                 });
                 

@@ -15,9 +15,11 @@ namespace Uoko.FireProj.WebSite.ControllerApi
     public class TaskApiController : BaseApiController
     {
         private ITaskSvc _taskSvc { get; set; }
-        public TaskApiController(ITaskSvc taskSvc)
+        private ITaskLogsSvc _taskLogsSvc { get; set; }
+        public TaskApiController(ITaskSvc taskSvc, ITaskLogsSvc taskLogsSvc)
         {
             _taskSvc = taskSvc;
+            _taskLogsSvc = taskLogsSvc;
         }
 
         public IHttpActionResult Get([FromUri]TaskQuery query)
@@ -71,6 +73,27 @@ namespace Uoko.FireProj.WebSite.ControllerApi
             _taskSvc.UpdateTaskStatus(task);
             return Ok();
         }
-
+        /// <summary>
+        /// 开始部署
+        /// </summary>
+        /// <param name="taskId"></param>
+        /// <param name="triggerId"></param>
+        /// <returns></returns>
+        [Route("BeginDeploy")]
+        [HttpPost]
+        public IHttpActionResult BeginDeploy(int taskId,int triggerId)
+        {
+            var task= _taskSvc.GetTaskById(taskId);
+            _taskSvc.UpdateTaskStatus(new TaskDto() {Id= task.Id, Status=TaskEnum.Deployment.ToString()});
+            _taskLogsSvc.CreatTaskLogs(new TaskLogsDto()
+            {
+                TaskId = taskId,
+                TriggeredId = triggerId,
+                CreateBy = 1,
+                Environment= task.DeployEnvironment,
+                TaskLogsType = TaskLogsEnum.CI.ToString()
+            });
+            return Ok();
+        }
     }
 }
