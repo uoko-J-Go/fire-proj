@@ -76,7 +76,7 @@
                                 <div class="form-group">
                                     <label class="control-label">发布环境</label>
                                     <select name="deployenvironment" class="form-control" ng-model="taskInfo.DeployEnvironment" required>
-                                        <option ng-repeat="environment in environmentList" value="{{environment.Name}}" ng-selected="environment.Id==taskInfo.DeployEnvironment">{{environment.Name}}</option>
+                                        <option ng-repeat="environment in environmentList" value="{{environment.Id}}" ng-selected="environment.Id==taskInfo.DeployEnvironment">{{environment.Name}}</option>
                                     </select>
                                     <div ng-show="form.$submitted || form.deployenvironment.$touched">
                                         <span class="error-msg" ng-show="form.deployenvironment.$error.required">项目必选.</span>

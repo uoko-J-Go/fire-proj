@@ -23,7 +23,7 @@ namespace Uoko.FireProj.DataAccess.Dto
         /// <summary>
         /// 记录所处的环境
         /// </summary>
-        public string Environment { get; set; }
+        public EnvironmentEnum Environment { get; set; }
 
         /// <summary>
         /// 任务记录描述
@@ -41,7 +41,7 @@ namespace Uoko.FireProj.DataAccess.Dto
         /// <summary>
         /// 记录类型
         /// </summary>
-        public string TaskLogsType { get; set; }
+        public TaskLogsEnum TaskLogsType { get; set; }
 
         /// <summary>
         /// 操作人

@@ -66,6 +66,7 @@
     <Compile Include="Entity\ResourceInfo.cs" />
     <Compile Include="Entity\Task.cs" />
     <Compile Include="Entity\TaskLogs.cs" />
+    <Compile Include="Enum\EnvironmentEnum.cs" />
     <Compile Include="Enum\TaskLogsEnum.cs" />
     <Compile Include="Enum\DeployEnum.cs" />
     <Compile Include="Enum\DicEnum.cs" />
@@ -78,6 +79,7 @@
     <Compile Include="FluentAPI\ResourceInfoMap.cs" />
     <Compile Include="FluentAPI\TaskLogsMap.cs" />
     <Compile Include="FluentAPI\TaskInfoMap.cs" />
+    <Compile Include="Gitlab\BuildHookRequest.cs" />
     <Compile Include="Migrations\201601140333406_addproject.cs" />
     <Compile Include="Migrations\201601140333406_addproject.Designer.cs">
       <DependentUpon>201601140333406_addproject.cs</DependentUpon>
@@ -117,6 +119,14 @@
     <Compile Include="Migrations\201601270323412_updateTaskLogsaddEnvironment.cs" />
     <Compile Include="Migrations\201601270323412_updateTaskLogsaddEnvironment.Designer.cs">
       <DependentUpon>201601270323412_updateTaskLogsaddEnvironment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201601270713598_updateTaskEnvironment.cs" />
+    <Compile Include="Migrations\201601270713598_updateTaskEnvironment.Designer.cs">
+      <DependentUpon>201601270713598_updateTaskEnvironment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201601270829385_updateTask.cs" />
+    <Compile Include="Migrations\201601270829385_updateTask.Designer.cs">
+      <DependentUpon>201601270829385_updateTask.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -160,6 +170,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201601270323412_updateTaskLogsaddEnvironment.resx">
       <DependentUpon>201601270323412_updateTaskLogsaddEnvironment.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201601270713598_updateTaskEnvironment.resx">
+      <DependentUpon>201601270713598_updateTaskEnvironment.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201601270829385_updateTask.resx">
+      <DependentUpon>201601270829385_updateTask.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

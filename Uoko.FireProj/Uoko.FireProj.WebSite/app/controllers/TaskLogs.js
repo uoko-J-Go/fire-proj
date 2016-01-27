@@ -6,10 +6,10 @@ fireproj.controller("TaskController", function ($scope, $http) {
         url: '/api/TaskLogsApi',
         columns: [
             { field: 'Id', title: 'Id', align: 'center', width: 50 },
-            { field: 'Branch', title: '代码分支', align: 'center' },
-            { field: 'DeployEnvironment', title: '部署环境', align: 'center' },
-            { field: 'DeployIP', title: '服务器IP', align: 'center' },
-            { field: 'Status', title: '部署状态', align: 'center' },
+            { field: 'Environment', title: '操作环境', align: 'center' },
+            { field: 'TriggeredId', title: 'Triggered Id', align: 'center' },
+            { field: 'LogsDesc', title: '操作内容', align: 'center' },
+            { field: 'TaskLogsType', title: '记录类型', align: 'center' },
             { field: 'CreateBy', title: '操作人', align: 'center' },
             { field: 'CreateDate', title: '操作时间', align: 'center' },
             

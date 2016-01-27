@@ -21,6 +21,17 @@ namespace Uoko.FireProj.Abstracts
         void CreatTaskLogs(TaskLogsDto dto);
 
         /// <summary>
+        /// 更新任务记录
+        /// </summary>
+        /// <param name="dto"></param>
+        void UpdateTaskLogs(TaskLogsDto dto);
+        /// <summary>
+        /// 根据TrriggerId获取任务记录
+        /// </summary>
+        /// <param name="taskId"></param>
+        /// <returns></returns>
+        TaskLogsDto GetTaskLogByTriggerId(int triggerId);
+        /// <summary>
         /// 获取任务记录分页
         /// </summary>
         /// <param name="query"></param>

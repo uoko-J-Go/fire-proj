@@ -30,7 +30,7 @@ namespace Uoko.FireProj.DataAccess.Entity
         /// <summary>
         /// 部署环境
         /// </summary>
-        public string DeployEnvironment { get; set; }
+        public EnvironmentEnum DeployEnvironment { get; set; }
 
         /// <summary>
         /// 部署IP地址

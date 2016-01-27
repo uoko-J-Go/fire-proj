@@ -7,24 +7,27 @@ using System.Threading.Tasks;
 
 namespace Uoko.FireProj.DataAccess.Enum
 {
-    public enum TaskLogsEnum
+    /// <summary>
+    /// 测试环境枚举
+    /// </summary>
+    public enum EnvironmentEnum
     {
         /// <summary>
-        /// 状态记录
+        /// IOC环境
         /// </summary>
-        [Description("状态记录")]
-        Status = 0,
+        [Description("IOC环境")]
+        IOC = 0,
 
         /// <summary>
-        /// CI记录
+        /// Pre环境
         /// </summary>
-        [Description("CI记录")]
-        CI =1,
+        [Description("Pre环境")]
+        PRE = 1,
 
         /// <summary>
-        /// YML记录
+        /// 正式环境
         /// </summary>
-        [Description("YML记录")]
-        YML = 2,
+        [Description("正式环境")]
+        OnLine = 2,
     }
 }
