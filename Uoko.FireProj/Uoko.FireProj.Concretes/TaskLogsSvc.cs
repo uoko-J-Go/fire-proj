@@ -58,7 +58,7 @@ namespace Uoko.FireProj.Concretes
                     LogsDesc = r.LogsDesc,
                     LogsText = r.LogsText,
                     TriggeredId = r.TriggeredId,
-                    TaskLogsType = r.TaskLogsType.ToDescription(),
+                    TaskLogsType = r.TaskLogsType,
                     TaskId = r.TaskId,
                     CreateBy = r.CreateBy,
                     CreateDate = r.CreateDate
@@ -97,7 +97,9 @@ namespace Uoko.FireProj.Concretes
                     TriggeredId = r.TriggeredId,
                     TaskId = r.TaskId,
                     CreateBy = r.CreateBy,
-                    CreateDate = r.CreateDate
+                    CreateDate = r.CreateDate,
+                    Environment = r.Environment,
+                    TaskLogsType = r.TaskLogsType,
                 }).FirstOrDefault();
                 return data;
             }
@@ -113,7 +115,7 @@ namespace Uoko.FireProj.Concretes
                     LogsDesc = r.LogsDesc,
                     LogsText = r.LogsText,
                     TriggeredId = r.TriggeredId,
-                    //TaskLogsType = r.TaskLogsType.ToString(),//ToDescription 会错
+                    TaskLogsType = r.TaskLogsType,
                     TaskId = r.TaskId,
                     CreateBy = r.CreateBy,
                     CreateDate = r.CreateDate

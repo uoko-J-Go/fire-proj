@@ -25,7 +25,7 @@ namespace Uoko.FireProj.DataAccess.Entity
         /// <summary>
         /// 记录所处的环境
         /// </summary>
-        public string Environment { get; set; }
+        public EnvironmentEnum Environment { get; set; }
 
         /// <summary>
         /// 任务记录描述

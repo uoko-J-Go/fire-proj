@@ -25,7 +25,7 @@ fireproj.directive('initTable', ['$compile', function ($compile) {
 
 //表单提交成功事件通用操作
 var formSubmitSuccessClick = function (operation) {
-    bootbox.alert("提交成功", function (data) {
+    bootbox.alert("操作成功", function (data) {
         if (operation == "refresh") {
             window.location.href = window.location.href
         }

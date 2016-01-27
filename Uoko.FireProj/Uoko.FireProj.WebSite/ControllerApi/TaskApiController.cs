@@ -84,15 +84,54 @@ namespace Uoko.FireProj.WebSite.ControllerApi
         public IHttpActionResult BeginDeploy(int taskId,int triggerId)
         {
             var task= _taskSvc.GetTaskById(taskId);
-            _taskSvc.UpdateTaskStatus(new TaskDto() {Id= task.Id, Status=TaskEnum.Deployment.ToString()});
+            _taskSvc.UpdateTaskStatus(new TaskDto() { Id = task.Id, Status = TaskEnum.Deployment });
             _taskLogsSvc.CreatTaskLogs(new TaskLogsDto()
             {
                 TaskId = taskId,
                 TriggeredId = triggerId,
                 CreateBy = 1,
                 Environment= task.DeployEnvironment,
-                TaskLogsType = TaskLogsEnum.CI.ToString()
+                TaskLogsType = TaskLogsEnum.CI
             });
+            return Ok();
+        }
+
+        /// <summary>
+        /// 提交测试动作
+        /// </summary>
+        /// <param name="taskId"></param>
+        /// <returns></returns>
+        [Route("CommitToTest")]
+        [HttpPost]
+        public IHttpActionResult CommitToTest(int taskId)
+        {
+            _taskSvc.UpdateTaskStatus(new TaskDto() { Id = taskId, Status = TaskEnum.Testing  });
+            return Ok();
+        }
+
+        /// <summary>
+        /// 测试不通过动作
+        /// </summary>
+        /// <param name="taskId"></param>
+        /// <returns></returns>
+        [Route("TestFails")]
+        [HttpPost]
+        public IHttpActionResult TestFails(int taskId)
+        {
+            _taskSvc.UpdateTaskStatus(new TaskDto() { Id = taskId, Status = TaskEnum.TestFails });
+            return Ok();
+        }
+
+        /// <summary>
+        /// 测试通过动作
+        /// </summary>
+        /// <param name="taskId"></param>
+        /// <returns></returns>
+        [Route("Tested")]
+        [HttpPost]
+        public IHttpActionResult Tested(int taskId)
+        {
+            _taskSvc.UpdateTaskStatus(new TaskDto() { Id = taskId, Status = TaskEnum.Tested });
             return Ok();
         }
     }

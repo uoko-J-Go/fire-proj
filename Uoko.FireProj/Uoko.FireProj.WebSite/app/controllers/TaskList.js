@@ -19,12 +19,13 @@ fireproj.controller("TaskController", function ($scope, $http, TaskService, Proj
             { field: 'TaskDesc', title: '任务描述', align: 'center' },
             {
                 title: '操作', align: 'center', width: 400, formatter: function (value, row, index) {
+                  
                     return [
-                        '<a class="btn btn-primary editor" ng-click="Deploy(' + row.Id + ')" title="编译部署">',
+                        '<a class="btn btn-primary editor"  ng-click="Deploy(' + row.Id + ')" title="编译部署">',
                             '编译部署',
                         '</a>',
 
-                        '<a class="btn btn-primary delete" ng-click="CommitToTest(' + row.Id + ')" title="提交测试">',
+                        '<a class="btn btn-primary delete"  ng-click="CommitToTest(' + row.Id + ')" title="提交测试">',
                             '提交测试',
                         '</a>',
 
@@ -52,12 +53,10 @@ fireproj.controller("TaskController", function ($scope, $http, TaskService, Proj
         TaskService.GetTaskInfo(taskId, function (data) {
             var taskInfo = data;
             CommonService.TriggerBuild(taskInfo, function (data) {
-                bootbox.alert("已经成功发起部署任务，点击详细进行查看!", function () {
-
+                bootbox.alert("已经成功发起部署任务，点击详细进行查看!", function () {              
                     TaskService.BeginDeploy(taskId, data.id, function (data) {
                         location.reload();
                     });
-
                 });
                 
             });
@@ -70,14 +69,10 @@ fireproj.controller("TaskController", function ($scope, $http, TaskService, Proj
     $scope.Init = function () {
         $scope.GetProjectList();
     }
-    ///提交测试,状态改为3测试中
+    ///提交测试,状态改为8测试中
     $scope.CommitToTest = function (taskId) {
-        var param = {
-            id: taskId,
-            Status: 3
-        };
-        TaskService.UpdateTaskStatus(param, function (data) {
-
+        TaskService.CommitToTest(taskId, function (data) {
+            formSubmitSuccessClick("refresh");
         });
     }
 

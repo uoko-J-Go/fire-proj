@@ -167,6 +167,7 @@
     <Compile Include="App_Start\SimpleInjectorWebApiInitializer.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="ControllerApi\BaseApiController.cs" />
+    <Compile Include="ControllerApi\CommonApiController.cs" />
     <Compile Include="ControllerApi\DictionaryApiController.cs" />
     <Compile Include="ControllerApi\ProjectApiController.cs" />
     <Compile Include="ControllerApi\TaskLogsApiController.cs" />

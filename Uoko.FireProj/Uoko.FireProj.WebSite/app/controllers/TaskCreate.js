@@ -15,7 +15,9 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
     };
     $scope.projectList = [];
     $scope.branchList = [];
-    $scope.environmentList = [{ Id: 1, Name: "IOC环境" }, { Id: 2, Name: "Pre环境" }, { Id: 3, Name: "生产环境" }];
+    TaskService.GetEnvironment(function (data) {
+        $scope.environmentList = data;
+    });
     $scope.GetProjectList = function() {
         ProjectService.getAllProject(function(data) {
             $scope.projectList = data;

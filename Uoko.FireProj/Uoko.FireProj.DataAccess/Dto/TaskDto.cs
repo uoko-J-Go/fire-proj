@@ -31,7 +31,7 @@ namespace Uoko.FireProj.DataAccess.Dto
         /// <summary>
         /// 部署环境
         /// </summary>
-        public string DeployEnvironment { get; set; }
+        public EnvironmentEnum DeployEnvironment { get; set; }
 
         /// <summary>
         /// 部署IP地址
@@ -61,11 +61,13 @@ namespace Uoko.FireProj.DataAccess.Dto
         /// <summary>
         /// 任务状态值
         /// </summary>
-        public string Status { get; set; }
+        public TaskEnum Status { get; set; }
 
         /// <summary>
         /// 任务描述
         /// </summary>
         public string TaskDesc { get; set; }
+
+        public int TriggeredId { get; set; }
     }
 }

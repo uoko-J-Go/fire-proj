@@ -134,20 +134,20 @@ namespace Uoko.FireProj.Concretes
             using (var dbScope = _dbScopeFactory.CreateReadOnly())
             {
                 var db = dbScope.DbContexts.Get<FireProjDbContext>();
-                var data = db.TaskInfo.AsQueryable();
-                if (!string.IsNullOrEmpty(query.Search))
-                {
-                    data = data.Where(r => r.TaskName.Contains(query.Search));
-                }
-                var result = data.OrderBy(r => r.Id).Skip(query.Offset).Take(query.Limit).ToList().Select(r => new TaskDto
+                var data = db.TaskInfo.Select(r => new TaskDto
                 {
                     Id = r.Id,
                     TaskName = r.TaskName,
                     DeployEnvironment = r.DeployEnvironment,
                     Branch = r.Branch,
                     TaskDesc = r.TaskDesc,
-                    Status = r.Status.ToDescription(),
+                    Status = r.Status,
                 });
+                if (!string.IsNullOrEmpty(query.Search))
+                {
+                    data = data.Where(r => r.TaskName.Contains(query.Search));
+                }
+                var result = data.OrderBy(r => r.Id).Skip(query.Offset).Take(query.Limit).ToList();
                 var total = data.Count();
                 return new PageGridData<TaskDto> { rows = result, total = total };
             }
@@ -157,17 +157,28 @@ namespace Uoko.FireProj.Concretes
         {
             try
             {
-                var entity = new TaskInfo()
-                {
-                    Id = task.Id,
-                    Status = (TaskEnum)Enum.Parse(typeof(TaskEnum), task.Status).GetHashCode(),
-                    ModifyDate = DateTime.Now,
-                };
                 using (var dbScope = _dbScopeFactory.Create())
                 {
                     var db = dbScope.DbContexts.Get<FireProjDbContext>();
-                    //根据实际情况修改
-                    db.Update(entity, r => new { r.Status });
+                    //插入状态变更记录
+                    var taskInfo = db.TaskInfo.FirstOrDefault(r => r.Id == task.Id);
+                    TaskLogs taskinfo = new TaskLogs()
+                    {
+                        CreateBy = 0,
+                        CreateDate = DateTime.Now,
+                        Environment = taskInfo.DeployEnvironment,
+                        TaskId = task.Id,
+                        TriggeredId = task.TriggeredId,
+                        TaskLogsType = TaskLogsEnum.Status,
+                        LogsDesc = string.Format("{0}任务流程状态从{1}变更为{2}", taskInfo.TaskName, taskInfo.Status.ToDescription(), task.Status.ToDescription())
+                    };
+                    db.TaskLogs.Add(taskinfo);
+                   
+                    ///修改任务表状态
+                    taskInfo.ModifyBy = 1;
+                    taskInfo.ModifyDate = DateTime.Now;
+                    taskInfo.Status = task.Status;
+
                     db.SaveChanges();
                 }
             }

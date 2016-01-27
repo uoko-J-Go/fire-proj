@@ -33,21 +33,13 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
     }
 
     $scope.TestFails = function () {
-        var param = {
-            id: $scope.taskInfo.Id,
-            Status: 4
-        };
-        TaskService.UpdateTaskStatus(param, function (data) {
+        TaskService.TestFails($scope.taskInfo.Id, function (data) {
             formSubmitSuccessClick();
         });
     }
 
     $scope.Tested = function () {
-        var param = {
-            id: $scope.taskInfo.Id,
-            Status: 5
-        };
-        TaskService.UpdateTaskStatus(param, function (data) {
+        TaskService.Tested($scope.taskInfo.Id, function (data) {
             formSubmitSuccessClick();
         });
     }
