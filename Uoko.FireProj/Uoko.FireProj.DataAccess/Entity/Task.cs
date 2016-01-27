@@ -66,6 +66,5 @@ namespace Uoko.FireProj.DataAccess.Entity
         /// 任务描述
         /// </summary>
         public string TaskDesc { get; set; }
-
     }
 }

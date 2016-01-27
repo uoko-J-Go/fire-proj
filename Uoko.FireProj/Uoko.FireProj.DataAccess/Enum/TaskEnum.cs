@@ -19,34 +19,40 @@ namespace Uoko.FireProj.DataAccess.Enum
         WaitingDeploy = 0,
 
         /// <summary>
+        /// 部署中
+        /// </summary>
+        [Description("部署中")]
+        Deployment = 2,
+
+        /// <summary>
         /// 部署失败
         /// </summary>
         [Description("部署失败")]
-        DeployFails = 1,
+        DeployFails = 4,
 
         // <summary>
         /// 部署成功
         /// </summary>
         [Description("部署成功")]
-        DeploySuccess = 2,
+        DeploySuccess = 6,
 
 
         // <summary>
         /// 测试中
         /// </summary>
         [Description("测试中")]
-        Testing = 3,
+        Testing = 8,
 
         // <summary>
         /// 测试未通过
         /// </summary>
         [Description("测试未通过")]
-        TestFails = 4,
+        TestFails = 10,
 
         // <summary>
         /// 测试通过
         /// </summary>
         [Description("测试通过")]
-        Tested = 5,
+        Tested = 12,
     }
 }

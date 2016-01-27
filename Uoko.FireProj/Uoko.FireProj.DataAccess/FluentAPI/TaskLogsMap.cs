@@ -13,10 +13,6 @@ namespace Uoko.FireProj.DataAccess.FluentAPI
         public TaskLogsMap()
         {
             Property(r => r.TaskId).IsRequired();
-            Property(r => r.Status).IsRequired();
-            Property(r => r.DeployEnvironment).IsRequired();
-            Property(r => r.DeployIP).IsRequired();
-            Property(r => r.Branch).IsRequired();
             ToTable("TaskLogs");//指定生成表名
         }
     }

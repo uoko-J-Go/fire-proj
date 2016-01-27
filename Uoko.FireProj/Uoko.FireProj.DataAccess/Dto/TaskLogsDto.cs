@@ -16,29 +16,27 @@ namespace Uoko.FireProj.DataAccess.Dto
         public int TaskId { get; set; }
 
         /// <summary>
-        /// 代码分支
+        /// gitlab triggered Id
         /// </summary>
-        public string Branch { get; set; }
+        public int TriggeredId { get; set; }
 
         /// <summary>
-        /// 部署环境
+        /// 任务记录描述
+        /// 流程变更格式: XXX在XXX时间,把XXX任务流程状态从XXX变更为XXX.
+        /// 部署记录格式: XXX在XXX时间,把XXX任务从XXX分支部署到XXX环境,部署服务器IP:XXX,站点名称:XXX
+        /// 部署中记录格式: XXX任务在执行XXX Stages时出错,详情gitlab  builds
         /// </summary>
-        public string DeployEnvironment { get; set; }
-
-        /// <summary>
-        /// 部署IP地址
-        /// </summary>
-        public string DeployIP { get; set; }
-
-        /// <summary>
-        /// 状态
-        /// </summary>
-        public DeployEnum Status { get; set; }
+        public string LogsDesc { get; set; }
 
         /// <summary>
         /// 输出文件
         /// </summary>
         public string LogsText { get; set; }
+
+        /// <summary>
+        /// 记录类型
+        /// </summary>
+        public string TaskLogsType { get; set; }
 
         /// <summary>
         /// 操作人

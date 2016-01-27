@@ -11,6 +11,7 @@ using Uoko.FireProj.DataAccess.Entity;
 using Uoko.FireProj.DataAccess.Query;
 using Uoko.FireProj.Infrastructure.Data;
 using Uoko.FireProj.Infrastructure.Exception;
+using Uoko.FireProj.Infrastructure.Extensions;
 using Uoko.FireProj.Model;
 
 namespace Uoko.FireProj.Concretes
@@ -51,11 +52,10 @@ namespace Uoko.FireProj.Concretes
                 var data = db.TaskLogs.Where(r => r.TaskId == taskId).Select(r => new TaskLogsDto()
                 {
                     Id = r.Id,
-                    Branch = r.Branch,
-                    DeployEnvironment = r.DeployEnvironment,
-                    DeployIP = r.DeployIP,
+                    LogsDesc = r.LogsDesc,
                     LogsText = r.LogsText,
-                    Status = r.Status,
+                    TriggeredId = r.TriggeredId,
+                    TaskLogsType = r.TaskLogsType.ToDescription(),
                     TaskId = r.TaskId,
                     CreateBy = r.CreateBy,
                     CreateDate = r.CreateDate
@@ -72,11 +72,10 @@ namespace Uoko.FireProj.Concretes
                 var data = db.TaskLogs.Where(r => r.TaskId == query.TaskId).Select(r => new TaskLogsDto
                 {
                     Id = r.Id,
-                    Branch = r.Branch,
-                    DeployEnvironment = r.DeployEnvironment,
-                    DeployIP = r.DeployIP,
+                    LogsDesc = r.LogsDesc,
                     LogsText = r.LogsText,
-                    Status = r.Status,
+                    TriggeredId = r.TriggeredId,
+                    TaskLogsType = r.TaskLogsType.ToDescription(),
                     TaskId = r.TaskId,
                     CreateBy = r.CreateBy,
                     CreateDate = r.CreateDate

@@ -66,6 +66,7 @@
     <Compile Include="Entity\ResourceInfo.cs" />
     <Compile Include="Entity\Task.cs" />
     <Compile Include="Entity\TaskLogs.cs" />
+    <Compile Include="Enum\Class1.cs" />
     <Compile Include="Enum\DeployEnum.cs" />
     <Compile Include="Enum\DicEnum.cs" />
     <Compile Include="Enum\ResourceEnum.cs" />
@@ -109,6 +110,10 @@
     <Compile Include="Migrations\201601250905453_updateResourceInfo.Designer.cs">
       <DependentUpon>201601250905453_updateResourceInfo.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201601270310569_updateTaskLogs.cs" />
+    <Compile Include="Migrations\201601270310569_updateTaskLogs.Designer.cs">
+      <DependentUpon>201601270310569_updateTaskLogs.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Query\BaseQuery.cs" />
@@ -145,6 +150,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201601250905453_updateResourceInfo.resx">
       <DependentUpon>201601250905453_updateResourceInfo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201601270310569_updateTaskLogs.resx">
+      <DependentUpon>201601270310569_updateTaskLogs.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
