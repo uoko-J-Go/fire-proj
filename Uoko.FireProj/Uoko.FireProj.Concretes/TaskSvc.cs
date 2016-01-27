@@ -157,15 +157,32 @@ namespace Uoko.FireProj.Concretes
         {
             try
             {
+                var status = (TaskEnum)Enum.Parse(typeof(TaskEnum), task.Status);
                 var entity = new TaskInfo()
                 {
                     Id = task.Id,
-                    Status = (TaskEnum)Enum.Parse(typeof(TaskEnum), task.Status).GetHashCode(),
+                    Status = (TaskEnum)status.GetHashCode(),
                     ModifyDate = DateTime.Now,
                 };
+              
+
+
                 using (var dbScope = _dbScopeFactory.Create())
                 {
                     var db = dbScope.DbContexts.Get<FireProjDbContext>();
+                    //插入状态变更记录
+                    var taskInfo = db.TaskInfo.FirstOrDefault(r => r.Id == task.Id);
+                    TaskLogs taskinfo = new TaskLogs()
+                    {
+                        CreateBy = 0,
+                        CreateDate = DateTime.Now,
+                        Environment = taskInfo.DeployEnvironment,
+                        TaskId = task.Id,
+                        TriggeredId = task.TriggeredId,
+                        TaskLogsType = TaskLogsEnum.Status,
+                        LogsDesc = string.Format("{0}任务流程状态从{1}变更为{2}", taskInfo.TaskName, taskInfo.Status.ToDescription(), status.ToDescription())
+                    };
+                    db.TaskLogs.Add(taskinfo);
                     //根据实际情况修改
                     db.Update(entity, r => new { r.Status });
                     db.SaveChanges();

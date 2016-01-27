@@ -1,5 +1,6 @@
 ﻿
 fireproj.controller("TaskController", function ($scope, $http, TaskService, ProjectService, CommonService) {
+    $scope.isShow = true;
     $scope.projectList = [];
     $scope.GetProjectList = function () {
         ProjectService.getAllProject(function (data) {
@@ -19,12 +20,13 @@ fireproj.controller("TaskController", function ($scope, $http, TaskService, Proj
             { field: 'TaskDesc', title: '任务描述', align: 'center' },
             {
                 title: '操作', align: 'center', width: 400, formatter: function (value, row, index) {
+                  
                     return [
-                        '<a class="btn btn-primary editor" ng-click="Deploy(' + row.Id + ')" title="编译部署">',
+                        '<a class="btn btn-primary editor"  ng-click="Deploy(' + row.Id + ')" title="编译部署">',
                             '编译部署',
                         '</a>',
 
-                        '<a class="btn btn-primary delete" ng-click="CommitToTest(' + row.Id + ')" title="提交测试">',
+                        '<a class="btn btn-primary delete" ng-hide="{{isShow}}" ng-click="CommitToTest(' + row.Id + ')" title="提交测试">',
                             '提交测试',
                         '</a>',
 
@@ -53,7 +55,7 @@ fireproj.controller("TaskController", function ($scope, $http, TaskService, Proj
             var taskInfo = data;
             CommonService.TriggerBuild(taskInfo, function (data) {
                 bootbox.alert("已经成功发起部署任务，点击详细进行查看!", function () {
-                    //todo 添加记录 状态更改,这里判断是否部署成功
+                    //todo 添加记录 状态更改, 保存部署记录
                     var param = {
                         id:taskId,
                         Status: "Deployment"
@@ -61,7 +63,7 @@ fireproj.controller("TaskController", function ($scope, $http, TaskService, Proj
                     TaskService.UpdateTaskStatus(param, function (data) {
 
                     });
-                    // 保存部署记录
+                   
 
                 });
                 
