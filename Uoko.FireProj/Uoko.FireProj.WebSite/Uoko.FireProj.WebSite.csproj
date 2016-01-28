@@ -677,6 +677,7 @@
     <Content Include="Metronic\assets\global\plugins\icheck\demo\css\montserrat-regular.svg" />
     <Content Include="Metronic\assets\global\plugins\icheck\demo\css\normalize.css" />
     <Content Include="Metronic\assets\global\plugins\icheck\demo\index.html" />
+    <Content Include="Metronic\assets\global\plugins\icheck\demo\js\custom.js" />
     <Content Include="Metronic\assets\global\plugins\icheck\demo\js\custom.min.js" />
     <Content Include="Metronic\assets\global\plugins\icheck\demo\js\jquery.js" />
     <Content Include="Metronic\assets\global\plugins\icheck\demo\js\zepto.js" />
