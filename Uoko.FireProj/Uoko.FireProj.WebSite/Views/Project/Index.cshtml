@@ -36,9 +36,9 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="btn-group">
-                                <button id="sample_editable_1_new" class="btn green" ng-click="OpenForm()">
+                                <a id="sample_editable_1_new" class="btn green" href="@Url.Action("Creat","Project")" >
                                     新增 <i class="fa fa-plus"></i>
-                                </button>
+                                </a>
                             </div>
                         </div>
 
@@ -58,13 +58,13 @@
                         </thead>
                         <tbody>
                         <tr ng-repeat="item in items">
-                            <td><a href="">{{item.ProjectName}}</a></td>
+                            <td><a href="/Project/Detail/{{item.Id}}">{{item.ProjectName}}</a></td>
                             <td>{{item.ProjectFileName}}</td>
                             <td>{{item.ProjectRepo}}</td>
                             <td>{{item.ProjectDesc}}</td>
                             <td>
                                 <div>
-                                    <a class="btn btn-primary editor" ng-click="edit(item)">编辑</a>
+                                    <a class="btn btn-primary editor" href="/Project/Edit/{{item.Id}}">编辑</a>
                                     <a class="btn btn-primary delete" ng-click="delete(item)">删除</a>
                                 </div>
                             </td>
@@ -84,82 +84,11 @@
         </div>
     </div>
     <!-- Grid -->
-    <!-- Form -->
-    <div ng-show="isShowForm">
-        <div class="portlet light">
-            <div class="portlet-title">
-                <div class="caption font-green-haze">
-                    <i class="icon-settings font-green-haze"></i>
-                    <span class="caption-subject bold uppercase">{{formTile}}</span>
-                </div>
-                <div class="actions">
-                    <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title="全屏"></a>
-                </div>
-            </div>
-            <div class="portlet-body form">
-                <div id="bootstrap_alerts_demo"></div>
-                <form role="form" class="form-horizontal" name="serverForm" novalidate>
-                    <div class="form-body">
-                        <div class="form-group form-md-line-input">
-                            <label class="col-md-2 control-label" for="form_control_1">项目名称</label>
-                            <div class="col-md-10">
-                                <input type="text" class="form-control" id="form_control_1" ng-model="model.ProjectName" placeholder="请输入项目名称" required>
-                                <div class="form-control-focus">
-                                </div>
-                                <span class="help-block">项目名称是必填</span>
-                            </div>
-                        </div>
-                        <div class="form-group form-md-line-input">
-                            <label class="col-md-2 control-label" for="form_control_1">项目文件</label>
-                            <div class="col-md-10">
-                                <input type="text" class="form-control" id="form_control_1" ng-model="model.ProjectFileName" placeholder="请输入项目文件" required>
-                                <div class="form-control-focus">
-                                </div>
-                                <span class="help-block">项目文件是必填</span>
-                            </div>
 
-                        </div>
-
-                        <div class="form-group form-md-line-input">
-                            <label class="col-md-2 control-label" for="form_control_1">项目地址</label>
-                            <div class="col-md-10">
-                                <select class="form-control" id="form_control_1" ng-model="model.Project">
-                                    <option ng-repeat="project in ProjectList" value="{{project}}"  ng-selected="project.id == model.ProjectId">{{project.name}}</option>
-                                </select>
-                                <div class="form-control-focus">
-                                </div>
-                                <span class="help-block">项目地址是必填</span>
-                            </div>
-                        </div>
-
-                        <div class="form-group form-md-line-input">
-                            <label class="col-md-2 control-label" for="form_control_1">项目描述</label>
-                            <div class="col-md-10">
-                                <textarea class="form-control" rows="3" ng-model="model.ProjectDesc"></textarea>
-                                <div class="form-control-focus">
-                                </div>
-
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="form-actions">
-                        <div class="row">
-                            <div class="col-md-offset-2 col-md-10">
-                                <button type="button" class="btn blue btn-lg" ng-disabled="serverForm.$invalid" ng-click="SubmitFrom(model)">提交</button>
-                                <button type="button" class="btn default btn-lg" ng-click="CancelForm()">取消</button>
-                            </div>
-                        </div>
-                    </div>
-
-                </form>
-            </div>
-        </div>
-    </div>
-    <!-- Form -->
 </div>
 
 
 @section Scripts {
-    <script src="~/app/controllers/project.js"></script>
+    <script src="~/app/controllers/Project.js"></script>
+<script src="~/app/services/ProjectService.js"></script>
 }

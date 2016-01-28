@@ -185,6 +185,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="app\controllers\ProjectDetail.js" />
+    <Content Include="app\controllers\ProjectEdit.js" />
+    <Content Include="app\controllers\ProjectCreat.js" />
     <Content Include="app\controllers\TaskLogs.js" />
     <Content Include="app\filters\CommonFilter.js" />
     <Content Include="app\global.js" />
@@ -192,7 +195,7 @@
     <Content Include="app\modals\SelectUser.js" />
     <Content Include="app\controllers\dictionaryForm.js" />
     <Content Include="app\controllers\dictionary.js" />
-    <Content Include="app\controllers\project.js" />
+    <Content Include="app\controllers\Project.js" />
     <Content Include="app\controllers\TaskCreate.js" />
     <Content Include="app\controllers\TaskDetail.js" />
     <Content Include="app\controllers\TaskEdit.js" />
@@ -1040,6 +1043,7 @@
     <Content Include="Scripts\ui-bootstrap-1.1.0.min.js" />
     <Content Include="Scripts\ui-bootstrap-tpls-1.1.0.min.js" />
     <Content Include="Scripts\_references.js" />
+    <Content Include="Views\Project\Creat.cshtml" />
     <Content Include="Views\Task\Index.cshtml" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -1056,13 +1060,14 @@
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Project\Index.cshtml" />
-    <Content Include="Views\Project\Form.cshtml" />
     <Content Include="Views\Dictionary\Index.cshtml" />
     <Content Include="Views\Dictionary\Form.cshtml" />
     <Content Include="Views\Task\Create.cshtml" />
     <Content Include="Views\Task\Edit.cshtml" />
     <Content Include="Views\Task\Detail.cshtml" />
     <Content Include="Views\Task\Logs.cshtml" />
+    <Content Include="Views\Project\Edit.cshtml" />
+    <Content Include="Views\Project\Detail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="app\directives\" />
