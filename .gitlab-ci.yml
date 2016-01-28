@@ -10,15 +10,6 @@ stages:
   - nugetrestore
   - package
   - deploy
-  
-nugetrestore:
-  stage: nugetrestore
-  script:
-     - 'cd .nuget'
-     - 'echo restoring..'
-     - .\NuGet.exe restore ../Uoko.FireProj/Uoko.FireProj.sln
-     - 'cd ..'
-     - 'echo restored'
 
 package:
   stage: package
