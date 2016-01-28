@@ -1,0 +1,42 @@
+
+variables:
+  CsprojNameAPI: Uoko.FireProj\Uoko.FireProj.WebSite\Uoko.FireProj.WebSite.csproj
+  DeployAddressAPI: https://192.168.200.25:8172/msdeploy.axd 
+  SiteNameAPI: fire
+  PkgDir: d:\deploy-pkg
+  
+before_script:
+  - 'echo off'
+stages:
+  - nugetrestore
+  - package
+  - deploy
+  
+nugetrestore:
+  stage: nugetrestore
+  script:
+     - 'cd .nuget'
+     - 'echo restoring..'
+     - .\NuGet.exe restore ../Uoko.FireProj/Uoko.FireProj.sln
+     - 'cd ..'
+     - 'echo restored'
+
+build:
+  stage: build
+  script:
+     - 'echo building..'
+     - c:\windows\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe $CsprojNameAPI /t:Build /property:Configuration=Debug /p:VisualStudioVersion=14.0
+
+package:
+  stage: package
+  script:
+     - 'echo package..'
+     - c:\windows\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe $CsprojNameAPI /p:VisualStudioVersion=14.0 /p:DeployOnBuild=true /p:PackageLocation=$PkgDir
+
+deploy:
+  stage: deploy
+  script:
+     - 'echo deploy..'   
+     - 'cd $PkgDir'   
+     - .\Uoko.FireProj.WebSite.deploy.cmd  /Y /U:simple-deploy /P:deploy /A:Basic -allowUntrusted "-setParam:name='IIS Web Application Name',value='$SiteNameAPI'" "/M:$DeployAddressAPI?site=$SiteNameAPI"
+ 
