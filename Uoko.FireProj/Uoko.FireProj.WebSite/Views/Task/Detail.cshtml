@@ -51,7 +51,18 @@
                         </div>
 
                     </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">状态</label>
+                                <label class="control-label detail">{{taskInfo.Status|taskStatusFilter}}</label>
 
+                            </div>
+                        </div>
+
+                       
+
+                    </div>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
@@ -63,7 +74,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">发布环境</label>
-                                <label class="control-label detail" >{{taskInfo.DeployEnvironment}}</label>
+                                <label class="control-label detail" >{{taskInfo.DeployEnvironment|environmentFilter}}</label>
                             </div>
                         </div>
                     </div>
@@ -185,6 +196,7 @@
     <script src="~/app/services/CommonService.js"></script>
     <script src="~/app/services/ProjectService.js"></script>
     <script src="~/app/services/TaskService.js"></script>
+    <script src="~/app/filters/CommonFilter.js"></script>
     <script src="~/app/controllers/TaskDetail.js"></script>
 }
 

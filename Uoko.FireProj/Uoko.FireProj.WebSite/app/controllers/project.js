@@ -2,8 +2,8 @@
 //创建一个ProjectService
 fireproj.service("ProjectService", function ($http) {
     //列表分页
-    this.getByPage = function (param) {
-        return $http.get("/api/ProjectApi/" + param + "");
+    this.getByPage = function (params) {
+        return $http.get("/api/ProjectApi?Offset={0}&Limit={1}".Format(params.offset,params.limit));
     };
 
     //根据Id获取表单信息
@@ -37,45 +37,30 @@ fireproj.service("ProjectService", function ($http) {
 //创建一个ProjectController
 fireproj.controller("ProjectController", function ($scope, $http, ProjectService) {
     $scope.isShowForm = false;
-    //分页配置
-    $scope.tableOptions = {
-        url: '/api/ProjectApi',
-        columns: [
-            { field: 'selected', checkbox: true, align: 'center', width: 200 },
-            { field: 'Id', title: 'Id', align: 'center', width: 50 },
-            { field: 'ProjectName', title: '项目名称', align: 'center' },
-            { field: 'ProjectFileName', title: '项目文件', align: 'center' },
-            { field: 'ProjectRepo', title: '项目地址', align: 'center' },
-            { field: 'ProjectDesc', title: '项目描述', align: 'center' },
-            {
-                title: '操作', align: 'center', width: 200, formatter: function (value, row, index) {
-                    return [
-                        '<a class="btn btn-primary editor" ng-click="edit(' + row.Id + ')" title="编辑">',
-                            '编辑',
-                        '</a>',
+    $scope.pageSize = 10;
+    $scope.currentPage = 1;
+    $scope.items = [];
+    $scope.totalItems = 0;//总数
+    //查询项目
+    $scope.Query = function () {
+        var params= {
+            offset: $scope.pageSize * ($scope.currentPage - 1),
+            limit: $scope.pageSize
+        }
+        ProjectService.getByPage(params).success(function (data) {
+            $scope.totalItems = data.total;
+            $scope.items = data.rows;
+           
+           
+        }).error(function (data) {
+            formSubmitFailClick(data);
+        });
 
-                        '<a class="btn btn-primary delete" ng-click="delete(' + row.Id + ')" title="删除">',
-                            '删除',
-                        '</a>'].join('');
-                }
-            },
-        ],
-        search: true,
-        showRefresh: true,
-        showToggle: true,
-        showColumns: true,
-        showExport: true,
-        minimumCountColumns: 2,
-        showPaginationSwitch: true,
-        pagination: true,
-        idField: true,
-        pageList: [10, 25, 50, 100],
-        sidePagination: 'server',
-    };
+    }
 
     //编辑事件
-    $scope.edit = function (id) {
-        ProjectService.getById(id).success(function (data) {
+    $scope.edit = function (item) {
+        ProjectService.getById(item.Id).success(function (data) {
             $scope.formTile = "项目编辑";
             $scope.isShowForm = true;
             $scope.model = data;
@@ -85,8 +70,8 @@ fireproj.controller("ProjectController", function ($scope, $http, ProjectService
     }
 
     //删除事件
-    $scope.delete = function (id) {
-        ProjectService.delete(id).success(function (data) {
+    $scope.delete = function (item) {
+        ProjectService.delete(item.Id).success(function (data) {
             formSubmitSuccessClick("refresh");
         }).error(function (data) {
             formSubmitFailClick(data);
@@ -131,7 +116,11 @@ fireproj.controller("ProjectController", function ($scope, $http, ProjectService
     $scope.CancelForm = function () {
         $scope.isShowForm = false;
     }
+    $scope.Init = function () {
+        $scope.Query();
+    }
 
+    $scope.Init();
 });
 
 
