@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewBag.Title = "Detail";
+    ViewBag.Title = "项目查看";
 }
 <div class="col-md-12">
     <div ng-controller="ProjectController">
@@ -26,11 +26,10 @@
         <!-- END  HEADER-->
         <!--BEGIN Form -->
         <div>
-            <div class="portlet light">
+            <div class="portlet  box blue">
                 <div class="portlet-title">
-                    <div class="caption font-green-haze">
-                        <i class="icon-settings font-green-haze"></i>
-                        <span class="caption-subject bold uppercase">项目查看</span>
+                    <div class="caption">
+                        <i class="fa fa-book"></i>项目查看
                     </div>
                     <div class="actions">
                         <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title="全屏"></a>
@@ -58,9 +57,9 @@
                                 <label class="col-md-2 control-label" for="form_control_1">项目地址</label>
                                 <div class="col-md-10">
                                     <select disabled class="form-control" id="form_control_1" ng-model="model.Project">
-                                        <option  ng-repeat="project in ProjectList" value="{{project}}" ng-selected="project.id == model.ProjectId">{{project.name}}</option>
+                                        <option ng-repeat="project in ProjectList" value="{{project}}" ng-selected="project.id == model.ProjectId">{{project.name}}</option>
                                     </select>
-                                   
+
                                 </div>
                             </div>
 
