@@ -3,7 +3,7 @@
 fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskService, ProjectService, CommonService) {
     $scope.taskInfo = {
         TaskName: "",
-        Project: {},
+        Project: null,
         Branch: "",
         DeployEnvironment: "",
         DeployIP: "",
