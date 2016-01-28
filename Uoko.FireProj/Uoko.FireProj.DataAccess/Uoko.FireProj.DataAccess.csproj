@@ -30,6 +30,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper, Version=4.1.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.4.1.1\lib\net45\AutoMapper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
       <Private>True</Private>
@@ -49,16 +53,88 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AutoMapper\AutoMapper.cs" />
+    <Compile Include="Dto\DictionaryDto.cs" />
+    <Compile Include="Dto\ProjectDto.cs" />
+    <Compile Include="Dto\ResourceInfoDto.cs" />
+    <Compile Include="Dto\TaskLogsDto.cs" />
+    <Compile Include="Dto\TaskDto.cs" />
+    <Compile Include="Dto\UserDto.cs" />
     <Compile Include="Entity\BaseEntity.cs" />
+    <Compile Include="Entity\Dictionary.cs" />
     <Compile Include="Entity\Project.cs" />
+    <Compile Include="Entity\ResourceInfo.cs" />
+    <Compile Include="Entity\Task.cs" />
+    <Compile Include="Entity\TaskLogs.cs" />
+    <Compile Include="Enum\EnvironmentEnum.cs" />
+    <Compile Include="Enum\TaskLogsEnum.cs" />
+    <Compile Include="Enum\DeployEnum.cs" />
+    <Compile Include="Enum\DicEnum.cs" />
+    <Compile Include="Enum\ResourceEnum.cs" />
+    <Compile Include="Enum\TaskEnum.cs" />
+    <Compile Include="Extensions\DbContextExtensions.cs" />
     <Compile Include="FireProjDbContext.cs" />
+    <Compile Include="FluentAPI\DictionaryMap.cs" />
     <Compile Include="FluentAPI\ProjectMap.cs" />
+    <Compile Include="FluentAPI\ResourceInfoMap.cs" />
+    <Compile Include="FluentAPI\TaskLogsMap.cs" />
+    <Compile Include="FluentAPI\TaskInfoMap.cs" />
+    <Compile Include="Gitlab\BuildHookRequest.cs" />
     <Compile Include="Migrations\201601140333406_addproject.cs" />
     <Compile Include="Migrations\201601140333406_addproject.Designer.cs">
       <DependentUpon>201601140333406_addproject.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201601140907522_updateprojectserverip.cs" />
+    <Compile Include="Migrations\201601140907522_updateprojectserverip.Designer.cs">
+      <DependentUpon>201601140907522_updateprojectserverip.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201601190318591_updateentity.cs" />
+    <Compile Include="Migrations\201601190318591_updateentity.Designer.cs">
+      <DependentUpon>201601190318591_updateentity.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201601190323094_updatetable.cs" />
+    <Compile Include="Migrations\201601190323094_updatetable.Designer.cs">
+      <DependentUpon>201601190323094_updatetable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201601200813566_updatedictionary.cs" />
+    <Compile Include="Migrations\201601200813566_updatedictionary.Designer.cs">
+      <DependentUpon>201601200813566_updatedictionary.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201601220618410_updateentity1.cs" />
+    <Compile Include="Migrations\201601220618410_updateentity1.Designer.cs">
+      <DependentUpon>201601220618410_updateentity1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201601220809439_addprojectIdtoproject.cs" />
+    <Compile Include="Migrations\201601220809439_addprojectIdtoproject.Designer.cs">
+      <DependentUpon>201601220809439_addprojectIdtoproject.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201601250905453_updateResourceInfo.cs" />
+    <Compile Include="Migrations\201601250905453_updateResourceInfo.Designer.cs">
+      <DependentUpon>201601250905453_updateResourceInfo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201601270310569_updateTaskLogs.cs" />
+    <Compile Include="Migrations\201601270310569_updateTaskLogs.Designer.cs">
+      <DependentUpon>201601270310569_updateTaskLogs.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201601270323412_updateTaskLogsaddEnvironment.cs" />
+    <Compile Include="Migrations\201601270323412_updateTaskLogsaddEnvironment.Designer.cs">
+      <DependentUpon>201601270323412_updateTaskLogsaddEnvironment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201601270713598_updateTaskEnvironment.cs" />
+    <Compile Include="Migrations\201601270713598_updateTaskEnvironment.Designer.cs">
+      <DependentUpon>201601270713598_updateTaskEnvironment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201601270829385_updateTask.cs" />
+    <Compile Include="Migrations\201601270829385_updateTask.Designer.cs">
+      <DependentUpon>201601270829385_updateTask.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Query\BaseQuery.cs" />
+    <Compile Include="Query\DictionaryQuery.cs" />
+    <Compile Include="Query\TaskQuery.cs" />
+    <Compile Include="Query\ProjectQuery.cs" />
+    <Compile Include="Query\TaskLogsQuery.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -67,6 +143,39 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201601140333406_addproject.resx">
       <DependentUpon>201601140333406_addproject.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201601140907522_updateprojectserverip.resx">
+      <DependentUpon>201601140907522_updateprojectserverip.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201601190318591_updateentity.resx">
+      <DependentUpon>201601190318591_updateentity.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201601190323094_updatetable.resx">
+      <DependentUpon>201601190323094_updatetable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201601200813566_updatedictionary.resx">
+      <DependentUpon>201601200813566_updatedictionary.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201601220618410_updateentity1.resx">
+      <DependentUpon>201601220618410_updateentity1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201601220809439_addprojectIdtoproject.resx">
+      <DependentUpon>201601220809439_addprojectIdtoproject.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201601250905453_updateResourceInfo.resx">
+      <DependentUpon>201601250905453_updateResourceInfo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201601270310569_updateTaskLogs.resx">
+      <DependentUpon>201601270310569_updateTaskLogs.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201601270323412_updateTaskLogsaddEnvironment.resx">
+      <DependentUpon>201601270323412_updateTaskLogsaddEnvironment.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201601270713598_updateTaskEnvironment.resx">
+      <DependentUpon>201601270713598_updateTaskEnvironment.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201601270829385_updateTask.resx">
+      <DependentUpon>201601270829385_updateTask.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

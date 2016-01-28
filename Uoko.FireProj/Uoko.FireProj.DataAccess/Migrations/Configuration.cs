@@ -9,7 +9,7 @@ namespace Uoko.FireProj.DataAccess.Migrations
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = false;
+            AutomaticMigrationsEnabled = true;
         }
 
         protected override void Seed(Uoko.FireProj.Model.FireProjDbContext context)

@@ -1,0 +1,5 @@
+﻿.form-control-wrap .tags { float:left;list-style:none }
+.form-control-wrap .tags li{ float:left; height:60px;padding:10px 20px; position:relative;cursor:pointer; }
+.form-control-wrap .tags li img{width:60px;height:60px;}
+.form-control-wrap textarea{ border: 1px solid #808080;width:100%;margin:5px;}
+label.detail{ color: red;}

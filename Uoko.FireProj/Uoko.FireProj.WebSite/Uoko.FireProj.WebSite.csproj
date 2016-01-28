@@ -61,6 +61,10 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.8.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="SimpleInjector, Version=3.1.2.0, Culture=neutral, PublicKeyToken=984cb50dea722e99, processorArchitecture=MSIL">
       <HintPath>..\packages\SimpleInjector.3.1.2\lib\net45\SimpleInjector.dll</HintPath>
       <Private>True</Private>
@@ -139,6 +143,10 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="UOKO.WebAPI.Tools, Version=1.0.5730.26600, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\UOKO.WebAPI.Tools.1.0.5730.26600\lib\net45\UOKO.WebAPI.Tools.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="WebActivator, Version=1.4.4.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\WebActivator.1.4.4\lib\net40\WebActivator.dll</HintPath>
       <Private>True</Private>
@@ -153,33 +161,58 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\SimpleInjectorWebApiInitializer.cs" />
-    <Compile Include="ControllerApi\BaseControllerApi.cs" />
-    <Compile Include="ControllerApi\ProjectControllerApi.cs" />
+    <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="ControllerApi\BaseApiController.cs" />
+    <Compile Include="ControllerApi\CommonApiController.cs" />
+    <Compile Include="ControllerApi\DictionaryApiController.cs" />
+    <Compile Include="ControllerApi\ProjectApiController.cs" />
+    <Compile Include="ControllerApi\TaskLogsApiController.cs" />
+    <Compile Include="ControllerApi\TaskApiController.cs" />
+    <Compile Include="ControllerApi\WebHookApiController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\DictionaryController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ProjectController.cs" />
+    <Compile Include="Controllers\TaskController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\MenuVM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="app\controllers\ProjectDetail.js" />
+    <Content Include="app\controllers\ProjectEdit.js" />
+    <Content Include="app\controllers\ProjectCreat.js" />
+    <Content Include="app\controllers\TaskLogs.js" />
+    <Content Include="app\filters\CommonFilter.js" />
     <Content Include="app\global.js" />
-    <Content Include="app\service\project.js" />
-    <Content Include="Content\bootstrap-table-zh-CN.min.js" />
+    <Content Include="app\modals\SelectUser.html" />
+    <Content Include="app\modals\SelectUser.js" />
+    <Content Include="app\controllers\dictionaryForm.js" />
+    <Content Include="app\controllers\dictionary.js" />
+    <Content Include="app\controllers\Project.js" />
+    <Content Include="app\controllers\TaskCreate.js" />
+    <Content Include="app\controllers\TaskDetail.js" />
+    <Content Include="app\controllers\TaskEdit.js" />
+    <Content Include="app\controllers\TaskList.js" />
+    <Content Include="app\services\ProjectService.js" />
+    <Content Include="app\services\TaskService.js" />
+    <Content Include="app\services\CommonService.js" />
     <Content Include="Content\bootstrap-table.min.css" />
-    <Content Include="Content\bootstrap-table.min.js" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Images\logo.png" />
+    <Content Include="Content\TaskEdit.css" />
+    <Content Include="Content\TaskDetail.css" />
+    <Content Include="Content\tree-grid-directive.js" />
+    <Content Include="Content\treeGrid.css" />
+    <Content Include="Content\Images\add-tag.png" />
+    <Content Include="Content\TaskCreate.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -235,96 +268,71 @@
     <Content Include="Metronic\assets\admin\layout2\scripts\demo.js" />
     <Content Include="Metronic\assets\admin\layout2\scripts\layout.js" />
     <Content Include="Metronic\assets\admin\layout2\scripts\quick-sidebar.js" />
-    <Content Include="Metronic\assets\admin\pages\css\about-us.css" />
-    <Content Include="Metronic\assets\admin\pages\css\blog.css" />
-    <Content Include="Metronic\assets\admin\pages\css\coming-soon.css" />
-    <Content Include="Metronic\assets\admin\pages\css\error.css" />
-    <Content Include="Metronic\assets\admin\pages\css\image-crop.css" />
-    <Content Include="Metronic\assets\admin\pages\css\inbox.css" />
-    <Content Include="Metronic\assets\admin\pages\css\invoice.css" />
-    <Content Include="Metronic\assets\admin\pages\css\lock.css" />
-    <Content Include="Metronic\assets\admin\pages\css\lock2.css" />
-    <Content Include="Metronic\assets\admin\pages\css\login-soft.css" />
-    <Content Include="Metronic\assets\admin\pages\css\login.css" />
-    <Content Include="Metronic\assets\admin\pages\css\login2.css" />
-    <Content Include="Metronic\assets\admin\pages\css\login3.css" />
-    <Content Include="Metronic\assets\admin\pages\css\news.css" />
-    <Content Include="Metronic\assets\admin\pages\css\portfolio.css" />
-    <Content Include="Metronic\assets\admin\pages\css\pricing-table.css" />
-    <Content Include="Metronic\assets\admin\pages\css\pricing-tables.css" />
-    <Content Include="Metronic\assets\admin\pages\css\profile-old.css" />
-    <Content Include="Metronic\assets\admin\pages\css\profile.css" />
-    <Content Include="Metronic\assets\admin\pages\css\search.css" />
-    <Content Include="Metronic\assets\admin\pages\css\tasks.css" />
-    <Content Include="Metronic\assets\admin\pages\css\timeline-old.css" />
-    <Content Include="Metronic\assets\admin\pages\css\timeline.css" />
-    <Content Include="Metronic\assets\admin\pages\css\todo.css" />
-    <Content Include="Metronic\assets\admin\pages\img\bg-opacity.png" />
-    <Content Include="Metronic\assets\admin\pages\img\bg-white-lock.png" />
-    <Content Include="Metronic\assets\admin\pages\img\bg-white.png" />
-    <Content Include="Metronic\assets\admin\pages\img\inbox-nav-arrow-blue.png" />
-    <Content Include="Metronic\assets\admin\pages\scripts\calendar.js" />
-    <Content Include="Metronic\assets\admin\pages\scripts\charts-amcharts.js" />
-    <Content Include="Metronic\assets\admin\pages\scripts\charts-flotcharts.js" />
-    <Content Include="Metronic\assets\admin\pages\scripts\coming-soon.js" />
-    <Content Include="Metronic\assets\admin\pages\scripts\components-context-menu.js" />
-    <Content Include="Metronic\assets\admin\pages\scripts\components-dropdowns.js" />
-    <Content Include="Metronic\assets\admin\pages\scripts\components-editors.js" />
-    <Content Include="Metronic\assets\admin\pages\scripts\components-form-tools.js" />
-    <Content Include="Metronic\assets\admin\pages\scripts\components-form-tools2.js" />
-    <Content Include="Metronic\assets\admin\pages\scripts\components-ion-sliders.js" />
-    <Content Include="Metronic\assets\admin\pages\scripts\components-jqueryui-sliders.js" />
-    <Content Include="Metronic\assets\admin\pages\scripts\components-knob-dials.js" />
-    <Content Include="Metronic\assets\admin\pages\scripts\components-nouisliders.js" />
-    <Content Include="Metronic\assets\admin\pages\scripts\components-pickers.js" />
-    <Content Include="Metronic\assets\admin\pages\scripts\contact-us.js" />
-    <Content Include="Metronic\assets\admin\pages\scripts\custom.js" />
-    <Content Include="Metronic\assets\admin\pages\scripts\ecommerce-index.js" />
-    <Content Include="Metronic\assets\admin\pages\scripts\ecommerce-orders-view.js" />
-    <Content Include="Metronic\assets\admin\pages\scripts\ecommerce-orders.js" />
-    <Content Include="Metronic\assets\admin\pages\scripts\ecommerce-products-edit.js" />
-    <Content Include="Metronic\assets\admin\pages\scripts\ecommerce-products.js" />
-    <Content Include="Metronic\assets\admin\pages\scripts\form-dropzone.js" />
-    <Content Include="Metronic\assets\admin\pages\scripts\form-editable.js" />
-    <Content Include="Metronic\assets\admin\pages\scripts\form-fileupload.js" />
-    <Content Include="Metronic\assets\admin\pages\scripts\form-icheck.js" />
-    <Content Include="Metronic\assets\admin\pages\scripts\form-image-crop.js" />
-    <Content Include="Metronic\assets\admin\pages\scripts\form-samples.js" />
-    <Content Include="Metronic\assets\admin\pages\scripts\form-validation.js" />
-    <Content Include="Metronic\assets\admin\pages\scripts\form-wizard.js" />
-    <Content Include="Metronic\assets\admin\pages\scripts\inbox.js" />
-    <Content Include="Metronic\assets\admin\pages\scripts\index.js" />
-    <Content Include="Metronic\assets\admin\pages\scripts\index3.js" />
-    <Content Include="Metronic\assets\admin\pages\scripts\lock.js" />
-    <Content Include="Metronic\assets\admin\pages\scripts\login-soft.js" />
-    <Content Include="Metronic\assets\admin\pages\scripts\login.js" />
-    <Content Include="Metronic\assets\admin\pages\scripts\maps-google.js" />
-    <Content Include="Metronic\assets\admin\pages\scripts\maps-vector.js" />
-    <Content Include="Metronic\assets\admin\pages\scripts\portfolio.js" />
-    <Content Include="Metronic\assets\admin\pages\scripts\portlet-draggable.js" />
-    <Content Include="Metronic\assets\admin\pages\scripts\profile.js" />
-    <Content Include="Metronic\assets\admin\pages\scripts\search.js" />
-    <Content Include="Metronic\assets\admin\pages\scripts\table-advanced.js" />
-    <Content Include="Metronic\assets\admin\pages\scripts\table-ajax.js" />
-    <Content Include="Metronic\assets\admin\pages\scripts\table-editable.js" />
-    <Content Include="Metronic\assets\admin\pages\scripts\table-managed.js" />
-    <Content Include="Metronic\assets\admin\pages\scripts\table-tree.js" />
-    <Content Include="Metronic\assets\admin\pages\scripts\tasks.js" />
-    <Content Include="Metronic\assets\admin\pages\scripts\timeline.js" />
-    <Content Include="Metronic\assets\admin\pages\scripts\todo.js" />
-    <Content Include="Metronic\assets\admin\pages\scripts\ui-alert-dialog-api.js" />
-    <Content Include="Metronic\assets\admin\pages\scripts\ui-blockui.js" />
-    <Content Include="Metronic\assets\admin\pages\scripts\ui-bootstrap-growl.js" />
-    <Content Include="Metronic\assets\admin\pages\scripts\ui-confirmations.js" />
-    <Content Include="Metronic\assets\admin\pages\scripts\ui-datepaginator.js" />
-    <Content Include="Metronic\assets\admin\pages\scripts\ui-extended-modals.js" />
-    <Content Include="Metronic\assets\admin\pages\scripts\ui-general.js" />
-    <Content Include="Metronic\assets\admin\pages\scripts\ui-idletimeout.js" />
-    <Content Include="Metronic\assets\admin\pages\scripts\ui-nestable.js" />
-    <Content Include="Metronic\assets\admin\pages\scripts\ui-notific8.js" />
-    <Content Include="Metronic\assets\admin\pages\scripts\ui-toastr.js" />
-    <Content Include="Metronic\assets\admin\pages\scripts\ui-tree.js" />
-    <Content Include="Metronic\assets\admin\pages\scripts\widgets.js" />
+    <Content Include="Metronic\assets\admin\layout\css\custom.css" />
+    <Content Include="Metronic\assets\admin\layout\css\layout.css" />
+    <Content Include="Metronic\assets\admin\layout\css\themes\blue.css" />
+    <Content Include="Metronic\assets\admin\layout\css\themes\darkblue.css" />
+    <Content Include="Metronic\assets\admin\layout\css\themes\default.css" />
+    <Content Include="Metronic\assets\admin\layout\css\themes\grey.css" />
+    <Content Include="Metronic\assets\admin\layout\css\themes\light.css" />
+    <Content Include="Metronic\assets\admin\layout\css\themes\light2.css" />
+    <Content Include="Metronic\assets\admin\layout\img\ajax-loading.gif" />
+    <Content Include="Metronic\assets\admin\layout\img\ajax-modal-loading.gif" />
+    <Content Include="Metronic\assets\admin\layout\img\arrow-down.png" />
+    <Content Include="Metronic\assets\admin\layout\img\avatar.png" />
+    <Content Include="Metronic\assets\admin\layout\img\avatar1.jpg" />
+    <Content Include="Metronic\assets\admin\layout\img\avatar10.jpg" />
+    <Content Include="Metronic\assets\admin\layout\img\avatar11.jpg" />
+    <Content Include="Metronic\assets\admin\layout\img\avatar1_small.jpg" />
+    <Content Include="Metronic\assets\admin\layout\img\avatar2.jpg" />
+    <Content Include="Metronic\assets\admin\layout\img\avatar3.jpg" />
+    <Content Include="Metronic\assets\admin\layout\img\avatar3_small.jpg" />
+    <Content Include="Metronic\assets\admin\layout\img\avatar4.jpg" />
+    <Content Include="Metronic\assets\admin\layout\img\avatar5.jpg" />
+    <Content Include="Metronic\assets\admin\layout\img\avatar6.jpg" />
+    <Content Include="Metronic\assets\admin\layout\img\avatar7.jpg" />
+    <Content Include="Metronic\assets\admin\layout\img\avatar8.jpg" />
+    <Content Include="Metronic\assets\admin\layout\img\avatar9.jpg" />
+    <Content Include="Metronic\assets\admin\layout\img\hor-menu-red-arrow.png" />
+    <Content Include="Metronic\assets\admin\layout\img\icon-color-close.png" />
+    <Content Include="Metronic\assets\admin\layout\img\icon-color.png" />
+    <Content Include="Metronic\assets\admin\layout\img\icon-img-down.png" />
+    <Content Include="Metronic\assets\admin\layout\img\icon-img-up.png" />
+    <Content Include="Metronic\assets\admin\layout\img\inbox-nav-arrow-blue.png" />
+    <Content Include="Metronic\assets\admin\layout\img\loading-spinner-blue.gif" />
+    <Content Include="Metronic\assets\admin\layout\img\loading-spinner-default.gif" />
+    <Content Include="Metronic\assets\admin\layout\img\loading-spinner-grey.gif" />
+    <Content Include="Metronic\assets\admin\layout\img\loading.gif" />
+    <Content Include="Metronic\assets\admin\layout\img\logo-big-white.png" />
+    <Content Include="Metronic\assets\admin\layout\img\logo-big.png" />
+    <Content Include="Metronic\assets\admin\layout\img\logo-invert.png" />
+    <Content Include="Metronic\assets\admin\layout\img\logo.png" />
+    <Content Include="Metronic\assets\admin\layout\img\menu-toggler.png" />
+    <Content Include="Metronic\assets\admin\layout\img\photo1.jpg" />
+    <Content Include="Metronic\assets\admin\layout\img\photo2.jpg" />
+    <Content Include="Metronic\assets\admin\layout\img\photo3.jpg" />
+    <Content Include="Metronic\assets\admin\layout\img\remove-icon-small.png" />
+    <Content Include="Metronic\assets\admin\layout\img\search_icon_light.png" />
+    <Content Include="Metronic\assets\admin\layout\img\sidebar-menu-arrow-reverse.png" />
+    <Content Include="Metronic\assets\admin\layout\img\sidebar-menu-arrow-right.png" />
+    <Content Include="Metronic\assets\admin\layout\img\sidebar-menu-arrow.png" />
+    <Content Include="Metronic\assets\admin\layout\img\sidebar_arrow_icon_light.png" />
+    <Content Include="Metronic\assets\admin\layout\img\sidebar_arrow_icon_light_rtl.png" />
+    <Content Include="Metronic\assets\admin\layout\img\sidebar_inline_toggler_icon_blue.jpg" />
+    <Content Include="Metronic\assets\admin\layout\img\sidebar_inline_toggler_icon_darkblue.jpg" />
+    <Content Include="Metronic\assets\admin\layout\img\sidebar_inline_toggler_icon_default.jpg" />
+    <Content Include="Metronic\assets\admin\layout\img\sidebar_inline_toggler_icon_grey.jpg" />
+    <Content Include="Metronic\assets\admin\layout\img\sidebar_inline_toggler_icon_light.jpg" />
+    <Content Include="Metronic\assets\admin\layout\img\sidebar_inline_toggler_icon_light2.jpg" />
+    <Content Include="Metronic\assets\admin\layout\img\sidebar_toggler_icon_blue.png" />
+    <Content Include="Metronic\assets\admin\layout\img\sidebar_toggler_icon_darkblue.png" />
+    <Content Include="Metronic\assets\admin\layout\img\sidebar_toggler_icon_default.png" />
+    <Content Include="Metronic\assets\admin\layout\img\sidebar_toggler_icon_grey.png" />
+    <Content Include="Metronic\assets\admin\layout\img\sidebar_toggler_icon_light.png" />
+    <Content Include="Metronic\assets\admin\layout\img\sidebar_toggler_icon_light2.png" />
+    <Content Include="Metronic\assets\admin\layout\scripts\demo.js" />
+    <Content Include="Metronic\assets\admin\layout\scripts\layout.js" />
+    <Content Include="Metronic\assets\admin\layout\scripts\quick-sidebar.js" />
     <Content Include="Metronic\assets\global\css\components-md.css" />
     <Content Include="Metronic\assets\global\css\components-rounded.css" />
     <Content Include="Metronic\assets\global\css\components.css" />
@@ -653,6 +661,141 @@
     <Content Include="Metronic\assets\global\plugins\font-awesome\css\font-awesome.css" />
     <Content Include="Metronic\assets\global\plugins\font-awesome\css\font-awesome.min.css" />
     <Content Include="Metronic\assets\global\plugins\font-awesome\fonts\fontawesome-webfont.svg" />
+    <Content Include="Metronic\assets\global\plugins\icheck\.gitignore" />
+    <Content Include="Metronic\assets\global\plugins\icheck\demo\css\banner.jpg" />
+    <Content Include="Metronic\assets\global\plugins\icheck\demo\css\custom.css" />
+    <Content Include="Metronic\assets\global\plugins\icheck\demo\css\icheck.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\demo\css\ie\arrow-bottom.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\demo\css\ie\arrow-top.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\demo\css\ie\header-line.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\demo\css\ie\icon-fork.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\demo\css\ie\icon-github.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\demo\css\ie\icon-lab.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\demo\css\ie\icon-options.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\demo\css\ie\icon-star.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\demo\css\montserrat-bold.svg" />
+    <Content Include="Metronic\assets\global\plugins\icheck\demo\css\montserrat-regular.svg" />
+    <Content Include="Metronic\assets\global\plugins\icheck\demo\css\normalize.css" />
+    <Content Include="Metronic\assets\global\plugins\icheck\demo\index.html" />
+    <Content Include="Metronic\assets\global\plugins\icheck\demo\js\custom.js" />
+    <Content Include="Metronic\assets\global\plugins\icheck\demo\js\custom.min.js" />
+    <Content Include="Metronic\assets\global\plugins\icheck\demo\js\jquery.js" />
+    <Content Include="Metronic\assets\global\plugins\icheck\demo\js\zepto.js" />
+    <Content Include="Metronic\assets\global\plugins\icheck\icheck.js" />
+    <Content Include="Metronic\assets\global\plugins\icheck\icheck.min.js" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\all.css" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\flat\aero%402x.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\flat\aero.css" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\flat\aero.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\flat\blue%402x.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\flat\blue.css" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\flat\blue.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\flat\flat%402x.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\flat\flat.css" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\flat\flat.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\flat\green%402x.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\flat\green.css" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\flat\green.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\flat\grey%402x.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\flat\grey.css" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\flat\grey.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\flat\orange%402x.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\flat\orange.css" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\flat\orange.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\flat\pink%402x.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\flat\pink.css" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\flat\pink.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\flat\purple%402x.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\flat\purple.css" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\flat\purple.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\flat\red%402x.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\flat\red.css" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\flat\red.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\flat\yellow%402x.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\flat\yellow.css" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\flat\yellow.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\flat\_all.css" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\futurico\futurico%402x.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\futurico\futurico.css" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\futurico\futurico.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\line\aero.css" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\line\blue.css" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\line\green.css" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\line\grey.css" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\line\line%402x.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\line\line.css" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\line\line.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\line\orange.css" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\line\pink.css" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\line\purple.css" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\line\red.css" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\line\yellow.css" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\line\_all.css" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\minimal\aero%402x.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\minimal\aero.css" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\minimal\aero.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\minimal\blue%402x.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\minimal\blue.css" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\minimal\blue.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\minimal\green%402x.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\minimal\green.css" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\minimal\green.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\minimal\grey%402x.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\minimal\grey.css" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\minimal\grey.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\minimal\minimal%402x.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\minimal\minimal.css" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\minimal\minimal.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\minimal\orange%402x.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\minimal\orange.css" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\minimal\orange.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\minimal\pink%402x.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\minimal\pink.css" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\minimal\pink.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\minimal\purple%402x.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\minimal\purple.css" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\minimal\purple.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\minimal\red%402x.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\minimal\red.css" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\minimal\red.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\minimal\yellow%402x.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\minimal\yellow.css" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\minimal\yellow.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\minimal\_all.css" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\polaris\polaris%402x.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\polaris\polaris.css" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\polaris\polaris.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\square\aero%402x.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\square\aero.css" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\square\aero.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\square\blue%402x.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\square\blue.css" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\square\blue.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\square\green%402x.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\square\green.css" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\square\green.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\square\grey%402x.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\square\grey.css" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\square\grey.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\square\orange%402x.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\square\orange.css" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\square\orange.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\square\pink%402x.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\square\pink.css" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\square\pink.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\square\purple%402x.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\square\purple.css" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\square\purple.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\square\red%402x.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\square\red.css" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\square\red.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\square\square%402x.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\square\square.css" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\square\square.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\square\yellow%402x.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\square\yellow.css" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\square\yellow.png" />
+    <Content Include="Metronic\assets\global\plugins\icheck\skins\square\_all.css" />
     <Content Include="Metronic\assets\global\plugins\jquery-migrate.min.js" />
     <Content Include="Metronic\assets\global\plugins\jquery-slimscroll\jquery.slimscroll.js" />
     <Content Include="Metronic\assets\global\plugins\jquery-slimscroll\jquery.slimscroll.min.js" />
@@ -815,6 +958,9 @@
     <Content Include="Scripts\angular-mocks.js" />
     <Content Include="Scripts\angular.js" />
     <Content Include="Scripts\angular.min.js" />
+    <Content Include="Scripts\bootstrap-table-zh-CN.min.js" />
+    <Content Include="Scripts\bootstrap-table.js" />
+    <Content Include="Scripts\bootstrap-table.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Metronic\assets\global\css\components-md.css.map" />
@@ -872,6 +1018,18 @@
     <Content Include="Metronic\assets\global\plugins\uniform\README.md" />
     <Content Include="Scripts\angular.min.js.map" />
     <Content Include="Scripts\angular-messages.min.js.map" />
+    <Content Include="Metronic\assets\global\plugins\icheck\bower.json" />
+    <Content Include="Metronic\assets\global\plugins\icheck\CHANGELOG.md" />
+    <Content Include="Metronic\assets\global\plugins\icheck\demo\css\custom.styl" />
+    <Content Include="Metronic\assets\global\plugins\icheck\demo\css\montserrat-bold.eot" />
+    <Content Include="Metronic\assets\global\plugins\icheck\demo\css\montserrat-bold.ttf" />
+    <Content Include="Metronic\assets\global\plugins\icheck\demo\css\montserrat-bold.woff" />
+    <Content Include="Metronic\assets\global\plugins\icheck\demo\css\montserrat-regular.eot" />
+    <Content Include="Metronic\assets\global\plugins\icheck\demo\css\montserrat-regular.ttf" />
+    <Content Include="Metronic\assets\global\plugins\icheck\demo\css\montserrat-regular.woff" />
+    <Content Include="Metronic\assets\global\plugins\icheck\icheck.jquery.json" />
+    <Content Include="Metronic\assets\global\plugins\icheck\README.md" />
+    <None Include="Properties\PublishProfiles\ioc.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -883,7 +1041,12 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\ui-bootstrap-1.1.0.js" />
+    <Content Include="Scripts\ui-bootstrap-1.1.0.min.js" />
+    <Content Include="Scripts\ui-bootstrap-tpls-1.1.0.min.js" />
     <Content Include="Scripts\_references.js" />
+    <Content Include="Views\Project\Creat.cshtml" />
+    <Content Include="Views\Task\Index.cshtml" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -899,21 +1062,18 @@
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Project\Index.cshtml" />
+    <Content Include="Views\Dictionary\Index.cshtml" />
+    <Content Include="Views\Dictionary\Form.cshtml" />
+    <Content Include="Views\Task\Create.cshtml" />
+    <Content Include="Views\Task\Edit.cshtml" />
+    <Content Include="Views\Task\Detail.cshtml" />
+    <Content Include="Views\Task\Logs.cshtml" />
+    <Content Include="Views\Project\Edit.cshtml" />
+    <Content Include="Views\Project\Detail.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="app\directives\" />
     <Folder Include="App_Data\" />
-    <Folder Include="Metronic\assets\admin\pages\media\bg\" />
-    <Folder Include="Metronic\assets\admin\pages\media\blog\" />
-    <Folder Include="Metronic\assets\admin\pages\media\email\" />
-    <Folder Include="Metronic\assets\admin\pages\media\gallery\" />
-    <Folder Include="Metronic\assets\admin\pages\media\invoice\" />
-    <Folder Include="Metronic\assets\admin\pages\media\pages\" />
-    <Folder Include="Metronic\assets\admin\pages\media\profile\" />
-    <Folder Include="Metronic\assets\admin\pages\media\search\" />
-    <Folder Include="Metronic\assets\admin\pages\media\users\" />
-    <Folder Include="Metronic\assets\admin\pages\media\works\" />
-    <Folder Include="Models\" />
-    <Folder Include="Views\Base\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -955,7 +1115,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>45135</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>

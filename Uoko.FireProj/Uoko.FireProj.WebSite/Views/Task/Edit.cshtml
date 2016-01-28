@@ -1,0 +1,177 @@
+﻿
+@{
+    ViewBag.Title = "编辑任务";
+}
+@section Css {
+    <link href="~/Content/TaskEdit.css" rel="stylesheet" />
+}
+<input type="hidden" id="taskIdParam" value="@ViewBag.TaskId" />
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <i class="fa fa-home"></i>
+            <a href="@Url.Action("Index","Home")">首页</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="@Url.Action("Index", "Task")">我的任务</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="#">编辑任务</a>
+        </li>
+    </ul>
+</div>
+<div class="row" ng-controller="TaskController">
+    <div class="col-md-12">
+        <!-- BEGIN EXAMPLE TABLE PORTLET-->
+        <div class="portlet box blue">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-pencil"></i>编辑任务
+                </div>
+
+            </div>
+            <div class="portlet-body">
+                <form role="form" class="form form-horizontal" name="form" ng-submit="Save(form.$valid)" novalidate>
+                    <div class="form-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">任务名</label>
+                                    <input type="text" name="taskname" ng-model="taskInfo.TaskName" class="form-control" placeholder="请输入任务名" required>
+                                    <div ng-show="form.$submitted || form.taskname.$touched">
+                                        <span class="error-msg" ng-show="form.taskname.$error.required">任务名必填.</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">项目</label>
+                                    <select class="form-control" name="project" ng-model="taskInfo.Project" ng-change="getBranch(taskInfo.Project)" required>
+                                        <option ng-repeat="project in projectList" value="{{project}}" ng-selected="project.Id==taskInfo.Project.Id">{{project.ProjectName}}</option>
+                                    </select>
+                                    <div ng-show="form.$submitted || form.project.$touched">
+                                        <span class="error-msg" ng-show="form.project.$error.required">项目必选.</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">分支</label>
+                                    <select name="branch" class="form-control" ng-model="taskInfo.Branch" required>
+                                        <option ng-repeat="branch in branchList" value="{{branch.name}}" ng-selected="branch.name == taskInfo.Branch">{{branch.name}}</option>
+                                    </select>
+                                    <div ng-show="form.$submitted || form.branch.$touched">
+                                        <span class="error-msg" ng-show="form.branch.$error.required">分支必选.</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">发布环境</label>
+                                    <select name="deployenvironment" class="form-control" ng-model="taskInfo.DeployEnvironment" required>
+                                        <option ng-repeat="environment in environmentList" value="{{environment.Id}}" ng-selected="environment.Id==taskInfo.DeployEnvironment">{{environment.Name}}</option>
+                                    </select>
+                                    <div ng-show="form.$submitted || form.deployenvironment.$touched">
+                                        <span class="error-msg" ng-show="form.deployenvironment.$error.required">项目必选.</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">部署机器IP</label>
+                                    <input name="deployip" type="text" ng-model="taskInfo.DeployIP" class="form-control" placeholder="请输入部署机器IP" required>
+                                    <div ng-show="form.$submitted || form.deployip.$touched">
+                                        <span class="error-msg" ng-show="form.deployip.$error.required">部署机器IP必填.</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">IIS站点名称</label>
+                                    <input name="sitename" type="text" ng-model="taskInfo.SiteName" class="form-control" placeholder="请输入IIS站点名称" required>
+                                    <div ng-show="form.$submitted || form.sitename.$touched">
+                                        <span class="error-msg" ng-show="form.sitename.$error.required">IIS站点名称必填.</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="control-label">部署地址</label>
+                                    <input type="text" ng-model="taskInfo.DeployAddress" class="form-control" placeholder="部署地址 例如 https://WIN-DEVTEST-002:8172/msdeploy.axd">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">验收人员</label>
+                                    <div class="form-control-wrap">
+                                        <ul class="tags">
+                                            <li ng-repeat="item in taskInfo.CheckUsers">
+                                                <img ng-src="{{item.avatar_url}}" title="{{item.name}}" alt="{{item.name}}" />
+                                                <a class="close" ng-click="removeCheckUser($index)">x</a>
+                                            </li>
+                                            <li class="add-tag" title="添加人员" ng-click="selectCheckUser()"></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">相关人员</label>
+                                    <div class="form-control-wrap">
+                                        <ul class="tags">
+                                            <li ng-repeat="item in taskInfo.NoticeUses">
+                                                <img ng-src="{{item.avatar_url}}" title="{{item.name}}" alt="{{item.name}}" />
+                                                <a class="close" ng-click="removeNoticeUser($index)">x</a>
+                                            </li>
+                                            <li class="add-tag" title="添加人员" ng-click="selectNoticeUser()"></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="control-label">备注</label>
+                                    <div class="form-control-wrap">
+                                        <textarea rows="4" ng-model="taskInfo.TaskDesc"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="form-actions right">
+                        <button type="button" class="btn default" ng-click="Cancel()">取消</button>
+                        <button type="submit" class="btn blue" ng-click=""><i class="fa fa-check"></i> 保存</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+        <!-- END EXAMPLE TABLE PORTLET-->
+    </div>
+</div>
+@section Scripts {
+    <script src="~/app/services/CommonService.js"></script>
+    <script src="~/app/services/ProjectService.js"></script>
+    <script src="~/app/services/TaskService.js"></script>
+   <script src="~/app/controllers/TaskEdit.js"></script>
+   <script src="~/app/modals/SelectUser.js"></script>
+}
+

@@ -1,0 +1,98 @@
+﻿
+@{
+    ViewBag.Title = "Detail";
+}
+<div class="col-md-12">
+    <div ng-controller="ProjectController">
+        <!-- BEGIN  HEADER-->
+        <div class="page-bar">
+            <ul class="page-breadcrumb">
+                <li>
+                    <i class="fa fa-home"></i>
+                    <a href="/">主页</a>
+                    <i class="fa fa-angle-right"></i>
+                </li>
+                <li>
+                    <a href="@Url.Action("Index","Project")">项目管理</a>
+                    <i class="fa fa-angle-right"></i>
+                </li>
+                <li>
+                    <a href="#">项目查看</a>
+
+                </li>
+            </ul>
+
+        </div>
+        <!-- END  HEADER-->
+        <!--BEGIN Form -->
+        <div>
+            <div class="portlet light">
+                <div class="portlet-title">
+                    <div class="caption font-green-haze">
+                        <i class="icon-settings font-green-haze"></i>
+                        <span class="caption-subject bold uppercase">项目查看</span>
+                    </div>
+                    <div class="actions">
+                        <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title="全屏"></a>
+                    </div>
+                </div>
+                <div class="portlet-body form">
+                    <div id="bootstrap_alerts_demo"></div>
+                    <form role="form" class="form-horizontal" name="serverForm" novalidate>
+                        <div class="form-body">
+                            <div class="form-group form-md-line-input">
+                                <label class="col-md-2 control-label" for="form_control_1">项目名称</label>
+                                <div class="col-md-10">
+                                    <input disabled type="text" class="form-control" id="form_control_1" ng-model="model.ProjectName" placeholder="请输入项目名称" required>
+                                </div>
+                            </div>
+                            <div class="form-group form-md-line-input">
+                                <label class="col-md-2 control-label" for="form_control_1">项目文件</label>
+                                <div class="col-md-10">
+                                    <input disabled type="text" class="form-control" id="form_control_1" ng-model="model.ProjectFileName" placeholder="请输入项目名称" required>
+                                </div>
+
+                            </div>
+
+                            <div class="form-group form-md-line-input">
+                                <label class="col-md-2 control-label" for="form_control_1">项目地址</label>
+                                <div class="col-md-10">
+                                    <select disabled class="form-control" id="form_control_1" ng-model="model.Project">
+                                        <option  ng-repeat="project in ProjectList" value="{{project}}" ng-selected="project.id == model.ProjectId">{{project.name}}</option>
+                                    </select>
+                                   
+                                </div>
+                            </div>
+
+                            <div class="form-group form-md-line-input">
+                                <label class="col-md-2 control-label" for="form_control_1">项目描述</label>
+                                <div class="col-md-10">
+                                    <textarea disabled class="form-control" rows="3">{{model.ProjectDesc}}</textarea>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="form-actions">
+                            <div class="row">
+                                <div class="col-md-offset-2 col-md-10">
+                                    <a type="button" class="btn default btn-lg" href="@Url.Action("Index","Project")">取消</a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!--END Form -->
+        <input type="hidden" id="id" value="@Html.ViewContext.RouteData.Values["id"]" />
+    </div>
+</div>
+@section Scripts {
+<script src="~/app/controllers/ProjectDetail.js"></script>
+<script src="~/app/services/ProjectService.js"></script>
+}
+
+
+
+

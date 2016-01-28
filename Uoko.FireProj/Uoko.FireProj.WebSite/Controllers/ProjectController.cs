@@ -13,5 +13,20 @@ namespace Uoko.FireProj.WebSite.Controllers
         {
             return View();
         }
+
+        public ActionResult Creat()
+        {
+            return View();
+        }
+
+        public ActionResult Edit()
+        {
+            return View();
+        }
+
+        public ActionResult Detail()
+        {
+            return View();
+        }
     }
 }
