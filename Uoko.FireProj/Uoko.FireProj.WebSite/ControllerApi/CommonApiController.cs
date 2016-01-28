@@ -11,7 +11,7 @@ namespace Uoko.FireProj.WebSite.ControllerApi
 {
     [RoutePrefix("api/CommonApi")]
     public class CommonApiController : ApiController
-    {
+    { 
         /// <summary>
         /// 获取环境枚举下拉框绑定
         /// </summary>
