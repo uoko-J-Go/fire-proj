@@ -64,23 +64,15 @@ namespace Uoko.FireProj.WebSite.ControllerApi
             var projectId = _projectSvc.CreatProject(dto);
             if (projectId > 0)
             {
-                //创建内部测试环境地址: 域名+端口号
+                //创建内部测试环境地址: 
                 List<ResourceInfoDto> resourceInfoList = new List<ResourceInfoDto>();
-                Hashtable hashtable = new Hashtable();
-                Random rm = new Random();
-                for (int i = 0; hashtable.Count < 10; i++)
+                for (int i = 0; i < 10; i++)
                 {
-                    int nValue = rm.Next(1000, 10000);
-                    if (!hashtable.ContainsValue(nValue) && nValue != 0)
+                    resourceInfoList.Add(new ResourceInfoDto()
                     {
-                        hashtable.Add(nValue, nValue);
-                        resourceInfoList.Add(
-                        new ResourceInfoDto()
-                        {
-                            ProjectId = projectId,
-                            Url = string.Format("http://{0}.uoko.ioc:{1}", dto.ProjectGitlabName, nValue),
-                        });
-                    }
+                        ProjectId = projectId,
+                        Url = string.Format("{0}{1}.uoko.ioc", dto.ProjectGitlabName, (i + 1)),
+                    });
                 }
                 _resourceInfoSvc.CreatResource(resourceInfoList);
             }
