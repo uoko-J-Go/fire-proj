@@ -206,6 +206,7 @@
     <Content Include="Content\bootstrap-table.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Images\logo.png" />
     <Content Include="Content\TaskEdit.css" />
     <Content Include="Content\TaskDetail.css" />
     <Content Include="Content\tree-grid-directive.js" />
