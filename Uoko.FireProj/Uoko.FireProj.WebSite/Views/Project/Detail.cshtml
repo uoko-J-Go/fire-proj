@@ -1,8 +1,7 @@
 ﻿
 @{
-    ViewBag.Title = "Form";
+    ViewBag.Title = "Detail";
 }
-
 <div class="col-md-12">
     <div ng-controller="ProjectController">
         <!-- BEGIN  HEADER-->
@@ -14,22 +13,24 @@
                     <i class="fa fa-angle-right"></i>
                 </li>
                 <li>
-                    <a href="#">项目管理</a>
+                    <a href="@Url.Action("Index","Project")">项目管理</a>
+                    <i class="fa fa-angle-right"></i>
+                </li>
+                <li>
+                    <a href="#">项目查看</a>
 
                 </li>
-
             </ul>
 
         </div>
         <!-- END  HEADER-->
-
         <!--BEGIN Form -->
-        <div >
+        <div>
             <div class="portlet light">
                 <div class="portlet-title">
                     <div class="caption font-green-haze">
                         <i class="icon-settings font-green-haze"></i>
-                        <span class="caption-subject bold uppercase">{{formTile}}</span>
+                        <span class="caption-subject bold uppercase">项目查看</span>
                     </div>
                     <div class="actions">
                         <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title="全屏"></a>
@@ -42,19 +43,13 @@
                             <div class="form-group form-md-line-input">
                                 <label class="col-md-2 control-label" for="form_control_1">项目名称</label>
                                 <div class="col-md-10">
-                                    <input type="text" class="form-control" id="form_control_1" ng-model="model.ProjectName" placeholder="请输入项目名称" required>
-                                    <div class="form-control-focus">
-                                    </div>
-                                    <span class="help-block">项目名称是必填</span>
+                                    <input disabled type="text" class="form-control" id="form_control_1" ng-model="model.ProjectName" placeholder="请输入项目名称" required>
                                 </div>
                             </div>
                             <div class="form-group form-md-line-input">
                                 <label class="col-md-2 control-label" for="form_control_1">项目文件</label>
                                 <div class="col-md-10">
-                                    <input type="text" class="form-control" id="form_control_1" ng-model="model.ProjectFileName" placeholder="请输入项目文件" required>
-                                    <div class="form-control-focus">
-                                    </div>
-                                    <span class="help-block">项目文件是必填</span>
+                                    <input disabled type="text" class="form-control" id="form_control_1" ng-model="model.ProjectFileName" placeholder="请输入项目名称" required>
                                 </div>
 
                             </div>
@@ -62,22 +57,17 @@
                             <div class="form-group form-md-line-input">
                                 <label class="col-md-2 control-label" for="form_control_1">项目地址</label>
                                 <div class="col-md-10">
-                                    <select class="form-control" id="form_control_1" ng-model="model.ProjectRepo">
-                                        <option ng-repeat="project in ProjectList" value="{{project.http_url_to_repo}}" ng-selected="project.http_url_to_repo == model.http_url_to_repo">{{project.name}}</option>
+                                    <select disabled class="form-control" id="form_control_1" ng-model="model.Project">
+                                        <option  ng-repeat="project in ProjectList" value="{{project}}" ng-selected="project.id == model.ProjectId">{{project.name}}</option>
                                     </select>
-                                    <div class="form-control-focus">
-                                    </div>
-                                    <span class="help-block">项目地址是必填</span>
+                                   
                                 </div>
                             </div>
 
                             <div class="form-group form-md-line-input">
                                 <label class="col-md-2 control-label" for="form_control_1">项目描述</label>
                                 <div class="col-md-10">
-                                    <textarea class="form-control" rows="3" ng-model="model.ProjectDesc"></textarea>
-                                    <div class="form-control-focus">
-                                    </div>
-
+                                    <textarea disabled class="form-control" rows="3">{{model.ProjectDesc}}</textarea>
                                 </div>
                             </div>
 
@@ -85,7 +75,6 @@
                         <div class="form-actions">
                             <div class="row">
                                 <div class="col-md-offset-2 col-md-10">
-                                    <button type="button" class="btn blue btn-lg" ng-disabled="serverForm.$invalid" ng-click="SubmitFrom(model)">提交</button>
                                     <a type="button" class="btn default btn-lg" href="@Url.Action("Index","Project")">取消</a>
                                 </div>
                             </div>
@@ -96,9 +85,14 @@
             </div>
         </div>
         <!--END Form -->
+        <input type="hidden" id="id" value="@Html.ViewContext.RouteData.Values["id"]" />
     </div>
 </div>
 @section Scripts {
-    <script src="~/app/controllers/project.js"></script>
+<script src="~/app/controllers/ProjectDetail.js"></script>
+<script src="~/app/services/ProjectService.js"></script>
 }
+
+
+
 
