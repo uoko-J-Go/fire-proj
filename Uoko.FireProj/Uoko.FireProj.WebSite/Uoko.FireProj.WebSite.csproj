@@ -1019,7 +1019,6 @@
     <Content Include="Scripts\angular-messages.min.js.map" />
     <Content Include="Metronic\assets\global\plugins\icheck\bower.json" />
     <Content Include="Metronic\assets\global\plugins\icheck\CHANGELOG.md" />
-    <Content Include="Metronic\assets\global\plugins\icheck\demo\css\custom.styl" />
     <Content Include="Metronic\assets\global\plugins\icheck\demo\css\montserrat-bold.eot" />
     <Content Include="Metronic\assets\global\plugins\icheck\demo\css\montserrat-bold.ttf" />
     <Content Include="Metronic\assets\global\plugins\icheck\demo\css\montserrat-bold.woff" />
