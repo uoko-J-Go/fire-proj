@@ -1028,6 +1028,7 @@
     <Content Include="Metronic\assets\global\plugins\icheck\demo\css\montserrat-regular.woff" />
     <Content Include="Metronic\assets\global\plugins\icheck\icheck.jquery.json" />
     <Content Include="Metronic\assets\global\plugins\icheck\README.md" />
+    <None Include="Properties\PublishProfiles\ioc.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
