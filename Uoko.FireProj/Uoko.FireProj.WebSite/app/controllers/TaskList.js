@@ -27,7 +27,7 @@ fireproj.controller("TaskController", function ($scope, $http, TaskService, Proj
             var taskInfo = data;
             CommonService.TriggerBuild(taskInfo, function (data) {
                 bootbox.alert("已经成功发起部署任务，点击详细进行查看!", function () {              
-                    TaskService.BeginDeploy(taskId, data.id, function (data) {
+                    TaskService.BeginDeploy(taskInfo.Id, data.id, function (data) {
                         location.reload();
                     });
                 });
