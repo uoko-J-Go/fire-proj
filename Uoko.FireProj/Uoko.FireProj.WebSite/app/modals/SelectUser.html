@@ -7,15 +7,15 @@
     </h4>
 </div>
 <div class="modal-body">
-    <div class="row">
-        <div class="input-group">
-            <div class="icheck-list" ng-repeat="user in userList">
+    <div class="row" style="padding-right: 20px;">
+        <ul>
+            <li style="display: inline; line-height: 24px;margin-right:10px;" ng-repeat="user in userList">
+
                 <label>
                     <input type="checkbox" class="icheck" ng-model="user.selected">{{user.name}}
                 </label>
-                
-            </div>
-        </div>
+            </li>
+        </ul>
   
     </div>
 </div>
