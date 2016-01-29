@@ -17,6 +17,7 @@ namespace Uoko.FireProj.Model
         public DbSet<ResourceInfo> ResourceInfo { get; set; }
         public DbSet<TaskInfo> TaskInfo { get; set; }
         public DbSet<TaskLogs> TaskLogs { get; set; }
+        public DbSet<Server> Servers { get; set; }
         #endregion
 
 
@@ -27,6 +28,7 @@ namespace Uoko.FireProj.Model
             modelBuilder.Configurations.Add(new ResourceInfoMap());
             modelBuilder.Configurations.Add(new TaskInfoMap());
             modelBuilder.Configurations.Add(new TaskLogsMap());
+            modelBuilder.Configurations.Add(new ServerMap());
         }
     }
 }

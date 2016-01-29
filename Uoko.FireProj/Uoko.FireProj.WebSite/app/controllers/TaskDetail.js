@@ -44,9 +44,9 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
         });
     }
     $scope.Deploy = function () {
-        CommonService.TriggerBuild(taskInfo, function (data) {
+        CommonService.TriggerBuild($scope.taskInfo, function (data) {
             bootbox.alert("已经成功发起部署任务!", function () {
-                TaskService.BeginDeploy(taskId, data.id, function (data) {
+                TaskService.BeginDeploy($scope.taskInfo.Id, data.id, function (data) {
                     location.reload();
                 });
             });

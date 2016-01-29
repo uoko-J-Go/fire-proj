@@ -107,7 +107,7 @@ namespace Uoko.FireProj.Concretes
                 data.Project= Mapper.Map<Project, ProjectDto>(project);
                 
                 var checkUsers = new List<UserDto>();
-                taskInfo.CheckUserId.Split(',').ToList().ForEach((item)=>
+                taskInfo.CheckUserId.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList().ForEach((item)=>
                 {
                     checkUsers.Add(new UserDto
                     {
@@ -117,7 +117,7 @@ namespace Uoko.FireProj.Concretes
                 data.CheckUsers = checkUsers;
 
                 var noticeUsers = new List<UserDto>();
-                taskInfo.NoticeUseId.Split(',').ToList().ForEach((item) =>
+                taskInfo.NoticeUseId.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList().ForEach((item) =>
                 {
                     noticeUsers.Add(new UserDto
                     {

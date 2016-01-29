@@ -57,6 +57,7 @@
     <Compile Include="Dto\DictionaryDto.cs" />
     <Compile Include="Dto\ProjectDto.cs" />
     <Compile Include="Dto\ResourceInfoDto.cs" />
+    <Compile Include="Dto\ServerDto.cs" />
     <Compile Include="Dto\TaskLogsDto.cs" />
     <Compile Include="Dto\TaskDto.cs" />
     <Compile Include="Dto\UserDto.cs" />
@@ -64,9 +65,11 @@
     <Compile Include="Entity\Dictionary.cs" />
     <Compile Include="Entity\Project.cs" />
     <Compile Include="Entity\ResourceInfo.cs" />
+    <Compile Include="Entity\Server.cs" />
     <Compile Include="Entity\Task.cs" />
     <Compile Include="Entity\TaskLogs.cs" />
     <Compile Include="Enum\EnvironmentEnum.cs" />
+    <Compile Include="Enum\GenericStatusEnum.cs" />
     <Compile Include="Enum\TaskLogsEnum.cs" />
     <Compile Include="Enum\DeployEnum.cs" />
     <Compile Include="Enum\DicEnum.cs" />
@@ -77,6 +80,7 @@
     <Compile Include="FluentAPI\DictionaryMap.cs" />
     <Compile Include="FluentAPI\ProjectMap.cs" />
     <Compile Include="FluentAPI\ResourceInfoMap.cs" />
+    <Compile Include="FluentAPI\ServerMap.cs" />
     <Compile Include="FluentAPI\TaskLogsMap.cs" />
     <Compile Include="FluentAPI\TaskInfoMap.cs" />
     <Compile Include="Gitlab\BuildHookRequest.cs" />
@@ -140,6 +144,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Query\BaseQuery.cs" />
     <Compile Include="Query\DictionaryQuery.cs" />
+    <Compile Include="Query\ServerQuery.cs" />
     <Compile Include="Query\TaskQuery.cs" />
     <Compile Include="Query\ProjectQuery.cs" />
     <Compile Include="Query\TaskLogsQuery.cs" />
