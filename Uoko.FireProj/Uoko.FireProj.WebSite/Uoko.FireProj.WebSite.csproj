@@ -179,6 +179,7 @@
     <Compile Include="Controllers\DictionaryController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ProjectController.cs" />
+    <Compile Include="Controllers\SystemSetController.cs" />
     <Compile Include="Controllers\TaskController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -1046,6 +1047,7 @@
     <Content Include="Scripts\ui-bootstrap-tpls-1.1.0.min.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Views\Project\Creat.cshtml" />
+    <Content Include="Views\DomainResource\Index.cshtml" />
     <Content Include="Views\Task\Index.cshtml" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -1070,6 +1072,7 @@
     <Content Include="Views\Task\Logs.cshtml" />
     <Content Include="Views\Project\Edit.cshtml" />
     <Content Include="Views\Project\Detail.cshtml" />
+    <Content Include="Views\Server\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="app\directives\" />
