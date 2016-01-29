@@ -7,6 +7,10 @@ variables:
 before_script:
   - 'chcp 65001'
   
+cache:
+  paths:
+    - Uoko.FireProj/packages/
+  
 stages:
   - nugetrestore
   - package
@@ -18,10 +22,7 @@ nugetrestore:
      - 'echo restoring..'
      - .\Uoko.FireProj\.nuget\NuGet.exe restore $CsprojNameAPI
      - 'echo restored'
-  cache:
-    paths:
-    - Uoko.FireProj/packages/
-
+     
 package:
   stage: package
   script:
