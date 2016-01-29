@@ -30,6 +30,6 @@ deploy:
   stage: deploy
   script:
      - 'echo deploy..'   
-     - 'cd $PkgDir'   
+     - 'cd "$PkgDir"'   
      - .\Uoko.FireProj.WebSite.deploy.cmd  /Y /U:simple-deploy /P:deploy /A:Basic -allowUntrusted "-setParam:name='IIS Web Application Name',value='$SiteNameAPI'" "/M:$DeployAddressAPI?site=$SiteNameAPI"
  
