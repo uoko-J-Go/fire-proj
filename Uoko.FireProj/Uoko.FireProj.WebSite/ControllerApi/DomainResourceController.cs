@@ -25,5 +25,18 @@ namespace Uoko.FireProj.WebSite.ControllerApi
             var result = _domainResourceSvc.GetResourceList(projectId, serverId);
             return Ok(result);
         }
+
+        /// <summary>
+        /// 根据任务任务Id释放域名
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [Route("ReleaseDomain")]
+        [HttpPost]
+        public IHttpActionResult post(int id)
+        {
+            _domainResourceSvc.ReleaseDomain(id);
+            return Ok();
+        }
     }
 }

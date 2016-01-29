@@ -1,11 +1,16 @@
 variables:
-  CsprojNameAPI: Uoko.FireProj\Uoko.FireProj.WebSite\Uoko.FireProj.WebSite.csproj
-  DeployAddressAPI: https://192.168.200.25:8172/msdeploy.axd 
+  CsprojNameAPI: Uoko.FireProj\Uoko.FireProj.sln
   SiteNameAPI: fire
   PkgDir: d:\deploy-pkg
   
 before_script:
-  - 'echo off'
+  - 'chcp 65001'
+  
+cache:
+  key: "$CI_BUILD_REF_NAME"
+  paths:
+    - Uoko.FireProj/packages/
+  
 stages:
   - nugetrestore
   - package
@@ -14,22 +19,20 @@ stages:
 nugetrestore:
   stage: nugetrestore
   script:
-     - 'cd Uoko.FireProj\.nuget'
      - 'echo restoring..'
-     - .\NuGet.exe restore ../Uoko.FireProj.sln
-     - 'cd ..'
+     - .\Uoko.FireProj\.nuget\NuGet.exe restore $CsprojNameAPI
      - 'echo restored'
-
+     
 package:
   stage: package
   script:
      - 'echo package..'
-     - c:\windows\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe $CsprojNameAPI /p:VisualStudioVersion=14.0 /p:DeployOnBuild=true /p:PackageLocation=$PkgDir
+     - c:\windows\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe $CsprojNameAPI /p:VisualStudioVersion=12.0 /p:DeployOnBuild=true /p:PackageLocation=$PkgDir /verbosity:m
 
 deploy:
   stage: deploy
   script:
      - 'echo deploy..'   
-     - 'cd $PkgDir'   
-     - .\Uoko.FireProj.WebSite.deploy.cmd  /Y /U:simple-deploy /P:deploy /A:Basic -allowUntrusted "-setParam:name='IIS Web Application Name',value='$SiteNameAPI'" "/M:$DeployAddressAPI?site=$SiteNameAPI"
+     - 'cd d:\deploy-pkg'   
+     - .\Uoko.FireProj.WebSite.deploy.cmd  /Y /U:simple-deploy /P:deploy /A:Basic -allowUntrusted "-setParam:name='IIS Web Application Name',value='$SiteNameAPI'" """/M:https://192.168.200.25:8172/msdeploy.axd?site=$SiteNameAPI"
  

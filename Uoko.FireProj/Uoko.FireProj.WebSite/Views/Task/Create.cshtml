@@ -91,7 +91,6 @@
                                     <select name="deployenvironment" class="form-control" ng-model="taskInfo.Server" ng-change="GetDomain(taskInfo.Project,taskInfo.Server)" required>
                                         <option ng-repeat="server in ServerList" value="{{server}}" ng-selected="server.IP==taskInfo.DeployIP">{{server.Name}}</option>
                                     </select>
-                                    @*<input name="deployip" type="text" ng-model="taskInfo.DeployIP" class="form-control" placeholder="请输入部署机器IP" required>*@
                                     <div ng-show="form.$submitted || form.deployenvironment.$touched">
                                         <span class="error-msg" ng-show="form.deployenvironment.$error.required">部署机器IP必填.</span>
                                     </div>

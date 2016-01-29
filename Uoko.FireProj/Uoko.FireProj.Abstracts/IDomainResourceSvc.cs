@@ -24,10 +24,9 @@ namespace Uoko.FireProj.Abstracts
         List<DomainResourceDto> GetResourceList(int projectId, int serverId);
 
         /// <summary>
-        /// 修改资源表
+        /// 根据任务Id释放域名
         /// </summary>
-        /// <param name="iPId"></param>
-        /// <returns></returns>
-        void UpdateResource(DomainResourceDto dto, Expression<Func<DomainResourceDto, object>> propertyExpression);
+        /// <param name="taskId"></param>
+        void ReleaseDomain(int taskId);
     }
 }
