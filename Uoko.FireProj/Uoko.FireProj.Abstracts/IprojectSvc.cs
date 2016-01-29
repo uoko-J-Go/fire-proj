@@ -45,6 +45,13 @@ namespace Uoko.FireProj.Abstracts
         /// <param name="projectId"></param>
         ProjectDto GetProjectById(int projectId);
         /// <summary>
+        /// 根据任务Id获取项目信息
+        /// </summary>
+        /// <param name="taskId"></param>
+        /// <returns></returns>
+        ProjectDto GetProjectByTaskId(int taskId);
+
+        /// <summary>
         /// 获取所有项目
         /// </summary>
         /// <returns></returns>

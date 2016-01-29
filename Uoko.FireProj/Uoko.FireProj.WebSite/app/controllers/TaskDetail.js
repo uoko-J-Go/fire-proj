@@ -1,15 +1,27 @@
 ﻿
 fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskService, ProjectService, CommonService) {
     $scope.taskInfo = {};
+    $scope.tasklogTotal = {};
+    $scope.currLogTab = 0;
     $scope.GetTaskInfo = function () {
         var taskId = $("#taskIdParam").val();
         TaskService.GetTaskInfo(taskId, function (data) {
             $scope.taskInfo = data;
+            $scope.GetLogTotal($scope.taskInfo.Id);
             $scope.GetAllUserDetail($scope.taskInfo.CheckUsers, 0);
             $scope.GetAllUserDetail($scope.taskInfo.NoticeUses, 0);
          
         });
     }
+    //获取当前任务在各个环境中的任务记录数
+    $scope.GetLogTotal = function (taskId) {
+        TaskService.GetLogTotal(taskId, function (data) {
+            $scope.tasklogTotal = data;
+            $scope.currLogTab = $scope.taskInfo.DeployEnvironment;
+            $scope.Query();
+        });
+    }
+
     $scope.GetAllUserDetail = function (userList, index) {
         if (index < userList.length) {
             var user = userList[index];
@@ -61,6 +73,44 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
             });
         });
     }
+
+    /*任务记录相关*/
+    $scope.pageSize = 5;
+    $scope.currentPage = 1;
+    $scope.items = [];
+    $scope.totalItems = 0;//总数
+    //查询项目
+    $scope.Query = function () {
+        var params = {
+            offset: $scope.pageSize * ($scope.currentPage - 1),
+            limit: $scope.pageSize,
+            taskId: $scope.taskInfo.Id,
+            environment: $scope.currLogTab,
+            sort: "CreateDate",
+            order:"desc"
+        }
+        TaskService.GetTaskLogsByPage(params, function (data) {
+            $scope.totalItems = data.total;
+            $scope.items = data.rows;
+        });
+
+    }
+
+    $scope.GotoGitLabBuildPage = function (buildId) {
+        ProjectService.getByTaskId($scope.taskInfo.Id,function(data) {
+            var url = data.ProjectRepo.replace(".git", "") + "/builds/" + buildId;
+            window.open(url, '_blank');
+        });
+    }
+    $scope.GetCurrLog = function (enviroment) {
+        $scope.currLogTab = enviroment;
+        $scope.currentPage = 1;
+        $scope.items = [];
+        $scope.totalItems = 0;//总数
+        $scope.Query();
+    }
+
+    /*任务记录相关*/
     $scope.Init = function () {
         $scope.GetTaskInfo();
     }

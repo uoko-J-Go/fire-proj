@@ -10,7 +10,7 @@
         });;
     };
     this.GetTaskLogsByPage = function (params, successCallBack) {
-        $http.get("/api/TaskLogsApi?Offset={0}&Limit={1}&taskId={2}".Format(params.offset, params.limit, params.taskId)).success(function (data) {
+        $http.get("/api/TaskLogsApi?Offset={0}&Limit={1}&taskId={2}&environment={3}&sort={4}&order={5}".Format(params.offset, params.limit, params.taskId, params.environment, params.sort, params.order)).success(function (data) {
             if (successCallBack != undefined) {
                 successCallBack(data);
             }
@@ -117,6 +117,14 @@
             //错误处理
         });
     };
-
+    this.GetLogTotal = function (taskId, successCallBack) {
+        $http.get("/api/TaskLogsApi/LogTotal/" + taskId + "").success(function (data) {
+            if (successCallBack != undefined) {
+                successCallBack(data);
+            }
+        }).error(function (data) {
+            //错误处理
+        });
+    };
     
 });

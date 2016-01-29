@@ -34,6 +34,13 @@ namespace Uoko.FireProj.WebSite.ControllerApi
             return Ok(result);
         }
 
+        [Route("GetByTaskId/{taskId}")]
+        public IHttpActionResult GetByTaskId(int taskId)
+        {
+            var result = _projectSvc.GetProjectByTaskId(taskId);
+            return Ok(result);
+        }
+        
         /// <summary>
         /// 获取项目分页
         /// </summary>

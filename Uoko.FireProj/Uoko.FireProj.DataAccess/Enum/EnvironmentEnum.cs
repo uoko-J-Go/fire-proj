@@ -28,6 +28,6 @@ namespace Uoko.FireProj.DataAccess.Enum
         /// 正式环境
         /// </summary>
         [Description("正式环境")]
-        OnLine = 2,
+        PRODUCTION = 2,
     }
 }

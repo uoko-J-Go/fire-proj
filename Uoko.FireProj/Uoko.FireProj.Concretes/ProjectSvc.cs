@@ -124,6 +124,28 @@ namespace Uoko.FireProj.Concretes
             }
         }
 
+        public ProjectDto GetProjectByTaskId(int taskId)
+        {
+            using (var dbScope = _dbScopeFactory.CreateReadOnly())
+            {
+                var db = dbScope.DbContexts.Get<FireProjDbContext>();
+
+                var data = from p in db.Project
+                    join t in db.TaskInfo on p.Id equals t.ProjectId
+                    where t.Id == taskId
+                    select new ProjectDto
+                    {
+                        Id = p.Id,
+                        ProjectName = p.ProjectName,
+                        ProjectRepo = p.ProjectRepo,
+                        ProjectDesc = p.ProjectDesc,
+                        ProjectFileName = p.ProjectFileName,
+                        ProjectId = p.ProjectId,
+                    };
+                return data.FirstOrDefault();
+            }
+        }
+
         public PageGridData<ProjectDto> GetProjectPage(ProjectQuery query)
         {
             using (var dbScope = _dbScopeFactory.CreateReadOnly())
