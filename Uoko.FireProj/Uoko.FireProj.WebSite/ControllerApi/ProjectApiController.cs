@@ -68,11 +68,24 @@ namespace Uoko.FireProj.WebSite.ControllerApi
                 List<DomainResourceDto> resourceInfoList = new List<DomainResourceDto>();
                 for (int i = 0; i < 10; i++)
                 {
-                    resourceInfoList.Add(new DomainResourceDto()
+                    if (!string.IsNullOrEmpty(dto.DomainRule)&& dto.DomainRule.IndexOf("{编号}")>=0)
                     {
-                        ProjectId = projectId,
-                        Name = string.Format("{0}{1}.uoko.ioc", dto.ProjectGitlabName, (i + 1)),
-                    });
+                        resourceInfoList.Add(new DomainResourceDto()
+                        {
+                            ProjectId = projectId,
+                            Name = dto.DomainRule.Replace("{编号}", i == 0 ? "" : i.ToString())
+                        });
+                        
+                    }
+                    else
+                    {
+                        resourceInfoList.Add(new DomainResourceDto()
+                        {
+                            ProjectId = projectId,
+                            Name = string.Format("{0}{1}.uoko.ioc", dto.ProjectGitlabName, i == 0 ? "" : i.ToString())
+                        });
+                    }
+                    
                 }
                 DomainResourceSvc.CreatResource(resourceInfoList);
             }
