@@ -10,6 +10,10 @@ using Uoko.FireProj.DataAccess.Dto;
 using Uoko.FireProj.DataAccess.Entity;
 using Uoko.FireProj.Infrastructure.Exception;
 using Uoko.FireProj.Model;
+using System.Linq.Expressions;
+using Uoko.FireProj.DataAccess.Extensions;
+using System.Collections.ObjectModel;
+using System.Reflection;
 
 namespace Uoko.FireProj.Concretes
 {
@@ -40,6 +44,50 @@ namespace Uoko.FireProj.Concretes
             }
             catch (Exception ex)
             {
+                throw new TipInfoException(ex.Message);
+            }
+        }
+
+        public List<ResourceInfoDto> GetResourceList(int projectId, int IPId)
+        {
+            try
+            {
+                using (var dbScope = _dbScopeFactory.CreateReadOnly())
+                {
+                    var db = dbScope.DbContexts.Get<FireProjDbContext>();
+                    var data = db.ResourceInfo.Where(r => r.ProjectId == projectId && r.Status == 0 && (r.DeployIPId == IPId || r.DeployIPId == 0)).Select(r => new ResourceInfoDto
+                    {
+                        Id = r.Id,
+                        Url = r.Url,
+                    }).ToList();
+                    return data;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new TipInfoException(ex.Message);
+            }
+        }
+
+        public void UpdateResource(ResourceInfoDto dto, Expression<Func<ResourceInfoDto, object>> propertyExpression)
+        {
+            try
+            {
+                var entity = Mapper.Map<ResourceInfoDto, ResourceInfo>(dto);
+                using (var dbScope = _dbScopeFactory.Create())
+                {
+                    var db = dbScope.DbContexts.Get<FireProjDbContext>();
+                    ReadOnlyCollection<MemberInfo> memberInfos = ((dynamic)propertyExpression.Body).Members;
+                    foreach (MemberInfo memberInfo in memberInfos)
+                    {
+                        db.Entry(entity).Property(memberInfo.Name).IsModified = true;
+                    }
+                    db.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+
                 throw new TipInfoException(ex.Message);
             }
         }

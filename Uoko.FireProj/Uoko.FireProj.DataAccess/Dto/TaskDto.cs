@@ -39,6 +39,11 @@ namespace Uoko.FireProj.DataAccess.Dto
         public string DeployIP { get; set; }
 
         /// <summary>
+        /// 部署域名
+        /// </summary>
+        public string Domain { get; set; }
+
+        /// <summary>
         /// IIS站点名称
         /// </summary>
         public string SiteName { get; set; }

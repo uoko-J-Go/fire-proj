@@ -13,6 +13,11 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
         NoticeUses: [],
         TaskDesc:""
     };
+    ///环境服务器IP List,后面优化
+    $scope.DeployIPList = [
+      { Id: 1, IP: "192.168.1.100" },
+      { Id: 2, IP: "192.168.1.101" },
+    ];
     $scope.projectList = [];
     $scope.branchList = [];
     TaskService.GetEnvironment(function (data) {
@@ -66,10 +71,10 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
         $scope.$evalAsync();
     }
     $scope.Save = function (isValid) {
-        if (!isValid) {
-            bootbox.alert("表单验证未通过");
-            return;
-        }
+        //if (!isValid) {
+        //    bootbox.alert("表单验证未通过");
+        //    return;
+        //}
         var project = $scope.taskInfo.Project;
         if (typeof project == "string") {
             $scope.taskInfo.Project = JSON.parse(project);
@@ -79,6 +84,17 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
         });
     }
 
+    //选择环境change事件
+    $scope.EnvironmentChange = function (project,environmentId) {
+        if (environmentId == 0) {
+            if (typeof project == "string") {
+                project = JSON.parse(project);
+            }
+            TaskService.GetResourceList(project.Id, environmentId, function (data) {
+                $scope.resourceList = data;
+            });
+        }
+    }
     //根据项目Id或者分支列表
     $scope.getBranch = function (project) {
         if (typeof project == "string") {

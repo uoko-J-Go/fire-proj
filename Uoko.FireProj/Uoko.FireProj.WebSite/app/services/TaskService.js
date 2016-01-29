@@ -97,4 +97,14 @@
             //错误处理
         });
     };
+
+    this.GetResourceList = function (projectId, ipId, successCallBack) {
+        $http.get("/api/ResourceApi/" + projectId + "/" + ipId + "").success(function (data) {
+            if (successCallBack != undefined) {
+                successCallBack(data);
+            }
+        }).error(function (data) {
+            //错误处理
+        });
+    };
 });

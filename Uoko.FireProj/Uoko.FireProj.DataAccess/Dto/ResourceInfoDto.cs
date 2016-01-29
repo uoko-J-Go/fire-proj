@@ -8,6 +8,7 @@ namespace Uoko.FireProj.DataAccess.Dto
 {
    public class ResourceInfoDto
     {
+        public int Id { get; set; }
         /// <summary>
         /// 域名
         /// </summary>

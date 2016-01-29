@@ -75,7 +75,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="control-label">发布环境</label>
-                                    <select name="deployenvironment" class="form-control" ng-model="taskInfo.DeployEnvironment" required>
+                                    <select name="deployenvironment" class="form-control" ng-model="taskInfo.DeployEnvironment"  required>
                                         <option ng-repeat="environment in environmentList" value="{{environment.Id}}" ng-selected="environment.Id==taskInfo.DeployEnvironment">{{environment.Name}}</option>
                                     </select>
                                     <div ng-show="form.$submitted || form.deployenvironment.$touched">
@@ -88,9 +88,23 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="control-label">部署机器IP</label>
-                                    <input name="deployip" type="text" ng-model="taskInfo.DeployIP" class="form-control" placeholder="请输入部署机器IP" required>
+                                    <select name="deployenvironment" class="form-control" ng-model="taskInfo.DeployIP" ng-change="EnvironmentChange(taskInfo.Project,taskInfo.DeployEnvironment)" required>
+                                        <option ng-repeat="deployIP in DeployIPList" value="{{deployIP.Id}}" ng-selected="deployIP.Id==taskInfo.DeployEnvironment">{{deployIP.IP}}</option>
+                                    </select>
+                                    @*<input name="deployip" type="text" ng-model="taskInfo.DeployIP" class="form-control" placeholder="请输入部署机器IP" required>*@
                                     <div ng-show="form.$submitted || form.deployip.$touched">
                                         <span class="error-msg" ng-show="form.deployip.$error.required">部署机器IP必填.</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">域名</label>
+                                    <select name="deployenvironment" class="form-control" ng-model="taskInfo.Domain" required>
+                                        <option ng-repeat="resource in resourceList" value="{{resource.Url}}" ng-selected="resource.Url==taskInfo.Domain">{{resource.Url}}</option>
+                                    </select>                                  
+                                      <div ng-show="form.$submitted || form.sitename.$touched">
+                                        <span class="error-msg" ng-show="form.sitename.$error.required">IIS站点名称必填.</span>
                                     </div>
                                 </div>
                             </div>
@@ -103,15 +117,14 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
+                            <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="control-label">部署地址</label>
-                                    <input type="text" ng-model="taskInfo.DeployAddress" class="form-control" placeholder="部署地址 例如 https://WIN-DEVTEST-002:8172/msdeploy.axd" >
+                                    <input type="text" ng-model="taskInfo.DeployAddress" class="form-control" placeholder="部署地址 例如 https://WIN-DEVTEST-002:8172/msdeploy.axd">
                                 </div>
                             </div>
                         </div>
+                        
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">

@@ -128,6 +128,14 @@
     <Compile Include="Migrations\201601270829385_updateTask.Designer.cs">
       <DependentUpon>201601270829385_updateTask.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201601280929595_updateResourceInfo1.cs" />
+    <Compile Include="Migrations\201601280929595_updateResourceInfo1.Designer.cs">
+      <DependentUpon>201601280929595_updateResourceInfo1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201601281037116_TaskAddDomainField.cs" />
+    <Compile Include="Migrations\201601281037116_TaskAddDomainField.Designer.cs">
+      <DependentUpon>201601281037116_TaskAddDomainField.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Query\BaseQuery.cs" />
@@ -176,6 +184,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201601270829385_updateTask.resx">
       <DependentUpon>201601270829385_updateTask.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201601280929595_updateResourceInfo1.resx">
+      <DependentUpon>201601280929595_updateResourceInfo1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201601281037116_TaskAddDomainField.resx">
+      <DependentUpon>201601281037116_TaskAddDomainField.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
