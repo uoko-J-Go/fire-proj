@@ -56,30 +56,76 @@
             <div class="hor-menu hidden-sm hidden-xs">
                 <ul class="nav navbar-nav">
 
-                    @if(menuList != null)
+                    @if (menuList != null)
                     {
-                       foreach (var item in menuList)
-                       {
-                           if (item.IsActive)
-                           {
-                            <li class="classic-menu-dropdown active">
-                                <a href="@Url.Action(item.Action,item.Controller)">
-                                    @item.MenuName
-                                    <span class="selected">
-                                    </span>
-                                </a>
-                            </li>
-                           }
-                           else
-                           {
-                            <li class="classic-menu-dropdown ">
-                                <a href="@Url.Action(item.Action,item.Controller)">
-                                    @item.MenuName
-                                </a>
-                            </li>
-                           }
+                        foreach (var item in menuList)
+                        {
+                            if (item.IsActive)
+                            {
+                                if (item.Children != null && item.Children.Count > 0)
+                                {
+                                    <li class="classic-menu-dropdown active">
+                                        <a data-toggle="dropdown" href="javascript:;" data-hover="megamenu-dropdown" data-close-others="true">
+                                            @item.MenuName<i class="fa fa-angle-down"></i>
+                                            <span class="selected">
+                                            </span>
+                                        </a>
+                                        <ul class="dropdown-menu pull-left">
+                                            @foreach (var subItem in item.Children)
+                                            {
+                                                <li class="">
+                                                    <a href="@Url.Action(subItem.Action,subItem.Controller)">
+                                                        @subItem.MenuName
+                                                    </a>
+                                                </li>
+                                            }
+                                        </ul>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="classic-menu-dropdown active">
+                                        <a href="@Url.Action(item.Action,item.Controller)">
+                                            @item.MenuName
+                                            <span class="selected">
+                                            </span>
+                                        </a>
+                                    </li>
+                                }
 
-                       }
+                            }
+                            else
+                            {
+                                if (item.Children != null && item.Children.Count > 0)
+                                {
+                                    <li class="classic-menu-dropdown">
+                                        <a data-toggle="dropdown" href="javascript:;" data-hover="megamenu-dropdown" data-close-others="true">
+                                            @item.MenuName<i class="fa fa-angle-down"></i>
+                                        </a>
+                                        <ul class="dropdown-menu pull-left">
+                                            @foreach (var subItem in item.Children)
+                                            {
+                                                <li class="">
+                                                    <a href="@Url.Action(subItem.Action,subItem.Controller)">
+                                                        @subItem.MenuName
+                                                    </a>
+                                                </li>
+                                            }
+                                        </ul>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="classic-menu-dropdown ">
+                                        <a href="@Url.Action(item.Action,item.Controller)">
+                                            @item.MenuName
+                                        </a>
+                                    </li>
+                                }
+
+                            }
+
+                        }
                     }
                           
                 </ul>

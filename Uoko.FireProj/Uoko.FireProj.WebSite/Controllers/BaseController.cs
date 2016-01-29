@@ -34,10 +34,34 @@ namespace Uoko.FireProj.WebSite.Controllers
                 },
                   new MenuTreeVM()
                 {
-                    MenuName = "数据字典",
+                    MenuName = "系统设置",
                     MenuLevel=1,
-                    Controller="Dictionary",
-                    Action="Index"
+                    Controller="SystemSet",
+                    Action=null,
+                    Children=new List<MenuTreeVM>()
+                    {
+                         new MenuTreeVM()
+                        {
+                            MenuName = "服务器",
+                            MenuLevel=1,
+                            Controller="SystemSet",
+                            Action="ServerMgmt",
+                        },
+                         new MenuTreeVM()
+                        {
+                            MenuName = "域名",
+                            MenuLevel=1,
+                            Controller="SystemSet",
+                            Action="DomainResourceMgmt"
+                        },
+                          new MenuTreeVM()
+                        {
+                            MenuName = "数据字典",
+                            MenuLevel=1,
+                            Controller="SystemSet",
+                            Action="DictionaryMgmt"
+                        }
+                    }
                 }
             };
             var  activeMenu= nodes.FirstOrDefault(t=>t.MenuLevel==1&&t.Controller.Equals(currentController,StringComparison.CurrentCultureIgnoreCase));
