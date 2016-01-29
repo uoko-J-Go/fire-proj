@@ -116,19 +116,20 @@ namespace Uoko.FireProj.Concretes
             using (var dbScope = _dbScopeFactory.CreateReadOnly())
             {
                 var db = dbScope.DbContexts.Get<FireProjDbContext>();
-                var data = db.Servers.Select(t => new ServerDto
+                var data = db.Servers.Where(t => t.EnvironmentType == EnvironmentEnum.IOC);
+                if (needEnable)
+                {
+                    data = data.Where(t => t.Status == GenericStatusEnum.Enable);
+                }
+                var result = data.Select(t => new ServerDto
                 {
                     Id = t.Id,
                     Name = t.Name,
                     IP = t.IP,
                     ServerDesc = t.ServerDesc,
                     Status = t.Status,
-                }).Where(t=>t.EnvironmentType== environmentEnum);
-                if (needEnable)
-                {
-                    data = data.Where(t => t.Status == GenericStatusEnum.Enable);
-                }
-                var result = data.ToList();
+                }).ToList();
+
                 return result;
             }
         }

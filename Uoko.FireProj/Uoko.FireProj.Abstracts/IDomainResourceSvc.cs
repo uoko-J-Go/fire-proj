@@ -21,7 +21,7 @@ namespace Uoko.FireProj.Abstracts
         /// </summary>
         /// <param name="serverId"></param>
         /// <returns></returns>
-        List<ResourceInfoDto> GetResourceList(int projectId, string ip);
+        List<DomainResourceDto> GetResourceList(int projectId, int serverId);
 
         /// <summary>
         /// 修改资源表

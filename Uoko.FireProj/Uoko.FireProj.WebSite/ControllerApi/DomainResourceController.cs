@@ -11,18 +11,18 @@ namespace Uoko.FireProj.WebSite.ControllerApi
     [RoutePrefix("api/DomainResourceApi")]
     public class DomainResourceController : BaseApiController
     {
-        private IDomainResourceSvc DomainResourceSvc { get; set; }
+        private IDomainResourceSvc _domainResourceSvc { get; set; }
      
         public DomainResourceController(IDomainResourceSvc domainResourceSvc)
         {
-            DomainResourceSvc = domainResourceSvc;
+            _domainResourceSvc = domainResourceSvc;
            
         }
 
-        [Route("{projectId}/{ipId}")]
-        public IHttpActionResult Get(int projectId, string ip)
+        [Route("{projectId}/{serverId}")]
+        public IHttpActionResult Get(int projectId, int serverId)
         {
-            var result = _resourceInfoSvc.GetResourceList(projectId, ip);
+            var result = _domainResourceSvc.GetResourceList(projectId, serverId);
             return Ok(result);
         }
     }

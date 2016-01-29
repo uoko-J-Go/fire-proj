@@ -191,9 +191,9 @@ namespace Uoko.FireProj.Concretes
 
         private void UpdateResourceInfo(FireProjDbContext db, TaskDto task)
         {
-            var resourceInfo = db.ResourceInfo.FirstOrDefault(r => r.ProjectId == task.Project.Id && r.Url == task.Domain);
-            resourceInfo.Status = ResourceEnum.Enable;
-            resourceInfo.DeployIP = task.DeployIP;
+            var resourceInfo = db.DomainResource.FirstOrDefault(r => r.ProjectId == task.Project.Id);
+            resourceInfo.Status = DomainResourceStatusEnum.Enable;
+           // resourceInfo.ServerIP = task.DeployIP;
         }
     }
 }

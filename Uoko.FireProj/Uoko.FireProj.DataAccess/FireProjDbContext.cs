@@ -14,7 +14,7 @@ namespace Uoko.FireProj.Model
         #region DbSet 
         public DbSet<Project> Project { get; set; }
         public DbSet<Dictionary> Dictionary { get; set; }
-        public DbSet<DomainResource> ResourceInfo { get; set; }
+        public DbSet<DomainResource> DomainResource { get; set; }
         public DbSet<TaskInfo> TaskInfo { get; set; }
         public DbSet<TaskLogs> TaskLogs { get; set; }
         public DbSet<Server> Servers { get; set; }

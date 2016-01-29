@@ -33,10 +33,10 @@ namespace Uoko.FireProj.DataAccess.Entity
         public EnvironmentEnum DeployEnvironment { get; set; }
 
         /// <summary>
-        /// 部署IP地址
+        /// 部署服务器IP地址
         /// </summary>
         public string DeployIP { get; set; }
-
+       
         /// <summary>
         /// 部署域名
         /// </summary>

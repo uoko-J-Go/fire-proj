@@ -144,6 +144,22 @@
     <Compile Include="Migrations\201601290214284_AddServerUpdateDomainResource.Designer.cs">
       <DependentUpon>201601290214284_AddServerUpdateDomainResource.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201601290238118_updatedata.cs" />
+    <Compile Include="Migrations\201601290238118_updatedata.Designer.cs">
+      <DependentUpon>201601290238118_updatedata.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201601290315189_updateDomain.cs" />
+    <Compile Include="Migrations\201601290315189_updateDomain.Designer.cs">
+      <DependentUpon>201601290315189_updateDomain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201601290332251_updateTask11.cs" />
+    <Compile Include="Migrations\201601290332251_updateTask11.Designer.cs">
+      <DependentUpon>201601290332251_updateTask11.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201601290334576_updateDomainResourse.cs" />
+    <Compile Include="Migrations\201601290334576_updateDomainResourse.Designer.cs">
+      <DependentUpon>201601290334576_updateDomainResourse.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Query\BaseQuery.cs" />
@@ -202,6 +218,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201601290214284_AddServerUpdateDomainResource.resx">
       <DependentUpon>201601290214284_AddServerUpdateDomainResource.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201601290238118_updatedata.resx">
+      <DependentUpon>201601290238118_updatedata.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201601290315189_updateDomain.resx">
+      <DependentUpon>201601290315189_updateDomain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201601290332251_updateTask11.resx">
+      <DependentUpon>201601290332251_updateTask11.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201601290334576_updateDomainResourse.resx">
+      <DependentUpon>201601290334576_updateDomainResourse.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

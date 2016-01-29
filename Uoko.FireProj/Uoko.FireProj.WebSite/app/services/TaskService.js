@@ -98,8 +98,8 @@
         });
     };
 
-    this.GetResourceList = function (projectId, ipId, successCallBack) {
-        $http.get("/api/DomainResourceApi/" + projectId + "/" + ipId + "").success(function (data) {
+    this.GetResourceList = function (environmentId, successCallBack) {
+        $http.get("/api/ServerApi/Environment/" + environmentId + "").success(function (data) {
             if (successCallBack != undefined) {
                 successCallBack(data);
             }
@@ -107,4 +107,16 @@
             //错误处理
         });
     };
+
+    this.GetDomain = function (projectId, serverId, successCallBack) {
+        $http.get("/api/DomainResourceApi/" + projectId + "/" + serverId + "").success(function (data) {
+            if (successCallBack != undefined) {
+                successCallBack(data);
+            }
+        }).error(function (data) {
+            //错误处理
+        });
+    };
+
+    
 });

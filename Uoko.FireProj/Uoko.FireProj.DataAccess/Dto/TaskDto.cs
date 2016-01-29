@@ -34,7 +34,7 @@ namespace Uoko.FireProj.DataAccess.Dto
         public EnvironmentEnum DeployEnvironment { get; set; }
 
         /// <summary>
-        /// 部署IP地址
+        /// 部署服务器IP地址
         /// </summary>
         public string DeployIP { get; set; }
 

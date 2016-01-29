@@ -38,7 +38,7 @@ namespace Uoko.FireProj.Concretes
                     foreach (var item in entity)
                     {
                         item.CreateDate = DateTime.Now;
-                        db.ResourceInfo.Add(item);
+                        db.DomainResource.Add(item);
                     }
                     db.SaveChanges();
                 }
@@ -49,14 +49,14 @@ namespace Uoko.FireProj.Concretes
             }
         }
 
-        public List<ResourceInfoDto> GetResourceList(int projectId, string ip)
+        public List<DomainResourceDto> GetResourceList(int projectId, int serverId)
         {
             try
             {
                 using (var dbScope = _dbScopeFactory.CreateReadOnly())
                 {
                     var db = dbScope.DbContexts.Get<FireProjDbContext>();
-                    var data = db.ResourceInfo.Where(r => r.ProjectId == projectId && r.Status == 0 && (r.DeployIP == ip )).Select(r => new ResourceInfoDto
+                    var data = db.DomainResource.Where(r => r.ProjectId == projectId && r.Status == 0 && (r.ServerId == 0 || r.ServerId == serverId)).Select(r => new DomainResourceDto
                     {
                         Id = r.Id,
                         Name = r.Name,
