@@ -75,7 +75,13 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
         var project = $scope.taskInfo.Project;
         if (typeof project == "string") {
             $scope.taskInfo.Project = JSON.parse(project);
-        } 
+        }
+        var server = $scope.taskInfo.Server;
+        if (typeof project == "string") {
+            server = JSON.parse(server);
+            $scope.taskInfo.DeployIP = server.IP;
+            $scope.taskInfo.ServerId = server.Id;
+        }
         TaskService.CreateTask($scope.taskInfo, function() {
             location.href = "/Task/Index";
         });

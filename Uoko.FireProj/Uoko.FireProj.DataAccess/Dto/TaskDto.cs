@@ -39,6 +39,11 @@ namespace Uoko.FireProj.DataAccess.Dto
         public string DeployIP { get; set; }
 
         /// <summary>
+        /// 部署服务器Id
+        /// </summary>
+        public int ServerId { get; set; }
+
+        /// <summary>
         /// 部署域名
         /// </summary>
         public string Domain { get; set; }
