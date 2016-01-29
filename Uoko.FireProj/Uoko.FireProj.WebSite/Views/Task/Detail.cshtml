@@ -143,7 +143,7 @@
                 </div>
                 <div class="form-actions right">
                     <button type="button" class="btn blue" ng-click="Edit()"><i class="fa fa-edit"></i> 编辑</button>
-                    <button type="button" class="btn blue" ng-show="taskInfo.Status==0||item.Status==4||taskInfo.Status==10" ng-click="Deploy()"><i class="fa fa-building-o"></i> 编译部署</button>
+                    <button type="button" class="btn blue" ng-show="taskInfo.Status==0||taskInfo.Status==4||taskInfo.Status==10" ng-click="Deploy()"><i class="fa fa-building-o"></i> 编译部署</button>
                     <button type="button" class="btn blue" ng-show="taskInfo.Status==6" ng-click="CommitToTest()"><i class="fa fa-angle-up"></i> 提交测试</button>
                     <button type="button" class="btn green" ng-show="taskInfo.Status==8" ng-click="Tested()"><i class="fa fa-check"></i> 测试通过</button>
                     <button type="button" class="btn red" ng-show="taskInfo.Status==8" ng-click="TestFails()"><i class="fa fa-times"></i> 测试不通过</button>
