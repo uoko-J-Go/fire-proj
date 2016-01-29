@@ -23,7 +23,7 @@ package:
   stage: package
   script:
      - 'echo package..'
-     - c:\windows\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe $CsprojNameAPI /p:VisualStudioVersion=14.0 /p:DeployOnBuild=true /p:PackageLocation=$PkgDir
+     - c:\windows\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe $CsprojNameAPI /p:VisualStudioVersion=12.0 /p:DeployOnBuild=true /p:PackageLocation=$PkgDir /verbosity:m
 
 deploy:
   stage: deploy
