@@ -1,5 +1,5 @@
 variables:
-  CsprojNameAPI: Uoko.FireProj\Uoko.FireProj.WebSite\Uoko.FireProj.WebSite.csproj
+  CsprojNameAPI: Uoko.FireProj\Uoko.FireProj.sln
   DeployAddressAPI: https://192.168.200.25:8172/msdeploy.axd 
   SiteNameAPI: fire
   PkgDir: d:\deploy-pkg
@@ -14,10 +14,8 @@ stages:
 nugetrestore:
   stage: nugetrestore
   script:
-     - 'cd Uoko.FireProj\.nuget'
      - 'echo restoring..'
-     - .\NuGet.exe restore ../Uoko.FireProj.sln
-     - 'cd ..'
+     - .\Uoko.FireProj\.nuget\NuGet.exe restore $CsprojNameAPI
      - 'echo restored'
 
 package:
