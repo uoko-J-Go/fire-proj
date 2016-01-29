@@ -43,7 +43,8 @@ namespace Uoko.FireProj.Concretes
                 using (var dbScope = _dbScopeFactory.Create())
                 {
                     var db = dbScope.DbContexts.Get<FireProjDbContext>();
-                    var data = db.TaskInfo.Add(entity);
+                    db.TaskInfo.Add(entity);
+                    UpdateResourceInfo(db, task);
                     db.SaveChanges();
                 }
             }
@@ -186,6 +187,13 @@ namespace Uoko.FireProj.Concretes
             {
                 throw new TipInfoException(ex.Message);
             }
+        }
+
+        private void UpdateResourceInfo(FireProjDbContext db, TaskDto task)
+        {
+            var resourceInfo = db.ResourceInfo.FirstOrDefault(r => r.ProjectId == task.Project.Id && r.Url == task.Domain);
+            resourceInfo.Status = ResourceEnum.Enable;
+            resourceInfo.DeployIP = task.DeployIP;
         }
     }
 }

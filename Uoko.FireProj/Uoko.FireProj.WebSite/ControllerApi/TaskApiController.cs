@@ -16,10 +16,13 @@ namespace Uoko.FireProj.WebSite.ControllerApi
     {
         private ITaskSvc _taskSvc { get; set; }
         private ITaskLogsSvc _taskLogsSvc { get; set; }
-        public TaskApiController(ITaskSvc taskSvc, ITaskLogsSvc taskLogsSvc)
+
+        private IResourceInfoSvc _resourceInfoSvc { get; set; }
+        public TaskApiController(ITaskSvc taskSvc, ITaskLogsSvc taskLogsSvc, IResourceInfoSvc resourceInfoSvc)
         {
             _taskSvc = taskSvc;
             _taskLogsSvc = taskLogsSvc;
+            _resourceInfoSvc = resourceInfoSvc;
         }
 
         public IHttpActionResult Get([FromUri]TaskQuery query)
@@ -46,6 +49,13 @@ namespace Uoko.FireProj.WebSite.ControllerApi
         public IHttpActionResult Create([FromBody]TaskDto task)
         {
             _taskSvc.CreatTask(task);
+            //修改资源表,占位
+            ResourceInfoDto dto = new ResourceInfoDto()
+            {
+                 
+            };
+           // _resourceInfoSvc.UpdateResource();
+
             return Ok();
         }
 

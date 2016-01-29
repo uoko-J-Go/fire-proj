@@ -14,6 +14,7 @@ using System.Linq.Expressions;
 using Uoko.FireProj.DataAccess.Extensions;
 using System.Collections.ObjectModel;
 using System.Reflection;
+using System.Data.Entity;
 
 namespace Uoko.FireProj.Concretes
 {
@@ -48,14 +49,14 @@ namespace Uoko.FireProj.Concretes
             }
         }
 
-        public List<ResourceInfoDto> GetResourceList(int projectId, int IPId)
+        public List<ResourceInfoDto> GetResourceList(int projectId, string ip)
         {
             try
             {
                 using (var dbScope = _dbScopeFactory.CreateReadOnly())
                 {
                     var db = dbScope.DbContexts.Get<FireProjDbContext>();
-                    var data = db.ResourceInfo.Where(r => r.ProjectId == projectId && r.Status == 0 && (r.DeployIPId == IPId || r.DeployIPId == 0)).Select(r => new ResourceInfoDto
+                    var data = db.ResourceInfo.Where(r => r.ProjectId == projectId && r.Status == 0 && (r.DeployIP == ip )).Select(r => new ResourceInfoDto
                     {
                         Id = r.Id,
                         Url = r.Url,
@@ -77,6 +78,9 @@ namespace Uoko.FireProj.Concretes
                 using (var dbScope = _dbScopeFactory.Create())
                 {
                     var db = dbScope.DbContexts.Get<FireProjDbContext>();
+                    db.Configuration.ValidateOnSaveEnabled = false;
+                    var entry = db.Entry(entity);
+                    entry.State = EntityState.Unchanged;
                     ReadOnlyCollection<MemberInfo> memberInfos = ((dynamic)propertyExpression.Body).Members;
                     foreach (MemberInfo memberInfo in memberInfos)
                     {

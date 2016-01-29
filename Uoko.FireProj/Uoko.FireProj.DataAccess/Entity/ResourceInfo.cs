@@ -30,7 +30,7 @@ namespace Uoko.FireProj.DataAccess.Entity
         /// <summary>
         /// 域名在哪台服务器下
         /// </summary>
-        public int DeployIPId { get; set; }
+        public string DeployIP { get; set; }
 
         public ResourceEnum Status { get; set; }
     }

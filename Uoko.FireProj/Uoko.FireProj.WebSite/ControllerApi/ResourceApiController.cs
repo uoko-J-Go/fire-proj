@@ -20,9 +20,9 @@ namespace Uoko.FireProj.WebSite.ControllerApi
         }
 
         [Route("{projectId}/{ipId}")]
-        public IHttpActionResult Get(int projectId, int ipId)
+        public IHttpActionResult Get(int projectId, string ip)
         {
-            var result = _resourceInfoSvc.GetResourceList(projectId, ipId);
+            var result = _resourceInfoSvc.GetResourceList(projectId, ip);
             return Ok(result);
         }
     }
