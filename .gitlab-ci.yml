@@ -18,6 +18,9 @@ nugetrestore:
      - 'echo restoring..'
      - .\Uoko.FireProj\.nuget\NuGet.exe restore $CsprojNameAPI
      - 'echo restored'
+  cache:
+    paths:
+    - Uoko.FireProj/packages/
 
 package:
   stage: package
