@@ -15,7 +15,7 @@ namespace Uoko.FireProj.Abstracts
         /// 新增服务器
         /// </summary>
         /// <param name="server"></param>
-        void CreatServer(ServerDto Server);
+        void CreateServer(ServerDto server);
 
         /// <summary>
         /// 服务器编辑

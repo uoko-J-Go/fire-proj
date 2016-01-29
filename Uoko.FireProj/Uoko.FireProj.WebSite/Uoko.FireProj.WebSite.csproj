@@ -171,6 +171,7 @@
     <Compile Include="ControllerApi\DictionaryApiController.cs" />
     <Compile Include="ControllerApi\ProjectApiController.cs" />
     <Compile Include="ControllerApi\DomainResourceController.cs" />
+    <Compile Include="ControllerApi\ServerApiController.cs" />
     <Compile Include="ControllerApi\TaskLogsApiController.cs" />
     <Compile Include="ControllerApi\TaskApiController.cs" />
     <Compile Include="ControllerApi\WebHookApiController.cs" />
