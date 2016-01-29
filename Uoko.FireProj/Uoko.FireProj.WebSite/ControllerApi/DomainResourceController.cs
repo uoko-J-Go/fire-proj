@@ -8,14 +8,14 @@ using Uoko.FireProj.Abstracts;
 
 namespace Uoko.FireProj.WebSite.ControllerApi
 {
-    [RoutePrefix("api/ResourceApi")]
-    public class ResourceApiController : BaseApiController
+    [RoutePrefix("api/DomainResourceApi")]
+    public class DomainResourceController : BaseApiController
     {
-        private IResourceInfoSvc _resourceInfoSvc { get; set; }
+        private IDomainResourceSvc DomainResourceSvc { get; set; }
      
-        public ResourceApiController(IResourceInfoSvc resourceInfoSvc)
+        public DomainResourceController(IDomainResourceSvc domainResourceSvc)
         {
-            _resourceInfoSvc = resourceInfoSvc;
+            DomainResourceSvc = domainResourceSvc;
            
         }
 

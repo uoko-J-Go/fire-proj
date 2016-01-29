@@ -21,6 +21,11 @@ namespace Uoko.FireProj.DataAccess.Dto
         public int TriggeredId { get; set; }
 
         /// <summary>
+        /// 用于记录失败时 GitLab的BuildId
+        /// </summary>
+        public int BuildId { get; set; }
+
+        /// <summary>
         /// 记录所处的环境
         /// </summary>
         public EnvironmentEnum Environment { get; set; }

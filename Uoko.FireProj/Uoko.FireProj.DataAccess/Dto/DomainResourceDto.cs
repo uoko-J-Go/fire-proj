@@ -5,17 +5,15 @@ using System.Text;
 using System.Threading.Tasks;
 using Uoko.FireProj.DataAccess.Enum;
 
-namespace Uoko.FireProj.DataAccess.Entity
+namespace Uoko.FireProj.DataAccess.Dto
 {
-    /// <summary>
-    /// 服务器资源实体
-    /// </summary>
-    public class ResourceInfo : BaseEntity
+   public class DomainResourceDto
     {
+        public int Id { get; set; }
         /// <summary>
         /// 域名
         /// </summary>
-        public string Url { get; set; }
+        public string Name { get; set; }
 
         /// <summary>
         /// 项目Id
@@ -30,8 +28,11 @@ namespace Uoko.FireProj.DataAccess.Entity
         /// <summary>
         /// 域名在哪台服务器下
         /// </summary>
-        public string DeployIP { get; set; }
+        public int ServerId { get; set; }
 
-        public ResourceEnum Status { get; set; }
+
+        public DomainResourceStatusEnum Status { get; set; }
+
+
     }
 }
