@@ -5,7 +5,8 @@ variables:
   PkgDir: d:\deploy-pkg
   
 before_script:
-  - 'echo off'
+  - 'chcp 65001'
+  
 stages:
   - nugetrestore
   - package
