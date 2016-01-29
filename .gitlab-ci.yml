@@ -8,6 +8,7 @@ before_script:
   - 'chcp 65001'
   
 cache:
+  key: "$CI_BUILD_REF_NAME"
   paths:
     - Uoko.FireProj/packages/
   
