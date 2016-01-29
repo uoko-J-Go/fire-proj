@@ -15,11 +15,11 @@ namespace Uoko.FireProj.WebSite.ControllerApi
     public class ProjectApiController : BaseApiController
     {
         private IProjectSvc _projectSvc { get; set; }
-        private IResourceInfoSvc _resourceInfoSvc { get; set; }
-        public ProjectApiController(IProjectSvc projectSvc, IResourceInfoSvc resourceInfoSvc)
+        private IDomainResourceSvc DomainResourceSvc { get; set; }
+        public ProjectApiController(IProjectSvc projectSvc, IDomainResourceSvc domainResourceSvc)
         {
             _projectSvc = projectSvc;
-            _resourceInfoSvc = resourceInfoSvc;
+            DomainResourceSvc = domainResourceSvc;
         }
 
         /// <summary>
@@ -64,25 +64,17 @@ namespace Uoko.FireProj.WebSite.ControllerApi
             var projectId = _projectSvc.CreatProject(dto);
             if (projectId > 0)
             {
-                //创建内部测试环境地址: 域名+端口号
-                List<ResourceInfoDto> resourceInfoList = new List<ResourceInfoDto>();
-                Hashtable hashtable = new Hashtable();
-                Random rm = new Random();
-                for (int i = 0; hashtable.Count < 10; i++)
+                //创建内部测试环境地址: 
+                List<DomainResourceDto> resourceInfoList = new List<DomainResourceDto>();
+                for (int i = 0; i < 10; i++)
                 {
-                    int nValue = rm.Next(1000, 10000);
-                    if (!hashtable.ContainsValue(nValue) && nValue != 0)
+                    resourceInfoList.Add(new DomainResourceDto()
                     {
-                        hashtable.Add(nValue, nValue);
-                        resourceInfoList.Add(
-                        new ResourceInfoDto()
-                        {
-                            ProjectId = projectId,
-                            Url = string.Format("http://{0}.uoko.ioc:{1}", dto.ProjectGitlabName, nValue),
-                        });
-                    }
+                        ProjectId = projectId,
+                        Name = string.Format("{0}{1}.uoko.ioc", dto.ProjectGitlabName, (i + 1)),
+                    });
                 }
-                _resourceInfoSvc.CreatResource(resourceInfoList);
+                DomainResourceSvc.CreatResource(resourceInfoList);
             }
             return Ok();
         }

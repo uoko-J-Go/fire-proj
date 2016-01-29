@@ -8,13 +8,13 @@ using Uoko.FireProj.DataAccess.Entity;
 
 namespace Uoko.FireProj.DataAccess.FluentAPI
 {
-    class ResourceInfoMap: EntityTypeConfiguration<ResourceInfo>
+    class ServerMap : EntityTypeConfiguration<Server>
     {
-        public ResourceInfoMap()
+        public ServerMap()
         {
-            Property(r => r.Url).IsRequired();
+            Property(r => r.IP).IsRequired();
             Property(r => r.Status).IsRequired();
-            ToTable("ResourceInfo");//指定生成表名
+            ToTable("Server");//指定生成表名
         }
     }
 }

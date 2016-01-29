@@ -4,12 +4,15 @@ fireproj.controller("ProjectController", function ($scope, $http, ProjectService
   
     //声明表单提交事件
     $scope.SubmitFrom = function (model) {
-        var gitlabInfo = JSON.parse(model.Project);
+        var gitlabInfo = model.Project;
+        if (typeof gitlabInfo == 'string') {
+            gitlabInfo = JSON.parse(gitlabInfo);
+        }
         model.ProjectRepo = gitlabInfo.http_url_to_repo;
         model.ProjectId = gitlabInfo.id;
         model.ProjectGitlabName = gitlabInfo.name;
         ProjectService.post(model).success(function (data) {
-            formSubmitSuccessClick();
+            location.href = "/Project/Index";
         }).error(function (data) {
             formSubmitFailClick(data);
         });

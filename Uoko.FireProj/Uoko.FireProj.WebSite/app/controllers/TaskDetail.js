@@ -43,7 +43,24 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
             formSubmitSuccessClick();
         });
     }
+    $scope.Deploy = function () {
+        CommonService.TriggerBuild($scope.taskInfo, function (data) {
+            bootbox.alert("已经成功发起部署任务!", function () {
+                TaskService.BeginDeploy($scope.taskInfo.Id, data.id, function (data) {
+                    location.reload();
+                });
+            });
 
+        });
+    }
+
+    $scope.CommitToTest = function () {
+        TaskService.CommitToTest($scope.taskInfo.Id, function (data) {
+            bootbox.alert("已经成功提交测试!", function () {
+                location.reload();
+            });
+        });
+    }
     $scope.Init = function () {
         $scope.GetTaskInfo();
     }

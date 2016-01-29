@@ -170,6 +170,7 @@
     <Compile Include="ControllerApi\CommonApiController.cs" />
     <Compile Include="ControllerApi\DictionaryApiController.cs" />
     <Compile Include="ControllerApi\ProjectApiController.cs" />
+    <Compile Include="ControllerApi\DomainResourceController.cs" />
     <Compile Include="ControllerApi\TaskLogsApiController.cs" />
     <Compile Include="ControllerApi\TaskApiController.cs" />
     <Compile Include="ControllerApi\WebHookApiController.cs" />
@@ -677,7 +678,6 @@
     <Content Include="Metronic\assets\global\plugins\icheck\demo\css\montserrat-regular.svg" />
     <Content Include="Metronic\assets\global\plugins\icheck\demo\css\normalize.css" />
     <Content Include="Metronic\assets\global\plugins\icheck\demo\index.html" />
-    <Content Include="Metronic\assets\global\plugins\icheck\demo\js\custom.js" />
     <Content Include="Metronic\assets\global\plugins\icheck\demo\js\custom.min.js" />
     <Content Include="Metronic\assets\global\plugins\icheck\demo\js\jquery.js" />
     <Content Include="Metronic\assets\global\plugins\icheck\demo\js\zepto.js" />
@@ -1020,7 +1020,6 @@
     <Content Include="Scripts\angular-messages.min.js.map" />
     <Content Include="Metronic\assets\global\plugins\icheck\bower.json" />
     <Content Include="Metronic\assets\global\plugins\icheck\CHANGELOG.md" />
-    <Content Include="Metronic\assets\global\plugins\icheck\demo\css\custom.styl" />
     <Content Include="Metronic\assets\global\plugins\icheck\demo\css\montserrat-bold.eot" />
     <Content Include="Metronic\assets\global\plugins\icheck\demo\css\montserrat-bold.ttf" />
     <Content Include="Metronic\assets\global\plugins\icheck\demo\css\montserrat-bold.woff" />

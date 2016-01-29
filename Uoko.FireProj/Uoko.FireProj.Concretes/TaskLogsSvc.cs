@@ -58,6 +58,7 @@ namespace Uoko.FireProj.Concretes
                     LogsDesc = r.LogsDesc,
                     LogsText = r.LogsText,
                     TriggeredId = r.TriggeredId,
+                    BuildId=r.BuildId,
                     TaskLogsType = r.TaskLogsType,
                     TaskId = r.TaskId,
                     CreateBy = r.CreateBy,
@@ -75,7 +76,7 @@ namespace Uoko.FireProj.Concretes
                 using (var dbScope = _dbScopeFactory.Create())
                 {
                     var db = dbScope.DbContexts.Get<FireProjDbContext>();
-                    db.Update(entity, r => new { r.ModifyBy,r.TaskLogsType,r.LogsDesc});
+                    db.Update(entity, r => new { r.ModifyBy,r.TaskLogsType,r.LogsDesc,r.BuildId});
                     db.SaveChanges();
                 }
             }
@@ -95,6 +96,7 @@ namespace Uoko.FireProj.Concretes
                     LogsDesc = r.LogsDesc,
                     LogsText = r.LogsText,
                     TriggeredId = r.TriggeredId,
+                    BuildId = r.BuildId,
                     TaskId = r.TaskId,
                     CreateBy = r.CreateBy,
                     CreateDate = r.CreateDate,
@@ -115,6 +117,7 @@ namespace Uoko.FireProj.Concretes
                     LogsDesc = r.LogsDesc,
                     LogsText = r.LogsText,
                     TriggeredId = r.TriggeredId,
+                    BuildId = r.BuildId,
                     TaskLogsType = r.TaskLogsType,
                     TaskId = r.TaskId,
                     CreateBy = r.CreateBy,

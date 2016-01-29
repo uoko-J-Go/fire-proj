@@ -10,12 +10,12 @@ namespace Uoko.FireProj.DataAccess.Entity
     /// <summary>
     /// 服务器资源实体
     /// </summary>
-    public class ResourceInfo : BaseEntity
+    public class DomainResource : BaseEntity
     {
         /// <summary>
         /// 域名
         /// </summary>
-        public string Url { get; set; }
+        public string Name { get; set; }
 
         /// <summary>
         /// 项目Id
@@ -27,6 +27,12 @@ namespace Uoko.FireProj.DataAccess.Entity
         /// </summary>
         public int TaskId { get; set; }
 
-        public ResourceEnum Status { get; set; }
+        /// <summary>
+        /// 域名在哪台服务器下
+        /// </summary>
+        public int ServerId { get; set; }
+
+
+        public DomainResourceStatusEnum Status { get; set; }
     }
 }
