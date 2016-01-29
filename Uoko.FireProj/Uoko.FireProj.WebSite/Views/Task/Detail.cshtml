@@ -59,17 +59,17 @@
 
                             </div>
                         </div>
-
-                       
-
-                    </div>
-                    <div class="row">
+                        
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">分支</label>
-                                <label class="control-label detail" >{{taskInfo.Branch}}</label>
+                                <label class="control-label detail">{{taskInfo.Branch}}</label>
                             </div>
                         </div>
+
+                    </div>
+                    <div class="row">
+                        
 
                         <div class="col-md-6">
                             <div class="form-group">
@@ -77,12 +77,20 @@
                                 <label class="control-label detail" >{{taskInfo.DeployEnvironment|environmentFilter}}</label>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
+                       
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">部署机器IP</label>
                                 <label class="control-label detail">{{taskInfo.DeployIP}}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">域名</label>
+                                <label class="control-label detail">{{taskInfo.Domain}}</label>
+
                             </div>
                         </div>
 

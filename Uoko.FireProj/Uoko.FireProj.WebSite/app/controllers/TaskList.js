@@ -45,7 +45,12 @@ fireproj.controller("TaskController", function ($scope, $http, TaskService, Proj
             formSubmitSuccessClick("refresh");
         });
     }
-
+    ///释放资源操作
+    $scope.ReleaseDomain = function (taskId) {
+        TaskService.ReleaseDomain(taskId, function (data) {
+            formSubmitSuccessClick("refresh");
+        });
+    }
     $scope.Init();
 });
 

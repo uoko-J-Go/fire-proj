@@ -15,6 +15,7 @@ using Uoko.FireProj.DataAccess.Extensions;
 using System.Collections.ObjectModel;
 using System.Reflection;
 using System.Data.Entity;
+using Uoko.FireProj.DataAccess.Enum;
 
 namespace Uoko.FireProj.Concretes
 {
@@ -70,28 +71,20 @@ namespace Uoko.FireProj.Concretes
             }
         }
 
-        public void UpdateResource(DomainResourceDto dto, Expression<Func<DomainResourceDto, object>> propertyExpression)
+        public void ReleaseDomain(int taskId)
         {
             try
             {
-                var entity = Mapper.Map<DomainResourceDto, DomainResource>(dto);
                 using (var dbScope = _dbScopeFactory.Create())
                 {
                     var db = dbScope.DbContexts.Get<FireProjDbContext>();
-                    db.Configuration.ValidateOnSaveEnabled = false;
-                    var entry = db.Entry(entity);
-                    entry.State = EntityState.Unchanged;
-                    ReadOnlyCollection<MemberInfo> memberInfos = ((dynamic)propertyExpression.Body).Members;
-                    foreach (MemberInfo memberInfo in memberInfos)
-                    {
-                        db.Entry(entity).Property(memberInfo.Name).IsModified = true;
-                    }
+                    var entity = db.DomainResource.FirstOrDefault(r => r.TaskId == taskId);
+                    entity.Status = DomainResourceStatusEnum.Unable;
                     db.SaveChanges();
                 }
             }
             catch (Exception ex)
             {
-
                 throw new TipInfoException(ex.Message);
             }
         }

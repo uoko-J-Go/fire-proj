@@ -49,13 +49,6 @@ namespace Uoko.FireProj.WebSite.ControllerApi
         public IHttpActionResult Create([FromBody]TaskDto task)
         {
             _taskSvc.CreatTask(task);
-            //修改资源表,占位
-            DomainResourceDto dto = new DomainResourceDto()
-            {
-                 
-            };
-           // _resourceInfoSvc.UpdateResource();
-
             return Ok();
         }
 

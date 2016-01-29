@@ -118,5 +118,14 @@
         });
     };
 
+    this.ReleaseDomain = function (taskId, successCallBack) {
+        $http.post("/api/DomainResourceApi/ReleaseDomain/?id=" + taskId + "").success(function (data) {
+            if (successCallBack != undefined) {
+                successCallBack(data);
+            }
+        }).error(function (data) {
+            //错误处理
+        });
+    };
     
 });
