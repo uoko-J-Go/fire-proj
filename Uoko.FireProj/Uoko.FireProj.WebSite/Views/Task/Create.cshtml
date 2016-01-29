@@ -88,7 +88,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="control-label">部署服务器</label>
-                                    <select name="deployenvironment" class="form-control" ng-model="taskInfo.Server" ng-change="GetDomain(taskInfo.Project,taskInfo.Server)" required>
+                                    <select name="deployenvironment" class="form-control" ng-model="taskInfo.Server"  required>
                                         <option ng-repeat="server in ServerList" value="{{server}}" ng-selected="server.IP==taskInfo.DeployIP">{{server.Name}}</option>
                                     </select>
                                     <div ng-show="form.$submitted || form.deployenvironment.$touched">

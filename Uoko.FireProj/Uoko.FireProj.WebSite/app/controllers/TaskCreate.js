@@ -104,9 +104,15 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
         if (typeof server == "string") {
             server = JSON.parse(server);
         }
-        TaskService.GetDomain(project.Id, server.Id, function (data) {
-            $scope.DomainList = data;
-        });
+
+        if (project != undefined && project!= "") {
+            if (server == undefined) {
+                server = { Id: 0 };
+            }
+            TaskService.GetDomain(project.Id, server.Id, function (data) {
+                $scope.DomainList = data;
+            });
+        }   
     }
     //根据项目Id或者分支列表
     $scope.getBranch = function (project) {
@@ -124,6 +130,9 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
     
     $scope.Init = function () {
         $scope.GetProjectList();
+        $scope.$watch('taskInfo.Project + taskInfo.DeployEnvironment + taskInfo.Server', function () {
+            $scope.GetDomain($scope.taskInfo.Project, $scope.taskInfo.Server);
+        });
     }
 
     $scope.Init();
