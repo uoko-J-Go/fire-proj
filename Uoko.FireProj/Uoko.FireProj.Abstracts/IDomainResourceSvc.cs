@@ -8,26 +8,26 @@ using Uoko.FireProj.DataAccess.Dto;
 
 namespace Uoko.FireProj.Abstracts
 {
-    public interface IResourceInfoSvc
+    public interface IDomainResourceSvc
     {
         /// <summary>
         /// 批量新增任务测试地址
         /// </summary>
         /// <param name="dto"></param>
-        void CreatResource(List<ResourceInfoDto> dto);
+        void CreatResource(List<DomainResourceDto> dto);
 
         /// <summary>
         /// 根据项目id,部署服务器ip的id获取未被使用的域名list
         /// </summary>
-        /// <param name="iPId"></param>
+        /// <param name="serverId"></param>
         /// <returns></returns>
-        List<ResourceInfoDto> GetResourceList(int projectId, int iPId);
+        List<DomainResourceDto> GetResourceList(int projectId, int serverId);
 
         /// <summary>
         /// 修改资源表
         /// </summary>
         /// <param name="iPId"></param>
         /// <returns></returns>
-        void UpdateResource(ResourceInfoDto dto, Expression<Func<ResourceInfoDto, object>> propertyExpression);
+        void UpdateResource(DomainResourceDto dto, Expression<Func<DomainResourceDto, object>> propertyExpression);
     }
 }

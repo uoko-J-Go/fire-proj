@@ -17,20 +17,20 @@ using System.Reflection;
 
 namespace Uoko.FireProj.Concretes
 {
-    public class ResourceInfoSvc : IResourceInfoSvc
+    public class DomainResourceSvc : IDomainResourceSvc
     {
         private readonly IDbContextScopeFactory _dbScopeFactory;
 
-        public ResourceInfoSvc(IDbContextScopeFactory dbScopeFactory)
+        public DomainResourceSvc(IDbContextScopeFactory dbScopeFactory)
         {
             _dbScopeFactory = dbScopeFactory;
         }
 
-        public void CreatResource(List<ResourceInfoDto> dto)
+        public void CreatResource(List<DomainResourceDto> dto)
         {
             try
             {
-                var entity = Mapper.Map<List<ResourceInfoDto>, List<ResourceInfo>>(dto);
+                var entity = Mapper.Map<List<DomainResourceDto>, List<DomainResource>>(dto);
                 using (var dbScope = _dbScopeFactory.Create())
                 {
                     var db = dbScope.DbContexts.Get<FireProjDbContext>();
@@ -48,17 +48,17 @@ namespace Uoko.FireProj.Concretes
             }
         }
 
-        public List<ResourceInfoDto> GetResourceList(int projectId, int IPId)
+        public List<DomainResourceDto> GetResourceList(int projectId, int serverId)
         {
             try
             {
                 using (var dbScope = _dbScopeFactory.CreateReadOnly())
                 {
                     var db = dbScope.DbContexts.Get<FireProjDbContext>();
-                    var data = db.ResourceInfo.Where(r => r.ProjectId == projectId && r.Status == 0 && (r.DeployIPId == IPId || r.DeployIPId == 0)).Select(r => new ResourceInfoDto
+                    var data = db.ResourceInfo.Where(r => r.ProjectId == projectId && r.Status == 0 && (r.ServerId == serverId || r.ServerId == 0)).Select(r => new DomainResourceDto
                     {
                         Id = r.Id,
-                        Url = r.Url,
+                        Name = r.Name,
                     }).ToList();
                     return data;
                 }
@@ -69,11 +69,11 @@ namespace Uoko.FireProj.Concretes
             }
         }
 
-        public void UpdateResource(ResourceInfoDto dto, Expression<Func<ResourceInfoDto, object>> propertyExpression)
+        public void UpdateResource(DomainResourceDto dto, Expression<Func<DomainResourceDto, object>> propertyExpression)
         {
             try
             {
-                var entity = Mapper.Map<ResourceInfoDto, ResourceInfo>(dto);
+                var entity = Mapper.Map<DomainResourceDto, DomainResource>(dto);
                 using (var dbScope = _dbScopeFactory.Create())
                 {
                     var db = dbScope.DbContexts.Get<FireProjDbContext>();

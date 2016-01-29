@@ -42,7 +42,7 @@
   <ItemGroup>
     <Compile Include="IDictionary.cs" />
     <Compile Include="IProjectSvc.cs" />
-    <Compile Include="IResourceInfoSvc.cs" />
+    <Compile Include="IDomainResourceSvc.cs" />
     <Compile Include="IServerSvc.cs" />
     <Compile Include="ITaskLogsSvc.cs" />
     <Compile Include="ITaskSvc.cs" />

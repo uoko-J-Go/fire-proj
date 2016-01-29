@@ -13,7 +13,7 @@ namespace Uoko.FireProj.DataAccess.Gitlab
         public bool tag { get; set; }
         public string before_sha { get; set; }
         public string sha { get; set; }
-        public string build_id { get; set; }
+        public int build_id { get; set; }
         public string build_name { get; set; }
         public string build_stage { get; set; }
         public string build_status { get; set; }

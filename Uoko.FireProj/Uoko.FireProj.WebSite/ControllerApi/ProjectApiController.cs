@@ -15,11 +15,11 @@ namespace Uoko.FireProj.WebSite.ControllerApi
     public class ProjectApiController : BaseApiController
     {
         private IProjectSvc _projectSvc { get; set; }
-        private IResourceInfoSvc _resourceInfoSvc { get; set; }
-        public ProjectApiController(IProjectSvc projectSvc, IResourceInfoSvc resourceInfoSvc)
+        private IDomainResourceSvc DomainResourceSvc { get; set; }
+        public ProjectApiController(IProjectSvc projectSvc, IDomainResourceSvc domainResourceSvc)
         {
             _projectSvc = projectSvc;
-            _resourceInfoSvc = resourceInfoSvc;
+            DomainResourceSvc = domainResourceSvc;
         }
 
         /// <summary>
@@ -65,16 +65,16 @@ namespace Uoko.FireProj.WebSite.ControllerApi
             if (projectId > 0)
             {
                 //创建内部测试环境地址: 
-                List<ResourceInfoDto> resourceInfoList = new List<ResourceInfoDto>();
+                List<DomainResourceDto> resourceInfoList = new List<DomainResourceDto>();
                 for (int i = 0; i < 10; i++)
                 {
-                    resourceInfoList.Add(new ResourceInfoDto()
+                    resourceInfoList.Add(new DomainResourceDto()
                     {
                         ProjectId = projectId,
-                        Url = string.Format("{0}{1}.uoko.ioc", dto.ProjectGitlabName, (i + 1)),
+                        Name = string.Format("{0}{1}.uoko.ioc", dto.ProjectGitlabName, (i + 1)),
                     });
                 }
-                _resourceInfoSvc.CreatResource(resourceInfoList);
+                DomainResourceSvc.CreatResource(resourceInfoList);
             }
             return Ok();
         }

@@ -14,7 +14,7 @@ namespace Uoko.FireProj.Model
         #region DbSet 
         public DbSet<Project> Project { get; set; }
         public DbSet<Dictionary> Dictionary { get; set; }
-        public DbSet<ResourceInfo> ResourceInfo { get; set; }
+        public DbSet<DomainResource> ResourceInfo { get; set; }
         public DbSet<TaskInfo> TaskInfo { get; set; }
         public DbSet<TaskLogs> TaskLogs { get; set; }
         public DbSet<Server> Servers { get; set; }
@@ -25,7 +25,7 @@ namespace Uoko.FireProj.Model
         {
             modelBuilder.Configurations.Add(new ProjectMap());
             modelBuilder.Configurations.Add(new DictionaryMap());
-            modelBuilder.Configurations.Add(new ResourceInfoMap());
+            modelBuilder.Configurations.Add(new DomainResourceMap());
             modelBuilder.Configurations.Add(new TaskInfoMap());
             modelBuilder.Configurations.Add(new TaskLogsMap());
             modelBuilder.Configurations.Add(new ServerMap());
