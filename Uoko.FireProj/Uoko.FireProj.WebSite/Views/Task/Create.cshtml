@@ -85,7 +85,7 @@
                                 <option ng-repeat="server in ServerList" value="{{server}}" ng-init="person={firstName:'John',lastName:'Doe'}" ng-selected="server.IP==taskInfo.DeployIP">{{server.Name}}</option>
                             </select>
                             <div ng-show="form.$submitted || form.deployenvironment.$touched">
-                                <span class="error-msg" ng-show="form.deployenvironment.$error.required">部署机器IP必填.</span>
+                                <span class="error-msg" ng-show="form.deployenvironment.$error.required">部署服务器必选</span>
                             </div>
                         </div>
                     </div>
@@ -105,7 +105,7 @@
                         <div class="col-md-10">
                             <input disabled name="sitename" type="text" ng-model="taskInfo.SiteName" class="form-control" placeholder="自动生成" required>
                             <div ng-show="form.$submitted || form.sitename.$touched">
-                                <span class="error-msg" ng-show="form.sitename.$error.required">IIS站点名称必填.</span>
+                                <span class="error-msg" ng-show="form.sitename.$error.required">自动生成.</span>
                             </div>
                         </div>
                     </div>
@@ -114,7 +114,7 @@
                         <div class="col-md-10">
                             <input disabled type="text" name="deployAddress" ng-model="taskInfo.DeployAddress" class="form-control" placeholder="自动生成" required>
                             <div ng-show="form.$submitted || form.deployAddress.$touched">
-                                <span class="error-msg" ng-show="form.deployAddress.$error.required">部署地址.</span>
+                                <span class="error-msg" ng-show="form.deployAddress.$error.required">自动生成.</span>
                             </div>
                         </div>
                     </div>

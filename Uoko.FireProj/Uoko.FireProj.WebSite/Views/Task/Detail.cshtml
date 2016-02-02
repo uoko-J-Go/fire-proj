@@ -99,7 +99,7 @@
                             <div class="form-group">
                                 <label class="control-label">状态</label>
                                 <label class="control-label detail">{{taskInfo.Status|taskStatusFilter}}</label>
-                                <a  class="text-primary" ng-click="GotoGitLabBuildPage(taskInfo.BuildId)">点击查看</a>
+                                <a  ng-show="taskInfo.BuildId>0" class="text-primary" ng-click="GotoGitLabBuildPage(taskInfo.BuildId)">点击查看</a>
                             </div>
                         </div>
                     </div>
