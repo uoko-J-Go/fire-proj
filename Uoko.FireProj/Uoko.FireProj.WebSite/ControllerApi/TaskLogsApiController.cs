@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Web.Http;
 using Uoko.FireProj.Abstracts;
 using Uoko.FireProj.DataAccess.Dto;
+using Uoko.FireProj.DataAccess.Enum;
 using Uoko.FireProj.DataAccess.Query;
 
 namespace Uoko.FireProj.WebSite.ControllerApi
@@ -31,6 +32,17 @@ namespace Uoko.FireProj.WebSite.ControllerApi
             return Ok(result);
         }
 
+        [Route("LogTotal/{taskId}")]
+        public IHttpActionResult GetLogTotal(int taskId)
+        {
+            var result = new
+            {
+                IocTotal= _taskLogsSvc.GetLogTotalByEnvironment(taskId,EnvironmentEnum.IOC),
+                PreTotal = _taskLogsSvc.GetLogTotalByEnvironment(taskId, EnvironmentEnum.PRE),
+                ProductionTotal = _taskLogsSvc.GetLogTotalByEnvironment(taskId, EnvironmentEnum.PRODUCTION),
+            };
+            return Ok(result);
+        }
         /// <summary>
         /// 获取任务记录分页
         /// </summary>

@@ -39,7 +39,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="control-label">任务名</label>
-                                    <input type="text" name="taskname" ng-model="taskInfo.TaskName" class="form-control" placeholder="请输入任务名" required>
+                                    <input disabled type="text" name="taskname" ng-model="taskInfo.TaskName" class="form-control" placeholder="请输入任务名" required>
                                     <div ng-show="form.$submitted || form.taskname.$touched">
                                         <span class="error-msg" ng-show="form.taskname.$error.required">任务名必填.</span>
                                     </div>
@@ -49,7 +49,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="control-label">项目</label>
-                                    <select class="form-control" name="project" ng-model="taskInfo.Project" ng-change="getBranch(taskInfo.Project)" required>
+                                    <select disabled class="form-control" name="project" ng-model="taskInfo.Project" ng-change="getBranch(taskInfo.Project)" required>
                                         <option ng-repeat="project in projectList" value="{{project}}" ng-selected="project.Id==taskInfo.Project.Id">{{project.ProjectName}}</option>
                                     </select>
                                     <div ng-show="form.$submitted || form.project.$touched">
@@ -64,7 +64,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="control-label">分支</label>
-                                    <select name="branch" class="form-control" ng-model="taskInfo.Branch" required>
+                                    <select disabled name="branch" class="form-control" ng-model="taskInfo.Branch" required>
                                         <option ng-repeat="branch in branchList" value="{{branch.name}}" ng-selected="branch.name == taskInfo.Branch">{{branch.name}}</option>
                                     </select>
                                     <div ng-show="form.$submitted || form.branch.$touched">
@@ -76,7 +76,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="control-label">发布环境</label>
-                                    <select name="deployenvironment" class="form-control" ng-model="taskInfo.DeployEnvironment" required>
+                                    <select disabled name="deployenvironment" class="form-control" ng-model="taskInfo.DeployEnvironment" required>
                                         <option ng-repeat="environment in environmentList" value="{{environment.Id}}" ng-selected="environment.Id==taskInfo.DeployEnvironment">{{environment.Name}}</option>
                                     </select>
                                     <div ng-show="form.$submitted || form.deployenvironment.$touched">
@@ -89,12 +89,23 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="control-label">部署机器IP</label>
-                                    <input name="deployip" type="text" ng-model="taskInfo.DeployIP" class="form-control" placeholder="请输入部署机器IP" required>
+                                    <input disabled name="deployip" type="text" ng-model="taskInfo.DeployIP" class="form-control" placeholder="请输入部署机器IP" required>
                                     <div ng-show="form.$submitted || form.deployip.$touched">
                                         <span class="error-msg" ng-show="form.deployip.$error.required">部署机器IP必填.</span>
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">域名</label>
+                                    <input disabled name="deployip" type="text" ng-model="taskInfo.Domain" class="form-control" placeholder="请输入部署机器IP" required>
+                                    <div ng-show="form.$submitted || form.domain.$touched">
+                                        <span class="error-msg" ng-show="form.domain.$error.required">域名必选.</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="control-label">IIS站点名称</label>
@@ -104,9 +115,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
+                            <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="control-label">部署地址</label>
                                     <input type="text" ng-model="taskInfo.DeployAddress" class="form-control" placeholder="部署地址 例如 https://WIN-DEVTEST-002:8172/msdeploy.axd">

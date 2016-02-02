@@ -37,3 +37,16 @@ fireproj.filter("taskStatusFilter", function () {
         }
     }
 });
+
+fireproj.filter("TaskLogsFilter", function () {
+    return function (value) {
+        switch (value) {
+            case 0:
+                return "状态变更";
+            case 1:
+                return "CI记录";
+            case 2:
+                return "CD记录";
+        }
+    }
+});

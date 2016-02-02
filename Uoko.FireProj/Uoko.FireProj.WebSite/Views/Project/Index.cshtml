@@ -26,9 +26,11 @@
         <div class="portlet box blue" ng-hide="isShowForm">
             <div class="portlet-title">
                 <div class="caption">
-                    <i class="fa fa-list"></i>项目列表
+                    <i class="fa fa-github"></i>项目列表
                 </div>
-
+                <div class="tools">
+                    <a href="javascript:;" class="reload" data-original-title="" title="reload" ng-click="Query()"></a>
+                </div>
             </div>
             <div class="portlet-body">
                 <div class="table-toolbar">
@@ -49,16 +51,18 @@
                         <thead>
                         <tr>
                             <th>项目名称</th>
-                            <th>项目文件</th>
-                            <th>项目地址</th>
+                            <th>Sln文件</th>
+                            <th>Csproj文件</th>
+                            <th>GitLab地址</th>
                             <th>项目描述</th>
                             <th>操作</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr ng-repeat="item in items">
-                            <td><a href="/Project/Detail/{{item.Id}}">{{item.ProjectName}}</a></td>
-                            <td>{{item.ProjectFileName}}</td>
+                            <td><a  class="text-primary" href="/Project/Detail/{{item.Id}}">{{item.ProjectName}}</a></td>
+                            <td>{{item.ProjectSlnName}}</td>
+                            <td>{{item.ProjectCsprojName}}</td>
                             <td>{{item.ProjectRepo}}</td>
                             <td>{{item.ProjectDesc}}</td>
                             <td>

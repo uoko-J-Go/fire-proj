@@ -14,6 +14,7 @@ using Uoko.FireProj.Infrastructure.Data;
 using Uoko.FireProj.Infrastructure.Exception;
 using Uoko.FireProj.Infrastructure.Extensions;
 using Uoko.FireProj.Model;
+using Uoko.FireProj.DataAccess.Enum;
 
 namespace Uoko.FireProj.Concretes
 {
@@ -111,7 +112,13 @@ namespace Uoko.FireProj.Concretes
             using (var dbScope = _dbScopeFactory.CreateReadOnly())
             {
                 var db = dbScope.DbContexts.Get<FireProjDbContext>();
-                var data = db.TaskLogs.Where(r => r.TaskId == query.TaskId).Select(r => new TaskLogsDto
+
+                var data1 = db.TaskLogs.Where(r => r.TaskId == query.TaskId);
+                if (query.Environment.HasValue)
+                {
+                    data1 = data1.Where(r => r.Environment == query.Environment.Value);
+                }
+                var data = data1.Select(r => new TaskLogsDto
                 {
                     Id = r.Id,
                     LogsDesc = r.LogsDesc,
@@ -123,9 +130,30 @@ namespace Uoko.FireProj.Concretes
                     CreateBy = r.CreateBy,
                     CreateDate = r.CreateDate
                 });
-                var result = data.OrderBy(r => r.Id).Skip(query.Offset).Take(query.Limit).ToList();
+                //分页和不分页情况
+                if (query.Limit == 0)
+                {
+                    var result = data.OrderByDescending(r => r.Id).ToList();
+                    var total = data.Count();
+                    return new PageGridData<TaskLogsDto> { rows = result, total = total };
+                }
+                else
+                {
+                    var result = data.OrderByDescending(r => r.Id).Skip(query.Offset).Take(query.Limit).ToList();
+                    var total = data.Count();
+                    return new PageGridData<TaskLogsDto> { rows = result, total = total };
+                }
+            }
+        }
+
+        public int GetLogTotalByEnvironment(int taskId, EnvironmentEnum environment)
+        {
+            using (var dbScope = _dbScopeFactory.CreateReadOnly())
+            {
+                var db = dbScope.DbContexts.Get<FireProjDbContext>();
+                var data = db.TaskLogs.Where(t=>t.TaskId==taskId&&t.Environment==environment);
                 var total = data.Count();
-                return new PageGridData<TaskLogsDto> { rows = result, total = total };
+                return total;
             }
         }
     }

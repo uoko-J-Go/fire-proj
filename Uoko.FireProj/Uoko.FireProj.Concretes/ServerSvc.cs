@@ -116,7 +116,7 @@ namespace Uoko.FireProj.Concretes
             using (var dbScope = _dbScopeFactory.CreateReadOnly())
             {
                 var db = dbScope.DbContexts.Get<FireProjDbContext>();
-                var data = db.Servers.Where(t => t.EnvironmentType == EnvironmentEnum.IOC);
+                var data = db.Servers.Where(t => t.EnvironmentType == environmentEnum);
                 if (needEnable)
                 {
                     data = data.Where(t => t.Status == GenericStatusEnum.Enable);

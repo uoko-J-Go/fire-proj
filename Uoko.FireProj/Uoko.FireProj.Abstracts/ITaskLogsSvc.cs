@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Uoko.FireProj.DataAccess.Dto;
+using Uoko.FireProj.DataAccess.Enum;
 using Uoko.FireProj.DataAccess.Query;
 using Uoko.FireProj.Infrastructure.Data;
 
@@ -43,5 +44,12 @@ namespace Uoko.FireProj.Abstracts
         /// </summary>
         /// <param name="taskId"></param>
         List<TaskLogsDto> GetTaskLogsByTaskId(int taskId);
+       /// <summary>
+       /// 获取某个任务在某个环境下的任务记录数
+       /// </summary>
+       /// <param name="taskId"></param>
+       /// <param name="environment"></param>
+       /// <returns></returns>
+        int GetLogTotalByEnvironment(int taskId,EnvironmentEnum environment);
     }
 }

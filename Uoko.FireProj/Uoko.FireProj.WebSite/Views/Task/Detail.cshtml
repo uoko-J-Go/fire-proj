@@ -52,44 +52,54 @@
 
                     </div>
                     <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="control-label">状态</label>
-                                <label class="control-label detail">{{taskInfo.Status|taskStatusFilter}}</label>
-
-                            </div>
-                        </div>
-
                        
-
-                    </div>
-                    <div class="row">
+                        
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">分支</label>
-                                <label class="control-label detail" >{{taskInfo.Branch}}</label>
+                                <label class="control-label detail">{{taskInfo.Branch}}</label>
                             </div>
                         </div>
-
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">发布环境</label>
-                                <label class="control-label detail" >{{taskInfo.DeployEnvironment|environmentFilter}}</label>
+                                <label class="control-label detail">{{taskInfo.DeployEnvironment|environmentFilter}}</label>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">部署机器IP</label>
                                 <label class="control-label detail">{{taskInfo.DeployIP}}</label>
                             </div>
                         </div>
-
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">域名</label>
+                                <label class="control-label detail"><a class="text-primary" target="_blank" href="http://{{taskInfo.Domain}}/">{{taskInfo.Domain}}</a></label>
+                            </div>
+                        </div>
+                    </div>
+                   
+                    <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">IIS站点名称</label>
                                 <label class="control-label detail" >{{taskInfo.SiteName}}</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">部署地址</label>
+                                <label class="control-label detail">{{taskInfo.DeployAddress}}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">状态</label>
+                                <label class="control-label detail">{{taskInfo.Status|taskStatusFilter}}</label>
+                                <a  ng-show="taskInfo.BuildId>0" class="text-primary" ng-click="GotoGitLabBuildPage(taskInfo.BuildId)">点击查看</a>
                             </div>
                         </div>
                     </div>
@@ -154,37 +164,120 @@
             </div>
             <div class="portlet-body">
                 <ul class="nav nav-tabs">
-                    <li class="active">
+                    <li  ng-class="{'active':currLogTab==0}" ng-show="tasklogTotal.IocTotal>0" ng-click="GetCurrLog(0)">
                         <a href="#tab_1_1" data-toggle="tab">
                             IOC环境
                         </a>
                     </li>
-                    <li>
+                    <li  ng-class="{'active':currLogTab==1}" ng-show="tasklogTotal.PreTotal>0" ng-click="GetCurrLog(1)">
                         <a href="#tab_1_2" data-toggle="tab">
                             Pre环境
                         </a>
                     </li>
-                    <li>
+                    <li  ng-class="{'active':currLogTab==2}" ng-show="tasklogTotal.ProductionTotal>0" ng-click="GetCurrLog(2)">
                         <a href="#tab_1_3" data-toggle="tab">
                             正式环境
                         </a>
                     </li>
                 </ul>
                 <div class="tab-content">
-                    <div class="tab-pane fade active in" id="tab_1_1">
-                        <p>
-                            Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui.
-                        </p>
+                    <div class="tab-pane fade " ng-class="{'active in':currLogTab==0}" id="tab_1_1">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>内容</th>
+                                        <th>记录类型</th>
+                                        <th>操作人</th>
+                                        <th>时间</th>
+                                        <th>详细</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="item in items">
+
+                                        <td>{{item.LogsDesc}}</td>
+                                        <td>{{item.TaskLogsType|TaskLogsFilter}}</td>
+                                        <td>{{item.CreateBy}}</td>
+                                        <td>{{item.CreateDate}}</td>
+                                        <td><a class="text-danger" href="javascript:;" ng-show="item.BuildId!=0" ng-click="GotoGitLabBuildPage(item.BuildId)">错误详细</a></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        @*<div class="row">
+                            <div class="col-md-12">
+                                <div class="pull-right">
+                                    <uib-pagination total-items="totalItems" ng-model="currentPage" ng-change="Query()" first-text="首页" last-text="末页"
+                                                    previous-text="上一页" next-text="下一页" items-per-page="pageSize" max-size="5" boundary-links="true" boundary-link-numbers="true" rotate="false"></uib-pagination>
+                                </div>
+                            </div>
+                        </div>*@
                     </div>
-                    <div class="tab-pane fade" id="tab_1_2">
-                        <p>
-                            Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit. Keytar helvetica VHS salvia yr, vero magna velit sapiente labore stumptown. Vegan fanny pack odio cillum wes anderson 8-bit, sustainable jean shorts beard ut DIY ethical culpa terry richardson biodiesel. Art party scenester stumptown, tumblr butcher vero sint qui sapiente accusamus tattooed echo park.
-                        </p>
+                    <div class="tab-pane fade" ng-class="{'active in':currLogTab==1}" id="tab_1_2">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>内容</th>
+                                        <th>记录类型</th>
+                                        <th>操作人</th>
+                                        <th>时间</th>
+                                        <th>详细</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="item in items">
+
+                                        <td>{{item.LogsDesc}}</td>
+                                        <td>{{item.TaskLogsType|TaskLogsFilter}}</td>
+                                        <td>{{item.CreateBy}}</td>
+                                        <td>{{item.CreateDate}}</td>
+                                        <td><a class="text-danger" href="javascript:;" ng-show="item.BuildId!=0" ng-click="GotoGitLabBuildPage(item.BuildId)">错误详细</a></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        @*<div class="row">
+                            <div class="col-md-12">
+                                <div class="pull-right">
+                                    <uib-pagination total-items="totalItems" ng-model="currentPage" ng-change="Query()" first-text="首页" last-text="末页"
+                                                    previous-text="上一页" next-text="下一页" items-per-page="pageSize" max-size="5" boundary-links="true" boundary-link-numbers="true" rotate="false"></uib-pagination>
+                                </div>
+                            </div>
+                        </div>*@
                     </div>
-                    <div class="tab-pane fade" id="tab_1_3">
-                        <p>
-                            Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo retro fanny pack lo-fi farm-to-table readymade. Messenger bag gentrify pitchfork tattooed craft beer, iphone skateboard locavore carles etsy salvia banksy hoodie helvetica. DIY synth PBR banksy irony. Leggings gentrify squid 8-bit cred pitchfork. Williamsburg banh mi whatever gluten-free, carles pitchfork biodiesel fixie etsy retro mlkshk vice blog. Scenester cred you probably haven't heard of them, vinyl craft beer blog stumptown. Pitchfork sustainable tofu synth chambray yr.
-                        </p>
+                    <div class="tab-pane fade" ng-class="{'active in':currLogTab==2}" id="tab_1_3">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>内容</th>
+                                        <th>记录类型</th>
+                                        <th>操作人</th>
+                                        <th>时间</th>
+                                        <th>详细</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="item in items">
+                                        <td>{{item.LogsDesc}}</td>
+                                        <td>{{item.TaskLogsType|TaskLogsFilter}}</td>
+                                        <td>{{item.CreateBy}}</td>
+                                        <td>{{item.CreateDate}}</td>
+                                        <td><a class="text-danger" href="javascript:;" ng-show="item.BuildId!=0" ng-click="GotoGitLabBuildPage(item.BuildId)">错误详细</a></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        @*<div class="row">
+                            <div class="col-md-12">
+                                <div class="pull-right">
+                                    <uib-pagination total-items="totalItems" ng-model="currentPage" ng-change="Query()" first-text="首页" last-text="末页"
+                                                    previous-text="上一页" next-text="下一页" items-per-page="pageSize" max-size="5" boundary-links="true" boundary-link-numbers="true" rotate="false"></uib-pagination>
+                                </div>
+                            </div>
+                        </div>*@
                     </div>
                    
                 </div>

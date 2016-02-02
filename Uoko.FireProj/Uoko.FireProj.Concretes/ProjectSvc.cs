@@ -76,7 +76,7 @@ namespace Uoko.FireProj.Concretes
                 using (var dbScope = _dbScopeFactory.Create())
                 {
                     var db = dbScope.DbContexts.Get<FireProjDbContext>();
-                    db.Update(entity, r => new { r.ProjectDesc, r.ProjectName, r.ProjectRepo,r.ProjectId, r.ProjectFileName });
+                    db.Update(entity, r => new { r.ProjectDesc, r.ProjectName, r.ProjectRepo,r.ProjectId, r.ProjectSlnName });
                     db.SaveChanges();
                 }
             }
@@ -97,7 +97,8 @@ namespace Uoko.FireProj.Concretes
                     ProjectName = r.ProjectName,
                     ProjectRepo = r.ProjectRepo,
                     ProjectDesc = r.ProjectDesc,
-                    ProjectFileName = r.ProjectFileName,
+                    ProjectSlnName = r.ProjectSlnName,
+                    ProjectCsprojName = r.ProjectCsprojName,
                     ProjectId = r.ProjectId,
                 });
                 var result = data.ToList();
@@ -116,11 +117,34 @@ namespace Uoko.FireProj.Concretes
                     ProjectName = r.ProjectName,
                     ProjectRepo = r.ProjectRepo,
                     ProjectDesc = r.ProjectDesc,
-                    ProjectFileName = r.ProjectFileName,
+                    ProjectSlnName = r.ProjectSlnName,
                     ProjectId = r.ProjectId,
                 }).FirstOrDefault();
 
                 return data;
+            }
+        }
+
+        public ProjectDto GetProjectByTaskId(int taskId)
+        {
+            using (var dbScope = _dbScopeFactory.CreateReadOnly())
+            {
+                var db = dbScope.DbContexts.Get<FireProjDbContext>();
+
+                var data = from p in db.Project
+                    join t in db.TaskInfo on p.Id equals t.ProjectId
+                    where t.Id == taskId
+                    select new ProjectDto
+                    {
+                        Id = p.Id,
+                        ProjectName = p.ProjectName,
+                        ProjectRepo = p.ProjectRepo,
+                        ProjectDesc = p.ProjectDesc,
+                        ProjectSlnName = p.ProjectSlnName,
+                        ProjectCsprojName = p.ProjectCsprojName,
+                        ProjectId = p.ProjectId,
+                    };
+                return data.FirstOrDefault();
             }
         }
 
@@ -135,7 +159,8 @@ namespace Uoko.FireProj.Concretes
                     ProjectName = r.ProjectName,
                     ProjectRepo = r.ProjectRepo,
                     ProjectDesc = r.ProjectDesc,
-                    ProjectFileName = r.ProjectFileName,
+                    ProjectSlnName = r.ProjectSlnName,
+                    ProjectCsprojName = r.ProjectCsprojName,
                     ProjectId = r.ProjectId,
                 });
                 if (!string.IsNullOrEmpty(query.Search))

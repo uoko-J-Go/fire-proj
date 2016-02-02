@@ -39,7 +39,7 @@
     //触发项目
     this.TriggerBuild = function (taskInfo, successCallBack) {
         var params = {
-            "CsprojNameAPI": taskInfo.Project.ProjectFileName,
+            "CsprojNameAPI": taskInfo.Project.ProjectCsprojName,
             "DeployAddressAPI": taskInfo.DeployAddress,
             "SiteNameAPI": taskInfo.SiteName
         };

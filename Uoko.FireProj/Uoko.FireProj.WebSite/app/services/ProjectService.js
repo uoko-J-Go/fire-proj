@@ -8,6 +8,16 @@
             //错误处理
         });
     };
+    //获取任务的项目
+    this.getByTaskId = function (taskId, successCallBack) {
+        return $http.get("/api/ProjectApi/GetByTaskId/" + taskId).success(function (data) {
+            if (successCallBack != undefined) {
+                successCallBack(data);
+            }
+        }).error(function (data) {
+            //错误处理
+        });
+    };
     //列表分页
     this.getByPage = function (params) {
         return $http.get("/api/ProjectApi?Offset={0}&Limit={1}".Format(params.offset, params.limit));
@@ -37,4 +47,15 @@
     this.getGitlbProject = function () {
         return $http.get("http://gitlab.uoko.ioc:12015/api/v3/projects?private_token=JX4Gb7W_gfp7PdzpBjpG");
     };
+
+    this.getGitLabSln = function (projectId,successCallBack) {
+        $http.get("http://gitlab.uoko.ioc:12015/api/v3/projects/" + projectId + "/repository/tree?private_token=JX4Gb7W_gfp7PdzpBjpG").success(function (data) {
+            if (successCallBack != undefined) {
+                successCallBack(data);
+            }
+        }).error(function (data) {
+            //错误处理
+        });
+    };
+
 });

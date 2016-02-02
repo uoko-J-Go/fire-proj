@@ -12,19 +12,19 @@ namespace Uoko.FireProj.DataAccess.Enum
         /// <summary>
         /// 状态记录
         /// </summary>
-        [Description("状态记录")]
+        [Description("状态变更")]
         Status = 0,
 
         /// <summary>
-        /// CI记录
+        /// CI
         /// </summary>
         [Description("CI记录")]
         CI =1,
 
         /// <summary>
-        /// YML记录
+        /// YML
         /// </summary>
-        [Description("YML记录")]
+        [Description("CD记录")]
         YML = 2,
     }
 }
