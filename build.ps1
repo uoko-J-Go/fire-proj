@@ -10,6 +10,6 @@ gci .\source -Recurse "packages.config" |% {
 }
 
 #>
-
+;
 # .\Uoko.FireProj\.nuget\NuGet.exe install "FAKE" -o .\Uoko.FireProj\packages -ExcludeVersion
 .\Uoko.FireProj\packages\FAKE\tools\FAKE.exe build.fsx
