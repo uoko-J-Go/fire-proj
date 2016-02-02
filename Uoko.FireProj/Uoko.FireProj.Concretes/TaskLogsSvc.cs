@@ -130,9 +130,19 @@ namespace Uoko.FireProj.Concretes
                     CreateBy = r.CreateBy,
                     CreateDate = r.CreateDate
                 });
-                var result = data.OrderByDescending(r => r.Id).Skip(query.Offset).Take(query.Limit).ToList();
-                var total = data.Count();
-                return new PageGridData<TaskLogsDto> { rows = result, total = total };
+                //分页和不分页情况
+                if (query.Limit == 0)
+                {
+                    var result = data.OrderByDescending(r => r.Id).ToList();
+                    var total = data.Count();
+                    return new PageGridData<TaskLogsDto> { rows = result, total = total };
+                }
+                else
+                {
+                    var result = data.OrderByDescending(r => r.Id).Skip(query.Offset).Take(query.Limit).ToList();
+                    var total = data.Count();
+                    return new PageGridData<TaskLogsDto> { rows = result, total = total };
+                }
             }
         }
 

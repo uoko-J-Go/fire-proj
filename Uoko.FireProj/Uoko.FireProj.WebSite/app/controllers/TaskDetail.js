@@ -75,7 +75,7 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
     }
 
     /*任务记录相关*/
-    $scope.pageSize = 5;
+    $scope.pageSize = 0;
     $scope.currentPage = 1;
     $scope.items = [];
     $scope.totalItems = 0;//总数

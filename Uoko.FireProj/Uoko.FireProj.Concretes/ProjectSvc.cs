@@ -76,7 +76,7 @@ namespace Uoko.FireProj.Concretes
                 using (var dbScope = _dbScopeFactory.Create())
                 {
                     var db = dbScope.DbContexts.Get<FireProjDbContext>();
-                    db.Update(entity, r => new { r.ProjectDesc, r.ProjectName, r.ProjectRepo,r.ProjectId, r.ProjectFileName });
+                    db.Update(entity, r => new { r.ProjectDesc, r.ProjectName, r.ProjectRepo,r.ProjectId, r.ProjectSlnName });
                     db.SaveChanges();
                 }
             }
@@ -97,7 +97,8 @@ namespace Uoko.FireProj.Concretes
                     ProjectName = r.ProjectName,
                     ProjectRepo = r.ProjectRepo,
                     ProjectDesc = r.ProjectDesc,
-                    ProjectFileName = r.ProjectFileName,
+                    ProjectSlnName = r.ProjectSlnName,
+                    ProjectCsprojName = r.ProjectCsprojName,
                     ProjectId = r.ProjectId,
                 });
                 var result = data.ToList();
@@ -116,7 +117,7 @@ namespace Uoko.FireProj.Concretes
                     ProjectName = r.ProjectName,
                     ProjectRepo = r.ProjectRepo,
                     ProjectDesc = r.ProjectDesc,
-                    ProjectFileName = r.ProjectFileName,
+                    ProjectSlnName = r.ProjectSlnName,
                     ProjectId = r.ProjectId,
                 }).FirstOrDefault();
 
@@ -139,7 +140,8 @@ namespace Uoko.FireProj.Concretes
                         ProjectName = p.ProjectName,
                         ProjectRepo = p.ProjectRepo,
                         ProjectDesc = p.ProjectDesc,
-                        ProjectFileName = p.ProjectFileName,
+                        ProjectSlnName = p.ProjectSlnName,
+                        ProjectCsprojName = p.ProjectCsprojName,
                         ProjectId = p.ProjectId,
                     };
                 return data.FirstOrDefault();
@@ -157,7 +159,8 @@ namespace Uoko.FireProj.Concretes
                     ProjectName = r.ProjectName,
                     ProjectRepo = r.ProjectRepo,
                     ProjectDesc = r.ProjectDesc,
-                    ProjectFileName = r.ProjectFileName,
+                    ProjectSlnName = r.ProjectSlnName,
+                    ProjectCsprojName = r.ProjectCsprojName,
                     ProjectId = r.ProjectId,
                 });
                 if (!string.IsNullOrEmpty(query.Search))

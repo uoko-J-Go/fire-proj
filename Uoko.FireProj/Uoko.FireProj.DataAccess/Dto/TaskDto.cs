@@ -79,5 +79,7 @@ namespace Uoko.FireProj.DataAccess.Dto
         public string TaskDesc { get; set; }
 
         public int TriggeredId { get; set; }
+
+        public int BuildId { get; set; }
     }
 }

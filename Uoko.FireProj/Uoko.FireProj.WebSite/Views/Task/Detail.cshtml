@@ -52,13 +52,7 @@
 
                     </div>
                     <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="control-label">状态</label>
-                                <label class="control-label detail">{{taskInfo.Status|taskStatusFilter}}</label>
-
-                            </div>
-                        </div>
+                       
                         
                         <div class="col-md-6">
                             <div class="form-group">
@@ -66,38 +60,46 @@
                                 <label class="control-label detail">{{taskInfo.Branch}}</label>
                             </div>
                         </div>
-
-                    </div>
-                    <div class="row">
-                        
-
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">发布环境</label>
-                                <label class="control-label detail" >{{taskInfo.DeployEnvironment|environmentFilter}}</label>
+                                <label class="control-label detail">{{taskInfo.DeployEnvironment|environmentFilter}}</label>
                             </div>
                         </div>
-                       
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">部署机器IP</label>
                                 <label class="control-label detail">{{taskInfo.DeployIP}}</label>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">域名</label>
-                                <label class="control-label detail">{{taskInfo.Domain}}</label>
-
+                                <label class="control-label detail"><a class="text-primary" target="_blank" href="http://{{taskInfo.Domain}}/">{{taskInfo.Domain}}</a></label>
                             </div>
                         </div>
-
+                    </div>
+                   
+                    <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">IIS站点名称</label>
                                 <label class="control-label detail" >{{taskInfo.SiteName}}</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">部署地址</label>
+                                <label class="control-label detail">{{taskInfo.DeployAddress}}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">状态</label>
+                                <label class="control-label detail">{{taskInfo.Status|taskStatusFilter}}</label>
+                                <a  class="text-primary" ng-click="GotoGitLabBuildPage(taskInfo.BuildId)">点击查看</a>
                             </div>
                         </div>
                     </div>
@@ -195,22 +197,22 @@
                                     <tr ng-repeat="item in items">
 
                                         <td>{{item.LogsDesc}}</td>
-                                        <td>{{item.TaskLogsType}}</td>
+                                        <td>{{item.TaskLogsType|TaskLogsFilter}}</td>
                                         <td>{{item.CreateBy}}</td>
                                         <td>{{item.CreateDate}}</td>
-                                        <td><a href="javascript:;" ng-show="item.BuildId!=0" ng-click="GotoGitLabBuildPage(item.BuildId)">错误详细</a></td>
+                                        <td><a class="text-danger" href="javascript:;" ng-show="item.BuildId!=0" ng-click="GotoGitLabBuildPage(item.BuildId)">错误详细</a></td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
-                        <div class="row">
+                        @*<div class="row">
                             <div class="col-md-12">
                                 <div class="pull-right">
                                     <uib-pagination total-items="totalItems" ng-model="currentPage" ng-change="Query()" first-text="首页" last-text="末页"
                                                     previous-text="上一页" next-text="下一页" items-per-page="pageSize" max-size="5" boundary-links="true" boundary-link-numbers="true" rotate="false"></uib-pagination>
                                 </div>
                             </div>
-                        </div>
+                        </div>*@
                     </div>
                     <div class="tab-pane fade" ng-class="{'active in':currLogTab==1}" id="tab_1_2">
                         <div class="table-responsive">
@@ -228,22 +230,22 @@
                                     <tr ng-repeat="item in items">
 
                                         <td>{{item.LogsDesc}}</td>
-                                        <td>{{item.TaskLogsType}}</td>
+                                        <td>{{item.TaskLogsType|TaskLogsFilter}}</td>
                                         <td>{{item.CreateBy}}</td>
                                         <td>{{item.CreateDate}}</td>
-                                        <td><a href="javascript:;" ng-show="item.BuildId!=0" ng-click="GotoGitLabBuildPage(item.BuildId)">错误详细</a></td>
+                                        <td><a class="text-danger" href="javascript:;" ng-show="item.BuildId!=0" ng-click="GotoGitLabBuildPage(item.BuildId)">错误详细</a></td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
-                        <div class="row">
+                        @*<div class="row">
                             <div class="col-md-12">
                                 <div class="pull-right">
                                     <uib-pagination total-items="totalItems" ng-model="currentPage" ng-change="Query()" first-text="首页" last-text="末页"
                                                     previous-text="上一页" next-text="下一页" items-per-page="pageSize" max-size="5" boundary-links="true" boundary-link-numbers="true" rotate="false"></uib-pagination>
                                 </div>
                             </div>
-                        </div>
+                        </div>*@
                     </div>
                     <div class="tab-pane fade" ng-class="{'active in':currLogTab==2}" id="tab_1_3">
                         <div class="table-responsive">
@@ -259,24 +261,23 @@
                                 </thead>
                                 <tbody>
                                     <tr ng-repeat="item in items">
-
                                         <td>{{item.LogsDesc}}</td>
-                                        <td>{{item.TaskLogsType}}</td>
+                                        <td>{{item.TaskLogsType|TaskLogsFilter}}</td>
                                         <td>{{item.CreateBy}}</td>
                                         <td>{{item.CreateDate}}</td>
-                                        <td><a href="javascript:;" ng-show="item.BuildId!=0" ng-click="GotoGitLabBuildPage(item.BuildId)">错误详细</a></td>
+                                        <td><a class="text-danger" href="javascript:;" ng-show="item.BuildId!=0" ng-click="GotoGitLabBuildPage(item.BuildId)">错误详细</a></td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
-                        <div class="row">
+                        @*<div class="row">
                             <div class="col-md-12">
                                 <div class="pull-right">
                                     <uib-pagination total-items="totalItems" ng-model="currentPage" ng-change="Query()" first-text="首页" last-text="末页"
                                                     previous-text="上一页" next-text="下一页" items-per-page="pageSize" max-size="5" boundary-links="true" boundary-link-numbers="true" rotate="false"></uib-pagination>
                                 </div>
                             </div>
-                        </div>
+                        </div>*@
                     </div>
                    
                 </div>

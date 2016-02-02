@@ -32,7 +32,12 @@ namespace Uoko.FireProj.DataAccess.Dto
         /// <summary>
         /// 项目文件(csproj)相对路径
         /// </summary>
-        public string ProjectFileName { get; set; }
+        public string ProjectSlnName { get; set; }
+
+        /// <summary>
+        ///  项目Csproj相对路径
+        /// </summary>
+        public string ProjectCsprojName { get; set; }
 
         /// <summary>
         /// 项目描述

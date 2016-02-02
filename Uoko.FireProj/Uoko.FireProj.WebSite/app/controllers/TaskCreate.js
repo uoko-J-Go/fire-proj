@@ -14,7 +14,12 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
         TaskDesc: "",
         Domain: "",
     };
-    
+    $scope.taskInfo.Server;
+    if (typeof project == "string") {
+        $scope.serverIP = JSON.parse(project);
+    }
+
+
     $scope.projectList = [];
     $scope.branchList = [];
     TaskService.GetEnvironment(function (data) {
@@ -89,12 +94,9 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
 
     //发布环境change事件,获取IOC环境的服务器List
     $scope.GetServerData = function (environmentId) {
-        if (environmentId == 0) { //IOC环境
-            TaskService.GetResourceList(environmentId, function (data) {
-                $scope.ServerList = data;
-            });
-        }
-
+        TaskService.GetResourceList(environmentId, function (data) {
+            $scope.ServerList = data;
+        });
     }
     //部署服务器change事件
     $scope.GetDomain = function (project, server) {
@@ -128,6 +130,13 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
         location.href = "/Task/Index";
     }
     
+    $scope.CreatDeployAddress = function (server) {
+        if (typeof server == "string") {
+            server = JSON.parse(server);
+            $scope.taskInfo.DeployAddress = "https://" + server.IP + "/msdeploy.axd";
+        }
+    }
+
     $scope.Init = function () {
         $scope.GetProjectList();
         $scope.$watch('taskInfo.Project + taskInfo.DeployEnvironment + taskInfo.Server', function () {

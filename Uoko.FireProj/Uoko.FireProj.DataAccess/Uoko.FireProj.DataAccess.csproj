@@ -160,6 +160,10 @@
     <Compile Include="Migrations\201601290334576_updateDomainResourse.Designer.cs">
       <DependentUpon>201601290334576_updateDomainResourse.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201602010648060_updateProjectfield.cs" />
+    <Compile Include="Migrations\201602010648060_updateProjectfield.Designer.cs">
+      <DependentUpon>201602010648060_updateProjectfield.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Query\BaseQuery.cs" />
@@ -230,6 +234,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201601290334576_updateDomainResourse.resx">
       <DependentUpon>201601290334576_updateDomainResourse.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201602010648060_updateProjectfield.resx">
+      <DependentUpon>201602010648060_updateProjectfield.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

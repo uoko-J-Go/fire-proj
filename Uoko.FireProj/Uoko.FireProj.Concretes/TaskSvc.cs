@@ -127,6 +127,11 @@ namespace Uoko.FireProj.Concretes
                     });
                 });
                 data.NoticeUses = noticeUsers;
+                //部署失败读取最新的build Id
+                if (taskInfo.Status== TaskEnum.DeployFails)
+                {
+                    data.BuildId = db.TaskLogs.OrderByDescending(r => r.Id).FirstOrDefault(r => r.TaskId == taskId && r.BuildId > 0).BuildId;
+                }
                 return data;
             }
         }

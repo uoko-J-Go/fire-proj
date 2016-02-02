@@ -14,7 +14,7 @@ namespace Uoko.FireProj.DataAccess.FluentAPI
         {
             Property(r => r.ProjectName).HasMaxLength(50).IsRequired();//长度50,必填
             Property(r => r.ProjectRepo).IsRequired();
-            Property(r => r.ProjectFileName).IsRequired();
+            Property(r => r.ProjectSlnName).IsRequired();
             ToTable("ProjectInfo");//指定生成表名
         }
     }
