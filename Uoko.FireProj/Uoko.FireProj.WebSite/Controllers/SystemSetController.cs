@@ -33,6 +33,20 @@ namespace Uoko.FireProj.WebSite.Controllers
         {
             return View("~/Views/Server/Index.cshtml");
         }
+
+        public ActionResult Creat()
+        {
+            return View("~/Views/Server/Creat.cshtml");
+        }
+        public ActionResult Edit()
+        {
+            return View("~/Views/Server/Edit.cshtml");
+        }
+
+        public ActionResult Detail()
+        {
+            return View();
+        }
         #endregion
     }
 }

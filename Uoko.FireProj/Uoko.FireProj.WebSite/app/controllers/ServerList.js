@@ -17,6 +17,13 @@
 
     }
     
+    //删除事件
+    $scope.delete = function (item) {
+        ServerService.delete(item.Id,function(data){
+            formSubmitSuccessClick("refresh");
+        });
+    }
+
     $scope.Init = function () {
         $scope.Query();
     }

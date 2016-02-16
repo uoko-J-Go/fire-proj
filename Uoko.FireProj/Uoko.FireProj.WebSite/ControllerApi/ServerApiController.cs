@@ -31,12 +31,7 @@ namespace Uoko.FireProj.WebSite.ControllerApi
             var result = _serverSvc.GetAllServerOfEnvironment(en);
             return Ok(result);
         }
-        [Route("{serverId}")]
-        public IHttpActionResult Get(int serverId)
-        {
-            var result = _serverSvc.GetServerById(serverId);
-            return Ok(result);
-        }
+       
         [Route("Update")]
         [HttpPost]
         public IHttpActionResult Update([FromBody]ServerDto server)

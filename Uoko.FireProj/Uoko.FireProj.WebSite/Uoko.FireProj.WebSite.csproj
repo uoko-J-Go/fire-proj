@@ -188,11 +188,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="app\controllers\ServerEdit.js" />
     <Content Include="app\controllers\ServerList.js" />
     <Content Include="app\controllers\DomainList.js" />
     <Content Include="app\controllers\ProjectDetail.js" />
     <Content Include="app\controllers\ProjectEdit.js" />
     <Content Include="app\controllers\ProjectCreat.js" />
+    <Content Include="app\controllers\ServerCreate.js" />
     <Content Include="app\controllers\TaskLogs.js" />
     <Content Include="app\directives\ProjectTree.js" />
     <Content Include="app\filters\CommonFilter.js" />
@@ -1094,6 +1096,8 @@
     <Content Include="Views\Project\Edit.cshtml" />
     <Content Include="Views\Project\Detail.cshtml" />
     <Content Include="Views\Server\Index.cshtml" />
+    <Content Include="Views\Server\Creat.cshtml" />
+    <Content Include="Views\Server\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

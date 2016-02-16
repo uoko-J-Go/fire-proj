@@ -19,7 +19,7 @@
         </li>
     </ul>
 </div>
-<div ng-controller="DomainController">
+<div ng-controller="ServerController">
     <!-- Grid -->
     <div class="portlet box blue">
         <div class="portlet-title">
@@ -35,7 +35,7 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="btn-group">
-                            <a id="sample_editable_1_new" class="btn green" href="@Url.Action("Creat","Project")">
+                            <a id="sample_editable_1_new" class="btn green" href="@Url.Action("Creat","SystemSet")">
                                 新增 <i class="fa fa-plus"></i>
                             </a>
                         </div>
@@ -58,15 +58,15 @@
                     </thead>
                     <tbody>
                         <tr ng-repeat="item in items">
-                            <td><label ng-show="item.Status==0">{{item.Name}}</label> <a ng-show="item.Status==1" class="text-primary" target="_blank" href="http://{{item.Name}}">{{item.Name}}</a> </td>
-                            <td><a class="text-primary" target="_blank" href="/Project/Detail/{{item.ProjectId}}">{{item.ProjectName}}</a></td>
-                            <td><a class="text-primary" target="_blank" href="/Task/Detail?taskId={{item.TaskId}}">{{item.TaskName}}</a></td>
-                            <td>{{item.ServerName}}</td>
+                            <td>{{item.Name}}</td>
+                            <td>{{item.IP}}</td>
+                            <td>{{item.EnvironmentType|environmentFilter}}</td>
+                            <td>{{item.ServerDesc}}</td>
                             <td>{{item.Status|DomainResourceFilter}}</td>
                             <td>
                                 <div>
-                                    <a ng-show="item.Status==1" class="btn btn-primary delete" ng-click="ReleaseDomain(item.TaskId)">修改</a>
-                                    <a ng-show="item.Status==1" class="btn btn-primary delete" ng-click="ReleaseDomain(item.TaskId)">删除</a>
+                                    <a class="btn btn-primary editor" href="/SystemSet/Edit/{{item.Id}}">编辑</a>
+                                    <a class="btn btn-primary delete" ng-click="delete(item)">删除</a>
                                 </div>
                             </td>
                         </tr>
@@ -88,9 +88,9 @@
 
 
 @section Scripts {
-<script src="~/app/controllers/DomainList.js"></script>
-<script src="~/app/services/DomainServer.js"></script>
+<script src="~/app/controllers/ServerList.js"></script>
+<script src="~/app/services/ServerServer.js"></script>
 <script src="~/app/filters/CommonFilter.js"></script>
-<script src="~/app/services/TaskService.js"></script>
+
 }
 
