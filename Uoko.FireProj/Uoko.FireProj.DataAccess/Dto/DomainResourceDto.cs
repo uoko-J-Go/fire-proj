@@ -21,14 +21,29 @@ namespace Uoko.FireProj.DataAccess.Dto
         public int ProjectId { get; set; }
 
         /// <summary>
+        /// 项目名称
+        /// </summary>
+        public string ProjectName { get; set; }
+
+        /// <summary>
         /// 任务Id
         /// </summary>
         public int TaskId { get; set; }
 
         /// <summary>
-        /// 域名在哪台服务器下
+        /// 任务名称
+        /// </summary>
+        public string TaskName { get; set; }
+
+        /// <summary>
+        /// 域名在哪台服务器Id
         /// </summary>
         public int ServerId { get; set; }
+
+        /// <summary>
+        /// 域名在哪台服务器名称
+        /// </summary>
+        public string ServerName { get; set; }
 
 
         public DomainResourceStatusEnum Status { get; set; }

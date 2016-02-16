@@ -58,4 +58,13 @@
         });
     };
 
+    this.getGitChildFile = function (projectId, path,successCallBack) {
+        $http.get("http://gitlab.uoko.ioc:12015/api/v3/projects/" + projectId + "/repository/tree?private_token=JX4Gb7W_gfp7PdzpBjpG&path=" + path + "").success(function (data) {
+            if (successCallBack != undefined) {
+                successCallBack(data);
+            }
+        }).error(function (data) {
+            //错误处理
+        });
+    };
 });

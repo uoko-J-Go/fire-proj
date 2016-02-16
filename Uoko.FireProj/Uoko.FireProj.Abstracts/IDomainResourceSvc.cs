@@ -5,6 +5,8 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using Uoko.FireProj.DataAccess.Dto;
+using Uoko.FireProj.DataAccess.Query;
+using Uoko.FireProj.Infrastructure.Data;
 
 namespace Uoko.FireProj.Abstracts
 {
@@ -28,5 +30,13 @@ namespace Uoko.FireProj.Abstracts
         /// </summary>
         /// <param name="taskId"></param>
         void ReleaseDomain(int taskId);
+
+
+        /// <summary>
+        /// 获取域名资源分页
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        PageGridData<DomainResourceDto> GetDomainPage(DomainResourceQuery query);
     }
 }

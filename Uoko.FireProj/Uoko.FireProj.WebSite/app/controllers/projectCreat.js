@@ -36,11 +36,12 @@ fireproj.controller("ProjectController", function ($scope, $http, ProjectService
                 if ((/\.[^\.]+$/.exec(data[i].name)) == ".sln") {
                     $scope.model.ProjectSlnName = data[i].name;//项目sln名称
                 }
-                if (data[i].mode == "040000") {
+                if (data[i].type == "tree") {
                     fileList.push(data[i]);
                 }
             }
-
+            $scope.menuList = fileList;
+          
         });
     }
 

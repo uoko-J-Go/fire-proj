@@ -5,15 +5,16 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Uoko.FireProj.Abstracts;
+using Uoko.FireProj.DataAccess.Query;
 
 namespace Uoko.FireProj.WebSite.ControllerApi
 {
     [RoutePrefix("api/DomainResourceApi")]
-    public class DomainResourceController : BaseApiController
+    public class DomainResourceApiController : BaseApiController
     {
         private IDomainResourceSvc _domainResourceSvc { get; set; }
      
-        public DomainResourceController(IDomainResourceSvc domainResourceSvc)
+        public DomainResourceApiController(IDomainResourceSvc domainResourceSvc)
         {
             _domainResourceSvc = domainResourceSvc;
            
@@ -37,6 +38,17 @@ namespace Uoko.FireProj.WebSite.ControllerApi
         {
             _domainResourceSvc.ReleaseDomain(id);
             return Ok();
+        }
+
+        /// <summary>
+        /// 获取资源服务分页
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public IHttpActionResult Get([FromUri]DomainResourceQuery query)
+        {
+            var result = _domainResourceSvc.GetDomainPage(query);
+            return Ok(result);
         }
     }
 }

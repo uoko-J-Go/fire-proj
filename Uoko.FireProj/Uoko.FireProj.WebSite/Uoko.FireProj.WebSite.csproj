@@ -170,7 +170,7 @@
     <Compile Include="ControllerApi\CommonApiController.cs" />
     <Compile Include="ControllerApi\DictionaryApiController.cs" />
     <Compile Include="ControllerApi\ProjectApiController.cs" />
-    <Compile Include="ControllerApi\DomainResourceController.cs" />
+    <Compile Include="ControllerApi\DomainResourceApiController.cs" />
     <Compile Include="ControllerApi\ServerApiController.cs" />
     <Compile Include="ControllerApi\TaskLogsApiController.cs" />
     <Compile Include="ControllerApi\TaskApiController.cs" />
@@ -188,10 +188,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="app\controllers\ServerList.js" />
+    <Content Include="app\controllers\DomainList.js" />
     <Content Include="app\controllers\ProjectDetail.js" />
     <Content Include="app\controllers\ProjectEdit.js" />
     <Content Include="app\controllers\ProjectCreat.js" />
     <Content Include="app\controllers\TaskLogs.js" />
+    <Content Include="app\directives\ProjectTree.js" />
     <Content Include="app\filters\CommonFilter.js" />
     <Content Include="app\global.js" />
     <Content Include="app\modals\SelectUser.html" />
@@ -203,9 +206,12 @@
     <Content Include="app\controllers\TaskDetail.js" />
     <Content Include="app\controllers\TaskEdit.js" />
     <Content Include="app\controllers\TaskList.js" />
+    <Content Include="app\services\ServerServer.js" />
     <Content Include="app\services\ProjectService.js" />
+    <Content Include="app\services\DomainServer.js" />
     <Content Include="app\services\TaskService.js" />
     <Content Include="app\services\CommonService.js" />
+    <Content Include="Content\app.css" />
     <Content Include="Content\bootstrap-table.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
@@ -336,7 +342,7 @@
     <Content Include="Metronic\assets\admin\layout\scripts\demo.js" />
     <Content Include="Metronic\assets\admin\layout\scripts\layout.js" />
     <Content Include="Metronic\assets\admin\layout\scripts\quick-sidebar.js" />
-    <Content Include="Metronic\assets\admin\pages\scripts\ui-tree.js" />
+    <Content Include="app\modals\ui-tree.js" />
     <Content Include="Metronic\assets\global\css\components-md.css" />
     <Content Include="Metronic\assets\global\css\components-rounded.css" />
     <Content Include="Metronic\assets\global\css\components.css" />
@@ -968,6 +974,8 @@
     <Content Include="Scripts\angular-messages.js" />
     <Content Include="Scripts\angular-messages.min.js" />
     <Content Include="Scripts\angular-mocks.js" />
+    <Content Include="Content\angular-ui-tree.min.css" />
+    <Content Include="Scripts\angular-ui-tree.min.js" />
     <Content Include="Scripts\angular.js" />
     <Content Include="Scripts\angular.min.js" />
     <Content Include="Scripts\bootstrap-table-zh-CN.min.js" />
@@ -1088,7 +1096,6 @@
     <Content Include="Views\Server\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="app\directives\" />
     <Folder Include="App_Data\" />
     <Folder Include="Metronic\assets\admin\pages\css\" />
     <Folder Include="Metronic\assets\admin\pages\img\" />
@@ -1102,6 +1109,7 @@
     <Folder Include="Metronic\assets\admin\pages\media\search\" />
     <Folder Include="Metronic\assets\admin\pages\media\users\" />
     <Folder Include="Metronic\assets\admin\pages\media\works\" />
+    <Folder Include="Metronic\assets\admin\pages\scripts\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

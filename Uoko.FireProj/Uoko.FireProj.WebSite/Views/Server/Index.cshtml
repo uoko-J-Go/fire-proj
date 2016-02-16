@@ -3,5 +3,94 @@
     ViewBag.Title = "服务器管理";
 }
 
-<h2>服务器管理</h2>
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <i class="fa fa-home"></i>
+            <a href="@Url.Action("Index","Home")">首页</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="@Url.Action("Index", "Project")">服务器</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="#">服务器列表</a>
+        </li>
+    </ul>
+</div>
+<div ng-controller="DomainController">
+    <!-- Grid -->
+    <div class="portlet box blue">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="fa fa-github"></i>服务器列表
+            </div>
+            <div class="tools">
+                <a href="javascript:;" class="reload" data-original-title="" title="reload" ng-click="Query()"></a>
+            </div>
+        </div>
+        <div class="portlet-body">
+            <div class="table-toolbar">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="btn-group">
+                            <a id="sample_editable_1_new" class="btn green" href="@Url.Action("Creat","Project")">
+                                新增 <i class="fa fa-plus"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>服务器名称</th>
+                            <th>服务器IP</th>
+                            <th>环境</th>
+                            <th>描述</th>
+                            <th>状态</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="item in items">
+                            <td><label ng-show="item.Status==0">{{item.Name}}</label> <a ng-show="item.Status==1" class="text-primary" target="_blank" href="http://{{item.Name}}">{{item.Name}}</a> </td>
+                            <td><a class="text-primary" target="_blank" href="/Project/Detail/{{item.ProjectId}}">{{item.ProjectName}}</a></td>
+                            <td><a class="text-primary" target="_blank" href="/Task/Detail?taskId={{item.TaskId}}">{{item.TaskName}}</a></td>
+                            <td>{{item.ServerName}}</td>
+                            <td>{{item.Status|DomainResourceFilter}}</td>
+                            <td>
+                                <div>
+                                    <a ng-show="item.Status==1" class="btn btn-primary delete" ng-click="ReleaseDomain(item.TaskId)">修改</a>
+                                    <a ng-show="item.Status==1" class="btn btn-primary delete" ng-click="ReleaseDomain(item.TaskId)">删除</a>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="pull-right">
+                        <uib-pagination total-items="totalItems" ng-model="currentPage" ng-change="Query()" first-text="首页" last-text="末页"
+                                        previous-text="上一页" next-text="下一页" items-per-page="pageSize" max-size="5" boundary-links="true" boundary-link-numbers="true" rotate="false"></uib-pagination>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Grid -->
+</div>
+
+
+@section Scripts {
+<script src="~/app/controllers/DomainList.js"></script>
+<script src="~/app/services/DomainServer.js"></script>
+<script src="~/app/filters/CommonFilter.js"></script>
+<script src="~/app/services/TaskService.js"></script>
+}
 
