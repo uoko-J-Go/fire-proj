@@ -188,6 +188,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="app\controllers\ServerDetail.js" />
     <Content Include="app\controllers\ServerEdit.js" />
     <Content Include="app\controllers\ServerList.js" />
     <Content Include="app\controllers\DomainList.js" />
@@ -1098,6 +1099,7 @@
     <Content Include="Views\Server\Index.cshtml" />
     <Content Include="Views\Server\Creat.cshtml" />
     <Content Include="Views\Server\Edit.cshtml" />
+    <Content Include="Views\Server\Detail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -61,7 +61,7 @@
                             <td><label ng-show="item.Status==0">{{item.Name}}</label> <a ng-show="item.Status==1" class="text-primary" target="_blank" href="http://{{item.Name}}">{{item.Name}}</a> </td>
                             <td><a class="text-primary" target="_blank" href="/Project/Detail/{{item.ProjectId}}">{{item.ProjectName}}</a></td>
                             <td><a class="text-primary" target="_blank" href="/Task/Detail?taskId={{item.TaskId}}">{{item.TaskName}}</a></td>
-                            <td>{{item.ServerName}}</td>
+                            <td><a class="text-primary" target="_blank" href="/SystemSet/Detail/{{item.ServerId}}">{{item.ServerName}}</a></td>
                             <td>{{item.Status|DomainResourceFilter}}</td>
                             <td>
                                 <div>

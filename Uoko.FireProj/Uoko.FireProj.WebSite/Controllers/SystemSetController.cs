@@ -45,7 +45,7 @@ namespace Uoko.FireProj.WebSite.Controllers
 
         public ActionResult Detail()
         {
-            return View();
+            return View("~/Views/Server/Detail.cshtml");
         }
         #endregion
     }

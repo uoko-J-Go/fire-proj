@@ -35,7 +35,7 @@ namespace Uoko.FireProj.Concretes
                 using (var dbScope = _dbScopeFactory.Create())
                 {
                     var db = dbScope.DbContexts.Get<FireProjDbContext>();
-                    var data = db.Servers.Add(entity);
+                    db.Servers.Add(entity);
                     db.SaveChanges();
                 }
             }
