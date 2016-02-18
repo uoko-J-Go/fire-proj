@@ -47,20 +47,9 @@
                                 </div>
                             </div>
                             <div class="form-group form-md-line-input">
-                                <label class="col-md-2 control-label" for="form_control_1">项目文件</label>
+                                <label class="col-md-2 control-label" for="form_control_1">GitLab地址</label>
                                 <div class="col-md-10">
-                                    <input type="text" class="form-control" id="form_control_1" ng-model="model.ProjectFileName" placeholder="请输入项目文件" required>
-                                    <div class="form-control-focus">
-                                    </div>
-                                    <span class="help-block">项目文件是必填</span>
-                                </div>
-
-                            </div>
-
-                            <div class="form-group form-md-line-input">
-                                <label class="col-md-2 control-label" for="form_control_1">项目地址</label>
-                                <div class="col-md-10">
-                                    <select class="form-control" id="form_control_1" ng-model="model.Project">
+                                    <select disabled class="form-control" id="form_control_1" ng-model="model.Project" ng-change="GetProjectInfo(model.Project)">
                                         <option ng-repeat="project in ProjectList" value="{{project}}" ng-selected="project.id == model.ProjectId">{{project.name}}</option>
                                     </select>
                                     <div class="form-control-focus">
@@ -68,7 +57,36 @@
                                     <span class="help-block">项目地址是必填</span>
                                 </div>
                             </div>
+                            <div class="form-group form-md-line-input">
+                                <label class="col-md-2 control-label" for="form_control_1">Sln名称</label>
+                                <div class="col-md-10">
+                                    <input disabled type="text" class="form-control" id="form_control_1" ng-model="model.ProjectSlnName" placeholder="选择项目自动带出" required>
+                                    <div class="form-control-focus">
+                                    </div>
+                                    <span class="help-block">项目文件是必填</span>
+                                </div>
 
+                            </div>
+                            <div class="form-group form-md-line-input">
+                                <label class="col-md-2 control-label" for="form_control_1">Csproj名称</label>
+                                <div class="col-md-10">
+                                    <input disabled type="text" class="form-control" id="ProjectCsprojName" ng-model="model.ProjectCsprojName" placeholder="请点击选择">
+                                    <div class="form-control-focus">
+                                    </div>
+                                    <span class="help-block">Csproj是必选</span>
+                                    
+                                </div>
+
+                            </div>
+                            <div class="form-group form-md-line-input">
+                                <label class="col-md-2 control-label" for="form_control_1">域名生成规则</label>
+                                <div class="col-md-10">
+                                    <input disabled type="text" class="form-control" id="form_control_1" ng-model="model.DomainRule" placeholder="请输入域名生成规则 例如 ids{编号}.uoko.ioc" required>
+                                    <div class="form-control-focus">
+                                    </div>
+                                    <span class="help-block">域名生成规则是必填</span>
+                                </div>
+                            </div>
                             <div class="form-group form-md-line-input">
                                 <label class="col-md-2 control-label" for="form_control_1">项目描述</label>
                                 <div class="col-md-10">

@@ -4,8 +4,11 @@
 }
 @section Css {
 <link href="~/Content/app.css" rel="stylesheet" />
-<link href="~/Content/angular-ui-tree.min.css" rel="stylesheet" />
+@*<link href="~/Content/angular-ui-tree.min.css" rel="stylesheet" />*@
+<link href="~/Metronic/assets/global/plugins/zTree/css/demo.css" rel="stylesheet" />
+<link href="~/Metronic/assets/global/plugins/zTree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" />
 }
+
 <div class="col-md-12">
     <div ng-controller="ProjectController">
         <!-- BEGIN  HEADER-->
@@ -76,10 +79,14 @@
                                 <div class="form-group form-md-line-input">
                                     <label class="col-md-2 control-label" for="form_control_1">Csproj名称</label>
                                     <div class="col-md-10">
-                                        <input type="text" class="form-control" id="form_control_1" ng-model="model.ProjectCsprojName" placeholder="请输入项目文件" required>
+                                        <input disabled type="text" class="form-control" id="ProjectCsprojName" ng-model="model.ProjectCsprojName"  placeholder="请点击选择">
+                                        &nbsp;<a id="menuBtn" href="#" class="btn default btn-sm green" ng-click="showMenu()">选择</a>
                                         <div class="form-control-focus">
                                         </div>
-                                        <span class="help-block">项目文件是必填</span>
+                                        <span class="help-block">Csproj是必选</span>
+                                        <div id="menuContent"   style="display:none; ">
+                                            <ul id="treeDemo" class="ztree" style="width:300px;"></ul>
+                                        </div>
                                     </div>
 
                                 </div>
@@ -113,47 +120,21 @@
                             </div>
 
                         </form>
-                        @*<div id="projectTree" class="tree-demo">
-                           
-                            <ul ng-repeat="menu in menuList">
-                                <li>
-                                    Root node 1
-                                    <ul>
-                                        <li data-jstree='{ "selected" : true }'>
-                                            <a href="javascript:;">
-                                                Initially selected
-                                            </a>
-                                        </li>
-                                      
-                                    </ul>
-                                </li>
-                               
-                                <li>{{menu.name}}</li>
-                               
-                            </ul>
-                        </div>*@
-                        @*<div ui-tree>
-                            <ol ui-tree-nodes="" ng-model="ProjectList">
-                                <li ng-repeat="item in ProjectList" ui-tree-node>
-                                    <div ui-tree-handle>
-                                        {{item.name}}
-                                    </div>
-                                    
-                                </li>
-                            </ol>
-                        </div>*@
-                 
 			        </div>
                 </div>
+           
             </div>
+       
         </div>
         <!--END Form -->
+   
     </div>
-</div>
+
 @section Scripts {
 <script src="~/app/controllers/ProjectCreat.js"></script>
 <script src="~/app/services/ProjectService.js"></script>
-<script src="~/Scripts/angular-ui-tree.min.js"></script>
+<script src="~/Metronic/assets/global/plugins/zTree/js/jquery.ztree.core-3.5.min.js"></script>
+
 }
 
 

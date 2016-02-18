@@ -100,6 +100,7 @@ namespace Uoko.FireProj.Concretes
                     ProjectSlnName = r.ProjectSlnName,
                     ProjectCsprojName = r.ProjectCsprojName,
                     ProjectId = r.ProjectId,
+                    DomainRule = r.DomainRule,
                 });
                 var result = data.ToList();
                 return result;
@@ -119,6 +120,8 @@ namespace Uoko.FireProj.Concretes
                     ProjectDesc = r.ProjectDesc,
                     ProjectSlnName = r.ProjectSlnName,
                     ProjectId = r.ProjectId,
+                    ProjectCsprojName=r.ProjectCsprojName,
+                    DomainRule = r.DomainRule,
                 }).FirstOrDefault();
 
                 return data;
@@ -143,6 +146,7 @@ namespace Uoko.FireProj.Concretes
                         ProjectSlnName = p.ProjectSlnName,
                         ProjectCsprojName = p.ProjectCsprojName,
                         ProjectId = p.ProjectId,
+                        DomainRule = p.DomainRule,
                     };
                 return data.FirstOrDefault();
             }
