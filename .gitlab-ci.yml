@@ -4,7 +4,7 @@ variables:
   PkgDir: d:\deploy-pkg
   go: the first string
   go1: the-second-string
-  
+
 before_script:
   - 'chcp 65001'
 
@@ -23,7 +23,7 @@ execFakeScript:
      - echo "start fake ..."
      - FAKE.exe build.fsx
      - echo "end fake!"
-     
+
 # package:
 #   stage: package
 #   script:
