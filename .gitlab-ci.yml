@@ -2,37 +2,38 @@ variables:
   CsprojNameAPI: Uoko.FireProj\Uoko.FireProj.sln
   SiteNameAPI: fire
   PkgDir: d:\deploy-pkg
+  go: the first string
+  go1: the-second-string
   
 before_script:
   - 'chcp 65001'
-  
+
+# 每次 package 包都放入缓存中，这样方便快速还原，这个维度是以 branch 为基础的  
 cache:
   key: "$CI_BUILD_REF_NAME"
   paths:
     - Uoko.FireProj/packages/
-  
+   
 stages:
-  - nugetrestore
-  - package
-  - deploy
+  - build
 
-nugetrestore:
-  stage: nugetrestore
+execFakeScript:
+  stage: build
   script:
-     - 'echo restoring..'
-     - .\Uoko.FireProj\.nuget\NuGet.exe restore $CsprojNameAPI
-     - 'echo restored'
+     - echo "start fake ..."
+     - FAKE.exe build.fsx
+     - echo "end fake!"
      
-package:
-  stage: package
-  script:
-     - 'echo package..'
-     - c:\windows\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe $CsprojNameAPI /p:VisualStudioVersion=12.0 /p:DeployOnBuild=true /p:PackageLocation=$PkgDir /verbosity:m
-
-deploy:
-  stage: deploy
-  script:
-     - 'echo deploy..'   
-     - 'cd d:\deploy-pkg'   
-     - .\Uoko.FireProj.WebSite.deploy.cmd  /Y /U:simple-deploy /P:deploy /A:Basic -allowUntrusted "-setParam:name='IIS Web Application Name',value='$SiteNameAPI'" """/M:https://192.168.200.25:8172/msdeploy.axd?site=$SiteNameAPI"
- 
+# package:
+#   stage: package
+#   script:
+#      - 'echo package..'
+#      - c:\windows\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe $CsprojNameAPI /p:VisualStudioVersion=12.0 /p:DeployOnBuild=true /p:PackageLocation=$PkgDir /verbosity:m
+# 
+# deploy:
+#   stage: deploy
+#   script:
+#      - 'echo deploy..'   
+#      - 'cd d:\deploy-pkg'   
+#      - .\Uoko.FireProj.WebSite.deploy.cmd  /Y /U:simple-deploy /P:deploy /A:Basic -allowUntrusted "-setParam:name='IIS Web Application Name',value='$SiteNameAPI'" """/M:https://192.168.200.25:8172/msdeploy.axd?site=$SiteNameAPI"
+#  
