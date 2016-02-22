@@ -1,7 +1,10 @@
 variables:
-  SlnPath: Uoko.FireProj\Uoko.FireProj.sln
-  SiteNameAPI: fire
-  PkgDir: d:\deploy-pkg
+  slnFile: Uoko.FireProj.sln
+  csProjFile: src\Uoko.FireProj.WebSite\Uoko.FireProj.WebSite.csproj 
+  iisSiteName: fire
+  pkgDir: d:\deploy-pkg
+  msDeployUrl: https://192.168.200.25:8172/msdeploy.axd
+  publishConfiguration: ioc
 
 
 before_script:
@@ -11,7 +14,7 @@ before_script:
 cache:
   key: "$CI_BUILD_REF_NAME"
   paths:
-    - Uoko.FireProj/packages/
+    - packages/
    
 stages:
   - build
