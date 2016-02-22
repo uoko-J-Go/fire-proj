@@ -21,8 +21,7 @@ Target "BuildSolution" (fun _ ->
 )
 
 
-"Clean"
-    ==> "RestorePkg"
+"RestorePkg"
     ==> "BuildSolution"
 
 // start build
