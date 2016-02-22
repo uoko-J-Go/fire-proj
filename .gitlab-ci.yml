@@ -2,6 +2,7 @@ variables:
   CsprojNameAPI: Uoko.FireProj\Uoko.FireProj.sln
   SiteNameAPI: fire
   PkgDir: d:\deploy-pkg
+  DeployAddressAPI:https://192.168.200.25:8172/msdeploy.axd
   
 before_script:
   - 'chcp 65001'
@@ -34,5 +35,5 @@ deploy:
   script:
      - 'echo deploy..'   
      - 'cd d:\deploy-pkg'   
-     - .\Uoko.FireProj.WebSite.deploy.cmd  /Y /U:simple-deploy /P:deploy /A:Basic -allowUntrusted "-setParam:name='IIS Web Application Name',value='$SiteNameAPI'" """/M:https://192.168.200.25:8172/msdeploy.axd?site=$SiteNameAPI"
+     - .\Uoko.FireProj.WebSite.deploy.cmd  /Y /U:simple-deploy /P:deploy /A:Basic -allowUntrusted "-setParam:name='IIS Web Application Name',value='$SiteNameAPI'" """/M:$DeployAddressAPI?site=$SiteNameAPI"
  
