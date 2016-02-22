@@ -14,6 +14,22 @@ Target "RestorePkg" (fun _ ->
     |> RestoreMSSolutionPackages (fun p -> p)
 )
 
+
+
+/// 这里调整 verbosity
+///  let setParams defaults =
+///             { defaults with
+///                 Verbosity = Some(Quiet)
+///                 Targets = ["Build"]
+///                 Properties =
+///                     [
+///                         "Optimize", "True"
+///                         "DebugSymbols", "True"
+///                         "Configuration", buildMode
+///                     ]
+///              }
+///     build setParams "./MySolution.sln"
+
 Target "BuildSolution" (fun _ ->
     !! "./**/*.sln"
     |> MSBuildWithDefaults "Build"
