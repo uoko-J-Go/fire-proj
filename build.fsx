@@ -1,5 +1,5 @@
 // include Fake lib
-#r @"Uoko.FireProj/packages/FAKE/tools/FakeLib.dll"
+#r @"FakeLib.dll"
 open Fake
 
 let srcDir = "./Uoko.FireProj/"
