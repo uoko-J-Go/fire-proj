@@ -22,9 +22,7 @@ stages:
 execFakeScript:
   stage: build
   script:
-     - echo "start fake ..."
      - FAKE.exe build.fsx
-     - echo "end fake!"
 
 # package:
 #   stage: package
