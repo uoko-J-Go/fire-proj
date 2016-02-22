@@ -6,8 +6,11 @@ let srcDir = "./Uoko.FireProj/"
 let slnFilePath = "./Uoko.FireProj/Uoko.FireProj.sln"
 let buildDir = "./testBuildDir/"
 
-let testParam = getBuildParam "go"
-let testParam1 = getBuildParam "go1"
+let slnFile = getBuildParam "slnFile"
+let csProjFile = getBuildParam "csProjFile"
+let iisSiteName = getBuildParam "iisSiteName"
+let pkgDir = getBuildParam "pkgDir"
+let msDeployUrl = getBuildParam "msDeployUrl"
 
 Target "RestorePkg" (fun _ ->
     slnFilePath

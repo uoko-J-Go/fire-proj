@@ -1,9 +1,8 @@
 variables:
-  CsprojNameAPI: Uoko.FireProj\Uoko.FireProj.sln
+  SlnPath: Uoko.FireProj\Uoko.FireProj.sln
   SiteNameAPI: fire
   PkgDir: d:\deploy-pkg
-  go: the first string
-  go1: the-second-string
+
 
 before_script:
   - 'chcp 65001'
