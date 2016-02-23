@@ -1,0 +1,140 @@
+﻿
+@{
+    ViewBag.Title = "项目新增";
+}
+@section Css {
+<link href="~/Content/app.css" rel="stylesheet" />
+@*<link href="~/Content/angular-ui-tree.min.css" rel="stylesheet" />*@
+<link href="~/Metronic/assets/global/plugins/zTree/css/demo.css" rel="stylesheet" />
+<link href="~/Metronic/assets/global/plugins/zTree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" />
+}
+
+<div class="col-md-12">
+    <div ng-controller="ProjectController">
+        <!-- BEGIN  HEADER-->
+        <div class="page-bar">
+            <ul class="page-breadcrumb">
+                <li>
+                    <i class="fa fa-home"></i>
+                    <a href="/">主页</a>
+                    <i class="fa fa-angle-right"></i>
+                </li>
+                <li>
+                    <a href="@Url.Action("Index","Project")">项目管理</a>
+                    <i class="fa fa-angle-right"></i>
+                </li>
+                <li>
+                    <a href="#">项目新增</a>
+
+                </li>
+            </ul>
+
+        </div>
+        <!-- END  HEADER-->
+        <!--BEGIN Form -->
+        <div>
+            <div class="portlet  box blue">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="fa fa-plus"></i>项目新增
+                    </div>
+                    <div class="actions">
+                        <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title="全屏"></a>
+                    </div>
+                </div>
+                    <div class="portlet-body form">
+                        <div id="bootstrap_alerts_demo"></div>
+                        <form role="form" class="form-horizontal" name="serverForm" novalidate>
+                            <div class="form-body">
+                                <div class="form-group form-md-line-input">
+                                    <label class="col-md-2 control-label" for="form_control_1">项目名称</label>
+                                    <div class="col-md-10">
+                                        <input type="text" class="form-control" id="form_control_1" ng-model="model.ProjectName" placeholder="请输入项目名称" required>
+                                        <div class="form-control-focus">
+                                        </div>
+                                        <span class="help-block">项目名称是必填</span>
+                                    </div>
+                                </div>
+                                <div class="form-group form-md-line-input">
+                                    <label class="col-md-2 control-label" for="form_control_1">GitLab地址</label>
+                                    <div class="col-md-10">
+                                        <select class="form-control" id="form_control_1" ng-model="model.Project" ng-change="GetProjectInfo(model.Project)">
+                                            <option ng-repeat="project in ProjectList" value="{{project}}" ng-selected="project.id == model.ProjectId">{{project.name}}</option>
+                                        </select>
+                                        <div class="form-control-focus">
+                                        </div>
+                                        <span class="help-block">项目地址是必填</span>
+                                    </div>
+                                </div>
+                                <div class="form-group form-md-line-input">
+                                    <label class="col-md-2 control-label" for="form_control_1">Sln名称</label>
+                                    <div class="col-md-10">
+                                        <input disabled type="text" class="form-control" id="form_control_1" ng-model="model.ProjectSlnName" placeholder="选择项目自动带出" required>
+                                        <div class="form-control-focus">
+                                        </div>
+                                        <span class="help-block">项目文件是必填</span>
+                                    </div>
+
+                                </div>
+                                <div class="form-group form-md-line-input">
+                                    <label class="col-md-2 control-label" for="form_control_1">Csproj名称</label>
+                                    <div class="col-md-10">
+                                        <input disabled type="text" class="form-control" id="ProjectCsprojName" ng-model="model.ProjectCsprojName"  placeholder="请点击选择">
+                                        &nbsp;<a id="menuBtn" href="#" class="btn default btn-sm green" ng-click="showMenu()">选择</a>
+                                        <div class="form-control-focus">
+                                        </div>
+                                        <span class="help-block">Csproj是必选</span>
+                                        <div id="menuContent"   style="display:none; ">
+                                            <ul id="treeDemo" class="ztree" style="width:300px;"></ul>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="form-group form-md-line-input">
+                                    <label class="col-md-2 control-label" for="form_control_1">域名生成规则</label>
+                                    <div class="col-md-10">
+                                        <input type="text" class="form-control" id="form_control_1" ng-model="model.DomainRule" placeholder="请输入域名生成规则 例如 ids{编号}.uoko.ioc" required>
+                                        <div class="form-control-focus">
+                                        </div>
+                                        <span class="help-block">域名生成规则是必填</span>
+                                    </div>
+                                </div>
+                                <div class="form-group form-md-line-input">
+                                    <label class="col-md-2 control-label" for="form_control_1">项目描述</label>
+                                    <div class="col-md-10">
+                                        <textarea class="form-control" rows="3" ng-model="model.ProjectDesc"></textarea>
+                                        <div class="form-control-focus">
+                                        </div>
+
+                                    </div>
+                                </div>
+                           
+                            </div>
+                            <div class="form-actions">
+                                <div class="row">
+                                    <div class="col-md-offset-2 col-md-10">
+                                        <button type="button" class="btn blue btn-lg" ng-disabled="serverForm.$invalid" ng-click="SubmitFrom(model)">提交</button>
+                                        <a type="button" class="btn default btn-lg" href="@Url.Action("Index","Project")">取消</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </form>
+			        </div>
+                </div>
+           
+            </div>
+       
+        </div>
+        <!--END Form -->
+   
+    </div>
+
+@section Scripts {
+<script src="~/app/controllers/ProjectCreat.js"></script>
+<script src="~/app/services/ProjectService.js"></script>
+<script src="~/Metronic/assets/global/plugins/zTree/js/jquery.ztree.core-3.5.min.js"></script>
+
+}
+
+

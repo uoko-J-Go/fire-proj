@@ -1,0 +1,297 @@
+﻿
+@{
+    ViewBag.Title = "任务详细";
+}
+@section Css {
+    <link href="~/Content/TaskDetail.css" rel="stylesheet" />
+}
+<input type="hidden" id="taskIdParam" value="@ViewBag.TaskId" />
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <i class="fa fa-home"></i>
+            <a href="@Url.Action("Index","Home")">首页</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="@Url.Action("Index", "Task")">我的任务</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="#">任务详细</a>
+        </li>
+    </ul>
+</div>
+<div class="row" ng-controller="TaskController">
+    <div class="col-md-12">
+        <!-- BEGIN EXAMPLE TABLE PORTLET-->
+        <div class="portlet box blue">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-clipboard"></i>任务详细         
+                </div>
+
+            </div>
+            <div class="portlet-body form">
+                <div class="form-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">任务名</label>
+                                <label class="control-label detail">{{taskInfo.TaskName}}</label>
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">项目</label>
+                                <label class="control-label detail">{{taskInfo.Project.ProjectName}}</label>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                       
+                        
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">分支</label>
+                                <label class="control-label detail">{{taskInfo.Branch}}</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">发布环境</label>
+                                <label class="control-label detail">{{taskInfo.DeployEnvironment|environmentFilter}}</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">部署机器IP</label>
+                                <label class="control-label detail">{{taskInfo.DeployIP}}</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">域名</label>
+                                <label class="control-label detail"><a class="text-primary" target="_blank" href="http://{{taskInfo.Domain}}/">{{taskInfo.Domain}}</a></label>
+                            </div>
+                        </div>
+                    </div>
+                   
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">IIS站点名称</label>
+                                <label class="control-label detail" >{{taskInfo.SiteName}}</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">部署地址</label>
+                                <label class="control-label detail">{{taskInfo.DeployAddress}}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">状态</label>
+                                <label class="control-label detail">{{taskInfo.Status|taskStatusFilter}}</label>
+                                <a  ng-show="taskInfo.BuildId>0" class="text-primary" ng-click="GotoGitLabBuildPage(taskInfo.BuildId)">点击查看</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">验收人员</label>
+                                <div class="form-control-wrap">
+                                    <ul class="tags">
+                                        <li ng-repeat="item in taskInfo.CheckUsers">
+                                            <img ng-src="{{item.avatar_url}}" title="{{item.name}}" alt="{{item.name}}" />
+                                           
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">相关人员</label>
+                                <div class="form-control-wrap">
+                                    <ul class="tags">
+                                        <li ng-repeat="item in taskInfo.NoticeUses">
+                                            <img ng-src="{{item.avatar_url}}" title="{{item.name}}" alt="{{item.name}}" />
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">备注</label>
+                                <div class="form-control-wrap">
+                                    <textarea rows="4" ng-model="taskInfo.TaskDesc" readonly></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="form-actions right">
+                    <button type="button" class="btn blue" ng-click="Edit()"><i class="fa fa-edit"></i> 编辑</button>
+                    <button type="button" class="btn blue" ng-show="taskInfo.Status==0||taskInfo.Status==4||taskInfo.Status==10" ng-click="Deploy()"><i class="fa fa-building-o"></i> 编译部署</button>
+                    <button type="button" class="btn blue" ng-show="taskInfo.Status==6" ng-click="CommitToTest()"><i class="fa fa-angle-up"></i> 提交测试</button>
+                    <button type="button" class="btn green" ng-show="taskInfo.Status==8" ng-click="Tested()"><i class="fa fa-check"></i> 测试通过</button>
+                    <button type="button" class="btn red" ng-show="taskInfo.Status==8" ng-click="TestFails()"><i class="fa fa-times"></i> 测试不通过</button>
+                    <button type="button" class="btn default" ng-click="Cancel()">返回列表</button>
+                </div>
+            </div>
+        </div>
+        <!-- END EXAMPLE TABLE PORTLET-->
+
+        <div class="portlet box blue">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-phone"></i>任务记录
+                </div>
+               
+            </div>
+            <div class="portlet-body">
+                <ul class="nav nav-tabs">
+                    <li  ng-class="{'active':currLogTab==0}" ng-show="tasklogTotal.IocTotal>0" ng-click="GetCurrLog(0)">
+                        <a href="#tab_1_1" data-toggle="tab">
+                            IOC环境
+                        </a>
+                    </li>
+                    <li  ng-class="{'active':currLogTab==1}" ng-show="tasklogTotal.PreTotal>0" ng-click="GetCurrLog(1)">
+                        <a href="#tab_1_2" data-toggle="tab">
+                            Pre环境
+                        </a>
+                    </li>
+                    <li  ng-class="{'active':currLogTab==2}" ng-show="tasklogTotal.ProductionTotal>0" ng-click="GetCurrLog(2)">
+                        <a href="#tab_1_3" data-toggle="tab">
+                            正式环境
+                        </a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane fade " ng-class="{'active in':currLogTab==0}" id="tab_1_1">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>内容</th>
+                                        <th>记录类型</th>
+                                        <th>操作人</th>
+                                        <th>时间</th>
+                                        <th>详细</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="item in items">
+
+                                        <td>{{item.LogsDesc}}</td>
+                                        <td>{{item.TaskLogsType|TaskLogsFilter}}</td>
+                                        <td>{{item.CreateBy}}</td>
+                                        <td>{{item.CreateDate}}</td>
+                                        <td><a class="text-danger" href="javascript:;" ng-show="item.BuildId!=0" ng-click="GotoGitLabBuildPage(item.BuildId)">错误详细</a></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        @*<div class="row">
+                            <div class="col-md-12">
+                                <div class="pull-right">
+                                    <uib-pagination total-items="totalItems" ng-model="currentPage" ng-change="Query()" first-text="首页" last-text="末页"
+                                                    previous-text="上一页" next-text="下一页" items-per-page="pageSize" max-size="5" boundary-links="true" boundary-link-numbers="true" rotate="false"></uib-pagination>
+                                </div>
+                            </div>
+                        </div>*@
+                    </div>
+                    <div class="tab-pane fade" ng-class="{'active in':currLogTab==1}" id="tab_1_2">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>内容</th>
+                                        <th>记录类型</th>
+                                        <th>操作人</th>
+                                        <th>时间</th>
+                                        <th>详细</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="item in items">
+
+                                        <td>{{item.LogsDesc}}</td>
+                                        <td>{{item.TaskLogsType|TaskLogsFilter}}</td>
+                                        <td>{{item.CreateBy}}</td>
+                                        <td>{{item.CreateDate}}</td>
+                                        <td><a class="text-danger" href="javascript:;" ng-show="item.BuildId!=0" ng-click="GotoGitLabBuildPage(item.BuildId)">错误详细</a></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        @*<div class="row">
+                            <div class="col-md-12">
+                                <div class="pull-right">
+                                    <uib-pagination total-items="totalItems" ng-model="currentPage" ng-change="Query()" first-text="首页" last-text="末页"
+                                                    previous-text="上一页" next-text="下一页" items-per-page="pageSize" max-size="5" boundary-links="true" boundary-link-numbers="true" rotate="false"></uib-pagination>
+                                </div>
+                            </div>
+                        </div>*@
+                    </div>
+                    <div class="tab-pane fade" ng-class="{'active in':currLogTab==2}" id="tab_1_3">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>内容</th>
+                                        <th>记录类型</th>
+                                        <th>操作人</th>
+                                        <th>时间</th>
+                                        <th>详细</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="item in items">
+                                        <td>{{item.LogsDesc}}</td>
+                                        <td>{{item.TaskLogsType|TaskLogsFilter}}</td>
+                                        <td>{{item.CreateBy}}</td>
+                                        <td>{{item.CreateDate}}</td>
+                                        <td><a class="text-danger" href="javascript:;" ng-show="item.BuildId!=0" ng-click="GotoGitLabBuildPage(item.BuildId)">错误详细</a></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        @*<div class="row">
+                            <div class="col-md-12">
+                                <div class="pull-right">
+                                    <uib-pagination total-items="totalItems" ng-model="currentPage" ng-change="Query()" first-text="首页" last-text="末页"
+                                                    previous-text="上一页" next-text="下一页" items-per-page="pageSize" max-size="5" boundary-links="true" boundary-link-numbers="true" rotate="false"></uib-pagination>
+                                </div>
+                            </div>
+                        </div>*@
+                    </div>
+                   
+                </div>
+
+
+            </div>
+        </div>
+     </div>
+</div>
+@section Scripts {
+    <script src="~/app/services/CommonService.js"></script>
+    <script src="~/app/services/ProjectService.js"></script>
+    <script src="~/app/services/TaskService.js"></script>
+    <script src="~/app/filters/CommonFilter.js"></script>
+    <script src="~/app/controllers/TaskDetail.js"></script>
+}
+
