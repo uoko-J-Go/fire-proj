@@ -1,5 +1,5 @@
 // include Fake lib
-#r @"D:\fake\tools\FakeLib.dll"
+#r @"F1akeLib.dll"
 open Fake
 
 let slnFile = getBuildParam "slnFile"
