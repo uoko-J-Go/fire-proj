@@ -22,7 +22,7 @@ stages:
 execFakeScript:
   stage: build
   script:
-     - ".\build.bat build.fsx"
+     - .\build.bat build.fsx
 
 # package:
 #   stage: package
