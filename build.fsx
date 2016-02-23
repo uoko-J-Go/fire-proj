@@ -6,7 +6,7 @@ open Fake
 open System
 
 
-let slnFile = getBuildParam "slnFile"
+let slnFile = getBuildParam "slnFileDefault" |> getBuildParamOrDefault "slnFile" 
 let csProjFile = getBuildParam "csProjFile"
 let iisSiteName = getBuildParam "iisSiteName"
 let pkgDir = getBuildParam "pkgDir"

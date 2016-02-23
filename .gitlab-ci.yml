@@ -1,10 +1,6 @@
 variables:
-  slnFile: Uoko.FireProj.sln
-  csProjFile: src\Uoko.FireProj.WebSite\Uoko.FireProj.WebSite.csproj 
-  iisSiteName: fire
-  pkgDir: d:\deploy-pkg
-  msDeployUrl: https://192.168.200.25:8172/msdeploy.axd
-  publishConfiguration: ioc
+  slnFileDefault: Uoko.FireProj.sln
+  publishConfiguration: Debug
 
 
 before_script:
