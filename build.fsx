@@ -1,5 +1,5 @@
 // include Fake lib
-#r @"FakeLib.dll"
+#r @"D:\fake\tools\FakeLib.dll"
 open Fake
 
 let slnFile = getBuildParam "slnFile"
@@ -14,27 +14,25 @@ Target "RestorePkg" (fun _ ->
     |> RestoreMSSolutionPackages (fun p -> p)
 )
 
+let setParams defaults =
+    {
+        defaults with
+            Verbosity = Some(Quiet)
+            Targets = ["Build"]
+            Properties =
+                [
+                    "Configuration","Release"
+                ]
+    }
 
-
-/// 这里调整 verbosity
-///  let setParams defaults =
-///             { defaults with
-///                 Verbosity = Some(Quiet)
-///                 Targets = ["Build"]
-///                 Properties =
-///                     [
-///                         "Optimize", "True"
-///                         "DebugSymbols", "True"
-///                         "Configuration", buildMode
-///                     ]
-///              }
-///     build setParams "./MySolution.sln"
 
 Target "BuildSolution" (fun _ ->
     !! "./**/*.sln"
-    |> MSBuildWithDefaults "Build"
-    |> Log "AppBuild-Output: "
+    |> Seq.toList
+    |> List.head
+    |> build setParams
 )
+
 
 
 "RestorePkg"
