@@ -74,7 +74,7 @@ namespace Uoko.FireProj.Concretes
                 {
                     var db = dbScope.DbContexts.Get<FireProjDbContext>();
                     //根据实际情况修改
-                    db.Update(entity, t => new { t.Name,t.IP,t.ServerDesc, t.Status, t.ModifyBy, t.ModifyDate });
+                    db.Update(entity, t => new { t.Name, t.IP, t.ServerDesc, t.Status, t.ModifyBy, t.ModifyDate, t.PackageDir });
                     db.SaveChanges();
                 }
             }
@@ -92,10 +92,11 @@ namespace Uoko.FireProj.Concretes
                 var data = db.Servers.Select(t => new ServerDto
                 {
                     Id = t.Id,
-                    Name=t.Name,
-                    IP=t.IP,
-                    ServerDesc=t.ServerDesc,
+                    Name = t.Name,
+                    IP = t.IP,
+                    ServerDesc = t.ServerDesc,
                     Status = t.Status,
+                    PackageDir = t.PackageDir,
                 });
                 if (query.EnvironmentType.HasValue)
                 {
@@ -128,6 +129,7 @@ namespace Uoko.FireProj.Concretes
                     IP = t.IP,
                     ServerDesc = t.ServerDesc,
                     Status = t.Status,
+                    PackageDir = t.PackageDir,
                 }).ToList();
 
                 return result;
@@ -146,6 +148,7 @@ namespace Uoko.FireProj.Concretes
                     IP = t.IP,
                     ServerDesc = t.ServerDesc,
                     Status = t.Status,
+                    PackageDir = t.PackageDir,
                 }).FirstOrDefault(t => t.Id == serverId);
                 return data;
             }

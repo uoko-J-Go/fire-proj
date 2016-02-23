@@ -27,6 +27,12 @@ namespace Uoko.FireProj.DataAccess.Dto
         /// 服务器描述 操作系统 配置等等
         /// </summary>
         public string ServerDesc { get; set; }
+
+        /// <summary>
+        /// 部署文件包服务器存储地址
+        /// </summary>
+        public string PackageDir { get; set; }
+
         /// <summary>
         /// 状态
         /// </summary>
