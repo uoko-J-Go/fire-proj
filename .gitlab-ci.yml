@@ -19,17 +19,3 @@ execFakeScript:
   stage: build
   script:
      - Fake.exe build.fsx
-
-# package:
-#   stage: package
-#   script:
-#      - 'echo package..'
-#      - c:\windows\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe $CsprojNameAPI /p:VisualStudioVersion=12.0 /p:DeployOnBuild=true /p:PackageLocation=$PkgDir /verbosity:m
-# 
-# deploy:
-#   stage: deploy
-#   script:
-#      - 'echo deploy..'   
-#      - 'cd d:\deploy-pkg'   
-#      - .\Uoko.FireProj.WebSite.deploy.cmd  /Y /U:simple-deploy /P:deploy /A:Basic -allowUntrusted "-setParam:name='IIS Web Application Name',value='$SiteNameAPI'" """/M:https://192.168.200.25:8172/msdeploy.axd?site=$SiteNameAPI"
-#  

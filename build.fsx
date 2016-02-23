@@ -6,7 +6,7 @@ open Fake
 open System
 
 
-let slnFile = getBuildParam "slnFileDefault" |> getBuildParamOrDefault "slnFile" 
+let slnFile = getBuildParam "slnFileDefault" |> getBuildParamOrDefault "slnFile"
 let csProjFile = getBuildParam "csProjFile"
 let iisSiteName = getBuildParam "iisSiteName"
 let pkgDir = getBuildParam "pkgDir"
@@ -33,21 +33,12 @@ Target "BuildSolution" (fun _ ->
                         "Configuration","Release"
                     ]
         }
-        
+
     !! "./**/*.sln"
     |> Seq.toList
     |> List.head
     |> build setParams
 )
-
-
-///     let result = ExecProcess (fun info ->  
-///                       info.FileName <- "c:/MyProc.exe"
-///                       info.WorkingDirectory <- "c:/workingDirectory"
-///                       info.Arguments <- "-v") (TimeSpan.FromMinutes 5.0)
-///     
-///     if result <> 0 then failwithf "MyProc.exe returned with a non-zero exit code"
-
 
 Target "PackageProject" (fun _ ->
     let setParams defaults =
