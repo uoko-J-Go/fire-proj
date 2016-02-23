@@ -39,9 +39,12 @@
     //触发项目
     this.TriggerBuild = function (taskInfo, successCallBack) {
         var params = {
-            "CsprojNameAPI": taskInfo.Project.ProjectCsprojName,
-            "DeployAddressAPI": taskInfo.DeployAddress,
-            "SiteNameAPI": taskInfo.SiteName
+            "slnFile":taskInfo.ProjectSlnName,
+            "csProjFile": taskInfo.Project.ProjectCsprojName,
+            "iisSiteName": taskInfo.SiteName,
+            "pkgDir": "d:\deploy-pkg",
+            "msDeployUrl": taskInfo.DeployAddress,
+            "publishConfiguration": taskInfo.DeployEnvironmentName
         };
         this.getProjectTriggers(taskInfo.Project.ProjectId, function (data) {
             var triggers = data;

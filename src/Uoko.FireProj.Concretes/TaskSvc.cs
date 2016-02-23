@@ -107,7 +107,10 @@ namespace Uoko.FireProj.Concretes
                 var project=db.Project.FirstOrDefault(t => t.Id == taskInfo.ProjectId);
                 var data = Mapper.Map<TaskInfo, TaskDto>(taskInfo);
                 data.Project= Mapper.Map<Project, ProjectDto>(project);
-                
+
+                data.DeployEnvironmentName = data.DeployEnvironment.ToString();
+                data.PackageDir = db.Servers.FirstOrDefault(r => r.IP == data.DeployIP).PackageDir;
+
                 var checkUsers = new List<UserDto>();
                 taskInfo.CheckUserId.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList().ForEach((item)=>
                 {

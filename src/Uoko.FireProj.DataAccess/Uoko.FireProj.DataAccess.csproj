@@ -168,6 +168,10 @@
     <Compile Include="Migrations\201602180909314_updateProjectDomainRulefield.Designer.cs">
       <DependentUpon>201602180909314_updateProjectDomainRulefield.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201602230237250_addfieldPackageDirInServerTable.cs" />
+    <Compile Include="Migrations\201602230237250_addfieldPackageDirInServerTable.Designer.cs">
+      <DependentUpon>201602230237250_addfieldPackageDirInServerTable.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Query\BaseQuery.cs" />
@@ -245,6 +249,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201602180909314_updateProjectDomainRulefield.resx">
       <DependentUpon>201602180909314_updateProjectDomainRulefield.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201602230237250_addfieldPackageDirInServerTable.resx">
+      <DependentUpon>201602230237250_addfieldPackageDirInServerTable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

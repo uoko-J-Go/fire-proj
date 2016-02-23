@@ -34,6 +34,11 @@ namespace Uoko.FireProj.DataAccess.Dto
         public EnvironmentEnum DeployEnvironment { get; set; }
 
         /// <summary>
+        /// 部署环境枚举对应的名称
+        /// </summary>
+        public string DeployEnvironmentName { get; set; }
+
+        /// <summary>
         /// 部署服务器IP地址
         /// </summary>
         public string DeployIP { get; set; }
@@ -67,6 +72,12 @@ namespace Uoko.FireProj.DataAccess.Dto
         /// 部署地址
         /// </summary>
         public string DeployAddress { get; set; }
+
+        /// <summary>
+        /// 部署文件包服务器存储地址
+        /// </summary>
+        public string PackageDir { get; set; }
+
 
         /// <summary>
         /// 任务状态值
