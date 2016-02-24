@@ -44,7 +44,7 @@
             "iisSiteName": taskInfo.SiteName,
             "pkgDir": "d:\deploy-pkg",
             "msDeployUrl": taskInfo.DeployAddress,
-            "publishConfiguration": taskInfo.DeployEnvironmentName
+            "publishConfiguration": "Release" //taskInfo.DeployEnvironmentName
         };
         this.getProjectTriggers(taskInfo.Project.ProjectId, function (data) {
             var triggers = data;
