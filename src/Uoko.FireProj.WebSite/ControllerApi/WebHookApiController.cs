@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -30,6 +31,11 @@ namespace Uoko.FireProj.WebSite.ControllerApi
         [HttpPost]
         public IHttpActionResult BuildCallback(BuildHookRequest bhRequest)
         {
+            using (var wf = new StreamWriter("1.txt", true))
+            {
+                wf.WriteLine("11111");
+            }
+
             var taskLog = _taskLogsSvc.GetTaskLogByTriggerId(bhRequest.trigger_request_id);
             if (!"build".Equals(bhRequest.object_kind, StringComparison.OrdinalIgnoreCase)|| bhRequest.trigger_request_id==0|| taskLog==null)
             {
