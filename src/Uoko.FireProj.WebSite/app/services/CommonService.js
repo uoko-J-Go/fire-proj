@@ -42,7 +42,7 @@
             "slnFile":taskInfo.ProjectSlnName,
             "csProjFile": taskInfo.Project.ProjectCsprojName,
             "iisSiteName": taskInfo.SiteName,
-            "pkgDir": "d:/deploy-pkg",
+            "pkgDir": taskInfo.PackageDir,
             "msDeployUrl": taskInfo.DeployAddress,
             "publishConfiguration": "Release" //taskInfo.DeployEnvironmentName
         };
