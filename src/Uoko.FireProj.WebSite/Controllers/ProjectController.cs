@@ -11,7 +11,7 @@ namespace Uoko.FireProj.WebSite.Controllers
 
         public ActionResult Index()
         {
-            return View();
+            return View();11111
         }
 
         public ActionResult Creat()
