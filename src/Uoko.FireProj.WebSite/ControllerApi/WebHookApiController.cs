@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -47,7 +48,7 @@ namespace Uoko.FireProj.WebSite.ControllerApi
             //部署成功
             if ("success".Equals(bhRequest.build_status, StringComparison.OrdinalIgnoreCase))
             {
-                if ("deploy".Equals(bhRequest.build_name, StringComparison.OrdinalIgnoreCase))
+                if ("execFakeScript".Equals(bhRequest.build_name, StringComparison.OrdinalIgnoreCase))
                 {
                     _taskSvc.UpdateTaskStatus(new TaskDto() { Id = taskLog.TaskId, Status = TaskEnum.DeploySuccess});
                 }

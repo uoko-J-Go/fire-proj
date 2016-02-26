@@ -24,7 +24,7 @@
         <div class="portlet box blue">
             <div class="portlet-title">
                 <div class="caption">
-                    <i class="fa fa-star"></i>我的任务 ==>测试发布部署啊
+                    <i class="fa fa-star"></i>我的任务
                 </div>
                 <div class="tools">
                     <a href="javascript:;" class="reload" data-original-title="" title="reload" ng-click="Query()"></a>
@@ -63,10 +63,10 @@
                             <td>{{item.TaskDesc}}</td>
                             <td>
                                 <div>
-                                    <a class="btn btn-primary editor" ng-show="item.Status==0||item.Status==4||item.Status==10" ng-click="Deploy(item)">编译部署</a>
-                                    <a class="btn btn-primary delete" ng-show="item.Status==6" ng-click="CommitToTest(item)">提交测试</a>
-                                    <a class="btn btn-primary delete" href="/Task/Logs/{{item.Id}}">任务记录</a>
-                                    <a class="btn btn-primary delete" ng-click="ReleaseDomain(item.Id)">释放域名</a>
+                                    <a class="btn btn-success" ng-show="item.Status==0||item.Status==4||item.Status==10" ng-click="Deploy(item)">编译部署</a>
+                                    <a class="btn btn-success" ng-show="item.Status==6" ng-click="CommitToTest(item)">提交测试</a>
+                                    <a class="btn btn-success" href="/Task/Logs/{{item.Id}}">任务记录</a>
+                                    <a class="btn btn-success" ng-click="ReleaseDomain(item.Id)">释放域名</a>
                                 </div>
                             </td>
                         </tr>

@@ -199,7 +199,7 @@
                                         <td>{{item.LogsDesc}}</td>
                                         <td>{{item.TaskLogsType|TaskLogsFilter}}</td>
                                         <td>{{item.CreateBy}}</td>
-                                        <td>{{item.CreateDate}}</td>
+                                        <td>{{item.CreateDate| date : 'yyyy-MM-dd hh:mm:ss EEEE'}}</td>
                                         <td><a class="text-danger" href="javascript:;" ng-show="item.BuildId!=0" ng-click="GotoGitLabBuildPage(item.BuildId)">错误详细</a></td>
                                     </tr>
                                 </tbody>
@@ -232,7 +232,7 @@
                                         <td>{{item.LogsDesc}}</td>
                                         <td>{{item.TaskLogsType|TaskLogsFilter}}</td>
                                         <td>{{item.CreateBy}}</td>
-                                        <td>{{item.CreateDate}}</td>
+                                        <td>{{item.CreateDate| date : 'yyyy-MM-dd hh:mm:ss EEEE'}}</td>
                                         <td><a class="text-danger" href="javascript:;" ng-show="item.BuildId!=0" ng-click="GotoGitLabBuildPage(item.BuildId)">错误详细</a></td>
                                     </tr>
                                 </tbody>
@@ -264,7 +264,7 @@
                                         <td>{{item.LogsDesc}}</td>
                                         <td>{{item.TaskLogsType|TaskLogsFilter}}</td>
                                         <td>{{item.CreateBy}}</td>
-                                        <td>{{item.CreateDate}}</td>
+                                        <td>{{item.CreateDate| date : 'yyyy-MM-dd hh:mm:ss EEEE'}}</td>
                                         <td><a class="text-danger" href="javascript:;" ng-show="item.BuildId!=0" ng-click="GotoGitLabBuildPage(item.BuildId)">错误详细</a></td>
                                     </tr>
                                 </tbody>
