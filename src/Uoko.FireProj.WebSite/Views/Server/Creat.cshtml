@@ -90,7 +90,43 @@
                                     </div>
 
                                 </div>
+
+                                <div class="portlet box blue">
+                                    <div class="portlet-title">
+                                        <div class="caption">
+                                            <i class="fa fa-cog"></i>IIS配置
+                                        </div>
+                                       
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group form-md-line-input">
+                                    <label class="col-md-2 control-label" for="form_control_1">域名</label>
+                                    <div class="col-md-10">
+                                        <input type="text" class="form-control" id="form_control_1" ng-model="model.Domain" ng-change="model.SiteName=model.Domain" placeholder="请输入域名: xxx.uoko.ioc">
+                                        <div class="form-control-focus">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group form-md-line-input">
+                                    <label class="col-md-2 control-label" for="form_control_1">IIS站点名称</label>
+                                    <div class="col-md-10">
+                                        <input type="text" class="form-control" id="form_control_1" ng-model="model.SiteName"   placeholder="请输入IIS站点名称">
+                                    </div>
+                                </div>
+                                <div class="form-group form-md-line-input">
+                                    <label class="col-md-2 control-label" for="form_control_1">所属项目</label>
+                                    <div class="col-md-10">
+                                        <select class="form-control" name="project" ng-model="model.ProjectId">
+                                            <option ng-repeat="project in projectList" value="{{project.Id}}" ng-selected="project.Id==model.Project.Id">{{project.ProjectName}}</option>
+                                        </select>
+                                        <button type="button" class="btn green  btn-lg" ng-click="Append(model)">Append</button>
+                                    </div>
+                                  
+                                </div>
+                                
                             </div>
+
                             <div class="form-actions">
                                 <div class="row">
                                     <div class="col-md-offset-2 col-md-10">
@@ -99,9 +135,7 @@
                                     </div>
                                 </div>
                             </div>
-
-                        </form>
-                       
+                         </form>
 			        </div>
                 </div>
             </div>
@@ -113,6 +147,7 @@
 <script src="~/app/controllers/ServerCreate.js"></script>
 <script src="~/app/services/ServerServer.js"></script>
 <script src="~/app/services/TaskService.js"></script>
+<script src="~/app/services/ProjectService.js"></script>
 }
 
 

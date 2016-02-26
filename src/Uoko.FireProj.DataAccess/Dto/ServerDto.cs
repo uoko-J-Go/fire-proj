@@ -33,6 +33,8 @@ namespace Uoko.FireProj.DataAccess.Dto
         /// </summary>
         public string PackageDir { get; set; }
 
+        public List<DomainResourceDto> IISData { get; set; }
+
         /// <summary>
         /// 状态
         /// </summary>

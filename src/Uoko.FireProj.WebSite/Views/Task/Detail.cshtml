@@ -140,7 +140,16 @@
                                 </div>
                             </div>
                         </div>
-
+                    </div>
+                    <div class="row" ng-show="taskInfo.Status==8">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">批示</label>
+                                <div class="form-control-wrap">
+                                    <textarea rows="4" ng-model="taskInfo.ApprovalInfo"></textarea>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="form-actions right">

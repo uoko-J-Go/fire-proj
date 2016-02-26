@@ -37,6 +37,21 @@ namespace Uoko.FireProj.Concretes
                     var db = dbScope.DbContexts.Get<FireProjDbContext>();
                     db.Servers.Add(entity);
                     db.SaveChanges();
+                    //保存域名信息
+                    foreach (var item in server.IISData)
+                    {
+                        var domainEntity = new DomainResource()
+                        {
+                            Name = item.Name,
+                            SiteName = item.SiteName,
+                            ProjectId = item.ProjectId,
+                            ServerId = entity.Id,
+                            CreateBy = 1,
+                            CreateDate = DateTime.Now,
+                        };
+                        db.DomainResource.Add(domainEntity);
+                    }
+                    db.SaveChanges();
                 }
             }
             catch (Exception ex)
@@ -118,10 +133,10 @@ namespace Uoko.FireProj.Concretes
             {
                 var db = dbScope.DbContexts.Get<FireProjDbContext>();
                 var data = db.Servers.Where(t => t.EnvironmentType == environmentEnum);
-                if (needEnable)
-                {
-                    data = data.Where(t => t.Status == GenericStatusEnum.Enable);
-                }
+                //if (needEnable)
+                //{
+                //    data = data.Where(t => t.Status == GenericStatusEnum.Enable);
+                //}
                 var result = data.Select(t => new ServerDto
                 {
                     Id = t.Id,

@@ -102,7 +102,7 @@ namespace Uoko.FireProj.Concretes
                 using (var dbScope = _dbScopeFactory.CreateReadOnly())
                 {
                     var db = dbScope.DbContexts.Get<FireProjDbContext>();
-                    var data = db.DomainResource.Where(r => r.ProjectId == projectId && r.Status == 0 && (r.ServerId == 0 || r.ServerId == serverId)).Select(r => new DomainResourceDto
+                    var data = db.DomainResource.Where(r => r.ProjectId == projectId && r.Status == 0 && r.ServerId == serverId).Select(r => new DomainResourceDto
                     {
                         Id = r.Id,
                         Name = r.Name,

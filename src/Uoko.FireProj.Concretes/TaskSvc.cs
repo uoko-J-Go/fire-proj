@@ -109,7 +109,14 @@ namespace Uoko.FireProj.Concretes
                 data.Project= Mapper.Map<Project, ProjectDto>(project);
 
                 data.DeployEnvironmentName = data.DeployEnvironment.ToString();
-                data.PackageDir = db.Servers.FirstOrDefault(r => r.IP == data.DeployIP).PackageDir;
+               
+
+                //获取任务部署服务器的信息
+                var serverInfo= db.Servers.FirstOrDefault(r => r.IP == data.DeployIP);
+                data.PackageDir = serverInfo.PackageDir;
+                data.DeployIP = serverInfo.IP;
+                //获取任务的部署的站点名称
+                data.SiteName = db.DomainResource.FirstOrDefault(r => r.TaskId == taskId).SiteName;
 
                 var checkUsers = new List<UserDto>();
                 taskInfo.CheckUserId.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList().ForEach((item)=>

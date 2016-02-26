@@ -18,6 +18,11 @@ namespace Uoko.FireProj.DataAccess.Entity
         public string Name { get; set; }
 
         /// <summary>
+        /// IIS站点名称
+        /// </summary>
+        public string SiteName { get; set; }
+
+        /// <summary>
         /// 项目Id
         /// </summary>
         public int ProjectId { get; set; }
