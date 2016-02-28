@@ -1,6 +1,6 @@
 // include Fake lib
-#r @"FakeLib.dll"
-//#r @"D:/fake/tools/FakeLib.dll"
+//#r @"FakeLib.dll"
+#r @"D:/fake/tools/FakeLib.dll"
 
 open Fake
 open Fake.Git
@@ -9,7 +9,7 @@ open System
 
 let getBuildParamEnsure name =
     let value = environVar name
-    if isNullOrWhiteSpace value then failwithf "environVar of %s is null or whitespace" name
+    if isNullOrWhiteSpace value then value // failwithf "environVar of %s is null or whitespace" name
     else value
 
 let slnFile = 
@@ -18,21 +18,7 @@ let slnFile =
     |> List.head
     |> getBuildParamOrDefault "slnFile"
 
-Target "BuildSolution" (fun _ ->
-    let setParams defaults =
-        {
-            defaults with
-                Verbosity = Some(Quiet)
-                Targets = ["Build"]
-                Properties =
-                    [
-                        "Configuration","Release"
-                    ]
-        }
-            
-    RestoreMSSolutionPackages (fun p -> p) slnFile
-    build setParams slnFile
-)
+
 
 let pkgProject pkgDir =
     let useConfig = getBuildParamEnsure "useConfig"
@@ -72,10 +58,6 @@ let deploy =
                      deployUser deployPwd iisSiteName msDeployUrl iisSiteName) (TimeSpan.FromMinutes 1.0)
     if exitCode <> 0 then failwithf "deploy cmd failed with a non-zero exit code %d."  exitCode
 
-
-Target "Deploy-To-IOC" (fun _ ->
-    deploy
-)
 
 let ensureOnBranch branchNeeded =
     let branchName = getBranchName null
@@ -120,5 +102,24 @@ Target "Online" (fun _ ->
     ffMergeAndDeploy branchMaster
 )
 
+Target "Deploy-To-IOC" (fun _ ->
+    deploy
+)
+
+Target "BuildSolution" (fun _ ->
+    let setParams defaults =
+        {
+            defaults with
+                Verbosity = Some(Quiet)
+                Targets = ["Build"]
+                Properties =
+                    [
+                        "Configuration","Release"
+                    ]
+        }
+            
+    RestoreMSSolutionPackages (fun p -> p) slnFile
+    build setParams slnFile
+)
 
 RunTargetOrDefault "BuildSolution"
