@@ -39,7 +39,7 @@ let pkgProject pkgDir =
     (getBuildParamEnsure "csProjFile") |> build setParams
 
     
-let deploy =
+let deploy() =
     RestoreMSSolutionPackages (fun p -> p) slnFile
 
     let pkgDir = getBuildParamEnsure "pkgDir"
@@ -75,7 +75,7 @@ let ffMergeAndDeploy onBranch =
     else
         gitCommand null (sprintf "tag -a %s-to-%s -m 'deploy %s to %s'"  mergeFromBranch onBranch mergeFromBranch onBranch)
                 
-    deploy
+    deploy()
 
     gitCommand null "push --follow-tags"
 
@@ -103,7 +103,7 @@ Target "Online" (fun _ ->
 )
 
 Target "Deploy-To-IOC" (fun _ ->
-    deploy
+    deploy()
 )
 
 Target "BuildSolution" (fun _ ->
