@@ -1,6 +1,5 @@
 variables:
-  slnFileDefault: Uoko.FireProj.sln
-  publishConfiguration: Debug
+#  slnFile: Uoko.FireProj.sln # 如果有多个则可以进行指定
 
 
 before_script:

@@ -3,24 +3,20 @@
 //#r @"D:/fake/tools/FakeLib.dll"
 
 open Fake
+open Fake.Git
 open System
 
 
-let slnFile = getBuildParam "slnFileDefault" |> getBuildParamOrDefault "slnFile"
-let csProjFile = getBuildParam "csProjFile"
-let iisSiteName = getBuildParam "iisSiteName"
-let pkgDir = getBuildParam "pkgDir"
-let msDeployUrl = getBuildParam "msDeployUrl"
-let publishConfiguration =  getBuildParam "publishConfiguration"
+let getBuildParamEnsure name =
+    let value = environVar name
+    if isNullOrWhiteSpace value then failwithf "environVar of %s is null or whitespace" name
+    else value
 
-let onlyBuild = isNullOrEmpty msDeployUrl
-
-Target "RestorePkg" (fun _ ->
-    slnFile
-    |> RestoreMSSolutionPackages (fun p -> p)
-)
-
-
+let slnFile = 
+    !! "./**/*.sln"
+    |> Seq.toList
+    |> List.head
+    |> getBuildParamOrDefault "slnFile"
 
 Target "BuildSolution" (fun _ ->
     let setParams defaults =
@@ -33,14 +29,14 @@ Target "BuildSolution" (fun _ ->
                         "Configuration","Release"
                     ]
         }
-
-    !! "./**/*.sln"
-    |> Seq.toList
-    |> List.head
-    |> build setParams
+            
+    RestoreMSSolutionPackages (fun p -> p) slnFile
+    build setParams slnFile
 )
 
-Target "PackageProject" (fun _ ->
+let pkgProject pkgDir =
+    let useConfig = getBuildParamEnsure "useConfig"
+    
     let setParams defaults =
         {
             defaults with
@@ -48,31 +44,81 @@ Target "PackageProject" (fun _ ->
                 Targets = ["Build"]
                 Properties =
                     [
-                        "Configuration",publishConfiguration
-                        "DeployOnBuild","True"
-                        "PackageLocation",pkgDir
+                        "DeployOnBuild", "True"
+                        "Configuration", useConfig
+                        "PackageLocation", pkgDir
                     ]
         }
+    
+    (getBuildParamEnsure "csProjFile") |> build setParams
 
-    build setParams csProjFile
-)
+    
+let deploy =
+    RestoreMSSolutionPackages (fun p -> p) slnFile
 
-Target "Deploy" (fun _ ->
+    let pkgDir = getBuildParamEnsure "pkgDir"
+
+    pkgProject pkgDir
+
+    let msDeployUrl = getBuildParamEnsure "msDeployUrl"
+    let iisSiteName = getBuildParamEnsure "iisSiteName"
+    let deployUser = getBuildParamEnsure "deployUser"
+    let deployPwd = getBuildParamEnsure "deployPwd"
+    
+
     let exitCode = ExecProcess (fun info ->
-                    info.FileName <- "D:\deploy-pkg\Uoko.FireProj.WebSite.deploy.cmd"
-                    info.Arguments <- sprintf "/Y /U:simple-deploy /P:deploy /A:Basic -allowUntrusted \"-setParam:name='IIS Web Application Name',value='%s'\" \"/M:%s?site=%s" iisSiteName msDeployUrl iisSiteName) (TimeSpan.FromMinutes 1.0)
-    if exitCode <> 0 then failwithf "packageProject cmd failed with a non-zero exit code %d."  exitCode
+                    info.FileName <- pkgDir + "\Uoko.FireProj.WebSite.deploy.cmd"
+                    info.Arguments <- sprintf "/Y /U:%s /P:%s /A:Basic -allowUntrusted \"-setParam:name='IIS Web Application Name',value='%s'\" \"/M:%s?site=%s" 
+                     deployUser deployPwd iisSiteName msDeployUrl iisSiteName) (TimeSpan.FromMinutes 1.0)
+    if exitCode <> 0 then failwithf "deploy cmd failed with a non-zero exit code %d."  exitCode
+
+
+Target "Deploy-To-IOC" (fun _ ->
+    deploy
 )
 
-"RestorePkg"
-    ==> "BuildSolution"
+let ensureOnBranch branchNeeded =
+    let branchName = getBranchName null
+    if branchName <> branchNeeded then failwithf "you need do this only on [%s] branch,but now you are on [%s]" branchNeeded branchName
+        
+let ffMergeAndDeploy onBranch =
+    let mergeFromBranch = getBuildParamEnsure "mergeFromBranch"
 
-"PackageProject"
-    ==> "Deploy"
+    merge null "--ff-only" mergeFromBranch
+
+    if onBranch = "master" then
+        let onlineDate = System.DateTime.Today.Date.ToString("yyyy-MM-dd")
+        let tagName = getBuildParamEnsure "onlineTagName"
+        gitCommand null (sprintf "tag -a v-%s-%s -m 'deploy %s to %s'" tagName onlineDate mergeFromBranch onBranch)
+    else
+        gitCommand null (sprintf "tag -a %s-to-%s -m 'deploy %s to %s'"  mergeFromBranch onBranch mergeFromBranch onBranch)
+                
+    deploy
+
+    gitCommand null "push --follow-tags"
 
 
-if onlyBuild then
-    // start build
-    RunTargetOrDefault "BuildSolution"
-else
-    RunTargetOrDefault "Deploy"
+(*
+    做 合并 git pull origin branch-xxx --ff-only
+    deploy
+    tag & push  git tag -a xxx-to-pre -m "deploy xxx to pre" & git push --follow-tags
+*)
+Target "Deoply-To-PRE" (fun _ ->
+    let branchPre = "pre"
+    ensureOnBranch branchPre
+    ffMergeAndDeploy branchPre
+)
+
+(*
+    做 合并 git pull origin pre --ff-only
+    deploy
+    tag & push  git tag -a xxx-to-master -m "deploy xxx to online" & git push --follow-tags
+*)
+Target "Online" (fun _ ->
+    let branchMaster = "master"
+    ensureOnBranch branchMaster
+    ffMergeAndDeploy branchMaster
+)
+
+
+RunTargetOrDefault "BuildSolution"
