@@ -1,6 +1,6 @@
 // include Fake lib
-//#r @"FakeLib.dll"
-#r @"D:/fake/tools/FakeLib.dll"
+#r @"FakeLib.dll"
+//#r @"D:/fake/tools/FakeLib.dll"
 
 open Fake
 open Fake.Git
