@@ -115,15 +115,16 @@ namespace Uoko.FireProj.Concretes
                 if (domainInfo != null)
                 {
                     data.SiteName = domainInfo.SiteName;
+                    //获取任务部署服务器的信息
+                    var serverInfo = db.Servers.FirstOrDefault(r => r.Id == domainInfo.ServerId);
+                    if (serverInfo != null)
+                    {
+                        data.PackageDir = serverInfo.PackageDir;
+                        data.DeployIP = serverInfo.IP;
+                    }
                 }
                 
-                //获取任务部署服务器的信息
-                var serverInfo= db.Servers.FirstOrDefault(r => r.Id == domainInfo.ServerId);
-                if (serverInfo != null)
-                {
-                    data.PackageDir = serverInfo.PackageDir;
-                    data.DeployIP = serverInfo.IP;
-                }      
+                    
 
                 var checkUsers = new List<UserDto>();
                 taskInfo.CheckUserId.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList().ForEach((item)=>
