@@ -68,8 +68,8 @@
         });
     };
 
-    this.CommitToTest = function (taskId, successCallBack) {
-        $http.post("/api/TaskApi/CommitToTest?taskId=" + taskId + "").success(function (data) {
+    this.CommitToTest = function (param, successCallBack) {
+        $http.post("/api/TaskApi/CommitToTest", param).success(function (data) {
             if (successCallBack != undefined) {
                 successCallBack(data);
             }
@@ -78,8 +78,8 @@
         });
     };
 
-    this.TestFails = function (taskId, successCallBack) {
-        $http.post("/api/TaskApi/TestFails?taskId=" + taskId + "").success(function (data) {
+    this.TestFails = function (param, successCallBack) {
+        $http.post("/api/TaskApi/TestFails", param).success(function (data) {
             if (successCallBack != undefined) {
                 successCallBack(data);
             }
@@ -88,8 +88,8 @@
         });
     };
 
-    this.Tested = function (taskId, successCallBack) {
-        $http.post("/api/TaskApi/Tested?taskId=" + taskId + "").success(function (data) {
+    this.Tested = function (param, successCallBack) {
+        $http.post("/api/TaskApi/Tested", param).success(function (data) {
             if (successCallBack != undefined) {
                 successCallBack(data);
             }

@@ -19,7 +19,9 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
             $scope.getBranch($scope.taskInfo.Project);
             $scope.GetAllUserDetail($scope.taskInfo.CheckUsers, 0);
             $scope.GetAllUserDetail($scope.taskInfo.NoticeUses, 0);
-
+            TaskService.GetResourceList(data.DeployEnvironment, function (data) {
+                $scope.ServerList = data;
+            });
         });
     }
     $scope.GetAllUserDetail = function (userList, index) {
@@ -87,6 +89,13 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
         }
         TaskService.UpdateTask($scope.taskInfo, function () {
             location.href = "/Task/Index";
+        });
+    }
+
+    //发布环境change事件,获取IOC环境的服务器List
+    $scope.GetServerData = function (environmentId) {
+        TaskService.GetResourceList(environmentId, function (data) {
+            $scope.ServerList = data;
         });
     }
 

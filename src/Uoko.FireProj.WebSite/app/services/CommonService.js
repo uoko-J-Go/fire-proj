@@ -43,7 +43,7 @@
             "csProjFile": taskInfo.Project.ProjectCsprojName,
             "iisSiteName": taskInfo.SiteName,
             "pkgDir": taskInfo.PackageDir,
-            "msDeployUrl": "https://" + taskInfo.DeployIP + "/msdeploy.axd",
+            "msDeployUrl": "https://" + taskInfo.DeployIP + ":8172/msdeploy.axd",
             "publishConfiguration": "Release" //taskInfo.DeployEnvironmentName
         };
         this.getProjectTriggers(taskInfo.Project.ProjectId, function (data) {

@@ -89,6 +89,11 @@ namespace Uoko.FireProj.DataAccess.Dto
         /// </summary>
         public string TaskDesc { get; set; }
 
+        /// <summary>
+        /// 操作事件备注信息
+        /// </summary>
+        public string LogsText { get; set; }
+
         public int TriggeredId { get; set; }
 
         public int BuildId { get; set; }

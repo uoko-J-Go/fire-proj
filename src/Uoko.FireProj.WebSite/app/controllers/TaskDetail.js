@@ -45,16 +45,31 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
     }
 
     $scope.TestFails = function () {
-        TaskService.TestFails($scope.taskInfo.Id, function (data) {
-            formSubmitSuccessClick();
+        bootbox.prompt("批示", function (result) {
+            param = {
+                "Id": $scope.taskInfo.Id,
+                "LogsText": result
+            };
+            TaskService.TestFails(param, function (data) {
+                formSubmitSuccessClick();
+            });
         });
+
+       
     }
 
     $scope.Tested = function () {
-        TaskService.Tested($scope.taskInfo.Id, function (data) {
-            formSubmitSuccessClick();
+        bootbox.prompt("批示", function (result) {
+            param = {
+                "Id": $scope.taskInfo.Id,
+                "LogsText": result
+            };
+            TaskService.Tested(param, function (data) {
+                formSubmitSuccessClick();
+            });
         });
     }
+
     $scope.Deploy = function () {
         CommonService.TriggerBuild($scope.taskInfo, function (data) {
             bootbox.alert("已经成功发起部署任务!", function () {

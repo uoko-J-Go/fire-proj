@@ -346,6 +346,7 @@
     <Content Include="Metronic\assets\admin\layout\scripts\layout.js" />
     <Content Include="Metronic\assets\admin\layout\scripts\quick-sidebar.js" />
     <Content Include="app\modals\ui-tree.js" />
+    <Content Include="Metronic\assets\admin\pages\css\timeline-old.css" />
     <Content Include="Metronic\assets\global\css\components-md.css" />
     <Content Include="Metronic\assets\global\css\components-rounded.css" />
     <Content Include="Metronic\assets\global\css\components.css" />
@@ -1142,7 +1143,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Metronic\assets\admin\pages\css\" />
     <Folder Include="Metronic\assets\admin\pages\img\" />
     <Folder Include="Metronic\assets\admin\pages\media\bg\" />
     <Folder Include="Metronic\assets\admin\pages\media\blog\" />

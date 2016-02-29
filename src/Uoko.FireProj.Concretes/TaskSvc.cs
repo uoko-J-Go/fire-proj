@@ -109,14 +109,16 @@ namespace Uoko.FireProj.Concretes
                 data.Project= Mapper.Map<Project, ProjectDto>(project);
 
                 data.DeployEnvironmentName = data.DeployEnvironment.ToString();
-               
+
+                //获取任务的部署的站点名称
+                var domainInfo = db.DomainResource.FirstOrDefault(r => r.TaskId == taskId);
+                data.SiteName = domainInfo.SiteName;
 
                 //获取任务部署服务器的信息
-                var serverInfo= db.Servers.FirstOrDefault(r => r.IP == data.DeployIP);
+                var serverInfo= db.Servers.FirstOrDefault(r => r.Id == domainInfo.ServerId);
                 data.PackageDir = serverInfo.PackageDir;
                 data.DeployIP = serverInfo.IP;
-                //获取任务的部署的站点名称
-                data.SiteName = db.DomainResource.FirstOrDefault(r => r.TaskId == taskId).SiteName;
+               
 
                 var checkUsers = new List<UserDto>();
                 taskInfo.CheckUserId.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList().ForEach((item)=>
@@ -187,6 +189,7 @@ namespace Uoko.FireProj.Concretes
                         TaskId = task.Id,
                         TriggeredId = task.TriggeredId,
                         TaskLogsType = TaskLogsEnum.Status,
+                        LogsText = task.LogsText,
                         LogsDesc = string.Format("{0}任务流程状态从{1}变更为{2}", taskInfo.TaskName, taskInfo.Status.ToDescription(), task.Status.ToDescription())
                     };
                     db.TaskLogs.Add(taskinfo);

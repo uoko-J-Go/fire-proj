@@ -41,9 +41,16 @@ fireproj.controller("TaskController", function ($scope, $http, TaskService, Proj
     }
     ///提交测试,状态改为8测试中
     $scope.CommitToTest = function (item) {
-        TaskService.CommitToTest(item.Id, function (data) {
-            formSubmitSuccessClick("refresh");
+        bootbox.prompt("批示", function (result) {
+            paran = {
+                "Id": item.Id,
+                "LogsText": result
+            }
+            TaskService.CommitToTest(paran, function (data) {
+                formSubmitSuccessClick("refresh");
+            });
         });
+       
     }
     ///释放资源操作
     $scope.ReleaseDomain = function (taskId) {

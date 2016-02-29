@@ -108,9 +108,10 @@ namespace Uoko.FireProj.WebSite.ControllerApi
         /// <returns></returns>
         [Route("CommitToTest")]
         [HttpPost]
-        public IHttpActionResult CommitToTest(int taskId)
+        public IHttpActionResult CommitToTest([FromBody]TaskDto task)
         {
-            _taskSvc.UpdateTaskStatus(new TaskDto() { Id = taskId, Status = TaskEnum.Testing  });
+            task.Status = TaskEnum.Testing;
+            _taskSvc.UpdateTaskStatus(task);
             return Ok();
         }
 
@@ -121,9 +122,10 @@ namespace Uoko.FireProj.WebSite.ControllerApi
         /// <returns></returns>
         [Route("TestFails")]
         [HttpPost]
-        public IHttpActionResult TestFails(int taskId)
+        public IHttpActionResult TestFails([FromBody]TaskDto task)
         {
-            _taskSvc.UpdateTaskStatus(new TaskDto() { Id = taskId, Status = TaskEnum.TestFails });
+            task.Status = TaskEnum.TestFails;
+            _taskSvc.UpdateTaskStatus(task);
             return Ok();
         }
 
@@ -134,9 +136,10 @@ namespace Uoko.FireProj.WebSite.ControllerApi
         /// <returns></returns>
         [Route("Tested")]
         [HttpPost]
-        public IHttpActionResult Tested(int taskId)
+        public IHttpActionResult Tested([FromBody]TaskDto task)
         {
-            _taskSvc.UpdateTaskStatus(new TaskDto() { Id = taskId, Status = TaskEnum.Tested });
+            task.Status = TaskEnum.Tested;
+            _taskSvc.UpdateTaskStatus(task);
             return Ok();
         }
     }

@@ -4,6 +4,7 @@
 }
 @section Css {
     <link href="~/Content/TaskDetail.css" rel="stylesheet" />
+    <link href="~/Metronic/assets/admin/pages/css/timeline-old.css" rel="stylesheet" />
 }
 <input type="hidden" id="taskIdParam" value="@ViewBag.TaskId" />
 <div class="page-bar">
@@ -141,16 +142,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row" ng-show="taskInfo.Status==8">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label class="control-label">批示</label>
-                                <div class="form-control-wrap">
-                                    <textarea rows="4" ng-model="taskInfo.ApprovalInfo"></textarea>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                  
                 </div>
                 <div class="form-actions right">
                     <button type="button" class="btn blue" ng-click="Edit()"><i class="fa fa-edit"></i> 编辑</button>
@@ -191,107 +183,136 @@
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane fade " ng-class="{'active in':currLogTab==0}" id="tab_1_1">
-                        <div class="table-responsive">
-                            <table class="table table-bordered table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>内容</th>
-                                        <th>记录类型</th>
-                                        <th>操作人</th>
-                                        <th>时间</th>
-                                        <th>详细</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr ng-repeat="item in items">
+                        <!-- BEGIN PAGE CONTENT-->
+                        <div class="portlet light">
+                            <div class="portlet-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <ul class="timeline">
+                                            <li class="timeline-blue" ng-repeat="item in items">
+                                                <div class="timeline-time">
+                                                    <span class="date">
+                                                        {{item.CreateDate| date : 'yyyy-MM-dd'}}
+                                                    </span>
+                                                    <span class="time">
+                                                        {{item.CreateDate| date : 'HH:MM:ss'}}
+                                                    </span>
+                                                </div>
+                                                <div class="timeline-icon">
+                                                    <i ng-show="item.TaskLogsType==0" class="fa fa-adn" title="{{item.TaskLogsType|TaskLogsFilter}}"></i>
+                                                    <i ng-show="item.TaskLogsType==1" class="fa fa-send" title="{{item.TaskLogsType|TaskLogsFilter}}"></i>
+                                                    <i ng-show="item.TaskLogsType==2" class="fa fa-cloud" title="{{item.TaskLogsType|TaskLogsFilter}}"></i>
+                                                </div>
+                                                <div class="timeline-body">
+                                                    <h2>{{item.LogsDesc}}</h2>
+                                                    <div class="timeline-content">
+                                                        <h4>{{item.LogsText}}</h4>
+                                                    </div>
+                                                    <div class="timeline-footer">
+                                                        <a class="text-danger" href="javascript:;" ng-show="item.BuildId!=0" ng-click="GotoGitLabBuildPage(item.BuildId)">错误详细<i class="m-icon-swapright m-icon-white"></i></a>
+                                                    </div>
+                                                    <div class="timeline-footer">
+                                                        <span  class="nav-link pull-right">
+                                                                {{item.CreateBy}}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </li>
 
-                                        <td>{{item.LogsDesc}}</td>
-                                        <td>{{item.TaskLogsType|TaskLogsFilter}}</td>
-                                        <td>{{item.CreateBy}}</td>
-                                        <td>{{item.CreateDate| date : 'yyyy-MM-dd hh:mm:ss EEEE'}}</td>
-                                        <td><a class="text-danger" href="javascript:;" ng-show="item.BuildId!=0" ng-click="GotoGitLabBuildPage(item.BuildId)">错误详细</a></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        @*<div class="row">
-                            <div class="col-md-12">
-                                <div class="pull-right">
-                                    <uib-pagination total-items="totalItems" ng-model="currentPage" ng-change="Query()" first-text="首页" last-text="末页"
-                                                    previous-text="上一页" next-text="下一页" items-per-page="pageSize" max-size="5" boundary-links="true" boundary-link-numbers="true" rotate="false"></uib-pagination>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
-                        </div>*@
+                        </div>
+                        <!-- END PAGE CONTENT-->
                     </div>
                     <div class="tab-pane fade" ng-class="{'active in':currLogTab==1}" id="tab_1_2">
-                        <div class="table-responsive">
-                            <table class="table table-bordered table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>内容</th>
-                                        <th>记录类型</th>
-                                        <th>操作人</th>
-                                        <th>时间</th>
-                                        <th>详细</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr ng-repeat="item in items">
+                        <!-- BEGIN PAGE CONTENT-->
+                        <div class="portlet light">
+                            <div class="portlet-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <ul class="timeline">
+                                            <li class="timeline-green" ng-repeat="item in items">
+                                                <div class="timeline-time">
+                                                    <span class="date">
+                                                        {{item.CreateDate| date : 'yyyy-MM-dd'}}
+                                                    </span>
+                                                    <span class="time">
+                                                        {{item.CreateDate| date : 'HH:MM:ss'}}
+                                                    </span>
+                                                    <span class="time">
+                                                        {{item.CreateBy}}
+                                                    </span>
 
-                                        <td>{{item.LogsDesc}}</td>
-                                        <td>{{item.TaskLogsType|TaskLogsFilter}}</td>
-                                        <td>{{item.CreateBy}}</td>
-                                        <td>{{item.CreateDate| date : 'yyyy-MM-dd hh:mm:ss EEEE'}}</td>
-                                        <td><a class="text-danger" href="javascript:;" ng-show="item.BuildId!=0" ng-click="GotoGitLabBuildPage(item.BuildId)">错误详细</a></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        @*<div class="row">
-                            <div class="col-md-12">
-                                <div class="pull-right">
-                                    <uib-pagination total-items="totalItems" ng-model="currentPage" ng-change="Query()" first-text="首页" last-text="末页"
-                                                    previous-text="上一页" next-text="下一页" items-per-page="pageSize" max-size="5" boundary-links="true" boundary-link-numbers="true" rotate="false"></uib-pagination>
+                                                </div>
+                                                <div class="timeline-icon">
+                                                    <i ng-show="item.TaskLogsType==0" class="fa fa-adn" title="{{item.TaskLogsType|TaskLogsFilter}}"></i>
+                                                    <i ng-show="item.TaskLogsType==1" class="fa fa-send" title="{{item.TaskLogsType|TaskLogsFilter}}"></i>
+                                                    <i ng-show="item.TaskLogsType==2" class="fa fa-cloud" title="{{item.TaskLogsType|TaskLogsFilter}}"></i>
+                                                </div>
+                                                <div class="timeline-body">
+                                                    <h2>{{item.LogsDesc}}</h2>
+                                                    <div class="timeline-content">
+                                                        <h4>{{item.LogsText}}</h4>
+                                                    </div>
+                                                    <div class="timeline-footer">
+                                                        <a class="text-danger" href="javascript:;" ng-show="item.BuildId!=0" ng-click="GotoGitLabBuildPage(item.BuildId)">错误详细<i class="m-icon-swapright m-icon-white"></i></a>
+                                                    </div>
+                                                </div>
+                                            </li>
+
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
-                        </div>*@
+                        </div>
+                        <!-- END PAGE CONTENT-->
                     </div>
                     <div class="tab-pane fade" ng-class="{'active in':currLogTab==2}" id="tab_1_3">
-                        <div class="table-responsive">
-                            <table class="table table-bordered table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>内容</th>
-                                        <th>记录类型</th>
-                                        <th>操作人</th>
-                                        <th>时间</th>
-                                        <th>详细</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr ng-repeat="item in items">
-                                        <td>{{item.LogsDesc}}</td>
-                                        <td>{{item.TaskLogsType|TaskLogsFilter}}</td>
-                                        <td>{{item.CreateBy}}</td>
-                                        <td>{{item.CreateDate| date : 'yyyy-MM-dd hh:mm:ss EEEE'}}</td>
-                                        <td><a class="text-danger" href="javascript:;" ng-show="item.BuildId!=0" ng-click="GotoGitLabBuildPage(item.BuildId)">错误详细</a></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        @*<div class="row">
-                            <div class="col-md-12">
-                                <div class="pull-right">
-                                    <uib-pagination total-items="totalItems" ng-model="currentPage" ng-change="Query()" first-text="首页" last-text="末页"
-                                                    previous-text="上一页" next-text="下一页" items-per-page="pageSize" max-size="5" boundary-links="true" boundary-link-numbers="true" rotate="false"></uib-pagination>
+                        <!-- BEGIN PAGE CONTENT-->
+                        <div class="portlet light">
+                            <div class="portlet-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <ul class="timeline">
+                                            <li class="timeline-grey" ng-repeat="item in items">
+                                                <div class="timeline-time">
+                                                    <span class="date">
+                                                        {{item.CreateDate| date : 'yyyy-MM-dd'}}
+                                                    </span>
+                                                    <span class="time">
+                                                        {{item.CreateDate| date : 'HH:MM:ss'}}
+                                                    </span>
+                                                    <span class="time">
+                                                        {{item.CreateBy}}
+                                                    </span>
+                                                   
+                                                </div>
+                                                <div class="timeline-icon">
+                                                    <i ng-show="item.TaskLogsType==0" class="fa fa-adn" title="{{item.TaskLogsType|TaskLogsFilter}}"></i>
+                                                    <i ng-show="item.TaskLogsType==1" class="fa fa-send" title="{{item.TaskLogsType|TaskLogsFilter}}"></i>
+                                                    <i ng-show="item.TaskLogsType==2" class="fa fa-cloud" title="{{item.TaskLogsType|TaskLogsFilter}}"></i>
+                                                </div>
+                                                <div class="timeline-body">
+                                                    <h2>{{item.LogsDesc}}</h2>
+                                                    <div class="timeline-content">
+                                                        <h4>{{item.LogsText}}</h4>
+                                                    </div>
+                                                    <div class="timeline-footer">
+                                                        <a class="text-danger" href="javascript:;" ng-show="item.BuildId!=0" ng-click="GotoGitLabBuildPage(item.BuildId)">错误详细<i class="m-icon-swapright m-icon-white"></i></a>
+                                                    </div>
+                                                </div>
+                                            </li>
+
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
-                        </div>*@
+                        </div>
+                        <!-- END PAGE CONTENT-->
                     </div>
-                   
                 </div>
-
-
             </div>
         </div>
      </div>
