@@ -35,12 +35,14 @@ namespace Uoko.FireProj.Concretes
             try
             {
                 var entity = Mapper.Map<List<DomainResourceDto>, List<DomainResource>>(dto);
+                
                 using (var dbScope = _dbScopeFactory.Create())
                 {
                     var db = dbScope.DbContexts.Get<FireProjDbContext>();
                     foreach (var item in entity)
                     {
                         item.CreateDate = DateTime.Now;
+                        item.Status = DomainResourceStatusEnum.Enable;//默认添加 可用
                         db.DomainResource.Add(item);
                     }
                     db.SaveChanges();

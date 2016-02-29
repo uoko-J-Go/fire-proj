@@ -30,6 +30,7 @@ namespace Uoko.FireProj.Concretes
             try
             {
                 var entity = Mapper.Map<ServerDto, Server>(server);
+                entity.Status = GenericStatusEnum.Enable;//默认添加 可用
                 entity.CreateBy = 1;
                 entity.CreateDate = DateTime.Now;
                 using (var dbScope = _dbScopeFactory.Create())
@@ -133,10 +134,10 @@ namespace Uoko.FireProj.Concretes
             {
                 var db = dbScope.DbContexts.Get<FireProjDbContext>();
                 var data = db.Servers.Where(t => t.EnvironmentType == environmentEnum);
-                //if (needEnable)
-                //{
-                //    data = data.Where(t => t.Status == GenericStatusEnum.Enable);
-                //}
+                if (needEnable)
+                {
+                    data = data.Where(t => t.Status == GenericStatusEnum.Enable);
+                }
                 var result = data.Select(t => new ServerDto
                 {
                     Id = t.Id,
@@ -164,6 +165,7 @@ namespace Uoko.FireProj.Concretes
                     ServerDesc = t.ServerDesc,
                     Status = t.Status,
                     PackageDir = t.PackageDir,
+                    SiteInfoJson = t.SiteInfoJson
                 }).FirstOrDefault(t => t.Id == serverId);
                 data.IISData = db.DomainResource.Where(r => r.ServerId == serverId).Select(r => new DomainResourceDto {
                     Id = r.Id,

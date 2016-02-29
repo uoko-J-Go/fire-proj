@@ -88,6 +88,10 @@ let ffMergeAndDeploy onBranch =
 Target "Deoply-To-PRE" (fun _ ->
     let branchPre = "pre"
     ensureOnBranch branchPre
+        
+    // 保证 pre 和 master 永远保持最新
+    merge null "--ff-only" "pre"
+    
     ffMergeAndDeploy branchPre
 )
 
@@ -98,12 +102,19 @@ Target "Deoply-To-PRE" (fun _ ->
 *)
 Target "Online" (fun _ ->
     let branchMaster = "master"
-    ensureOnBranch branchMaster
+    ensureOnBranch branchMaster    
     ffMergeAndDeploy branchMaster
 )
 
 Target "Deploy-To-IOC" (fun _ ->
     deploy()
+)
+
+// 测试通过的时候调用，方便后期合并，回滚进行跟踪
+Target "QA-Passed-IOC" (fun _ ->
+    let passedDate = System.DateTime.Today.Date.ToString("MM-dd-HH-mm")
+    gitCommand null (sprintf "tag -a pass-test-%s -m 'QA passed'"  passedDate)
+    gitCommand null "push --follow-tags"
 )
 
 Target "BuildSolution" (fun _ ->
@@ -121,5 +132,8 @@ Target "BuildSolution" (fun _ ->
     RestoreMSSolutionPackages (fun p -> p) slnFile
     build setParams slnFile
 )
+
+"BuildSolution"
+    ==> "QA-Passed-IOC"
 
 RunTargetOrDefault "BuildSolution"
