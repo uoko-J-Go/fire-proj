@@ -84,6 +84,7 @@ namespace Uoko.FireProj.Concretes
                                    ServerId = domainresource.ServerId,
                                    ServerName = parServer.Name,
                                    Status = domainresource.Status,
+                                   SiteName = domainresource.SiteName,
                                };
                     var result = data.OrderBy(r => r.Id).Skip(query.Offset).Take(query.Limit).ToList();
                     var total = data.Count();
