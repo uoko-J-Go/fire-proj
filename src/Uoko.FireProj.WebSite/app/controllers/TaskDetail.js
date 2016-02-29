@@ -46,6 +46,7 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
 
     $scope.TestFails = function () {
         bootbox.prompt("批示", function (result) {
+            if (result != null) {
             param = {
                 "Id": $scope.taskInfo.Id,
                 "LogsText": result
@@ -53,20 +54,21 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
             TaskService.TestFails(param, function (data) {
                 formSubmitSuccessClick();
             });
+            }
         });
-
-       
     }
 
     $scope.Tested = function () {
         bootbox.prompt("批示", function (result) {
-            param = {
-                "Id": $scope.taskInfo.Id,
-                "LogsText": result
-            };
-            TaskService.Tested(param, function (data) {
-                formSubmitSuccessClick();
-            });
+            if (result != null) {
+                param = {
+                    "Id": $scope.taskInfo.Id,
+                    "LogsText": result
+                };
+                TaskService.Tested(param, function (data) {
+                    formSubmitSuccessClick();
+                });
+            }
         });
     }
 
@@ -82,10 +84,16 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
     }
 
     $scope.CommitToTest = function () {
-        TaskService.CommitToTest($scope.taskInfo.Id, function (data) {
-            bootbox.alert("已经成功提交测试!", function () {
-                location.reload();
-            });
+        bootbox.prompt("批示", function (result) {
+            if (result != null) {
+                paran = {
+                    "Id": $scope.taskInfo.Id,
+                    "LogsText": result
+                }
+                TaskService.CommitToTest(paran, function (data) {
+                    formSubmitSuccessClick("refresh");
+                });
+            }
         });
     }
 
