@@ -108,7 +108,24 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
             $scope.branchList = data;
         });
     }
+    //部署服务器change事件
+    $scope.GetDomain = function (project, server) {
+        if (typeof project == "string") {
+            project = JSON.parse(project);
+        }
+        if (typeof server == "string") {
+            server = JSON.parse(server);
+        }
 
+        if (project != undefined && project != "") {
+            if (server == undefined) {
+                server = { Id: 0 };
+            }
+            TaskService.GetDomain(project.Id, server.Id, function (data) {
+                $scope.DomainList = data;
+            });
+        }
+    }
     $scope.Cancel = function () {
         location.href = "/Task/Index";
     }
@@ -116,6 +133,9 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
     $scope.Init = function () {
         $scope.GetTaskInfo();
         $scope.GetProjectList();
+        $scope.$watch('taskInfo.Project + taskInfo.DeployEnvironment + taskInfo.Server', function () {
+            $scope.GetDomain($scope.taskInfo.Project, $scope.taskInfo.Server);
+        });
     }
 
     $scope.Init();
