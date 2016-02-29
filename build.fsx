@@ -1,6 +1,6 @@
 // include Fake lib
+#I @"D:/fake/tools/"
 #r @"FakeLib.dll"
-//#r @"D:/fake/tools/FakeLib.dll"
 
 open Fake
 open Fake.Git
@@ -46,11 +46,11 @@ let deploy() =
 
     pkgProject pkgDir
 
+    let deployUser = getBuildParamEnsure "deployUser" // 系统自身配置
+    let deployPwd = getBuildParamEnsure "deployPwd"   // 系统自身配置
+    
     let msDeployUrl = getBuildParamEnsure "msDeployUrl"
     let iisSiteName = getBuildParamEnsure "iisSiteName"
-    let deployUser = getBuildParamEnsure "deployUser"
-    let deployPwd = getBuildParamEnsure "deployPwd"
-    
 
     let exitCode = ExecProcess (fun info ->
                     info.FileName <- pkgDir + "\Uoko.FireProj.WebSite.deploy.cmd"
