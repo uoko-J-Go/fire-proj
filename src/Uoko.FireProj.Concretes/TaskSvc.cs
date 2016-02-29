@@ -109,7 +109,7 @@ namespace Uoko.FireProj.Concretes
                 data.Project= Mapper.Map<Project, ProjectDto>(project);
 
                 data.DeployEnvironmentName = data.DeployEnvironment.ToString();
-
+               
                 //获取任务的部署的站点名称
                 var domainInfo = db.DomainResource.FirstOrDefault(r => r.TaskId == taskId);
                 data.SiteName = domainInfo.SiteName;
