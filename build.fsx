@@ -9,7 +9,7 @@ open System
 
 let getBuildParamEnsure name =
     let value = environVar name
-    if isNullOrWhiteSpace value then value // failwithf "environVar of %s is null or whitespace" name
+    if isNullOrWhiteSpace value then failwithf "environVar of %s is null or whitespace" name
     else value
 
 let slnFile = 
