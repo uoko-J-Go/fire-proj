@@ -176,6 +176,10 @@
     <Compile Include="Migrations\201602260403523_addfieldSiteNametoDomainResource.Designer.cs">
       <DependentUpon>201602260403523_addfieldSiteNametoDomainResource.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201602290948059_addremark.cs" />
+    <Compile Include="Migrations\201602290948059_addremark.Designer.cs">
+      <DependentUpon>201602290948059_addremark.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Query\BaseQuery.cs" />
@@ -259,6 +263,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201602260403523_addfieldSiteNametoDomainResource.resx">
       <DependentUpon>201602260403523_addfieldSiteNametoDomainResource.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201602290948059_addremark.resx">
+      <DependentUpon>201602290948059_addremark.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -117,8 +117,8 @@
                                 <div class="form-group form-md-line-input">
                                     <label class="col-md-2 control-label" for="form_control_1">所属项目</label>
                                     <div class="col-md-10">
-                                        <select class="form-control" name="project" ng-model="model.ProjectId">
-                                            <option ng-repeat="project in projectList" value="{{project.Id}}" ng-selected="project.Id==model.Project.Id">{{project.ProjectName}}</option>
+                                        <select class="form-control" name="project" ng-model="model.project">
+                                            <option ng-repeat="project in projectList" value="{{project}}" ng-selected="project.Id==model.ProjectId">{{project.ProjectName}}</option>
                                         </select>
                                         <button type="button" class="btn green  btn-lg" ng-click="Append(model)">Append</button>
                                     </div>
@@ -126,7 +126,35 @@
                                 </div>
                                 
                             </div>
-
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>序号</th>
+                                            <th>域名</th>
+                                            <th>IIS站点名称</th>
+                                            <th>所属项目Id</th>
+                                            <th>所属项目</th>
+                                            <th>操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="item in items track by $index">
+                                            <td>{{item.Index}}</td>
+                                            <td>{{item.Name}}</td>
+                                            <td>{{item.SiteName}}</td>
+                                            <td>{{item.ProjectId}}</td>
+                                            <td>{{item.ProjectName}}</td>
+                                            <td>
+                                                <div>
+                                                    <a class="btn btn-success" ng-click="edit(item)">编辑</a>
+                                                    <a class="btn btn-success" ng-click="delete(item)">删除</a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                             <div class="form-actions">
                                 <div class="row">
                                     <div class="col-md-offset-2 col-md-10">

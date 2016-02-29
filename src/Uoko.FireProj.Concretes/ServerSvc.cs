@@ -165,6 +165,15 @@ namespace Uoko.FireProj.Concretes
                     Status = t.Status,
                     PackageDir = t.PackageDir,
                 }).FirstOrDefault(t => t.Id == serverId);
+                data.IISData = db.DomainResource.Where(r => r.ServerId == serverId).Select(r => new DomainResourceDto {
+                    Id = r.Id,
+                    Name = r.Name,
+                    ProjectId = r.ProjectId,
+                    TaskId = r.TaskId,
+                    ServerId = r.ServerId,
+                    ServerName = r.Name,
+                    Status = r.Status,
+                }).ToList();
                 return data;
             }
         }
