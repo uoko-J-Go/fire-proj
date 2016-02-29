@@ -113,8 +113,12 @@ namespace Uoko.FireProj.Concretes
 
                 //获取任务部署服务器的信息
                 var serverInfo= db.Servers.FirstOrDefault(r => r.IP == data.DeployIP);
-                data.PackageDir = serverInfo.PackageDir;
-                data.DeployIP = serverInfo.IP;
+                if (serverInfo != null)
+                {
+                    data.PackageDir = serverInfo.PackageDir;
+                    data.DeployIP = serverInfo.IP;
+                }
+                
                 //获取任务的部署的站点名称
                 data.SiteName = db.DomainResource.FirstOrDefault(r => r.TaskId == taskId).SiteName;
 
