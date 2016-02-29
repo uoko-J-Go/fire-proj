@@ -42,6 +42,10 @@
       <HintPath>..\..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.8.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -176,6 +180,10 @@
     <Compile Include="Migrations\201602260403523_addfieldSiteNametoDomainResource.Designer.cs">
       <DependentUpon>201602260403523_addfieldSiteNametoDomainResource.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201602290950218_addSiteInfo.cs" />
+    <Compile Include="Migrations\201602290950218_addSiteInfo.Designer.cs">
+      <DependentUpon>201602290950218_addSiteInfo.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Query\BaseQuery.cs" />
@@ -259,6 +267,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201602260403523_addfieldSiteNametoDomainResource.resx">
       <DependentUpon>201602260403523_addfieldSiteNametoDomainResource.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201602290950218_addSiteInfo.resx">
+      <DependentUpon>201602290950218_addSiteInfo.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

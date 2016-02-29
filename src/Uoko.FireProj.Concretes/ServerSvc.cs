@@ -164,6 +164,7 @@ namespace Uoko.FireProj.Concretes
                     ServerDesc = t.ServerDesc,
                     Status = t.Status,
                     PackageDir = t.PackageDir,
+                    SiteInfoJson = t.SiteInfoJson
                 }).FirstOrDefault(t => t.Id == serverId);
                 return data;
             }

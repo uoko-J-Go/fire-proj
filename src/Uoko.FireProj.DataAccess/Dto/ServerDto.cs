@@ -15,14 +15,17 @@ namespace Uoko.FireProj.DataAccess.Dto
         /// 服务器名称
         /// </summary>
         public string Name { get; set; }
+
         /// <summary>
         /// 服务器IP
         /// </summary>
         public string IP { get; set; }
+
         /// <summary>
         /// 环境类型
         /// </summary>
         public EnvironmentEnum EnvironmentType { get; set; }
+
         /// <summary>
         /// 服务器描述 操作系统 配置等等
         /// </summary>
@@ -39,5 +42,7 @@ namespace Uoko.FireProj.DataAccess.Dto
         /// 状态
         /// </summary>
         public GenericStatusEnum Status { get; set; }
+
+        public string SiteInfoJson { get; set; }
     }
 }
