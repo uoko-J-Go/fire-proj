@@ -12,7 +12,8 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
     $scope.GetAllUser = function () {
         CommonService.getAllUsers(function (data) {
             $scope.AllUsers = data;
-           $scope.GetTaskInfo();
+            $scope.GetProjectList();
+          
         });
     }
     $scope.loadTags = function (query) {
@@ -25,6 +26,7 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
     $scope.GetProjectList = function () {
         ProjectService.getAllProject(function (data) {
             $scope.projectList = data;
+            $scope.GetTaskInfo();
         });
     };
     $scope.GetTaskInfo = function () {
@@ -163,7 +165,6 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
 
     $scope.Init = function () {
         $scope.GetAllUser();
-        $scope.GetProjectList();
         $scope.$watch('taskInfo.Project + taskInfo.DeployEnvironment + taskInfo.Server', function () {
             $scope.GetDomain($scope.taskInfo.Project, $scope.taskInfo.Server);
         });
