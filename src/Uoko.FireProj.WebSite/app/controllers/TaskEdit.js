@@ -4,6 +4,7 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
     $scope.taskInfo = {};
     $scope.projectList = [];
     $scope.branchList = [];
+    $scope.isFirstLoad = true;
     TaskService.GetEnvironment(function (data) {
         $scope.environmentList = data;
     });
@@ -29,19 +30,12 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
     $scope.GetTaskInfo = function () {
         var taskId = $("#taskIdParam").val();
         TaskService.GetTaskInfo(taskId, function (data) {
+
             $scope.GetAllUserDetail(data.CheckUsers, 0);
             $scope.GetAllUserDetail(data.NoticeUses, 0);
-            $scope.getBranch(data.Project);
-            TaskService.GetResourceList(data.DeployEnvironment, function (server) {
-                $scope.taskInfo = data;
-                $scope.ServerList = server;
-            });
-            //TaskService.GetDomain(data.ProjectId, server.Id, function (domain) {
-            //    $scope.DomainList = domain;
-
-
-               
-            //});
+            $scope.taskInfo = data;
+            $scope.getBranch($scope.taskInfo.Project);
+            $scope.GetServerData(data.DeployEnvironment);
         });
     }
     $scope.GetAllUserDetail = function (userList, index) {
@@ -124,6 +118,15 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
     $scope.GetServerData = function (environmentId) {
         TaskService.GetResourceList(environmentId, function (data) {
             $scope.ServerList = data;
+            if ($scope.isFirstLoad) {
+                var _server = $scope.ServerList.filter(function(server) {
+                    return server.IP == $scope.taskInfo.DeployIP;
+                })[0];
+                $scope.taskInfo.Server = JSON.stringify(_server);
+                $scope.isFirstLoad = false;
+            }
+           
+            //$scope.$apply();
         });
     }
 
@@ -161,9 +164,9 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
     $scope.Init = function () {
         $scope.GetAllUser();
         $scope.GetProjectList();
-        //$scope.$watch('taskInfo.Project + taskInfo.DeployEnvironment + taskInfo.Server', function () {
-        //    $scope.GetDomain($scope.taskInfo.Project, $scope.taskInfo.Server);
-        //});
+        $scope.$watch('taskInfo.Project + taskInfo.DeployEnvironment + taskInfo.Server', function () {
+            $scope.GetDomain($scope.taskInfo.Project, $scope.taskInfo.Server);
+        });
     }
 
     $scope.Init();

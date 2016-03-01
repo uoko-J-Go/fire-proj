@@ -232,11 +232,11 @@
                 <div class="form-group form-md-line-input">
                     <label class="col-md-2 control-label">部署服务器</label>
                     <div class="col-md-10">
-                        <select name="deployenvironment" class="form-control" ng-model="taskInfo.Server" required>
-                            <option ng-repeat="server in ServerList" value="{{server}}"  ng-selected="server.Id==taskInfo.DeployIP">{{server.Name}}</option>
+                        <select name="server" class="form-control" ng-model="taskInfo.Server" required>
+                            <option ng-repeat="server in ServerList" value="{{server}}"  ng-selected="server.IP==taskInfo.DeployIP">{{server.Name}}</option>
                         </select>
-                        <div ng-show="form.$submitted || form.deployenvironment.$touched">
-                            <span class="error-msg" ng-show="form.deployenvironment.$error.required">部署服务器必选</span>
+                        <div ng-show="form.$submitted || form.server.$touched">
+                            <span class="error-msg" ng-show="form.server.$error.required">部署服务器必选</span>
                         </div>
                     </div>
                 </div>
@@ -273,7 +273,7 @@
                     <label class="col-md-2 control-label">验收人员</label>
                     <div class="col-md-10">
                         <div class="form-control-wrap">
-                            <tags-input ng-model="taskInfo.CheckUsers" placeholder="添加验收人员" display-property="username" add-from-autocomplete-only="true" replace-spaces-with-dashes="false">
+                            <tags-input ng-model="taskInfo.CheckUsers" placeholder="添加验收人员" display-property="name" add-from-autocomplete-only="true" minLength="1">
                                 <auto-complete source="loadTags($query)" load-on-focus="true" load-on-empty="true" minLength="0" max-results-to-show="32" template="my-custom-template"></auto-complete>
                             </tags-input>
                             @*<ul class="tags">
@@ -298,7 +298,7 @@
                                         </li>
                                         <li class="add-tag" title="添加人员" ng-click="selectNoticeUser()"></li>
                                     </ul>*@
-                            <tags-input ng-model="taskInfo.NoticeUses" placeholder="添加相关人员" display-property="username" add-from-autocomplete-only="true" replace-spaces-with-dashes="false">
+                            <tags-input ng-model="taskInfo.NoticeUses" placeholder="添加相关人员" display-property="name" add-from-autocomplete-only="true" minLength="1">
                                 <auto-complete source="loadTags($query)" load-on-focus="true" load-on-empty="true" minLength="0" max-results-to-show="32" template="my-custom-template"></auto-complete>
                             </tags-input>
                         </div>
@@ -330,7 +330,8 @@
     </div>
     <div class="right-panel">
         <span ng-bind-html="$highlight($getDisplayText())"></span>
-        <span>({{data.email}})</span>
+        (<span ng-bind-html="$highlight(data.username)"></span>)
+        <span>{{data.email}}</span>
     </div>
 </script>
 @section Scripts {

@@ -4,6 +4,14 @@
 var fireproj;
 (function () {
     fireproj = angular.module("FireProj", ['ngMessages', 'ui.bootstrap', 'ngTagsInput']);
+    fireproj.config(function (tagsInputConfigProvider) {
+        tagsInputConfigProvider.setDefaults('tagsInput', {
+            minLength: 1
+        }).setDefaults('autoComplete', {
+            minLength: 0,
+            selectFirstMatch: true
+        });
+    });
 })();
 
 
