@@ -55,9 +55,9 @@ fireproj.filter("DomainResourceFilter", function () {
     return function (value) {
         switch (value) {
             case 0:
-                return "不可用";
+                return "使用中";
             case 1:
-                return "可用";
+                return "未使用";
         }
     }
 });

@@ -4,80 +4,104 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
     $scope.taskInfo = {};
     $scope.projectList = [];
     $scope.branchList = [];
+    $scope.isFirstLoad = true;
     TaskService.GetEnvironment(function (data) {
         $scope.environmentList = data;
     });
+    $scope.AllUsers = [];
+    $scope.GetAllUser = function () {
+        CommonService.getAllUsers(function (data) {
+            $scope.AllUsers = data;
+            $scope.GetProjectList();
+          
+        });
+    }
+    $scope.loadTags = function (query) {
+        var result = $scope.AllUsers.filter(function(user) {
+            return (user.name.toLowerCase().indexOf(query.toLowerCase()) != -1) || (user.username.toLowerCase().indexOf(query.toLowerCase()) != -1);
+        });
+        return result;
+    }
+
     $scope.GetProjectList = function () {
         ProjectService.getAllProject(function (data) {
             $scope.projectList = data;
+            $scope.GetTaskInfo();
         });
     };
     $scope.GetTaskInfo = function () {
         var taskId = $("#taskIdParam").val();
         TaskService.GetTaskInfo(taskId, function (data) {
+
+            $scope.GetAllUserDetail(data.CheckUsers, 0);
+            $scope.GetAllUserDetail(data.NoticeUses, 0);
             $scope.taskInfo = data;
             $scope.getBranch($scope.taskInfo.Project);
-            $scope.GetAllUserDetail($scope.taskInfo.CheckUsers, 0);
-            $scope.GetAllUserDetail($scope.taskInfo.NoticeUses, 0);
-            TaskService.GetResourceList(data.DeployEnvironment, function (data) {
-                $scope.ServerList = data;
-            });
+            $scope.GetServerData(data.DeployEnvironment);
         });
     }
     $scope.GetAllUserDetail = function (userList, index) {
         if (index < userList.length) {
-            var user = userList[index];
-            CommonService.getSingleUser(user.Id, function (data) {
-                userList.splice(index, 1, data);
-                if (index < userList.length) {
-                    ++index;
-                    $scope.GetAllUserDetail(userList, index);
-                }
+            var _user = userList[index];
+            var result = $scope.AllUsers.filter(function (user) {
+                return user.id == _user.Id;
             });
+            userList.splice(index, 1, result[0]);
+            if (index < userList.length) {
+                ++index;
+                $scope.GetAllUserDetail(userList, index);
+            }
+            //CommonService.getSingleUser(user.Id, function (data) {
+            //    userList.splice(index, 1, data);
+            //    if (index < userList.length) {
+            //        ++index;
+            //        $scope.GetAllUserDetail(userList, index);
+            //    }
+            //});
         }
     }
-    //选择审核人
-    $scope.selectCheckUser = function () {
-        var modalInstance = $uibModal.open({
-            templateUrl: '/app/modals/SelectUser.html',
-            controller: 'SelectUserController',
-            resolve: {
-                selectedUsers: function () {
-                    return $scope.taskInfo.CheckUsers;
-                }
-            }
-        });
+    ////选择审核人
+    //$scope.selectCheckUser = function () {
+    //    var modalInstance = $uibModal.open({
+    //        templateUrl: '/app/modals/SelectUser.html',
+    //        controller: 'SelectUserController',
+    //        resolve: {
+    //            selectedUsers: function () {
+    //                return $scope.taskInfo.CheckUsers;
+    //            }
+    //        }
+    //    });
 
-        modalInstance.result.then(function (selectedUsers) {
-            $scope.taskInfo.CheckUsers = selectedUsers;
-        });
-    }
-    //选择相关人
-    $scope.selectNoticeUser = function () {
-        var modalInstance = $uibModal.open({
-            templateUrl: '/app/modals/SelectUser.html',
-            controller: 'SelectUserController',
-            resolve: {
-                selectedUsers: function () {
-                    return $scope.taskInfo.NoticeUses;
-                }
-            }
-        });
+    //    modalInstance.result.then(function (selectedUsers) {
+    //        $scope.taskInfo.CheckUsers = selectedUsers;
+    //    });
+    //}
+    ////选择相关人
+    //$scope.selectNoticeUser = function () {
+    //    var modalInstance = $uibModal.open({
+    //        templateUrl: '/app/modals/SelectUser.html',
+    //        controller: 'SelectUserController',
+    //        resolve: {
+    //            selectedUsers: function () {
+    //                return $scope.taskInfo.NoticeUses;
+    //            }
+    //        }
+    //    });
 
-        modalInstance.result.then(function (selectedUsers) {
-            $scope.taskInfo.NoticeUses = selectedUsers;
-        });
-    }
-    //移除审核人
-    $scope.removeCheckUser = function (index) {
-        $scope.taskInfo.CheckUsers.splice(index, 1);
-        $scope.$evalAsync();
-    }
-    //移除相关人
-    $scope.removeNoticeUser = function (index) {
-        $scope.taskInfo.NoticeUses.splice(index, 1);
-        $scope.$evalAsync();
-    }
+    //    modalInstance.result.then(function (selectedUsers) {
+    //        $scope.taskInfo.NoticeUses = selectedUsers;
+    //    });
+    //}
+    ////移除审核人
+    //$scope.removeCheckUser = function (index) {
+    //    $scope.taskInfo.CheckUsers.splice(index, 1);
+    //    $scope.$evalAsync();
+    //}
+    ////移除相关人
+    //$scope.removeNoticeUser = function (index) {
+    //    $scope.taskInfo.NoticeUses.splice(index, 1);
+    //    $scope.$evalAsync();
+    //}
     $scope.Save = function (isValid) {
         if (!isValid) {
             bootbox.alert("表单验证未通过");
@@ -96,6 +120,15 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
     $scope.GetServerData = function (environmentId) {
         TaskService.GetResourceList(environmentId, function (data) {
             $scope.ServerList = data;
+            if ($scope.isFirstLoad) {
+                var _server = $scope.ServerList.filter(function(server) {
+                    return server.IP == $scope.taskInfo.DeployIP;
+                })[0];
+                $scope.taskInfo.Server = JSON.stringify(_server);
+                $scope.isFirstLoad = false;
+            }
+           
+            //$scope.$apply();
         });
     }
 
@@ -131,8 +164,7 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
     }
 
     $scope.Init = function () {
-        $scope.GetTaskInfo();
-        $scope.GetProjectList();
+        $scope.GetAllUser();
         $scope.$watch('taskInfo.Project + taskInfo.DeployEnvironment + taskInfo.Server', function () {
             $scope.GetDomain($scope.taskInfo.Project, $scope.taskInfo.Server);
         });

@@ -54,6 +54,25 @@ namespace Uoko.FireProj.Concretes
             }
         }
 
+        public void DeleteDomain(int Id)
+        {
+            try
+            {
+                using (var dbScope = _dbScopeFactory.Create())
+                {
+                    var db = dbScope.DbContexts.Get<FireProjDbContext>();
+                    DomainResource entity = new DomainResource() { Id = Id };
+                    db.DomainResource.Attach(entity);
+                    db.DomainResource.Remove(entity);
+                    db.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new TipInfoException(ex.Message);
+            }
+        }
+
         public PageGridData<DomainResourceDto> GetDomainPage(DomainResourceQuery query)
         {
             try
@@ -98,6 +117,37 @@ namespace Uoko.FireProj.Concretes
             
         }
 
+        public List<DomainResourceDto> GetResourceList(int serverId)
+        {
+            try
+            {
+                using (var dbScope = _dbScopeFactory.CreateReadOnly())
+                {
+                    var db = dbScope.DbContexts.Get<FireProjDbContext>();
+                    var data = from domain in db.DomainResource.AsQueryable()
+                               join project in db.Project.AsQueryable() on domain.ProjectId equals project.Id
+                               where domain.ServerId == serverId
+                               select new DomainResourceDto
+                               {
+                                   Id = domain.Id,
+                                   Name = domain.Name,
+                                   ProjectId = domain.ProjectId,
+                                   TaskId = domain.TaskId,
+                                   ServerId = domain.ServerId,
+                                   ServerName = domain.Name,
+                                   Status = domain.Status,
+                                   SiteName = domain.SiteName,
+                                   ProjectName = project.ProjectName
+                               };
+                    return data.ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new TipInfoException(ex.Message);
+            }
+        }
+
         public List<DomainResourceDto> GetResourceList(int projectId, int serverId)
         {
             try
@@ -105,7 +155,7 @@ namespace Uoko.FireProj.Concretes
                 using (var dbScope = _dbScopeFactory.CreateReadOnly())
                 {
                     var db = dbScope.DbContexts.Get<FireProjDbContext>();
-                    var data = db.DomainResource.Where(r => r.ProjectId == projectId && r.Status == 0 && r.ServerId == serverId).Select(r => new DomainResourceDto
+                    var data = db.DomainResource.Where(r => r.ProjectId == projectId && r.Status == DomainResourceStatusEnum.Enable && r.ServerId == serverId).Select(r => new DomainResourceDto
                     {
                         Id = r.Id,
                         Name = r.Name,
@@ -127,7 +177,7 @@ namespace Uoko.FireProj.Concretes
                 {
                     var db = dbScope.DbContexts.Get<FireProjDbContext>();
                     var entity = db.DomainResource.FirstOrDefault(r => r.TaskId == taskId);
-                    entity.Status = DomainResourceStatusEnum.Unable;
+                    entity.Status = DomainResourceStatusEnum.Enable;
                     db.SaveChanges();
                 }
             }

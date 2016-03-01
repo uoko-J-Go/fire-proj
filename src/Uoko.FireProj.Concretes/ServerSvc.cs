@@ -91,6 +91,24 @@ namespace Uoko.FireProj.Concretes
                     var db = dbScope.DbContexts.Get<FireProjDbContext>();
                     //根据实际情况修改
                     db.Update(entity, t => new { t.Name, t.IP, t.ServerDesc, t.Status, t.ModifyBy, t.ModifyDate, t.PackageDir });
+
+                    //修改域名有主键则修改,无主键新增
+                    var domainList = Mapper.Map<List<DomainResourceDto>, List<DomainResource>>(server.IISData);
+
+                    foreach (var item in domainList)
+                    {
+                        if (item.Id > 0)
+                        {
+                            db.Update(item, r => new { r.Name, r.SiteName, r.ProjectId });
+                        }
+                        else
+                        {
+                            item.ServerId = server.Id;
+                            item.CreateDate = DateTime.Now;
+                            item.Status = DomainResourceStatusEnum.Enable;//默认添加 可用
+                            db.DomainResource.Add(item);
+                        }
+                    }
                     db.SaveChanges();
                 }
             }
