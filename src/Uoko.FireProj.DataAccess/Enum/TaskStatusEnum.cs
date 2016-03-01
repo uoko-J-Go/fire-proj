@@ -10,7 +10,7 @@ namespace Uoko.FireProj.DataAccess.Enum
     /// <summary>
     /// 任务状态
     /// </summary>
-    public enum TaskEnum
+    public enum TaskStatusEnum
     {
         /// <summary>
         /// 待部署
@@ -37,19 +37,13 @@ namespace Uoko.FireProj.DataAccess.Enum
         DeploySuccess = 6,
 
 
-        // <summary>
-        /// 测试中
-        /// </summary>
-        [Description("测试中")]
-        Testing = 8,
-
-        // <summary>
+        /// <summary>
         /// 测试未通过
         /// </summary>
         [Description("测试未通过")]
         TestFails = 10,
 
-        // <summary>
+        /// <summary>
         /// 测试通过
         /// </summary>
         [Description("测试通过")]

@@ -10,7 +10,7 @@ namespace Uoko.FireProj.DataAccess.Enum
     /// <summary>
     /// 测试环境枚举
     /// </summary>
-    public enum EnvironmentEnum
+    public enum StageEnum
     {
         /// <summary>
         /// IOC环境

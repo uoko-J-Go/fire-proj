@@ -48,8 +48,8 @@ namespace Uoko.FireProj.Abstracts
        /// 获取某个任务在某个环境下的任务记录数
        /// </summary>
        /// <param name="taskId"></param>
-       /// <param name="environment"></param>
+       /// <param name="stage"></param>
        /// <returns></returns>
-        int GetLogTotalByEnvironment(int taskId,EnvironmentEnum environment);
+        int GetLogTotalByEnvironment(int taskId,StageEnum stage);
     }
 }

@@ -9,6 +9,6 @@ namespace Uoko.FireProj.DataAccess.Query
 {
     public class ServerQuery: BaseQuery
     {
-        public EnvironmentEnum? EnvironmentType { get; set; }
+        public StageEnum? StageType { get; set; }
     }
 }

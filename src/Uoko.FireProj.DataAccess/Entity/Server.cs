@@ -23,7 +23,7 @@ namespace Uoko.FireProj.DataAccess.Entity
         /// <summary>
         /// 环境类型
         /// </summary>
-        public EnvironmentEnum EnvironmentType { get; set; }
+        public StageEnum StageType { get; set; }
 
         /// <summary>
         /// 服务器描述 操作系统 配置等等

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using AutoMapper;
 using Mehdime.Entity;
+using Newtonsoft.Json;
 using Uoko.FireProj.Abstracts;
 using Uoko.FireProj.DataAccess.Dto;
 using Uoko.FireProj.DataAccess.Entity;
@@ -29,30 +30,82 @@ namespace Uoko.FireProj.Concretes
             _dbScopeFactory = dbScopeFactory;
         }
         #endregion
-        public void CreatTask(TaskDto task)
+
+        public void CreatTask(TaskDto taskDto)
         {
-            try
+            var taskInfo = new TaskInfo();
+            taskInfo.ProjectId = taskDto.Project.Id;
+            taskInfo.Branch = "dev";
+            taskInfo.TaskName = "邮件发送阻塞";
+
+            switch (taskDto.DeployStage)
             {
-                var entity = Mapper.Map<TaskDto,TaskInfo>(task);
-                entity.ProjectId = task.Project.Id;
-                entity.CheckUserId = string.Join(",", task.CheckUsers.Select(t => t.Id));
-                entity.NoticeUseId= string.Join(",", task.NoticeUses.Select(t => t.Id));
-                entity.CreateBy = 1;
-                entity.CreateDate = DateTime.Now;
-                entity.Status = TaskEnum.WaitingDeploy;
-                using (var dbScope = _dbScopeFactory.Create())
-                {
-                    var db = dbScope.DbContexts.Get<FireProjDbContext>();
-                    db.TaskInfo.Add(entity);
-                    db.SaveChanges();
-                    task.Id = entity.Id;
-                    UpdateResourceInfo(task);
-                }
+                case StageEnum.IOC:
+                    var iocInfo = new DeployInfoIoc
+                    {
+                        DeployStage = taskDto.DeployStage,
+                        CheckUserId = string.Join(",", taskDto.CheckUsers.Select(t => t.Id)),
+                        NoticeUseId = string.Join(",", taskDto.NoticeUses.Select(t => t.Id)),
+                        DeployAddress = taskDto.DeployAddress,
+                        DeployIP = taskDto.DeployIP,
+                        Domain = taskDto.Domain,
+                        SiteName = taskDto.SiteName,
+                        Status = TaskStatusEnum.WaitingDeploy,
+                        TaskDesc = taskDto.TaskDesc,
+                    };
+                    taskInfo.DeployInfoIocJson = JsonConvert.SerializeObject(iocInfo);
+                    break;
+                case StageEnum.PRE:
+                    var preInfo = new DeployInfoPre()
+                    {
+                        DeployStage = taskDto.DeployStage,
+                        CheckUserId = string.Join(",", taskDto.CheckUsers.Select(t => t.Id)),
+                        NoticeUseId = string.Join(",", taskDto.NoticeUses.Select(t => t.Id)),
+                        DeployAddress = taskDto.DeployAddress,
+                        DeployIP = taskDto.DeployIP,
+                        Domain = taskDto.Domain,
+                        SiteName = taskDto.SiteName,
+                        Status = TaskStatusEnum.WaitingDeploy,
+                        TaskDesc = taskDto.TaskDesc,
+                    };
+                    taskInfo.DeployInfoPreJson = JsonConvert.SerializeObject(preInfo);
+                    break;
+                default:
+                    throw new NotSupportedException("暂不支持其他阶段");
             }
-            catch (Exception ex)
+
+            using (var dbScope = _dbScopeFactory.Create())
             {
-                throw new TipInfoException(ex.Message);
+                var db = dbScope.DbContexts.Get<FireProjDbContext>();
+                db.TaskInfo.Add(taskInfo);
+                db.SaveChanges();
+                taskDto.Id = taskInfo.Id;
+                UpdateResourceInfo(taskDto);
             }
+
+
+            //try
+            //{
+            //    var entity = Mapper.Map<TaskDto,TaskInfo>(taskDto);
+            //    entity.ProjectId = taskDto.Project.Id;
+            //    entity.CheckUserId = string.Join(",", taskDto.CheckUsers.Select(t => t.Id));
+            //    entity.NoticeUseId= string.Join(",", taskDto.NoticeUses.Select(t => t.Id));
+            //    entity.CreateBy = 1;
+            //    entity.CreateDate = DateTime.Now;
+            //    entity.Status = TaskEnum.WaitingDeploy;
+            //    using (var dbScope = _dbScopeFactory.Create())
+            //    {
+            //        var db = dbScope.DbContexts.Get<FireProjDbContext>();
+            //        db.TaskInfo.Add(entity);
+            //        db.SaveChanges();
+            //        taskDto.Id = entity.Id;
+            //        UpdateResourceInfo(taskDto);
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    throw new TipInfoException(ex.Message);
+            //}
         }
 
         public void DeleteTask(int taskId)
@@ -74,28 +127,32 @@ namespace Uoko.FireProj.Concretes
             }
         }
 
+        /// <summary>
+        /// 应该是根据部署情况，更新部署信息
+        /// </summary>
+        /// <param name="task"></param>
         public void UpdateTask(TaskDto task)
         {
-            try
-            {
-                var entity = Mapper.Map<TaskDto, TaskInfo>(task);
-                entity.ProjectId = task.Project.Id;
-                entity.CheckUserId = string.Join(",", task.CheckUsers.Select(t => t.Id));
-                entity.NoticeUseId = string.Join(",", task.NoticeUses.Select(t => t.Id));
-                entity.ModifyBy = 1;
-                entity.ModifyDate = DateTime.Now;
-                using (var dbScope = _dbScopeFactory.Create())
-                {
-                    var db = dbScope.DbContexts.Get<FireProjDbContext>();
-                    //根据实际情况修改
-                    db.Update(entity, t => new { t.TaskName,t.ProjectId, t.Branch, t.DeployEnvironment, t.DeployIP,t.SiteName,t.DeployAddress,t.TaskDesc,t.CheckUserId,t.NoticeUseId,t.Status,t.ModifyBy,t.ModifyDate });
-                    db.SaveChanges();
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new TipInfoException(ex.Message);
-            }
+            //try
+            //{
+            //    var entity = Mapper.Map<TaskDto, TaskInfo>(task);
+            //    entity.ProjectId = task.Project.Id;
+            //    entity.CheckUserId = string.Join(",", task.CheckUsers.Select(t => t.Id));
+            //    entity.NoticeUseId = string.Join(",", task.NoticeUses.Select(t => t.Id));
+            //    entity.ModifyBy = 1;
+            //    entity.ModifyDate = DateTime.Now;
+            //    using (var dbScope = _dbScopeFactory.Create())
+            //    {
+            //        var db = dbScope.DbContexts.Get<FireProjDbContext>();
+            //        //根据实际情况修改
+            //        db.Update(entity, t => new { t.TaskName,t.ProjectId, t.Branch, t.DeployEnvironment, t.DeployIP,t.SiteName,t.DeployAddress,t.TaskDesc,t.CheckUserId,t.NoticeUseId,t.Status,t.ModifyBy,t.ModifyDate });
+            //        db.SaveChanges();
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    throw new TipInfoException(ex.Message);
+            //}
         }
 
         public TaskDto GetTaskById(int taskId)
@@ -108,7 +165,7 @@ namespace Uoko.FireProj.Concretes
                 var data = Mapper.Map<TaskInfo, TaskDto>(taskInfo);
                 data.Project= Mapper.Map<Project, ProjectDto>(project);
 
-                data.DeployEnvironmentName = data.DeployEnvironment.ToString();
+                data.DeployEnvironmentName = data.DeployStage.ToString();
                
                 //获取任务的部署的站点名称
                 var domainInfo = db.DomainResource.FirstOrDefault(r => r.TaskId == taskId);
@@ -163,7 +220,7 @@ namespace Uoko.FireProj.Concretes
                 {
                     Id = r.Id,
                     TaskName = r.TaskName,
-                    DeployEnvironment = r.DeployEnvironment,
+                    DeployStage = r.DeployEnvironment,
                     Branch = r.Branch,
                     TaskDesc = r.TaskDesc,
                     Status = r.Status,
@@ -191,7 +248,7 @@ namespace Uoko.FireProj.Concretes
                     {
                         CreateBy = 0,
                         CreateDate = DateTime.Now,
-                        Environment = taskInfo.DeployEnvironment,
+                        Stage = taskInfo.DeployEnvironment,
                         TaskId = task.Id,
                         TriggeredId = task.TriggeredId,
                         TaskLogsType = TaskLogsEnum.Status,

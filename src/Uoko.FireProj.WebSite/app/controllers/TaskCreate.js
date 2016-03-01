@@ -5,7 +5,12 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
         TaskName: "",
         Project: null,
         Branch: "",
-        DeployEnvironment: "",
+
+        Stage: "",
+
+        DeployInfoIoc:null,
+        DeployInfoPre:null,
+
         DeployIP: "",
         DeployAddress: "",
         SiteName: "",
@@ -14,6 +19,8 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
         TaskDesc: "",
         Domain: "",
     };
+
+
     $scope.taskInfo.Server;
     if (typeof project == "string") {
         $scope.serverIP = JSON.parse(project);
@@ -23,7 +30,7 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
     $scope.projectList = [];
     $scope.branchList = [];
     TaskService.GetEnvironment(function (data) {
-        $scope.environmentList = data;
+        $scope.stageList = data;
     });
     $scope.GetProjectList = function() {
         ProjectService.getAllProject(function(data) {
@@ -72,6 +79,8 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
         $scope.taskInfo.NoticeUses.splice(index, 1);
         $scope.$evalAsync();
     }
+
+
     $scope.Save = function (isValid) {
         if (!isValid) {
             bootbox.alert("表单验证未通过");

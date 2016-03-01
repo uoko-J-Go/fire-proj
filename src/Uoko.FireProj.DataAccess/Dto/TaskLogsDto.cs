@@ -28,7 +28,7 @@ namespace Uoko.FireProj.DataAccess.Dto
         /// <summary>
         /// 记录所处的环境
         /// </summary>
-        public EnvironmentEnum Environment { get; set; }
+        public StageEnum Stage { get; set; }
 
         /// <summary>
         /// 任务记录描述
