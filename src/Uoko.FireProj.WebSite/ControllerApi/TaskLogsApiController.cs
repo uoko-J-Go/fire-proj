@@ -37,9 +37,9 @@ namespace Uoko.FireProj.WebSite.ControllerApi
         {
             var result = new
             {
-                IocTotal= _taskLogsSvc.GetLogTotalByEnvironment(taskId,EnvironmentEnum.IOC),
-                PreTotal = _taskLogsSvc.GetLogTotalByEnvironment(taskId, EnvironmentEnum.PRE),
-                ProductionTotal = _taskLogsSvc.GetLogTotalByEnvironment(taskId, EnvironmentEnum.PRODUCTION),
+                IocTotal= _taskLogsSvc.GetLogTotalByEnvironment(taskId,StageEnum.IOC),
+                PreTotal = _taskLogsSvc.GetLogTotalByEnvironment(taskId, StageEnum.PRE),
+                ProductionTotal = _taskLogsSvc.GetLogTotalByEnvironment(taskId, StageEnum.PRODUCTION),
             };
             return Ok(result);
         }

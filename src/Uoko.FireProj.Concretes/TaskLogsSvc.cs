@@ -101,7 +101,7 @@ namespace Uoko.FireProj.Concretes
                     TaskId = r.TaskId,
                     CreateBy = r.CreateBy,
                     CreateDate = r.CreateDate,
-                    Environment = r.Environment,
+                    Stage = r.Stage,
                     TaskLogsType = r.TaskLogsType,
                 }).FirstOrDefault();
                 return data;
@@ -114,9 +114,9 @@ namespace Uoko.FireProj.Concretes
                 var db = dbScope.DbContexts.Get<FireProjDbContext>();
 
                 var data1 = db.TaskLogs.Where(r => r.TaskId == query.TaskId);
-                if (query.Environment.HasValue)
+                if (query.Stage.HasValue)
                 {
-                    data1 = data1.Where(r => r.Environment == query.Environment.Value);
+                    data1 = data1.Where(r => r.Stage == query.Stage.Value);
                 }
                 var data = data1.Select(r => new TaskLogsDto
                 {
@@ -146,12 +146,12 @@ namespace Uoko.FireProj.Concretes
             }
         }
 
-        public int GetLogTotalByEnvironment(int taskId, EnvironmentEnum environment)
+        public int GetLogTotalByEnvironment(int taskId, StageEnum stage)
         {
             using (var dbScope = _dbScopeFactory.CreateReadOnly())
             {
                 var db = dbScope.DbContexts.Get<FireProjDbContext>();
-                var data = db.TaskLogs.Where(t=>t.TaskId==taskId&&t.Environment==environment);
+                var data = db.TaskLogs.Where(t=>t.TaskId==taskId&&t.Stage==stage);
                 var total = data.Count();
                 return total;
             }

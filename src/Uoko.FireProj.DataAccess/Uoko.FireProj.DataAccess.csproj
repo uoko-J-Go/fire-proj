@@ -72,13 +72,12 @@
     <Compile Include="Entity\Server.cs" />
     <Compile Include="Entity\Task.cs" />
     <Compile Include="Entity\TaskLogs.cs" />
-    <Compile Include="Enum\EnvironmentEnum.cs" />
+    <Compile Include="Enum\StageEnum.cs" />
     <Compile Include="Enum\GenericStatusEnum.cs" />
-    <Compile Include="Enum\TaskLogsEnum.cs" />
     <Compile Include="Enum\DeployEnum.cs" />
     <Compile Include="Enum\DicEnum.cs" />
     <Compile Include="Enum\DomainResourceStatusEnum.cs" />
-    <Compile Include="Enum\TaskEnum.cs" />
+    <Compile Include="Enum\TaskStatusEnum.cs" />
     <Compile Include="Extensions\DbContextExtensions.cs" />
     <Compile Include="FireProjDbContext.cs" />
     <Compile Include="FluentAPI\DictionaryMap.cs" />

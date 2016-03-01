@@ -89,17 +89,22 @@ namespace Uoko.FireProj.WebSite.ControllerApi
         public IHttpActionResult BeginDeploy(int taskId,int triggerId)
         {
             var task= _taskSvc.GetTaskById(taskId);
-            _taskSvc.UpdateTaskStatus(new TaskDto() { Id = task.Id, Status = TaskEnum.Deployment });
+            _taskSvc.UpdateTaskStatus(new TaskDto() { Id = task.Id, Status = TaskStatusEnum.Deployment });
             _taskLogsSvc.CreatTaskLogs(new TaskLogsDto()
             {
                 TaskId = taskId,
                 TriggeredId = triggerId,
                 CreateBy = 1,
-                Environment= task.DeployEnvironment,
-                TaskLogsType = TaskLogsEnum.CI
+                Stage= task.DeployStage,
+                
             });
             return Ok();
         }
+
+        /* 
+        
+            暂时去除提测步骤
+
 
         /// <summary>
         /// 提交测试动作
@@ -114,6 +119,8 @@ namespace Uoko.FireProj.WebSite.ControllerApi
             _taskSvc.UpdateTaskStatus(task);
             return Ok();
         }
+
+        */
 
         /// <summary>
         /// 测试不通过动作

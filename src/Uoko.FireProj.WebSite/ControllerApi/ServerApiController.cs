@@ -26,7 +26,7 @@ namespace Uoko.FireProj.WebSite.ControllerApi
             return Ok(result);
         }
         [Route("Environment/{en}")]
-        public IHttpActionResult Get(EnvironmentEnum en)
+        public IHttpActionResult Get(StageEnum en)
         {
             var result = _serverSvc.GetAllServerOfEnvironment(en);
             return Ok(result);

@@ -132,9 +132,9 @@ namespace Uoko.FireProj.Concretes
                     Status = t.Status,
                     PackageDir = t.PackageDir,
                 });
-                if (query.EnvironmentType.HasValue)
+                if (query.StageType.HasValue)
                 {
-                    data = data.Where(t => t.EnvironmentType==query.EnvironmentType.Value);
+                    data = data.Where(t => t.StageType==query.StageType.Value);
                 }
                 if (!string.IsNullOrEmpty(query.Search))
                 {
@@ -146,12 +146,12 @@ namespace Uoko.FireProj.Concretes
             }
         }
 
-        public IList<ServerDto> GetAllServerOfEnvironment(EnvironmentEnum environmentEnum, bool needEnable = true)
+        public IList<ServerDto> GetAllServerOfEnvironment(StageEnum stageEnum, bool needEnable = true)
         {
             using (var dbScope = _dbScopeFactory.CreateReadOnly())
             {
                 var db = dbScope.DbContexts.Get<FireProjDbContext>();
-                var data = db.Servers.Where(t => t.EnvironmentType == environmentEnum);
+                var data = db.Servers.Where(t => t.StageType == stageEnum);
                 if (needEnable)
                 {
                     data = data.Where(t => t.Status == GenericStatusEnum.Enable);

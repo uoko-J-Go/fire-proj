@@ -31,7 +31,7 @@ namespace Uoko.FireProj.DataAccess.Dto
         /// <summary>
         /// 部署环境
         /// </summary>
-        public EnvironmentEnum DeployEnvironment { get; set; }
+        public StageEnum DeployStage { get; set; }
 
         /// <summary>
         /// 部署环境枚举对应的名称
@@ -82,7 +82,7 @@ namespace Uoko.FireProj.DataAccess.Dto
         /// <summary>
         /// 任务状态值
         /// </summary>
-        public TaskEnum Status { get; set; }
+        public TaskStatusEnum Status { get; set; }
 
         /// <summary>
         /// 任务描述
