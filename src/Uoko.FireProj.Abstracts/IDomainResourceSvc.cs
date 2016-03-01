@@ -38,5 +38,18 @@ namespace Uoko.FireProj.Abstracts
         /// <param name="query"></param>
         /// <returns></returns>
         PageGridData<DomainResourceDto> GetDomainPage(DomainResourceQuery query);
+
+        /// <summary>
+        /// 根据项部署服务器的id获取全部域名信息
+        /// </summary>
+        /// <param name="serverId"></param>
+        /// <returns></returns>
+        List<DomainResourceDto> GetResourceList(int serverId);
+
+        /// <summary>
+        /// 根据主键删除信息
+        /// </summary>
+        /// <param name="Id"></param>
+        void DeleteDomain(int Id);
     }
 }
