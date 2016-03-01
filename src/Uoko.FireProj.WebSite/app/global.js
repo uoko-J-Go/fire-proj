@@ -7,6 +7,9 @@ var fireproj;
     fireproj.config(function (tagsInputConfigProvider) {
         tagsInputConfigProvider.setDefaults('tagsInput', {
             minLength: 1
+        }).setDefaults('autoComplete', {
+            minLength: 0,
+            selectFirstMatch: true
         });
     });
 })();
