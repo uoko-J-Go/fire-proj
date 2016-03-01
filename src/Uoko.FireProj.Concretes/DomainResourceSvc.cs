@@ -177,7 +177,7 @@ namespace Uoko.FireProj.Concretes
                 {
                     var db = dbScope.DbContexts.Get<FireProjDbContext>();
                     var entity = db.DomainResource.FirstOrDefault(r => r.TaskId == taskId);
-                    entity.Status = DomainResourceStatusEnum.Unable;
+                    entity.Status = DomainResourceStatusEnum.Enable;
                     db.SaveChanges();
                 }
             }

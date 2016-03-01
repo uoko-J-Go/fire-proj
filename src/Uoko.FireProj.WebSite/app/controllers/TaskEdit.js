@@ -29,14 +29,19 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
     $scope.GetTaskInfo = function () {
         var taskId = $("#taskIdParam").val();
         TaskService.GetTaskInfo(taskId, function (data) {
-
             $scope.GetAllUserDetail(data.CheckUsers, 0);
             $scope.GetAllUserDetail(data.NoticeUses, 0);
-            $scope.taskInfo = data;
-            $scope.getBranch($scope.taskInfo.Project);
-            TaskService.GetResourceList(data.DeployEnvironment, function (data) {
-                $scope.ServerList = data;
+            $scope.getBranch(data.Project);
+            TaskService.GetResourceList(data.DeployEnvironment, function (server) {
+                $scope.taskInfo = data;
+                $scope.ServerList = server;
             });
+            //TaskService.GetDomain(data.ProjectId, server.Id, function (domain) {
+            //    $scope.DomainList = domain;
+
+
+               
+            //});
         });
     }
     $scope.GetAllUserDetail = function (userList, index) {
@@ -156,9 +161,9 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
     $scope.Init = function () {
         $scope.GetAllUser();
         $scope.GetProjectList();
-        $scope.$watch('taskInfo.Project + taskInfo.DeployEnvironment + taskInfo.Server', function () {
-            $scope.GetDomain($scope.taskInfo.Project, $scope.taskInfo.Server);
-        });
+        //$scope.$watch('taskInfo.Project + taskInfo.DeployEnvironment + taskInfo.Server', function () {
+        //    $scope.GetDomain($scope.taskInfo.Project, $scope.taskInfo.Server);
+        //});
     }
 
     $scope.Init();

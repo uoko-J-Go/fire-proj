@@ -55,6 +55,8 @@ namespace Uoko.FireProj.Concretes
                 using (var dbScope = _dbScopeFactory.Create())
                 {
                     var db = dbScope.DbContexts.Get<FireProjDbContext>();
+                    
+
                     Project entity = new Project() { Id = projectId };
                     db.Project.Attach(entity);
                     db.Project.Remove(entity);
