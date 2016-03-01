@@ -3,7 +3,7 @@
 */
 var fireproj;
 (function () {
-    fireproj = angular.module("FireProj", ['ngMessages','ui.bootstrap']);
+    fireproj = angular.module("FireProj", ['ngMessages', 'ui.bootstrap', 'ngTagsInput']);
 })();
 
 

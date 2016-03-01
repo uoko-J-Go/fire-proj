@@ -219,6 +219,8 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Images\logo.png" />
+    <Content Include="Content\ng-tags-input.bootstrap.min.css" />
+    <Content Include="Content\ng-tags-input.min.css" />
     <Content Include="Content\TaskEdit.css" />
     <Content Include="Content\TaskDetail.css" />
     <Content Include="Content\tree-grid-directive.js" />
@@ -1102,6 +1104,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\ng-tags-input.min.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\ui-bootstrap-1.1.0.js" />
