@@ -169,6 +169,27 @@ namespace Uoko.FireProj.Concretes
             }
         }
 
+        public List<DomainResourceDto> GetResourceList(int projectId, int serverId, int taskId)
+        {
+            try
+            {
+                using (var dbScope = _dbScopeFactory.CreateReadOnly())
+                {
+                    var db = dbScope.DbContexts.Get<FireProjDbContext>();
+                    var data = db.DomainResource.Where(r => r.ProjectId == projectId && (r.Status == DomainResourceStatusEnum.Enable || r.TaskId == taskId) && r.ServerId == serverId).Select(r => new DomainResourceDto
+                    {
+                        Id = r.Id,
+                        Name = r.Name,
+                    }).ToList();
+                    return data;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new TipInfoException(ex.Message);
+            }
+        }
+
         public void ReleaseDomain(int taskId)
         {
             try

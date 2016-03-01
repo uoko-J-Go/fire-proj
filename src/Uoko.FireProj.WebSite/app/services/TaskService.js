@@ -117,6 +117,17 @@
             //错误处理
         });
     };
+    this.GetDomainByTaskId = function (projectId, serverId, taskId, successCallBack) {
+        $http.get("/api/DomainResourceApi/" + projectId + "/" + serverId + "/" + taskId + "").success(function (data) {
+            if (successCallBack != undefined) {
+                successCallBack(data);
+            }
+        }).error(function (data) {
+            //错误处理
+        });
+    };
+    
+
     this.GetLogTotal = function (taskId, successCallBack) {
         $http.get("/api/TaskLogsApi/LogTotal/" + taskId + "").success(function (data) {
             if (successCallBack != undefined) {

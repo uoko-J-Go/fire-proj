@@ -88,7 +88,7 @@ namespace Uoko.FireProj.Concretes
                 {
                     var db = dbScope.DbContexts.Get<FireProjDbContext>();
                     //根据实际情况修改
-                    db.Update(entity, t => new { t.TaskName,t.ProjectId, t.Branch, t.DeployEnvironment, t.DeployIP,t.SiteName,t.DeployAddress,t.TaskDesc,t.CheckUserId,t.NoticeUseId,t.Status,t.ModifyBy,t.ModifyDate });
+                    db.Update(entity, t => new { t.Domain, t.TaskName,t.ProjectId, t.Branch, t.DeployEnvironment, t.DeployIP,t.SiteName,t.DeployAddress,t.TaskDesc,t.CheckUserId,t.NoticeUseId,t.Status,t.ModifyBy,t.ModifyDate });
                     db.SaveChanges();
                 }
             }
