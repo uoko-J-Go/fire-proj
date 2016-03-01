@@ -4,6 +4,7 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
     $scope.taskInfo = {};
     $scope.projectList = [];
     $scope.branchList = [];
+    $scope.isFirstLoad = true;
     TaskService.GetEnvironment(function (data) {
         $scope.environmentList = data;
     });
@@ -34,9 +35,7 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
             $scope.GetAllUserDetail(data.NoticeUses, 0);
             $scope.taskInfo = data;
             $scope.getBranch($scope.taskInfo.Project);
-            TaskService.GetResourceList(data.DeployEnvironment, function (data) {
-                $scope.ServerList = data;
-            });
+            $scope.GetServerData(data.DeployEnvironment);
         });
     }
     $scope.GetAllUserDetail = function (userList, index) {
@@ -119,6 +118,15 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
     $scope.GetServerData = function (environmentId) {
         TaskService.GetResourceList(environmentId, function (data) {
             $scope.ServerList = data;
+            if ($scope.isFirstLoad) {
+                var _server = $scope.ServerList.filter(function(server) {
+                    return server.IP == $scope.taskInfo.DeployIP;
+                })[0];
+                $scope.taskInfo.Server = JSON.stringify(_server);
+                $scope.isFirstLoad = false;
+            }
+           
+            //$scope.$apply();
         });
     }
 

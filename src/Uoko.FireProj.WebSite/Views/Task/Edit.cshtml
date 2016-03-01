@@ -232,11 +232,11 @@
                 <div class="form-group form-md-line-input">
                     <label class="col-md-2 control-label">部署服务器</label>
                     <div class="col-md-10">
-                        <select name="deployenvironment" class="form-control" ng-model="taskInfo.Server" required>
+                        <select name="server" class="form-control" ng-model="taskInfo.Server" required>
                             <option ng-repeat="server in ServerList" value="{{server}}"  ng-selected="server.IP==taskInfo.DeployIP">{{server.Name}}</option>
                         </select>
-                        <div ng-show="form.$submitted || form.deployenvironment.$touched">
-                            <span class="error-msg" ng-show="form.deployenvironment.$error.required">部署服务器必选</span>
+                        <div ng-show="form.$submitted || form.server.$touched">
+                            <span class="error-msg" ng-show="form.server.$error.required">部署服务器必选</span>
                         </div>
                     </div>
                 </div>
