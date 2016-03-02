@@ -26,7 +26,14 @@ namespace Uoko.FireProj.WebSite.ControllerApi
             var result = _domainResourceSvc.GetResourceList(projectId, serverId);
             return Ok(result);
         }
+        [Route("{projectId}/{serverId}/{taskId}")]
+        public IHttpActionResult Get(int projectId, int serverId,int taskId)
+        {
+            var result = _domainResourceSvc.GetResourceList(projectId, serverId, taskId);
+            return Ok(result);
+        }
 
+        
         [Route("{serverId}")]
         public IHttpActionResult Get(int serverId)
         {

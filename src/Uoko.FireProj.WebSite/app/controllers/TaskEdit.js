@@ -1,6 +1,7 @@
 ﻿
 
 fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskService, ProjectService,CommonService) {
+    var taskId = $("#taskIdParam").val();
     $scope.taskInfo = {};
     $scope.projectList = [];
     $scope.branchList = [];
@@ -30,7 +31,7 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
         });
     };
     $scope.GetTaskInfo = function () {
-        var taskId = $("#taskIdParam").val();
+        
         TaskService.GetTaskInfo(taskId, function (data) {
 
             $scope.GetAllUserDetail(data.CheckUsers, 0);
@@ -154,7 +155,7 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
             if (server == undefined) {
                 server = { Id: 0 };
             }
-            TaskService.GetDomain(project.Id, server.Id, function (data) {
+            TaskService.GetDomainByTaskId(project.Id, server.Id, taskId, function (data) {
                 $scope.DomainList = data;
             });
         }
