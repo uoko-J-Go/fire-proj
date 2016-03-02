@@ -32,6 +32,11 @@ namespace Uoko.FireProj.WebSite.Controllers
             ViewBag.TaskId = taskId;
             return View();
         }
+        public ActionResult NewDetail(int taskId)
+        {
+            ViewBag.TaskId = taskId;
+            return View();
+        }
         public ActionResult Logs()
         {
             return View();
@@ -46,7 +51,7 @@ namespace Uoko.FireProj.WebSite.Controllers
                 DeployIP ="192.168.200.25",
                 DeployStage = StageEnum.IOC,
                 Domain = "fire.uoko.ioc",
-                NoticeUseId =null,
+                NoticeUserId =null,
                 SiteName ="fire.uoko.ioc",
                 DeployStatus = DeployStatus.Deploying,
                 TaskDesc = "Seed data",

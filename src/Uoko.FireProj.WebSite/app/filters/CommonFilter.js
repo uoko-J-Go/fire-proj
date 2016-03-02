@@ -3,11 +3,11 @@
     return function(value) {
         switch (value) {
         case 0:
-            return "IOC环境";
+            return "IOC";
         case 1:
-            return "Pre环境";
+            return "Pre";
         case 2:
-            return "正式环境";
+            return "Online";
         default:
             return "未知";
         }

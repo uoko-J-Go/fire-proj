@@ -147,5 +147,14 @@
             //错误处理
         });
     };
-    
+    /////////////////////////////////
+    this.GetTaskLogsByTaskId = function (taskId, successCallBack) {
+        $http.get("/api/TaskLogsApi/" + taskId + "/ByTaskId").success(function (data) {
+            if (successCallBack != undefined) {
+                successCallBack(data);
+            }
+        }).error(function (data) {
+            //错误处理
+        });
+    };
 });
