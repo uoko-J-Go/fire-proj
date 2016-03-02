@@ -23,8 +23,7 @@ namespace Uoko.FireProj.Infrastructure.Data
             this.total = total;
             this.rows = rows;
         }
-        /// <sum
-        /// mary>
+        /// <summary>
         /// 获取或设置 总记录数
         /// </summary>
         public int total { get; set; }

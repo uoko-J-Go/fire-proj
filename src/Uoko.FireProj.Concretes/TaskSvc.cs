@@ -37,7 +37,7 @@ namespace Uoko.FireProj.Concretes
             taskInfo.ProjectId = taskDto.ProjectId;
             taskInfo.Branch = taskDto.Branch;
             taskInfo.TaskName = taskDto.TaskName;
-            taskInfo.CreateBy = 1;
+            taskInfo.CreatorId = 1;
             taskInfo.CreateDate = DateTime.Now;
 
             var domain = string.Empty;
@@ -209,29 +209,34 @@ namespace Uoko.FireProj.Concretes
             //}
         }
 
-        public PageGridData<TaskDto> GetTaskPage(TaskQuery query)
+        public PageGridData<TaskInfoForList> GetTaskPage(TaskQuery query)
         {
-            return null;
-            //using (var dbScope = _dbScopeFactory.CreateReadOnly())
-            //{
-            //    var db = dbScope.DbContexts.Get<FireProjDbContext>();
-            //    var data = db.TaskInfo.Select(r => new TaskDto
-            //    {
-            //        Id = r.Id,
-            //        TaskName = r.TaskName,
-            //        DeployStage = r.DeployEnvironment,
-            //        Branch = r.Branch,
-            //        TaskDesc = r.TaskDesc,
-            //        Status = r.Status,
-            //    });
-            //    if (!string.IsNullOrEmpty(query.Search))
-            //    {
-            //        data = data.Where(r => r.TaskName.Contains(query.Search));
-            //    }
-            //    var result = data.OrderBy(r => r.Id).Skip(query.Offset).Take(query.Limit).ToList();
-            //    var total = data.Count();
-            //    return new PageGridData<TaskDto> { rows = result, total = total };
-            //}
+            using (var dbScope = _dbScopeFactory.CreateReadOnly())
+            {
+                var db = dbScope.DbContexts.Get<FireProjDbContext>();
+                var data = db.TaskInfo.AsQueryable();
+                if (!string.IsNullOrEmpty(query.Search))
+                {
+                    data = data.Where(r => r.TaskName.Contains(query.Search));
+                }
+                var total = data.Count();
+
+                var tasksFromDb = data.OrderByDescending(r => r.Id)
+                                      .Skip(query.Offset)
+                                      .Take(query.Limit)
+                                      .ToList();
+                var tasksForList = TransferTask(tasksFromDb);
+                return new PageGridData<TaskInfoForList> {rows = tasksForList, total = total};
+            }
+        }
+
+        public IEnumerable<TaskInfoForList> TransferTask(IEnumerable<TaskInfo> tasks)
+        {
+            return tasks.Select(task => new TaskInfoForList
+                                        {
+                                            TaskInfo = task,
+                                            OnlineTaskInfo = null
+                                        });
         }
 
         public void UpdateTaskStatus(TaskDto task)

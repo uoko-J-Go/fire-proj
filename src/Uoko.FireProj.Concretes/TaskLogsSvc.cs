@@ -35,7 +35,7 @@ namespace Uoko.FireProj.Concretes
                 var entity = Mapper.Map<TaskLogsDto, TaskLogs>(dto);
                 using (var dbScope = _dbScopeFactory.Create())
                 {
-                    entity.CreateBy = 1;
+                    entity.CreatorId = 1;
                     entity.CreateDate = DateTime.Now;
                     var db = dbScope.DbContexts.Get<FireProjDbContext>();
                     db.TaskLogs.Add(entity);
@@ -64,7 +64,7 @@ namespace Uoko.FireProj.Concretes
                     taskLogsDto.Stage = item.Stage;
                     taskLogsDto.Comments = item.Comments;
                     taskLogsDto.LogType = item.LogType;
-                    taskLogsDto.CreateBy = item.CreateBy;
+                    taskLogsDto.CreateBy = item.CreatorId;
                     taskLogsDto.CreateDate = item.CreateDate;
                     switch (item.Stage)
                     {
