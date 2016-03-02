@@ -8,19 +8,7 @@
     //TaskService.GetEnvironment(function (data) {
     //    $scope.environmentList = data;
     //});
-    $scope.AllUsers = [];
-    $scope.GetAllUser = function () {
-        CommonService.getAllUsers(function (data) {
-            $scope.AllUsers = data;
-            $scope.GetProjectList();
-        });
-    }
-    $scope.loadTags = function (query) {
-        var result = $scope.AllUsers.filter(function(user) {
-            return (user.name.toLowerCase().indexOf(query.toLowerCase()) != -1) || (user.username.toLowerCase().indexOf(query.toLowerCase()) != -1);
-        });
-        return result;
-    }
+    
 
     //$scope.GetProjectList = function () {
     //    ProjectService.getAllProject(function (data) {
@@ -117,7 +105,6 @@
     }
 
     $scope.Init = function () {
-        $scope.GetAllUser();
         $scope.GetTaskInfo();
         $scope.GetTaskLogsByTaskId();
     }
