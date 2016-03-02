@@ -93,9 +93,9 @@ namespace Uoko.FireProj.WebSite.ControllerApi
             _taskLogsSvc.CreatTaskLogs(new TaskLogsDto()
             {
                 TaskId = taskId,
-                TriggeredId = triggerId,
-                CreateBy = 1,
-                Stage= task.DeployStage,
+                //TriggeredId = triggerId,
+                //CreateBy = 1,
+                //Stage= task.DeployStage,
                 
             });
             return Ok();

@@ -63,6 +63,7 @@
     <Compile Include="Dto\DomainResourceDto.cs" />
     <Compile Include="Dto\ServerDto.cs" />
     <Compile Include="Dto\TaskWriteDto.cs" />
+    <Compile Include="Dto\TaskDetailDto.cs" />
     <Compile Include="Dto\TaskLogsDto.cs" />
     <Compile Include="Dto\TaskDto.cs" />
     <Compile Include="Dto\UserDto.cs" />
@@ -73,6 +74,7 @@
     <Compile Include="Entity\Server.cs" />
     <Compile Include="Entity\Task.cs" />
     <Compile Include="Entity\TaskLogs.cs" />
+    <Compile Include="Enum\LogType.cs" />
     <Compile Include="Enum\StageEnum.cs" />
     <Compile Include="Enum\GenericStatusEnum.cs" />
     <Compile Include="Enum\DeployEnum.cs" />

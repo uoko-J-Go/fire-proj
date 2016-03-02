@@ -39,7 +39,7 @@ namespace Uoko.FireProj.Abstracts
         /// 根据任务Id获取任务信息详情
         /// </summary>
         /// <param name="taskId"></param>
-        TaskDto GetTaskById(int taskId);
+        TaskDetailDto GetTaskById(int taskId);
 
         /// <summary>
         /// 更新任务状态

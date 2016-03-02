@@ -1,20 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using AutoMapper;
 using Mehdime.Entity;
 using Newtonsoft.Json;
 using Uoko.FireProj.Abstracts;
 using Uoko.FireProj.DataAccess.Dto;
 using Uoko.FireProj.DataAccess.Entity;
-using Uoko.FireProj.DataAccess.Extensions;
+using Uoko.FireProj.DataAccess.Enum;
 using Uoko.FireProj.DataAccess.Query;
 using Uoko.FireProj.Infrastructure.Data;
 using Uoko.FireProj.Infrastructure.Exception;
 using Uoko.FireProj.Model;
-using Uoko.FireProj.DataAccess.Enum;
-using Uoko.FireProj.Infrastructure.Extensions;
 
 namespace Uoko.FireProj.Concretes
 {
@@ -48,7 +45,7 @@ namespace Uoko.FireProj.Concretes
                     if (!string.IsNullOrEmpty(taskDto.IocDeployInfo.CheckUserId))
                     {
                         var userIds = taskDto.IocDeployInfo.CheckUserId.Split(',');
-                        var userIdsStatus = userIds.Select(userId => string.Format("{0}-{1}", userId, (int) QAStatus.Waiting)).ToList();
+                        var userIdsStatus = userIds.Select(userId => string.Format("{0}-{1}", userId, (int)QAStatus.Waiting)).ToList();
                         taskInfo.IocCheckUserId = string.Join(",", userIdsStatus);
                     }
                     domain = taskDto.IocDeployInfo.Domain;
@@ -133,8 +130,28 @@ namespace Uoko.FireProj.Concretes
 
        
 
-        public TaskDto GetTaskById(int taskId)
+        public TaskDetailDto GetTaskById(int taskId)
         {
+            using (var dbScope = _dbScopeFactory.CreateReadOnly())
+            {
+                var db = dbScope.DbContexts.Get<FireProjDbContext>();
+                var entity = db.TaskInfo.FirstOrDefault(r => r.Id == taskId);
+                var taskDto = Mapper.Map<TaskInfo, TaskDetailDto>(entity);
+                taskDto.DeployInfoIocDto = JsonConvert.DeserializeObject<DeployInfoIocDto>(taskDto.DeployInfoIocJson);
+                taskDto.DeployInfoPreDto = JsonConvert.DeserializeObject<DeployInfoPreDto>(taskDto.DeployInfoPreJson);
+                taskDto.DeployInfoOnlineDto = JsonConvert.DeserializeObject<DeployInfoOnlineDto>(taskDto.DeployInfoOnlineJson);
+                var taskLogs = db.TaskLogs.Where(r => r.TaskId == taskId).ToList();
+
+
+                taskDto.TaskLogsDto = Mapper.Map<List<TaskLogs>, List<TaskLogsDto>>(taskLogs);
+
+
+            }
+
+
+
+
+
             return null;
             //using (var dbScope = _dbScopeFactory.CreateReadOnly())
             //{
