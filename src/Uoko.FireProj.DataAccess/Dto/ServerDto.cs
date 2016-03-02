@@ -43,6 +43,5 @@ namespace Uoko.FireProj.DataAccess.Dto
         /// </summary>
         public GenericStatusEnum Status { get; set; }
 
-        public string SiteInfoJson { get; set; }
     }
 }

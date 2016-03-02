@@ -74,7 +74,7 @@
                             <td>{{task.TaskInfo.ModifierName}}</td>
                             <td>
                                 <div>
-                                    <a class="btn btn-success" ng-show="task.TaskInfo.CreateBy == @loginUserId " ng-click="Deploy(item)">部署到...</a>
+                                    <a class="btn btn-success" ng-show="task.TaskInfo.CreatorId == @loginUserId " ng-click="Deploy(item)">部署到...</a>
                                 </div>
                             </td>
                         </tr>

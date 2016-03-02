@@ -40,46 +40,5 @@ namespace Uoko.FireProj.DataAccess.Entity
         /// </summary>
         public GenericStatusEnum Status { get; set; }
 
-        /// <summary>
-        /// iis info json
-        /// </summary>
-        public string SiteInfoJson { get; set; }
-
-
-        public IEnumerable<IISSiteInfo> GenerateSiteInfos()
-        {
-            try
-            {
-                var dicInfo = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, string>>>(SiteInfoJson);
-                var siteInfos = dicInfo.SelectMany(projectDic =>
-                {
-                    var projectName = projectDic.Key;
-                    return projectDic.Value.Select(siteDic =>
-                    {
-                        var siteName = siteDic.Key;
-                        var domainName = siteDic.Value;
-                        return new IISSiteInfo()
-                        {
-                            BelongProject = projectName,
-                            SiteName = siteName,
-                            DomainName = domainName
-                        };
-                    });
-                }).ToList();
-                return siteInfos;
-            }
-            catch (Exception)
-            {
-                return new List<IISSiteInfo>();
-            }
-        }
-
-        public class IISSiteInfo
-        {
-            public string SiteName { get; set; }
-            public string DomainName { get; set; }
-            public string BelongProject { get; set; }
-        }
-
     }
 }
