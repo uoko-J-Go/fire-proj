@@ -86,18 +86,9 @@ namespace Uoko.FireProj.WebSite.ControllerApi
         /// <returns></returns>
         [Route("BeginDeploy")]
         [HttpPost]
-        public IHttpActionResult BeginDeploy(int taskId,int triggerId)
+        public IHttpActionResult BeginDeploy(int taskId,StageEnum deployStage, int triggerId)
         {
-            var task= _taskSvc.GetTaskById(taskId);
-            _taskSvc.UpdateTaskStatus(new TaskDto() { Id = task.Id, DeployStatus = DeployStatus.Deploying });
-            _taskLogsSvc.CreatTaskLogs(new TaskLogsDto()
-            {
-                TaskId = taskId,
-                //TriggeredId = triggerId,
-                //CreateBy = 1,
-                //Stage= task.DeployStage,
-                
-            });
+            _taskSvc.BeginDeploy(taskId, deployStage, triggerId);
             return Ok();
         }
 

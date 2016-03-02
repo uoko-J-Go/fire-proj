@@ -113,10 +113,18 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
                 buildInfo.Target = "Deploy-To-PRE";
             }
             CommonService.TriggerBuild(buildInfo, function (data) {
+                var triggerId = data.id;
                 //发起部署后更新数据库状态
 
+                TaskService.BeginDeploy(taskId, $scope.taskInfo.DeployStage, triggerId, function (data) {
+                    bootbox.alert("任务创建成功并发起部署...", function (data) {
+                        location.href = "/Task/Index";
+                    });
+
+                });
+               
             });
-            location.href = "/Task/Index";
+            
         });
     }
 
