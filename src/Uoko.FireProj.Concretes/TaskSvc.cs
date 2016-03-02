@@ -155,9 +155,29 @@ namespace Uoko.FireProj.Concretes
             //}
         }
 
-        public TaskDto GetTaskById(int taskId)
+        public TaskDetailDto GetTaskById(int taskId)
         {
-            return null;
+            using (var dbScope = _dbScopeFactory.CreateReadOnly())
+            {
+                var db = dbScope.DbContexts.Get<FireProjDbContext>();
+                var entity = db.TaskInfo.FirstOrDefault(r => r.Id == taskId);
+                var taskDto = Mapper.Map<TaskInfo, TaskDetailDto>(entity);
+                taskDto.DeployInfoIocDto = JsonConvert.DeserializeObject<DeployInfoIocDto>(taskDto.DeployInfoIocJson);
+                taskDto.DeployInfoPreDto = JsonConvert.DeserializeObject<DeployInfoPreDto>(taskDto.DeployInfoPreJson);
+                taskDto.DeployInfoOnlineDto = JsonConvert.DeserializeObject<DeployInfoOnlineDto>(taskDto.DeployInfoOnlineJson);
+                var taskLogs = db.TaskLogs.Where(r => r.TaskId == taskId).ToList();
+
+
+                taskDto.TaskLogsDto = Mapper.Map<List<TaskLogs>, List<TaskLogsDto>>(taskLogs);
+
+
+            }
+
+
+
+
+
+                return null;
             //using (var dbScope = _dbScopeFactory.CreateReadOnly())
             //{
             //    var db = dbScope.DbContexts.Get<FireProjDbContext>();

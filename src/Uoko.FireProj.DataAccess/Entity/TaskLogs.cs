@@ -34,10 +34,4 @@ namespace Uoko.FireProj.DataAccess.Entity
 
         public LogType LogType { get; set; }
     }
-
-    public enum LogType
-    {
-        Deploy = 0,
-        QA = 1,
-    }
 }
