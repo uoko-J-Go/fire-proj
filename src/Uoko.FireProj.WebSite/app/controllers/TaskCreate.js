@@ -1,86 +1,47 @@
 ﻿
 
 fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskService, ProjectService, CommonService) {
+
+    $scope.Project = null;//当前项目对象
+    $scope.Server = null;//当前服务器对象
+    $scope.Server = null;//当前服务器对象
     $scope.taskInfo = {
         TaskName: "",
         Project: null,
         Branch: "",
-
-        Stage: "",
-
-        DeployInfoIoc:null,
-        DeployInfoPre:null,
-
-        DeployIP: "",
-        DeployAddress: "",
-        SiteName: "",
-        CheckUsers: [],
-        NoticeUses: [],
-        TaskDesc: "",
-        Domain: "",
+        DeployStage: "",
+        Server: null,
+        DomainInfo: null,
+        CheckUsers:[],
+        NoticeUsers:[],
+        DeployInfo: {}
     };
-
-
-    $scope.taskInfo.Server;
-    if (typeof project == "string") {
-        $scope.serverIP = JSON.parse(project);
-    }
-
 
     $scope.projectList = [];
     $scope.branchList = [];
+
     TaskService.GetEnvironment(function (data) {
-        $scope.stageList = data;
+        $scope.environmentList = data.filter(function (env) {
+            return env.Id !=2;
+        });
     });
+    $scope.AllUsers = [];
+    $scope.GetAllUser = function () {
+        CommonService.getAllUsers(function (data) {
+            $scope.AllUsers = data;
+        });
+    }
+    $scope.loadTags = function (query) {
+        var result = $scope.AllUsers.filter(function(user) {
+            return (user.name.toLowerCase().indexOf(query.toLowerCase()) != -1) || (user.username.toLowerCase().indexOf(query.toLowerCase()) != -1);
+        });
+        return result;
+    }
     $scope.GetProjectList = function() {
         ProjectService.getAllProject(function(data) {
             $scope.projectList = data;
         });
     };
-    //选择审核人
-    $scope.selectCheckUser = function () {
-        var modalInstance = $uibModal.open({
-            templateUrl: '/app/modals/SelectUser.html',
-            controller: 'SelectUserController',
-            resolve: {
-                selectedUsers: function () {
-                    return $scope.taskInfo.CheckUsers;
-                }
-            }
-        });
-
-        modalInstance.result.then(function (selectedUsers) {
-            $scope.taskInfo.CheckUsers = selectedUsers;
-        });
-    }
-    //选择相关人
-    $scope.selectNoticeUser = function () {
-        var modalInstance = $uibModal.open({
-            templateUrl: '/app/modals/SelectUser.html',
-            controller: 'SelectUserController',
-            resolve: {
-                selectedUsers: function () {
-                    return $scope.taskInfo.NoticeUses;
-                }
-            }
-        });
-
-        modalInstance.result.then(function (selectedUsers) {
-            $scope.taskInfo.NoticeUses = selectedUsers;
-        });
-    }
-    //移除审核人
-    $scope.removeCheckUser = function (index) {
-        $scope.taskInfo.CheckUsers.splice(index, 1);
-        $scope.$evalAsync();
-    }
-    //移除相关人
-    $scope.removeNoticeUser = function (index) {
-        $scope.taskInfo.NoticeUses.splice(index, 1);
-        $scope.$evalAsync();
-    }
-
-
     $scope.Save = function (isValid) {
         if (!isValid) {
             bootbox.alert("表单验证未通过");
@@ -93,9 +54,42 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
         var server = $scope.taskInfo.Server;
         if (typeof project == "string") {
             server = JSON.parse(server);
-            $scope.taskInfo.DeployIP = server.IP;
-            $scope.taskInfo.ServerId = server.Id;
         }
+        var checkUserIds = [];
+        var noticeUserIds = [];
+        if ($scope.taskInfo.CheckUsers != null && $scope.taskInfo.CheckUsers.length > 0) {
+            $.each($scope.taskInfo.CheckUsers, function (i, item) {
+                checkUserIds.push(item.id);
+            });
+        }
+        if ($scope.taskInfo.NoticeUsers != null && $scope.taskInfo.NoticeUsers.length > 0) {
+            $.each($scope.taskInfo.NoticeUsers, function (i, item) {
+                noticeUserIds.push(item.id);
+            });
+        }
+        
+        var taskForSave= {
+            TaskName:$scope.taskInfo.TaskName,
+            Branch:$scope.taskInfo.Branch,
+            ProjectId: $scope.taskInfo.Project.ProjectId,
+            DeployStage: $scope.taskInfo.DeployStage
+        }
+        if (taskForSave.DeployStage === 0) {
+            taskForSave.IocDeployInfo = $scope.taskInfo.DeployInfo;
+            taskForSave.IocDeployInfo.DeployIP = $scope.taskInfo.Server.DeployIP;
+            taskForSave.IocDeployInfo.Domain = $scope.taskInfo.DomainInfo.Name;
+            taskForSave.IocDeployInfo.SiteName = $scope.taskInfo.DomainInfo.SiteName;
+            taskForSave.IocDeployInfo.CheckUserId = checkUserIds.join(",");
+            taskForSave.IocDeployInfo.NoticeUserId = noticeUserIds.join(",");
+        } else if (taskForSave.DeployStage === 1) {
+            taskForSave.PreDeployInfo = $scope.taskInfo.DeployInfo;
+            taskForSave.PreDeployInfo.DeployIP = $scope.taskInfo.Server.DeployIP;
+            taskForSave.PreDeployInfo.Domain = $scope.taskInfo.DomainInfo.Name;
+            taskForSave.PreDeployInfo.SiteName = $scope.taskInfo.DomainInfo.SiteName;
+            taskForSave.PreDeployInfo.CheckUserId = checkUserIds.join(",");
+            taskForSave.PreDeployInfo.NoticeUserId = noticeUserIds.join(",");
+        }
+
         TaskService.CreateTask($scope.taskInfo, function() {
             location.href = "/Task/Index";
         });
@@ -148,6 +142,7 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
 
     $scope.Init = function () {
         $scope.GetProjectList();
+        $scope.GetAllUser();
         $scope.$watch('taskInfo.Project + taskInfo.DeployEnvironment + taskInfo.Server', function () {
             $scope.GetDomain($scope.taskInfo.Project, $scope.taskInfo.Server);
         });

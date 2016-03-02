@@ -198,6 +198,10 @@
     <Compile Include="Migrations\201603021004455_addNameForBaseEntity.Designer.cs">
       <DependentUpon>201603021004455_addNameForBaseEntity.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201603021105436_serverTrans.cs" />
+    <Compile Include="Migrations\201603021105436_serverTrans.Designer.cs">
+      <DependentUpon>201603021105436_serverTrans.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Query\BaseQuery.cs" />
@@ -293,6 +297,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201603021004455_addNameForBaseEntity.resx">
       <DependentUpon>201603021004455_addNameForBaseEntity.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201603021105436_serverTrans.resx">
+      <DependentUpon>201603021105436_serverTrans.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

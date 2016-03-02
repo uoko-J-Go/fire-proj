@@ -183,7 +183,6 @@ namespace Uoko.FireProj.Concretes
                     ServerDesc = t.ServerDesc,
                     Status = t.Status,
                     PackageDir = t.PackageDir,
-                    SiteInfoJson = t.SiteInfoJson
                 }).FirstOrDefault(t => t.Id == serverId);
                 data.IISData = db.DomainResource.Where(r => r.ServerId == serverId).Select(r => new DomainResourceDto {
                     Id = r.Id,
