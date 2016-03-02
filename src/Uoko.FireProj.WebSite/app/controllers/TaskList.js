@@ -21,7 +21,20 @@ fireproj.controller("TaskController", function ($scope, $http, TaskService, Proj
 
         TaskService.GetTaskByPage(params,function (data) {
             $scope.totalItems = data.total;
-            $scope.taskInfos = data.rows;
+            var tasks = data.rows;
+            _.each(tasks, function (task, key) {
+                if (task.TaskInfo.DeployInfoIocJson) {
+                    task.DeployInfoIoc = JSON.parse(task.TaskInfo.DeployInfoIocJson);
+                }
+                if (task.TaskInfo.DeployInfoPreJson) {
+                    task.DeployInfoPre = JSON.parse(task.TaskInfo.DeployInfoPreJson);
+                }
+                if (task.TaskInfo.DeployInfoOnlineJson) {
+                    task.DeployInfoOnline = JSON.parse(task.TaskInfo.DeployInfoOnlineJson);
+                }
+            });
+            
+            $scope.taskInfos = tasks;
         });
     }
 
