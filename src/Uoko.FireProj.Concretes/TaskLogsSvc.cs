@@ -64,7 +64,7 @@ namespace Uoko.FireProj.Concretes
                     taskLogsDto.Stage = item.Stage;
                     taskLogsDto.Comments = item.Comments;
                     taskLogsDto.LogType = item.LogType;
-                    taskLogsDto.CreateBy = item.CreateBy;
+                    taskLogsDto.CreateBy = item.CreatorId;
                     taskLogsDto.CreateDate = item.CreateDate;
                     switch (item.Stage)
                     {

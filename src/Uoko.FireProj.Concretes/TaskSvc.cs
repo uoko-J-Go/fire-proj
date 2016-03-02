@@ -37,7 +37,7 @@ namespace Uoko.FireProj.Concretes
             taskInfo.ProjectId = taskDto.ProjectId;
             taskInfo.Branch = taskDto.Branch;
             taskInfo.TaskName = taskDto.TaskName;
-            taskInfo.CreateBy = 1;
+            taskInfo.CreatorId = 1;
             taskInfo.CreateDate = DateTime.Now;
 
             var domain = string.Empty;
