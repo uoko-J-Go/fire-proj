@@ -14,26 +14,27 @@
     }
 });
 
-fireproj.filter("taskStatusFilter", function () {
+fireproj.filter("DeployStatusFilter", function () {
 
     return function (value) {
         switch (value) {
             case 0:
-                return "待部署";
+                return {
+                    Title: "部署中",
+                    IconClass: "glyphicon glyphicon-refresh"
+                };
+            case 1:
+                return {
+                    Title: "部署失败",
+                    IconClass: "glyphicon glyphicon-exclamation-sign"
+                }; 
             case 2:
-                return "部署中";
-            case 4:
-                return "部署失败";
-            case 6:
-                return "部署成功";
-            case 8:
-                return "测试中";
-            case 10:
-                return "测试未通过";
-            case 12:
-                return "测试通过";
+                return {
+                    Title: "部署成功",
+                    IconClass: "glyphicon glyphicon-ok"
+                };
             default:
-                return "未知";
+                return null;
         }
     }
 });
@@ -81,18 +82,6 @@ fireproj.filter("QAStatusFilter", function () {
                 return "测试未通过";
             case 2:
                 return "测试通过";
-        }
-    }
-});
-fireproj.filter("DeployStatusFilter", function () {
-    return function (value) {
-        switch (value) {
-            case 0:
-                return "部署中";
-            case 1:
-                return "部署失败";
-            case 2:
-                return "部署成功";
         }
     }
 });

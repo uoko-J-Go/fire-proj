@@ -208,6 +208,8 @@
     <Content Include="app\directives\ProjectTree.js" />
     <Content Include="app\filters\CommonFilter.js" />
     <Content Include="app\global.js" />
+    <Content Include="app\modals\Deploy.html" />
+    <Content Include="app\modals\Deploy.js" />
     <Content Include="app\modals\SelectUser.html" />
     <Content Include="app\modals\SelectUser.js" />
     <Content Include="app\controllers\dictionaryForm.js" />
@@ -1186,7 +1188,7 @@
     <Content Include="Views\Server\Creat.cshtml" />
     <Content Include="Views\Server\Edit.cshtml" />
     <Content Include="Views\Server\Detail.cshtml" />
-    <Content Include="Views\Task\NewDetail.cshtml" />
+    <Content Include="Views\Task\Detail_bp.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

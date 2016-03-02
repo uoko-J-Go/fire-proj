@@ -147,21 +147,24 @@ namespace Uoko.FireProj.Concretes
                 var entity = db.TaskInfo.FirstOrDefault(r => r.Id == taskId);
                 var taskDto = Mapper.Map<TaskInfo, TaskDetailDto>(entity);
 
-                taskDto.ProjectName = db.Project.FirstOrDefault(r => r.Id == taskDto.ProjectId).ProjectName;
+                //项目信息
+                var projectInfo= db.Project.FirstOrDefault(r => r.Id == taskDto.ProjectId);
+                taskDto.ProjectName = projectInfo.ProjectName;
+                taskDto.RepoId = projectInfo.RepoId;
 
                 taskDto.DeployInfoIocDto = !taskDto.DeployInfoIocJson.IsNullOrEmpty() ? JsonHelper.FromJson<DeployInfoIocDto>(taskDto.DeployInfoIocJson) : new DeployInfoIocDto();
                 taskDto.DeployInfoPreDto = !taskDto.DeployInfoPreJson.IsNullOrEmpty() ? JsonHelper.FromJson<DeployInfoPreDto>(taskDto.DeployInfoPreJson) : new DeployInfoPreDto();
                 taskDto.DeployInfoOnlineDto = !taskDto.DeployInfoOnlineJson.IsNullOrEmpty() ? JsonHelper.FromJson<DeployInfoOnlineDto>(taskDto.DeployInfoOnlineJson) : new DeployInfoOnlineDto();
 
                 //获取测试,通知人Id集合返回
-                taskDto.DeployInfoIocDto.CheckUser = AnalysisUser(taskDto.DeployInfoIocDto.CheckUserId);
-                taskDto.DeployInfoIocDto.NoticeUser = AnalysisUser(taskDto.DeployInfoIocDto.NoticeUserId);
+                taskDto.DeployInfoIocDto.CheckUser = AnalysisCheckUser(taskDto.DeployInfoIocDto.CheckUserId);
+                taskDto.DeployInfoIocDto.NoticeUser = AnalysisNoticeUser(taskDto.DeployInfoIocDto.NoticeUserId);
 
-                taskDto.DeployInfoPreDto.CheckUser = AnalysisUser(taskDto.DeployInfoPreDto.CheckUserId);
-                taskDto.DeployInfoPreDto.NoticeUser = AnalysisUser(taskDto.DeployInfoPreDto.NoticeUserId);
+                taskDto.DeployInfoPreDto.CheckUser = AnalysisCheckUser(taskDto.DeployInfoPreDto.CheckUserId);
+                taskDto.DeployInfoPreDto.NoticeUser = AnalysisNoticeUser(taskDto.DeployInfoPreDto.NoticeUserId);
 
-                taskDto.DeployInfoOnlineDto.CheckUser = AnalysisUser(taskDto.DeployInfoOnlineDto.CheckUserId);
-                taskDto.DeployInfoOnlineDto.NoticeUser = AnalysisUser(taskDto.DeployInfoOnlineDto.NoticeUserId);
+                taskDto.DeployInfoOnlineDto.CheckUser = AnalysisCheckUser(taskDto.DeployInfoOnlineDto.CheckUserId);
+                taskDto.DeployInfoOnlineDto.NoticeUser = AnalysisNoticeUser(taskDto.DeployInfoOnlineDto.NoticeUserId);
 
                 return taskDto;
             }
@@ -171,58 +174,7 @@ namespace Uoko.FireProj.Concretes
 
 
 
-            //using (var dbScope = _dbScopeFactory.CreateReadOnly())
-            //{
-            //    var db = dbScope.DbContexts.Get<FireProjDbContext>();
-            //    var taskInfo = db.TaskInfo.FirstOrDefault(t => t.Id == taskId);
-            //    var project=db.Project.FirstOrDefault(t => t.Id == taskInfo.ProjectId);
-            //    var data = Mapper.Map<TaskInfo, TaskDto>(taskInfo);
-            //    data.Project= Mapper.Map<Project, ProjectDto>(project);
 
-            //    data.DeployEnvironmentName = data.DeployStage.ToString();
-
-            //    //获取任务的部署的站点名称
-            //    var domainInfo = db.DomainResource.FirstOrDefault(r => r.TaskId == taskId);
-            //    if (domainInfo != null)
-            //    {
-            //        data.SiteName = domainInfo.SiteName;
-            //        //获取任务部署服务器的信息
-            //        var serverInfo = db.Servers.FirstOrDefault(r => r.Id == domainInfo.ServerId);
-            //        if (serverInfo != null)
-            //        {
-            //            data.PackageDir = serverInfo.PackageDir;
-            //            data.DeployIP = serverInfo.IP;
-            //        }
-            //    }
-
-
-
-            //    var checkUsers = new List<UserDto>();
-            //    taskInfo.CheckUserId.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList().ForEach((item)=>
-            //    {
-            //        checkUsers.Add(new UserDto
-            //        {
-            //            Id = int.Parse(item)
-            //        });
-            //    });
-            //    data.CheckUsers = checkUsers;
-
-            //    var noticeUsers = new List<UserDto>();
-            //    taskInfo.NoticeUserId.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList().ForEach((item) =>
-            //    {
-            //        noticeUsers.Add(new UserDto
-            //        {
-            //            Id = int.Parse(item)
-            //        });
-            //    });
-            //    data.NoticeUsers = noticeUsers;
-            //    //部署失败读取最新的build Id
-            //    if (taskInfo.Status== TaskEnum.DeployFails)
-            //    {
-            //        data.BuildId = db.TaskLogs.OrderByDescending(r => r.Id).FirstOrDefault(r => r.TaskId == taskId && r.BuildId > 0).BuildId;
-            //    }
-            //    return data;
-            //}
         }
 
         public PageGridData<TaskInfoForList> GetTaskPage(TaskQuery query)
@@ -310,7 +262,7 @@ namespace Uoko.FireProj.Concretes
             //}
         }
 
-        private List<UserDto> AnalysisUser(string userInfo)
+        private List<UserDto> AnalysisCheckUser(string userInfo)
         {
             List<UserDto> userDtoData = new List<UserDto>();
             if (string.IsNullOrEmpty(userInfo))
@@ -325,6 +277,23 @@ namespace Uoko.FireProj.Concretes
                 {
                     Id =int.Parse(user[0]),
                     QAStatus = (QAStatus) int.Parse(user[1])
+                });
+            }
+            return userDtoData;
+        }
+        private List<UserDto> AnalysisNoticeUser(string userInfo)
+        {
+            List<UserDto> userDtoData = new List<UserDto>();
+            if (string.IsNullOrEmpty(userInfo))
+            {
+                return userDtoData;
+            }
+            var userList = userInfo.Split(',');
+            foreach (var item in userList)
+            {
+                userDtoData.Add(new UserDto
+                {
+                    Id = int.Parse(item),
                 });
             }
             return userDtoData;
