@@ -28,11 +28,10 @@ namespace Uoko.FireProj.Concretes
         }
 
 
-        public void CreatTaskLogs(TaskLogsDto dto)
+        public void CreateTaskLogs(TaskLogs entity)
         {
             try
             {
-                var entity = Mapper.Map<TaskLogsDto, TaskLogs>(dto);
                 using (var dbScope = _dbScopeFactory.Create())
                 {
                     entity.CreatorId = 1;

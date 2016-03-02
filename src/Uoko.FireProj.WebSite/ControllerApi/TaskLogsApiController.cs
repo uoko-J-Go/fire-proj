@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Web.Http;
 using Uoko.FireProj.Abstracts;
 using Uoko.FireProj.DataAccess.Dto;
+using Uoko.FireProj.DataAccess.Entity;
 using Uoko.FireProj.DataAccess.Enum;
 using Uoko.FireProj.DataAccess.Query;
 
@@ -59,13 +60,13 @@ namespace Uoko.FireProj.WebSite.ControllerApi
         /// </summary>
         /// <param name="dto"></param>
         /// <returns></returns>
-        public IHttpActionResult Post([FromBody]TaskLogsDto dto)
+        public IHttpActionResult Post([FromBody]TaskLogs entity)
         {
             if (ModelState.IsValid == false)
             {
                 return BadRequest(ModelState);
             }
-            _taskLogsSvc.CreatTaskLogs(dto);
+            _taskLogsSvc.CreateTaskLogs(entity);
             return Ok();
         }
     }
