@@ -71,3 +71,28 @@ fireproj.filter("ServerFilter", function () {
         }
     }
 });
+
+fireproj.filter("QAStatusFilter", function () {
+    return function (value) {
+        switch (value) {
+            case 0:
+                return "待测试";
+            case 1:
+                return "测试未通过";
+            case 2:
+                return "测试通过";
+        }
+    }
+});
+fireproj.filter("DeployStatusFilter", function () {
+    return function (value) {
+        switch (value) {
+            case 0:
+                return "部署中";
+            case 1:
+                return "部署失败";
+            case 2:
+                return "部署成功";
+        }
+    }
+});

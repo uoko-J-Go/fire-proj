@@ -31,7 +31,7 @@ namespace Uoko.FireProj.Concretes
         }
         #endregion
 
-        public void CreatTask(TaskWriteDto taskDto)
+        public int CreatTask(TaskWriteDto taskDto)
         {
             var taskInfo = new TaskInfo();
             taskInfo.ProjectId = taskDto.ProjectId;
@@ -86,7 +86,8 @@ namespace Uoko.FireProj.Concretes
 
                 db.SaveChanges();
             }
-
+            //返回任务Id
+            return taskInfo.Id;
         }
 
         /// <summary>
@@ -311,6 +312,10 @@ namespace Uoko.FireProj.Concretes
         private List<UserDto> AnalysisUser(string userInfo)
         {
             List<UserDto> userDtoData = new List<UserDto>();
+            if (string.IsNullOrEmpty(userInfo))
+            {
+                return userDtoData;
+            }
             var userList = userInfo.Split(',');
             foreach (var item in userList)
             {
