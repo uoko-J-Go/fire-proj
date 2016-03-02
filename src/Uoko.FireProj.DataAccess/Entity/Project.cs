@@ -24,7 +24,7 @@ namespace Uoko.FireProj.DataAccess.Entity
         /// <summary>
         /// gitlab项目的id
         /// </summary>
-        public int ProjectId { get; set; }
+        public int RepoId { get; set; }
 
         /// <summary>
         /// 项目sln名称

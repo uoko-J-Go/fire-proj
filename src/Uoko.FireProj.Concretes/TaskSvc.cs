@@ -246,11 +246,30 @@ namespace Uoko.FireProj.Concretes
 
         public IEnumerable<TaskInfoForList> TransferTask(IEnumerable<TaskInfo> tasks)
         {
-            return tasks.Select(task => new TaskInfoForList
-                                        {
-                                            TaskInfo = task,
-                                            OnlineTaskInfo = null
-                                        });
+            Dictionary<int, string> projDic;
+            var taskInfos = tasks as TaskInfo[] ?? tasks.ToArray();
+
+            using (var dbScope = _dbScopeFactory.CreateReadOnly())
+            {
+
+                var db = dbScope.DbContexts.Get<FireProjDbContext>();
+                var projectIds = taskInfos.Select(item => item.ProjectId).Distinct();
+                projDic = db.Project.Where(item => projectIds.Contains(item.Id))
+                            .ToDictionary(item => item.Id, item => item.ProjectName);
+            }
+
+            var infoLists = taskInfos.Select(task =>
+                                {
+                                    string projectName;
+                                    projDic.TryGetValue(task.ProjectId, out projectName);
+                                    return new TaskInfoForList
+                                           {
+                                               TaskInfo = task,
+                                               OnlineTaskInfo = null,
+                                               ProjectName = projectName
+                                           };
+                                });
+            return infoLists;
         }
 
         public void UpdateTaskStatus(TaskDto task)
