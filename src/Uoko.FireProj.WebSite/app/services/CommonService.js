@@ -47,7 +47,7 @@
             "useConfig": "Release", //taskInfo.DeployEnvironmentName,
             "Target": buildInfo.Target//"Deploy-To-IOC"
         };
-        this.getProjectTriggers(taskInfo.Project.ProjectId, function (data) {
+        this.getProjectTriggers(buildInfo.RepoId, function (data) {
             var triggers = data;
             if (triggers.length <= 0) {
                 console.error("无Trigger 请到GitLab中配置");

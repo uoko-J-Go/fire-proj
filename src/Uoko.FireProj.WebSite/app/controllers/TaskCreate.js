@@ -99,7 +99,7 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
             //发起部署任务
 
             var buildInfo= {
-                RepoId: project.ProjectId,
+                RepoId: project.RepoId,
                 Branch: $scope.taskInfo.Branch,
                 DeployIP:server.IP,
                 ProjectSlnName: project.ProjectSlnName,
@@ -148,7 +148,7 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
         if (typeof project == "string") {
             project = JSON.parse(project);
         }
-        CommonService.getProjectBranch(project.ProjectId, function (data) {
+        CommonService.getProjectBranch(project.RepoId, function (data) {
             $scope.branchList = data;
         });
     }
