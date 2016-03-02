@@ -51,24 +51,39 @@ namespace Uoko.FireProj.Concretes
 
         public List<TaskLogsDto> GetTaskLogsByTaskId(int taskId)
         {
-            return null;
-            //using (var dbScope = _dbScopeFactory.CreateReadOnly())
-            //{
-            //    var db = dbScope.DbContexts.Get<FireProjDbContext>();
-            //    var data = db.TaskLogs.Where(r => r.TaskId == taskId).Select(r => new TaskLogsDto()
-            //    {
-            //        Id = r.Id,
-            //        LogsDesc = r.LogsDesc,
-            //        LogsText = r.LogsText,
-            //        TriggeredId = r.TriggeredId,
-            //        BuildId=r.BuildId,
-            //        TaskLogsType = r.TaskLogsType,
-            //        TaskId = r.TaskId,
-            //        CreateBy = r.CreateBy,
-            //        CreateDate = r.CreateDate
-            //    }).ToList();
-            //    return data;
-            //}
+          
+            using (var dbScope = _dbScopeFactory.CreateReadOnly())
+            {
+                var db = dbScope.DbContexts.Get<FireProjDbContext>();
+                var entity = db.TaskLogs.Where(r => r.TaskId == taskId).ToList();
+                List<TaskLogsDto> data = new List<TaskLogsDto>();
+                foreach (var item in entity)
+                {
+                    TaskLogsDto taskLogsDto = new TaskLogsDto();
+                    taskLogsDto.TaskId = item.TaskId;
+                    taskLogsDto.Stage = item.Stage;
+                    taskLogsDto.Comments = item.Comments;
+                    taskLogsDto.LogType = item.LogType;
+                    taskLogsDto.CreateBy = item.CreateBy;
+                    taskLogsDto.CreateDate = item.CreateDate;
+                    switch (item.Stage)
+                    {
+                        case StageEnum.IOC:
+                            taskLogsDto.DeployInfoIocDto = !item.DeployInfo.IsNullOrEmpty() ? JsonHelper.FromJson<DeployInfoIocDto>(item.DeployInfo) : new DeployInfoIocDto();
+                            break;
+                        case StageEnum.PRE:
+                            taskLogsDto.DeployInfoPreDto = !item.DeployInfo.IsNullOrEmpty() ? JsonHelper.FromJson<DeployInfoPreDto>(item.DeployInfo) : new DeployInfoPreDto();
+                            break;
+                        case StageEnum.PRODUCTION:
+                            taskLogsDto.DeployInfoOnlineDto = !item.DeployInfo.IsNullOrEmpty() ? JsonHelper.FromJson<DeployInfoOnlineDto>(item.DeployInfo) : new DeployInfoOnlineDto();
+                            break;
+                        default:
+                            break;
+                    }
+                    data.Add(taskLogsDto);
+                }
+                return data;
+            }
         }
 
 

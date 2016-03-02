@@ -10,6 +10,9 @@ using Uoko.FireProj.DataAccess.Query;
 using Uoko.FireProj.Infrastructure.Data;
 using Uoko.FireProj.Infrastructure.Exception;
 using Uoko.FireProj.Model;
+using AutoMapper;
+using System.Collections.Generic;
+using Uoko.FireProj.Infrastructure.Extensions;
 
 namespace Uoko.FireProj.Concretes
 {
@@ -157,22 +160,21 @@ namespace Uoko.FireProj.Concretes
                 var db = dbScope.DbContexts.Get<FireProjDbContext>();
                 var entity = db.TaskInfo.FirstOrDefault(r => r.Id == taskId);
                 var taskDto = Mapper.Map<TaskInfo, TaskDetailDto>(entity);
-                taskDto.DeployInfoIocDto = JsonConvert.DeserializeObject<DeployInfoIocDto>(taskDto.DeployInfoIocJson);
-                taskDto.DeployInfoPreDto = JsonConvert.DeserializeObject<DeployInfoPreDto>(taskDto.DeployInfoPreJson);
-                taskDto.DeployInfoOnlineDto = JsonConvert.DeserializeObject<DeployInfoOnlineDto>(taskDto.DeployInfoOnlineJson);
-                var taskLogs = db.TaskLogs.Where(r => r.TaskId == taskId).ToList();
 
+                taskDto.ProjectName = db.Project.FirstOrDefault(r => r.Id == taskDto.ProjectId).ProjectName;
 
-                taskDto.TaskLogsDto = Mapper.Map<List<TaskLogs>, List<TaskLogsDto>>(taskLogs);
+                taskDto.DeployInfoIocDto = !taskDto.DeployInfoIocJson.IsNullOrEmpty() ? JsonHelper.FromJson<DeployInfoIocDto>(taskDto.DeployInfoIocJson) : new DeployInfoIocDto();
+                taskDto.DeployInfoPreDto = !taskDto.DeployInfoPreJson.IsNullOrEmpty() ? JsonHelper.FromJson<DeployInfoPreDto>(taskDto.DeployInfoPreJson) : new DeployInfoPreDto();
+                taskDto.DeployInfoOnlineDto = !taskDto.DeployInfoOnlineJson.IsNullOrEmpty() ? JsonHelper.FromJson<DeployInfoOnlineDto>(taskDto.DeployInfoOnlineJson) : new DeployInfoOnlineDto();
 
-
+                return taskDto;
             }
 
 
 
 
 
-                return null;
+                
             //using (var dbScope = _dbScopeFactory.CreateReadOnly())
             //{
             //    var db = dbScope.DbContexts.Get<FireProjDbContext>();

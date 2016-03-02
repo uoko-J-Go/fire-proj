@@ -36,6 +36,11 @@ namespace Uoko.FireProj.DataAccess.Dto
 
         public DeployInfoPreDto DeployInfoPreDto { get; set; }
 
-        public DeployInfoOnlineDto DeployInfoOnlineDto { get; set; }                                                                                                                                                                                                                                                       
+        public DeployInfoOnlineDto DeployInfoOnlineDto { get; set; }
+
+        public int CreateBy { get; set; }
+
+
+        public DateTime CreateDate { get; set; }
     }
 }

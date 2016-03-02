@@ -23,6 +23,9 @@ namespace Uoko.FireProj.DataAccess.AutoMapper
 
             Mapper.CreateMap<Server, ServerDto>();
             Mapper.CreateMap<ServerDto, Server>();
+
+
+            Mapper.CreateMap<TaskInfo, TaskDetailDto>();
         }
     }
 }
