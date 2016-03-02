@@ -292,6 +292,10 @@ namespace Uoko.FireProj.Concretes
         private List<UserDto> AnalysisUser(string userInfo)
         {
             List<UserDto> userDtoData = new List<UserDto>();
+            if (string.IsNullOrEmpty(userInfo))
+            {
+                return userDtoData;
+            }
             var userList = userInfo.Split(',');
             foreach (var item in userList)
             {
