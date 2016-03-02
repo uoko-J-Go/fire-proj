@@ -22,7 +22,7 @@ fireproj.controller("TaskController", function ($scope, $http, TaskService, Proj
         TaskService.GetTaskByPage(params,function (data) {
             $scope.totalItems = data.total;
             var tasks = data.rows;
-            _.each(tasks, function (task, key) {
+            _.each(tasks, function(task, key) {
                 if (task.TaskInfo.DeployInfoIocJson) {
                     task.DeployInfoIoc = JSON.parse(task.TaskInfo.DeployInfoIocJson);
                 }
@@ -32,6 +32,13 @@ fireproj.controller("TaskController", function ($scope, $http, TaskService, Proj
                 if (task.TaskInfo.DeployInfoOnlineJson) {
                     task.DeployInfoOnline = JSON.parse(task.TaskInfo.DeployInfoOnlineJson);
                 }
+
+                task.IocTestAllPassed = task.TaskInfo.IocCheckUserId && !(/-[01]/m.test(task.TaskInfo.IocCheckUserId));
+
+                task.PreTestAllPassed = task.TaskInfo.PreCheckUserId && !(/-[01]/m.test(task.TaskInfo.PreCheckUserId));
+
+                task.OnlineTestAllPassed = task.TaskInfo.OnlineCheckUserId && !(/-[01]/m.test(task.TaskInfo.OnlineCheckUserId));
+
             });
             
             $scope.taskInfos = tasks;

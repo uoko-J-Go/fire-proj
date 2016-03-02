@@ -50,15 +50,23 @@
                     <table class="table table-bordered table-hover">
                         <thead>
                         <tr>
-                            <th>任务名称</th>
-                            <th>项目</th>
-                            <th>分支</th>
-                            <th>IOC</th>
-                            <th>Pre</th>
-                            <th>Online</th>
-                            <th>发起人</th>
-                            <th>最后操作人</th>
-                            <th>操作</th>
+                            <th rowspan="2">任务名称</th>
+                            <th rowspan="2">项目</th>
+                            <th rowspan="2">分支</th>
+                            <th colspan="2">IOC</th>
+                            <th colspan="2">Pre</th>
+                            <th colspan="2">Online</th>
+                            <th rowspan="2">发起人</th>
+                            <th rowspan="2">最后操作人</th>
+                            <th rowspan="2">操作</th>
+                        </tr>
+                        <tr>
+                            <th>部署</th>
+                            <th>测试</th>
+                            <th>部署</th>
+                            <th>测试</th>
+                            <th>部署</th>
+                            <th>测试</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -66,10 +74,32 @@
                             <td><a  class="text-primary" href="/Task/Detail?taskId={{task.TaskInfo.Id}}">{{task.TaskInfo.TaskName}}</a> </td>
                             <td>{{task.ProjectName}}</td>
                             <td>{{task.TaskInfo.Branch}}</td>
-                            @*<td>{{task.Status|taskStatusFilter}}</td>*@
-                            <td>{{task.DeployInfoIoc.DeployStatus}}</td>
+                            <td>
+                                <div ng-if="task.DeployInfoIoc">
+                                    <span ng-class="(task.DeployInfoIoc.DeployStatus | DeployStatusFilter).IconClass" title="{{(task.DeployInfoIoc.DeployStatus | DeployStatusFilter).Title}}"></span>
+                                </div>
+                            </td>
+                            <td>
+                                <div ng-if="task.IocTestAllPassed">
+                                    <span class="glyphicon glyphicon-ok" title="测试全部通过"></span>
+                                </div>
+                            </td>
+                            <td>
+                                <div ng-if="task.DeployInfoPre">
+                                    <span ng-class="(task.DeployInfoPre.DeployStatus | DeployStatusFilter).IconClass" title="{{(task.DeployInfoPre.DeployStatus | DeployStatusFilter).Title}}"></span>
+                                </div>
+                            </td>
+                            <td>
+                                <div ng-if="task.PreTestAllPassed">
+                                    <span class="glyphicon glyphicon-ok" title="测试全部通过"></span>
+                                </div>
+                            </td>
                             <td>{{task.TaskInfo.DeployInfoPreJson}}</td>
-                            <td>{{task.TaskInfo.DeployInfoOnlineJson}}</td>
+                            <td>
+                                <div ng-if="task.OnlineTestAllPassed">
+                                    <span class="glyphicon glyphicon-ok" title="测试全部通过"></span>
+                                </div>
+                            </td>
                             <td>{{task.TaskInfo.CreatorName}}</td>
                             <td>{{task.TaskInfo.ModifierName}}</td>
                             <td>
