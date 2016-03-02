@@ -50,6 +50,8 @@ namespace Uoko.FireProj.Concretes
                     }
                     domain = taskDto.IocDeployInfo.Domain;
                     taskDto.IocDeployInfo.DeployStage = taskDto.DeployStage;
+                    taskDto.IocDeployInfo.DeployAddress = string.Format("https://{0}:8172/msdeploy.axd", taskDto.IocDeployInfo.DeployIP);
+                    taskDto.IocDeployInfo.DeployStatus = DeployStatus.Deploying;
                     taskInfo.DeployInfoIocJson = JsonConvert.SerializeObject(taskDto.IocDeployInfo);
                     break;
                 case StageEnum.PRE:
@@ -61,6 +63,8 @@ namespace Uoko.FireProj.Concretes
                     }
                     domain = taskDto.PreDeployInfo.Domain;
                     taskDto.PreDeployInfo.DeployStage = taskDto.DeployStage;
+                    taskDto.PreDeployInfo.DeployAddress = string.Format("https://{0}:8172/msdeploy.axd", taskDto.PreDeployInfo.DeployIP);
+                    taskDto.PreDeployInfo.DeployStatus = DeployStatus.Deploying;
                     taskInfo.DeployInfoPreJson = JsonConvert.SerializeObject(taskDto.PreDeployInfo);
                     break;
                 default:
@@ -93,14 +97,14 @@ namespace Uoko.FireProj.Concretes
             //    var entity = Mapper.Map<TaskDto, TaskInfo>(task);
             //    entity.ProjectId = task.Project.Id;
             //    entity.CheckUserId = string.Join(",", task.CheckUsers.Select(t => t.Id));
-            //    entity.NoticeUseId = string.Join(",", task.NoticeUses.Select(t => t.Id));
+            //    entity.NoticeUserId = string.Join(",", task.NoticeUsers.Select(t => t.Id));
             //    entity.ModifyBy = 1;
             //    entity.ModifyDate = DateTime.Now;
             //    using (var dbScope = _dbScopeFactory.Create())
             //    {
             //        var db = dbScope.DbContexts.Get<FireProjDbContext>();
             //        //根据实际情况修改
-            //        db.Update(entity, t => new { t.TaskName,t.ProjectId, t.Branch, t.DeployEnvironment, t.DeployIP,t.SiteName,t.DeployAddress,t.TaskDesc,t.CheckUserId,t.NoticeUseId,t.Status,t.ModifyBy,t.ModifyDate });
+            //        db.Update(entity, t => new { t.TaskName,t.ProjectId, t.Branch, t.DeployEnvironment, t.DeployIP,t.SiteName,t.DeployAddress,t.TaskDesc,t.CheckUserId,t.NoticeUserId,t.Status,t.ModifyBy,t.ModifyDate });
             //        db.SaveChanges();
             //    }
             //}
@@ -190,14 +194,14 @@ namespace Uoko.FireProj.Concretes
             //    data.CheckUsers = checkUsers;
 
             //    var noticeUsers = new List<UserDto>();
-            //    taskInfo.NoticeUseId.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList().ForEach((item) =>
+            //    taskInfo.NoticeUserId.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList().ForEach((item) =>
             //    {
             //        noticeUsers.Add(new UserDto
             //        {
             //            Id = int.Parse(item)
             //        });
             //    });
-            //    data.NoticeUses = noticeUsers;
+            //    data.NoticeUsers = noticeUsers;
             //    //部署失败读取最新的build Id
             //    if (taskInfo.Status== TaskEnum.DeployFails)
             //    {

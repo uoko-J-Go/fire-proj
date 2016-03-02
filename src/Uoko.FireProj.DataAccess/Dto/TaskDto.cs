@@ -66,7 +66,7 @@ namespace Uoko.FireProj.DataAccess.Dto
         /// <summary>
         /// 任务相关通知人
         /// </summary>
-        public List<UserDto> NoticeUses{ get; set; }
+        public List<UserDto> NoticeUsers{ get; set; }
 
         /// <summary>
         /// 部署地址
