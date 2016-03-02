@@ -281,6 +281,23 @@ namespace Uoko.FireProj.Concretes
             }
             return userDtoData;
         }
+        private List<UserDto> AnalysisNoticeUser(string userInfo)
+        {
+            List<UserDto> userDtoData = new List<UserDto>();
+            if (string.IsNullOrEmpty(userInfo))
+            {
+                return userDtoData;
+            }
+            var userList = userInfo.Split(',');
+            foreach (var item in userList)
+            {
+                userDtoData.Add(new UserDto
+                {
+                    Id = int.Parse(item),
+                });
+            }
+            return userDtoData;
+        }
         /// <summary>
         /// 执行部署
         /// </summary>
