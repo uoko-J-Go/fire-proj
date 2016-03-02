@@ -24,6 +24,11 @@ namespace Uoko.FireProj.DataAccess.Dto
         public int ProjectId { get; set; }
 
         /// <summary>
+        /// 项目名称
+        /// </summary>
+        public string ProjectName { get; set; }
+
+        /// <summary>
         /// 代码分支
         /// </summary>
         public string Branch { get; set; }
@@ -59,152 +64,87 @@ namespace Uoko.FireProj.DataAccess.Dto
         public  DeployInfoPreDto DeployInfoPreDto { get; set; }
 
         public DeployInfoOnlineDto DeployInfoOnlineDto { get; set; }
-
-        public List<TaskLogsDto> TaskLogsDto { get; set; }
     }
 
-    /// <summary>
+    public class DeployInfoDto
+    {
+        /// <summary>
+        /// 部署环境
+        /// </summary>
+        public StageEnum DeployStage { get; set; }
+
+        /// <summary>
+        /// 部署服务器IP地址
+        /// </summary>
+        public string DeployIP { get; set; }
+
+        /// <summary>
+        /// 部署地址
+        /// </summary>
+        public string DeployAddress { get; set; }
+
+        /// <summary>
+        /// 部署域名
+        /// </summary>
+        public string Domain { get; set; }
+
+        /// <summary>
+        /// IIS站点名称
+        /// </summary>
+        public string SiteName { get; set; }
+
+
+        /// <summary>
+        /// 验收人Id集合
+        /// </summary>
+        public string CheckUserId { get; set; }
+
+        /// <summary>
+        /// 任务相关通知人
+        /// </summary>
+        public string NoticeUserId { get; set; }
+
+        /// <summary>
+        /// 任务描述
+        /// </summary>
+        public string TaskDesc { get; set; }
+
+        /// <summary>
+        /// 任务状态
+        /// </summary>
+        public string Status { get; set; }
+
+        /// <summary>
+        /// gitlab triggered Id
+        /// </summary>
+        public int? TriggeredId { get; set; }
+
+        /// <summary>
+        /// 用于记录失败时 GitLab的BuildId
+        /// </summary>
+        public int? BuildId { get; set; }
+    }
+
+
+
+        /// <summary>
     /// IOC部署dto
-    /// </summary>
-    public class DeployInfoIocDto
+        /// </summary>
+    public class DeployInfoIocDto: DeployInfoDto
     {
-        /// <summary>
-        /// 部署环境
-        /// </summary>
-        public StageEnum DeployStage { get; set; }
-
-        /// <summary>
-        /// 部署服务器IP地址
-        /// </summary>
-        public string DeployIP { get; set; }
-
-        /// <summary>
-        /// 部署地址
-        /// </summary>
-        public string DeployAddress { get; set; }
-
-        /// <summary>
-        /// 部署域名
-        /// </summary>
-        public string Domain { get; set; }
-
-        /// <summary>
-        /// IIS站点名称
-        /// </summary>
-        public string SiteName { get; set; }
-
-
-        /// <summary>
-        /// 验收人Id集合
-        /// </summary>
-        public string CheckUserId { get; set; }
-
-        /// <summary>
-        /// 任务相关通知人
-        /// </summary>
-        public string NoticeUserId { get; set; }
-
-        /// <summary>
-        /// 任务描述
-        /// </summary>
-        public string TaskDesc { get; set; }
-
-        /// <summary>
-        /// 任务状态
-        /// </summary>
-        public DeployStatus Status { get; set; }
-
-        /// <summary>
-        /// gitlab triggered Id
-        /// </summary>
-        public int TriggeredId { get; set; }
-
-        /// <summary>
-        /// 用于记录失败时 GitLab的BuildId
-        /// </summary>
-        public int BuildId { get; set; }
-
     }
 
-    /// <summary>
+        /// <summary>
     /// Pre部署dto
-    /// </summary>
-    public class DeployInfoPreDto
+        /// </summary>
+    public class DeployInfoPreDto: DeployInfoDto
     {
-        /// <summary>
-        /// 部署环境
-        /// </summary>
-        public StageEnum DeployStage { get; set; }
-
-        /// <summary>
-        /// 部署服务器IP地址
-        /// </summary>
-        public string DeployIP { get; set; }
-
-        /// <summary>
-        /// 部署地址
-        /// </summary>
-        public string DeployAddress { get; set; }
-
-        /// <summary>
-        /// 部署域名
-        /// </summary>
-        public string Domain { get; set; }
-
-        /// <summary>
-        /// IIS站点名称
-        /// </summary>
-        public string SiteName { get; set; }
-
-
-        /// <summary>
-        /// 验收人Id集合
-        /// </summary>
-        public string CheckUserId { get; set; }
-
-        /// <summary>
-        /// 任务相关通知人
-        /// </summary>
-        public string NoticeUserId { get; set; }
-
-        /// <summary>
-        /// 任务描述
-        /// </summary>
-        public string TaskDesc { get; set; }
-
-        /// <summary>
-        /// 任务状态
-        /// </summary>
-        public DeployStatus Status { get; set; }
-
-        /// <summary>
-        /// gitlab triggered Id
-        /// </summary>
-        public int TriggeredId { get; set; }
-
-        /// <summary>
-        /// 用于记录失败时 GitLab的BuildId
-        /// </summary>
-        public int BuildId { get; set; }
-
     }
 
     /// <summary>
     /// Online部署dto
     /// </summary>
-    public class DeployInfoOnlineDto
+    public class DeployInfoOnlineDto: DeployInfoDto
     {
-
-        /// <summary>
-        /// 验收人Id集合
-        /// </summary>
-        public string CheckUserId { get; set; }
-
-        /// <summary>
-        /// 任务相关通知人
-        /// </summary>
-        public string NoticeUserId { get; set; }
-
-
     }
 }

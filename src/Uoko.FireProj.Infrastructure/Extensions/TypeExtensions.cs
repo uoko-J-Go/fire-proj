@@ -154,5 +154,12 @@ namespace Uoko.FireProj.Infrastructure.Extensions
             return false;
         }
 
+        /// <summary>
+        /// 指示指定的字符串是 null 还是 System.String.Empty 字符串
+        /// </summary>
+        public static bool IsNullOrEmpty(this string value)
+        {
+            return string.IsNullOrEmpty(value);
+        }
     }
 }

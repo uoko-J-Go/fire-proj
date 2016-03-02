@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Uoko.FireProj.DataAccess.Entity;
 using Uoko.FireProj.DataAccess.Enum;
 
 namespace Uoko.FireProj.DataAccess.Dto
@@ -101,5 +102,12 @@ namespace Uoko.FireProj.DataAccess.Dto
         public int TriggeredId { get; set; }
 
         public int BuildId { get; set; }
+    }
+
+    public class TaskInfoForList
+    {
+        public TaskInfo TaskInfo { get; set; }
+
+        public OnlineTaskInfo OnlineTaskInfo { get; set; }
     }
 }

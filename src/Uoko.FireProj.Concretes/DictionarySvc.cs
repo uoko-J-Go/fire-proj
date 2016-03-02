@@ -77,7 +77,7 @@ namespace Uoko.FireProj.Concretes
                 using (var dbScope = _dbScopeFactory.Create())
                 {
                     var db = dbScope.DbContexts.Get<FireProjDbContext>();
-                    db.Update(entity, r => new { r.Description, r.ModifyBy, r.ModifyDate, r.Name, r.ParentId, r.Value });
+                    db.Update(entity, r => new { r.Description, ModifyBy = r.ModifyId, r.ModifyDate, r.Name, r.ParentId, r.Value });
                     db.SaveChanges();
                 }
             }

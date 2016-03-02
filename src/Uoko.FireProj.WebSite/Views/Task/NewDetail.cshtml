@@ -29,7 +29,7 @@
         <div class="portlet box blue">
             <div class="portlet-title">
                 <div class="caption">
-                    <i class="fa fa-clipboard"></i>任务详细
+                    <i class="fa fa-clipboard"></i>基本信息
                 </div>
             </div>
             <div class="portlet-body form">
@@ -38,38 +38,28 @@
                         <div class="form-group form-md-line-input">
                             <label class="col-md-2 control-label">任务名</label>
                             <div class="col-md-10">
-                                <input type="text" name="taskname" ng-model="taskInfo.TaskName" class="form-control" placeholder="请输入任务名" required>
-                                <div ng-show="form.$submitted || form.taskname.$touched">
-                                    <span class="error-msg" ng-show="form.taskname.$error.required">任务名必填.</span>
-                                </div>
+                                <input disabled type="text"  ng-model="model.TaskName" class="form-control" >
+                              
                             </div>
                         </div>
                         <div class="form-group form-md-line-input">
                             <label class="col-md-2 control-label">项目</label>
                             <div class="col-md-10">
-                                <select class="form-control" name="project" ng-model="taskInfo.Project" ng-change="getBranch(taskInfo.Project)" required>
-                                    <option ng-repeat="project in projectList" value="{{project}}" ng-selected="project.Id==taskInfo.Project.Id">{{project.ProjectName}}</option>
-                                </select>
-                                <div ng-show="form.$submitted || form.project.$touched">
-                                    <span class="error-msg" ng-show="form.project.$error.required">项目必选.</span>
-                                </div>
+                                <input disabled type="text"  ng-model="model.ProjectName" class="form-control">
                             </div>
                         </div>
                         <div class="form-group form-md-line-input">
                             <label class="col-md-2 control-label">分支</label>
                             <div class="col-md-10">
-                                <select name="branch" class="form-control" ng-model="taskInfo.Branch" required>
-                                    <option ng-repeat="branch in branchList" value="{{branch.name}}" ng-selected="branch.name == taskInfo.Branch">{{branch.name}}</option>
-                                </select>
-                                <div ng-show="form.$submitted || form.branch.$touched">
-                                    <span class="error-msg" ng-show="form.branch.$error.required">分支必选.</span>
-                                </div>
+                                <input disabled type="text"  ng-model="model.Branch" class="form-control">
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
+
         <!-- 基本信息-->
         <!-- 环境tab-->
         <div class="portlet box blue">
@@ -80,17 +70,17 @@
             </div>
             <div class="portlet-body">
                 <ul class="nav nav-tabs">
-                    <li ng-class="{'active':currLogTab==0}" ng-show="tasklogTotal.IocTotal>0" ng-click="GetCurrLog(0)">
+                    <li ng-class="{'active':currLogTab==0}"  ng-click="GetCurrLog(0)">
                         <a href="#tab_1_1" data-toggle="tab">
                             IOC
                         </a>
                     </li>
-                    <li ng-class="{'active':currLogTab==1}" ng-show="tasklogTotal.PreTotal>0" ng-click="GetCurrLog(1)">
+                    <li ng-class="{'active':currLogTab==1}"  ng-click="GetCurrLog(1)">
                         <a href="#tab_1_2" data-toggle="tab">
                             Pre
                         </a>
                     </li>
-                    <li ng-class="{'active':currLogTab==2}" ng-show="tasklogTotal.ProductionTotal>0" ng-click="GetCurrLog(2)">
+                    <li ng-class="{'active':currLogTab==2}"  ng-click="GetCurrLog(2)">
                         <a href="#tab_1_3" data-toggle="tab">
                             Online
                         </a>
@@ -101,56 +91,30 @@
                         <!-- BEGIN IOC CONTENT-->
                          <div>
                              <div class="form-group form-md-line-input">
-                                 <label class="col-md-2 control-label">发布环境</label>
+                                 <label class="col-md-2 control-label">部署服务器IP</label>
                                  <div class="col-md-10">
-                                     <select name="deployenvironment" class="form-control" ng-model="taskInfo.DeployEnvironment" ng-change="GetServerData(taskInfo.DeployEnvironment)" required>
-                                         <option ng-repeat="environment in environmentList" value="{{environment.Id}}" ng-selected="environment.Id==taskInfo.DeployEnvironment">{{environment.Name}}</option>
-                                     </select>
-                                     <div ng-show="form.$submitted || form.deployenvironment.$touched">
-                                         <span class="error-msg" ng-show="form.deployenvironment.$error.required">项目必选.</span>
-                                     </div>
-                                 </div>
-                             </div>
-                             <div class="form-group form-md-line-input">
-                                 <label class="col-md-2 control-label">部署服务器</label>
-                                 <div class="col-md-10">
-                                     <select name="server" class="form-control" ng-model="taskInfo.Server" required>
-                                         <option ng-repeat="server in ServerList" value="{{server}}" ng-selected="server.IP==taskInfo.DeployIP">{{server.Name}}</option>
-                                     </select>
-                                     <div ng-show="form.$submitted || form.server.$touched">
-                                         <span class="error-msg" ng-show="form.server.$error.required">部署服务器必选</span>
-                                     </div>
-                                 </div>
-                             </div>
-                             <div class="form-group form-md-line-input">
-                                 <label class="col-md-2 control-label">域名</label>
-                                 <div class="col-md-10">
-                                     <select name="domain" class="form-control" ng-model="taskInfo.Domain" required>
-                                         <option ng-repeat="domain in DomainList" value="{{domain.Name}}" ng-selected="domain.Id==taskInfo.Domain">{{domain.Name}}</option>
-                                     </select>
-                                     <div ng-show="form.$submitted || form.domain.$touched">
-                                         <span class="error-msg" ng-show="form.domain.$error.required">域名必选.</span>
-                                     </div>
-                                 </div>
-                             </div>
-                             <div class="form-group form-md-line-input">
-                                 <label class="col-md-2 control-label">IIS站点名称</label>
-                                 <div class="col-md-10">
-                                     <input disabled name="sitename" type="text" ng-model="taskInfo.SiteName" class="form-control" placeholder="自动生成" required>
-                                     <div ng-show="form.$submitted || form.sitename.$touched">
-                                         <span class="error-msg" ng-show="form.sitename.$error.required">自动生成.</span>
-                                     </div>
+                                     <input disabled type="text" ng-model="model.DeployInfoIocDto.DeployIP" class="form-control">
                                  </div>
                              </div>
                              <div class="form-group form-md-line-input">
                                  <label class="col-md-2 control-label">部署地址</label>
                                  <div class="col-md-10">
-                                     <input disabled type="text" name="deployAddress" ng-model="taskInfo.DeployAddress" class="form-control" placeholder="自动生成" required>
-                                     <div ng-show="form.$submitted || form.deployAddress.$touched">
-                                         <span class="error-msg" ng-show="form.deployAddress.$error.required">自动生成.</span>
-                                     </div>
+                                     <input disabled type="text" ng-model="model.DeployInfoIocDto.DeployAddress" class="form-control">
                                  </div>
                              </div>
+                             <div class="form-group form-md-line-input">
+                                 <label class="col-md-2 control-label">部署域名</label>
+                                 <div class="col-md-10">
+                                     <input disabled type="text" ng-model="model.DeployInfoIocDto.Domain" class="form-control">
+                                 </div>
+                             </div>
+                             <div class="form-group form-md-line-input">
+                                 <label class="col-md-2 control-label">IIS站点名称</label>
+                                 <div class="col-md-10">
+                                     <input disabled type="text" ng-model="model.DeployInfoIocDto.SiteName" class="form-control">
+                                 </div>
+                             </div>
+                             
                              <div class="form-group form-md-line-input">
                                  <label class="col-md-2 control-label">验收人员</label>
                                  <div class="col-md-10">
@@ -380,55 +344,46 @@
                 <div class="caption">
                     <i class="fa fa-phone"></i>任务记录
                 </div>
-
             </div>
-            <div class="portlet-body">
-                <div class="tab-content">
-                    <div class="tab-pane fade ">
-                        <!-- BEGIN PAGE CONTENT-->
-                        <div class="portlet light">
-                            <div class="portlet-body">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <ul class="timeline">
-                                            <li class="timeline-blue" ng-repeat="item in items">
-                                                <div class="timeline-time">
-                                                    <span class="date">
-                                                        {{item.CreateDate| date : 'yyyy-MM-dd'}}
-                                                    </span>
-                                                    <span class="time">
-                                                        {{item.CreateDate| date : 'HH:MM:ss'}}
-                                                    </span>
-                                                </div>
-                                                <div class="timeline-icon">
-                                                    <i ng-show="item.TaskLogsType==0" class="fa fa-adn" title="{{item.TaskLogsType|TaskLogsFilter}}"></i>
-                                                    <i ng-show="item.TaskLogsType==1" class="fa fa-send" title="{{item.TaskLogsType|TaskLogsFilter}}"></i>
-                                                    <i ng-show="item.TaskLogsType==2" class="fa fa-cloud" title="{{item.TaskLogsType|TaskLogsFilter}}"></i>
-                                                </div>
-                                                <div class="timeline-body">
-                                                    <h2>{{item.LogsDesc}}</h2>
-                                                    <div class="timeline-content">
-                                                        <h4>{{item.LogsText}}</h4>
-                                                    </div>
-                                                    <div class="timeline-footer">
-                                                        <a class="text-danger" href="javascript:;" ng-show="item.BuildId!=0" ng-click="GotoGitLabBuildPage(item.BuildId)">错误详细<i class="m-icon-swapright m-icon-white"></i></a>
-                                                    </div>
-                                                    <div class="timeline-footer">
-                                                        <span class="nav-link pull-right">
-                                                            {{item.CreateBy}}
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                        </ul>
+            <!-- BEGIN Logs CONTENT-->
+            <div class="portlet light">
+                <div class="portlet-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <ul class="timeline">
+                                <li class="timeline-blue" ng-repeat="item in items">
+                                    <div class="timeline-time">
+                                        <span class="date">
+                                            {{item.CreateDate| date : 'yyyy-MM-dd'}}
+                                        </span>
+                                        <span class="time">
+                                            {{item.CreateDate| date : 'HH:MM:ss'}}
+                                        </span>
                                     </div>
-                                </div>
-                            </div>
+                                    <div class="timeline-icon">
+                                        <i >{{item.Stage|environmentFilter}}</i>
+                                    </div>
+                                    <div class="timeline-body">
+                                        <h2>{{item.Comments}}</h2>
+                                        <div class="timeline-content">
+                                            <h4>{{item.Comments}}</h4>
+                                        </div>
+                                        @*<div class="timeline-footer">
+                                            <a class="text-danger" href="javascript:;" ng-show="item.BuildId!=0" ng-click="GotoGitLabBuildPage(item.BuildId)">错误详细<i class="m-icon-swapright m-icon-white"></i></a>
+                                        </div>*@
+                                        <div class="timeline-footer">
+                                            <span class="nav-link pull-right">
+                                                {{item.CreateBy}}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
                         </div>
-                        <!-- END PAGE CONTENT-->
                     </div>
                 </div>
             </div>
+            <!-- END Logs CONTENT-->
         </div>
         <!-- 任务记录-->
     </div>
