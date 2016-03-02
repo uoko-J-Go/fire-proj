@@ -49,11 +49,15 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
         }
         var project = $scope.taskInfo.Project;
         if (typeof project == "string") {
-            $scope.taskInfo.Project = JSON.parse(project);
+            project = JSON.parse(project);
         }
         var server = $scope.taskInfo.Server;
-        if (typeof project == "string") {
+        if (typeof server == "string") {
             server = JSON.parse(server);
+        }
+        var domainInfo = $scope.taskInfo.DomainInfo;
+        if (typeof domainInfo == "string") {
+            domainInfo = JSON.parse(domainInfo);
         }
         var checkUserIds = [];
         var noticeUserIds = [];
@@ -71,26 +75,47 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
         var taskForSave= {
             TaskName:$scope.taskInfo.TaskName,
             Branch:$scope.taskInfo.Branch,
-            ProjectId: $scope.taskInfo.Project.ProjectId,
+            ProjectId: project.Id,
             DeployStage: $scope.taskInfo.DeployStage
         }
-        if (taskForSave.DeployStage === 0) {
+        if (taskForSave.DeployStage == 0) {
             taskForSave.IocDeployInfo = $scope.taskInfo.DeployInfo;
-            taskForSave.IocDeployInfo.DeployIP = $scope.taskInfo.Server.DeployIP;
-            taskForSave.IocDeployInfo.Domain = $scope.taskInfo.DomainInfo.Name;
-            taskForSave.IocDeployInfo.SiteName = $scope.taskInfo.DomainInfo.SiteName;
+            taskForSave.IocDeployInfo.DeployIP =server.IP;
+            taskForSave.IocDeployInfo.Domain =domainInfo.Name;
+            taskForSave.IocDeployInfo.SiteName =domainInfo.SiteName;
             taskForSave.IocDeployInfo.CheckUserId = checkUserIds.join(",");
             taskForSave.IocDeployInfo.NoticeUserId = noticeUserIds.join(",");
-        } else if (taskForSave.DeployStage === 1) {
+        } else if (taskForSave.DeployStage == 1) {
             taskForSave.PreDeployInfo = $scope.taskInfo.DeployInfo;
-            taskForSave.PreDeployInfo.DeployIP = $scope.taskInfo.Server.DeployIP;
-            taskForSave.PreDeployInfo.Domain = $scope.taskInfo.DomainInfo.Name;
-            taskForSave.PreDeployInfo.SiteName = $scope.taskInfo.DomainInfo.SiteName;
+            taskForSave.PreDeployInfo.DeployIP = server.IP;
+            taskForSave.PreDeployInfo.Domain =domainInfo.Name;
+            taskForSave.PreDeployInfo.SiteName =domainInfo.SiteName;
             taskForSave.PreDeployInfo.CheckUserId = checkUserIds.join(",");
             taskForSave.PreDeployInfo.NoticeUserId = noticeUserIds.join(",");
         }
 
-        TaskService.CreateTask($scope.taskInfo, function() {
+        TaskService.CreateTask(taskForSave, function (data) {
+            var taskId = data;
+            //发起部署任务
+
+            var buildInfo= {
+                RepoId: project.ProjectId,
+                Branch: $scope.taskInfo.Branch,
+                DeployIP:server.IP,
+                ProjectSlnName: project.ProjectSlnName,
+                ProjectCsprojName: project.ProjectCsprojName,
+                SiteName: domainInfo.SiteName,
+                PackageDir: server.PackageDir
+            }
+            if (taskForSave.DeployStage == 0) {
+                buildInfo.Target = "Deploy-To-IOC";
+            } else if (taskForSave.DeployStage == 1) {
+                buildInfo.Target = "Deploy-To-PRE";
+            }
+            CommonService.TriggerBuild(buildInfo, function (data) {
+                //发起部署后更新数据库状态
+
+            });
             location.href = "/Task/Index";
         });
     }
@@ -109,7 +134,6 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
         if (typeof server == "string") {
             server = JSON.parse(server);
         }
-
         if (project != undefined && project!= "") {
             if (server == undefined) {
                 server = { Id: 0 };
@@ -131,13 +155,6 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
 
     $scope.Cancel = function () {
         location.href = "/Task/Index";
-    }
-    
-    $scope.CreatDeployAddress = function (server) {
-        if (typeof server == "string") {
-            server = JSON.parse(server);
-            $scope.taskInfo.DeployAddress = "https://" + server.IP + "/msdeploy.axd";
-        }
     }
 
     $scope.Init = function () {

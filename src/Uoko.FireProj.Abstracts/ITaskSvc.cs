@@ -14,7 +14,8 @@ namespace Uoko.FireProj.Abstracts
         /// 新增任务
         /// </summary>
         /// <param name="task"></param>
-        void CreatTask(TaskWriteDto task);
+        /// <returns>创建任务生成的任务Id</returns>
+        int CreatTask(TaskWriteDto task);
 
         /// <summary>
         /// 任务编辑

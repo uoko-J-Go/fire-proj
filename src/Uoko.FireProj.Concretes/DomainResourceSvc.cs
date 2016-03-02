@@ -159,6 +159,7 @@ namespace Uoko.FireProj.Concretes
                     {
                         Id = r.Id,
                         Name = r.Name,
+                        SiteName = r.SiteName,
                     }).ToList();
                     return data;
                 }
