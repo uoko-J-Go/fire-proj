@@ -102,7 +102,7 @@ namespace Uoko.FireProj.DataAccess.Dto
         /// <summary>
         /// 任务相关通知人
         /// </summary>
-        public string NoticeUseId { get; set; }
+        public string NoticeUserId { get; set; }
 
         /// <summary>
         /// 任务描述
@@ -127,16 +127,16 @@ namespace Uoko.FireProj.DataAccess.Dto
 
 
 
-    /// <summary>
+        /// <summary>
     /// IOC部署dto
-    /// </summary>
+        /// </summary>
     public class DeployInfoIocDto: DeployInfoDto
     {
     }
 
-    /// <summary>
+        /// <summary>
     /// Pre部署dto
-    /// </summary>
+        /// </summary>
     public class DeployInfoPreDto: DeployInfoDto
     {
     }

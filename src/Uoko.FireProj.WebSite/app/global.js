@@ -19,7 +19,7 @@ var fireproj;
 var formSubmitSuccessClick = function (operation) {
     bootbox.alert("操作成功", function (data) {
         if (operation == "refresh") {
-            window.location.href = window.location.href
+            window.location.href = window.location.href;
         }
         else {
             window.location.href = document.referrer;

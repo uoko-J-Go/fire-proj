@@ -50,7 +50,7 @@ namespace Uoko.FireProj.DataAccess.Migrations
                         DeployIP = c.String(nullable: false),
                         SiteName = c.String(),
                         CheckUserId = c.String(),
-                        NoticeUseId = c.String(),
+                        NoticeUserId = c.String(),
                         DeployAddress = c.String(nullable: false),
                         Status = c.Int(nullable: false),
                         TaskDesc = c.String(),
