@@ -50,8 +50,8 @@ namespace Uoko.FireProj.WebSite.ControllerApi
         [HttpPost]
         public IHttpActionResult Create([FromBody]TaskWriteDto task)
         {
-            _taskSvc.CreatTask(task);
-            return Ok();
+            var taskId=_taskSvc.CreatTask(task);
+            return Ok(taskId);
         }
 
         /// <summary>
