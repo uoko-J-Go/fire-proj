@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using Mehdime.Entity;
 using Newtonsoft.Json;
@@ -61,7 +58,7 @@ namespace Uoko.FireProj.WebSite.Controllers
                 TaskName = DateTime.Now.ToString(CultureInfo.InvariantCulture),
                 ProjectId = 2025,
                 Branch = "dev",
-                CreateBy = 1,
+                CreatorId = 1,
                 CreateDate = DateTime.Now,
                 DeployInfoIocJson = JsonConvert.SerializeObject(deployInfo) ,
                 DeployInfoOnlineJson = null,

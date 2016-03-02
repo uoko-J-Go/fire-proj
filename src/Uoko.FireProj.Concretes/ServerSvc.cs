@@ -31,7 +31,7 @@ namespace Uoko.FireProj.Concretes
             {
                 var entity = Mapper.Map<ServerDto, Server>(server);
                 entity.Status = GenericStatusEnum.Enable;//默认添加 可用
-                entity.CreateBy = 1;
+                entity.CreatorId = 1;
                 entity.CreateDate = DateTime.Now;
                 using (var dbScope = _dbScopeFactory.Create())
                 {
@@ -47,7 +47,7 @@ namespace Uoko.FireProj.Concretes
                             SiteName = item.SiteName,
                             ProjectId = item.ProjectId,
                             ServerId = entity.Id,
-                            CreateBy = 1,
+                            CreatorId = 1,
                             CreateDate = DateTime.Now,
                         };
                         db.DomainResource.Add(domainEntity);
@@ -84,13 +84,13 @@ namespace Uoko.FireProj.Concretes
             try
             {
                 var entity = Mapper.Map<ServerDto, Server>(server);
-                entity.ModifyBy = 1;
+                entity.ModifyId = 1;
                 entity.ModifyDate = DateTime.Now;
                 using (var dbScope = _dbScopeFactory.Create())
                 {
                     var db = dbScope.DbContexts.Get<FireProjDbContext>();
                     //根据实际情况修改
-                    db.Update(entity, t => new { t.Name, t.IP, t.ServerDesc, t.Status, t.ModifyBy, t.ModifyDate, t.PackageDir });
+                    db.Update(entity, t => new { t.Name, t.IP, t.ServerDesc, t.Status, ModifyBy = t.ModifyId, t.ModifyDate, t.PackageDir });
 
                     //修改域名有主键则修改,无主键新增
                     var domainList = Mapper.Map<List<DomainResourceDto>, List<DomainResource>>(server.IISData);

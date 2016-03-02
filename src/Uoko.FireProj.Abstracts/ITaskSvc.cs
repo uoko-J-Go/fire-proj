@@ -29,11 +29,12 @@ namespace Uoko.FireProj.Abstracts
         void DeleteTask(int taskId);
 
         /// <summary>
-        /// 获取任务分页
+        /// 基本的查询分页功能，提供支持 按 任务名称进行 查询过滤
+        /// 默认按照 提交日期 倒排序
         /// </summary>
         /// <param name="query"></param>
         /// <returns></returns>
-        PageGridData<TaskDto> GetTaskPage(TaskQuery query);
+        PageGridData<TaskInfoForList> GetTaskPage(TaskQuery query);
 
         /// <summary>
         /// 根据任务Id获取任务信息详情

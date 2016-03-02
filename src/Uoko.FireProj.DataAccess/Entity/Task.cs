@@ -52,6 +52,34 @@ namespace Uoko.FireProj.DataAccess.Entity
 
     }
 
+    public class OnlineTaskInfo:BaseEntity
+    {
+        /// <summary>
+        /// 部署环境
+        /// </summary>
+        public StageEnum DeployStage { get; set; }
+
+        /// <summary>
+        /// 部署服务器IP地址
+        /// </summary>
+        public string DeployIP { get; set; }
+
+        /// <summary>
+        /// 部署地址
+        /// </summary>
+        public string DeployAddress { get; set; }
+
+        /// <summary>
+        /// 部署域名
+        /// </summary>
+        public string Domain { get; set; }
+
+        /// <summary>
+        /// IIS站点名称
+        /// </summary>
+        public string SiteName { get; set; }
+    }
+
     /// <summary>
     /// 部署信息
     /// </summary>
@@ -137,7 +165,7 @@ namespace Uoko.FireProj.DataAccess.Entity
         /// <summary>
         /// 任务相关通知人
         /// </summary>
-        public string NoticeUseId { get; set; }
+        public string NoticeUseId { get; set; } 
    
     }
 

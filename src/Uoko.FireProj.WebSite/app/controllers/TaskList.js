@@ -8,20 +8,23 @@ fireproj.controller("TaskController", function ($scope, $http, TaskService, Proj
     };
     $scope.pageSize = 10;
     $scope.currentPage = 1;
-    $scope.items = [];
+
+    $scope.taskInfos = [];
     $scope.totalItems = 0;//总数
+
     //查询项目
     $scope.Query = function () {
         var params = {
             offset: $scope.pageSize * ($scope.currentPage - 1),
             limit: $scope.pageSize
         }
+
         TaskService.GetTaskByPage(params,function (data) {
             $scope.totalItems = data.total;
-            $scope.items = data.rows;
+            $scope.taskInfos = data.rows;
         });
-
     }
+
     $scope.Deploy = function (item) {
         TaskService.GetTaskInfo(item.Id, function (data) {
             var taskInfo = data;
