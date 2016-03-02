@@ -29,6 +29,11 @@ namespace Uoko.FireProj.DataAccess.Dto
         public string ProjectName { get; set; }
 
         /// <summary>
+        /// gitlab项目的id
+        /// </summary>
+        public int RepoId { get; set; }
+
+        /// <summary>
         /// 代码分支
         /// </summary>
         public string Branch { get; set; }
@@ -123,8 +128,6 @@ namespace Uoko.FireProj.DataAccess.Dto
         /// 部署状态
         /// </summary>
         public DeployStatus DeployStatus { get; set; }
-
-       
 
         /// <summary>
         /// gitlab triggered Id
