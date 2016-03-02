@@ -202,6 +202,10 @@
     <Compile Include="Migrations\201603021105436_serverTrans.Designer.cs">
       <DependentUpon>201603021105436_serverTrans.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201603021152037_repoIdInProject.cs" />
+    <Compile Include="Migrations\201603021152037_repoIdInProject.Designer.cs">
+      <DependentUpon>201603021152037_repoIdInProject.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Query\BaseQuery.cs" />
@@ -300,6 +304,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201603021105436_serverTrans.resx">
       <DependentUpon>201603021105436_serverTrans.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201603021152037_repoIdInProject.resx">
+      <DependentUpon>201603021152037_repoIdInProject.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

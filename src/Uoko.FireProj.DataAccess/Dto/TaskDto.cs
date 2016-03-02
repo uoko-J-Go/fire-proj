@@ -22,7 +22,7 @@ namespace Uoko.FireProj.DataAccess.Dto
         /// </summary>
         public ProjectDto Project { get; set; }
 
-       
+
 
         /// <summary>
         /// 代码分支
@@ -62,12 +62,12 @@ namespace Uoko.FireProj.DataAccess.Dto
         /// <summary>
         /// 验收人集合
         /// </summary>
-        public List<UserDto> CheckUsers{ get; set; }
+        public List<UserDto> CheckUsers { get; set; }
 
         /// <summary>
         /// 任务相关通知人
         /// </summary>
-        public List<UserDto> NoticeUsers{ get; set; }
+        public List<UserDto> NoticeUsers { get; set; }
 
         /// <summary>
         /// 部署地址
@@ -106,6 +106,8 @@ namespace Uoko.FireProj.DataAccess.Dto
 
     public class TaskInfoForList
     {
+        public string ProjectName { get; set; }
+
         public TaskInfo TaskInfo { get; set; }
 
         public OnlineTaskInfo OnlineTaskInfo { get; set; }

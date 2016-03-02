@@ -105,14 +105,26 @@ namespace Uoko.FireProj.DataAccess.Dto
         public string NoticeUserId { get; set; }
 
         /// <summary>
+        /// 验收人名称-状态集合
+        /// </summary>
+        public List<UserDto> CheckUser { get; set; }
+
+        /// <summary>
+        /// 任务相关通知人-状态集合
+        /// </summary>
+        public List<UserDto> NoticeUser { get; set; }
+
+        /// <summary>
         /// 任务描述
         /// </summary>
         public string TaskDesc { get; set; }
 
         /// <summary>
-        /// 任务状态
+        /// 部署状态
         /// </summary>
-        public string Status { get; set; }
+        public DeployStatus DeployStatus { get; set; }
+
+       
 
         /// <summary>
         /// gitlab triggered Id
@@ -127,16 +139,16 @@ namespace Uoko.FireProj.DataAccess.Dto
 
 
 
-        /// <summary>
+    /// <summary>
     /// IOC部署dto
-        /// </summary>
+    /// </summary>
     public class DeployInfoIocDto: DeployInfoDto
     {
     }
 
-        /// <summary>
+    /// <summary>
     /// Pre部署dto
-        /// </summary>
+    /// </summary>
     public class DeployInfoPreDto: DeployInfoDto
     {
     }

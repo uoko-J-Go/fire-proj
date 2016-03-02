@@ -152,6 +152,16 @@ namespace Uoko.FireProj.Concretes
                 taskDto.DeployInfoPreDto = !taskDto.DeployInfoPreJson.IsNullOrEmpty() ? JsonHelper.FromJson<DeployInfoPreDto>(taskDto.DeployInfoPreJson) : new DeployInfoPreDto();
                 taskDto.DeployInfoOnlineDto = !taskDto.DeployInfoOnlineJson.IsNullOrEmpty() ? JsonHelper.FromJson<DeployInfoOnlineDto>(taskDto.DeployInfoOnlineJson) : new DeployInfoOnlineDto();
 
+                //获取测试,通知人Id集合返回
+                taskDto.DeployInfoIocDto.CheckUser = AnalysisUser(taskDto.DeployInfoIocDto.CheckUserId);
+                taskDto.DeployInfoIocDto.NoticeUser = AnalysisUser(taskDto.DeployInfoIocDto.NoticeUserId);
+
+                taskDto.DeployInfoPreDto.CheckUser = AnalysisUser(taskDto.DeployInfoPreDto.CheckUserId);
+                taskDto.DeployInfoPreDto.NoticeUser = AnalysisUser(taskDto.DeployInfoPreDto.NoticeUserId);
+
+                taskDto.DeployInfoOnlineDto.CheckUser = AnalysisUser(taskDto.DeployInfoOnlineDto.CheckUserId);
+                taskDto.DeployInfoOnlineDto.NoticeUser = AnalysisUser(taskDto.DeployInfoOnlineDto.NoticeUserId);
+
                 return taskDto;
             }
 
@@ -237,11 +247,30 @@ namespace Uoko.FireProj.Concretes
 
         public IEnumerable<TaskInfoForList> TransferTask(IEnumerable<TaskInfo> tasks)
         {
-            return tasks.Select(task => new TaskInfoForList
-                                        {
-                                            TaskInfo = task,
-                                            OnlineTaskInfo = null
-                                        });
+            Dictionary<int, string> projDic;
+            var taskInfos = tasks as TaskInfo[] ?? tasks.ToArray();
+
+            using (var dbScope = _dbScopeFactory.CreateReadOnly())
+            {
+
+                var db = dbScope.DbContexts.Get<FireProjDbContext>();
+                var projectIds = taskInfos.Select(item => item.ProjectId).Distinct();
+                projDic = db.Project.Where(item => projectIds.Contains(item.Id))
+                            .ToDictionary(item => item.Id, item => item.ProjectName);
+            }
+
+            var infoLists = taskInfos.Select(task =>
+                                {
+                                    string projectName;
+                                    projDic.TryGetValue(task.ProjectId, out projectName);
+                                    return new TaskInfoForList
+                                           {
+                                               TaskInfo = task,
+                                               OnlineTaskInfo = null,
+                                               ProjectName = projectName
+                                           };
+                                });
+            return infoLists;
         }
 
         public void UpdateTaskStatus(TaskDto task)
@@ -279,5 +308,22 @@ namespace Uoko.FireProj.Concretes
             //    throw new TipInfoException(ex.Message);
             //}
         }
+
+        private List<UserDto> AnalysisUser(string userInfo)
+        {
+            List<UserDto> userDtoData = new List<UserDto>();
+            var userList = userInfo.Split(',');
+            foreach (var item in userList)
+            {
+                var user = item.Split('-');
+                userDtoData.Add(new UserDto
+                {
+                    Id =int.Parse(user[0]),
+                    QAStatus = (QAStatus) int.Parse(user[1])
+                });
+            }
+            return userDtoData;
+        }
+
     }
 }

@@ -38,7 +38,7 @@ namespace Uoko.FireProj.DataAccess.Dto
 
         public DeployInfoOnlineDto DeployInfoOnlineDto { get; set; }
 
-        public int CreateBy { get; set; }
+        public string CreatorName { get; set; }
 
 
         public DateTime CreateDate { get; set; }
