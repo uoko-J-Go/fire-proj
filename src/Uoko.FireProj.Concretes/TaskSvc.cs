@@ -1,20 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using AutoMapper;
 using Mehdime.Entity;
 using Newtonsoft.Json;
 using Uoko.FireProj.Abstracts;
 using Uoko.FireProj.DataAccess.Dto;
 using Uoko.FireProj.DataAccess.Entity;
-using Uoko.FireProj.DataAccess.Extensions;
+using Uoko.FireProj.DataAccess.Enum;
 using Uoko.FireProj.DataAccess.Query;
 using Uoko.FireProj.Infrastructure.Data;
 using Uoko.FireProj.Infrastructure.Exception;
 using Uoko.FireProj.Model;
-using Uoko.FireProj.DataAccess.Enum;
-using Uoko.FireProj.Infrastructure.Extensions;
 
 namespace Uoko.FireProj.Concretes
 {
@@ -50,7 +45,7 @@ namespace Uoko.FireProj.Concretes
                         DeployIP = taskDto.DeployIP,
                         Domain = taskDto.Domain,
                         SiteName = taskDto.SiteName,
-                        Status = DeployStatus.Deploying,
+                        DeployStatus = DeployStatus.Deploying,
                         TaskDesc = taskDto.TaskDesc,
                     };
                     taskInfo.DeployInfoIocJson = JsonConvert.SerializeObject(iocInfo);
@@ -65,7 +60,7 @@ namespace Uoko.FireProj.Concretes
                         DeployIP = taskDto.DeployIP,
                         Domain = taskDto.Domain,
                         SiteName = taskDto.SiteName,
-                        Status = DeployStatus.Deploying,
+                        DeployStatus = DeployStatus.Deploying,
                         TaskDesc = taskDto.TaskDesc,
                     };
                     taskInfo.DeployInfoPreJson = JsonConvert.SerializeObject(preInfo);
