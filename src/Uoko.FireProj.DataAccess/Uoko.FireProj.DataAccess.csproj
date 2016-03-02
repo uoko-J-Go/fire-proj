@@ -62,6 +62,7 @@
     <Compile Include="Dto\ProjectDto.cs" />
     <Compile Include="Dto\DomainResourceDto.cs" />
     <Compile Include="Dto\ServerDto.cs" />
+    <Compile Include="Dto\TaskWriteDto.cs" />
     <Compile Include="Dto\TaskDetailDto.cs" />
     <Compile Include="Dto\TaskLogsDto.cs" />
     <Compile Include="Dto\TaskDto.cs" />

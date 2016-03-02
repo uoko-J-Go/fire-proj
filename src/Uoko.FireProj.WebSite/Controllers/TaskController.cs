@@ -54,7 +54,7 @@ namespace Uoko.FireProj.WebSite.Controllers
                 DeployIP ="192.168.200.25",
                 DeployStage = StageEnum.IOC,
                 Domain = "fire.uoko.ioc",
-                NoticeUseId =null,
+                NoticeUserId =null,
                 SiteName ="fire.uoko.ioc",
                 DeployStatus = DeployStatus.Deploying,
                 TaskDesc = "Seed data",

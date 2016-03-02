@@ -91,7 +91,7 @@ namespace Uoko.FireProj.DataAccess.Entity
         /// <summary>
         /// 任务相关通知人
         /// </summary>
-        public string NoticeUseId { get; set; }
+        public string NoticeUserId { get; set; }
 
         /// <summary>
         /// 任务描述
@@ -117,7 +117,7 @@ namespace Uoko.FireProj.DataAccess.Entity
 
     public class DeployInfoIoc : DeployInfo
     {
-        
+
     }
 
     public class DeployInfoPre : DeployInfo
@@ -137,8 +137,8 @@ namespace Uoko.FireProj.DataAccess.Entity
         /// <summary>
         /// 任务相关通知人
         /// </summary>
-        public string NoticeUseId { get; set; }
-   
+        public string NoticeUserId { get; set; }
+
     }
 
 }

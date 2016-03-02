@@ -37,19 +37,19 @@ namespace Uoko.FireProj.DataAccess.Enum
     public enum QAStatus
     {
         /// <summary>
-        /// 部署中
+        /// 待测试
         /// </summary>
         [Description("待测试")]
         Waiting = 0,
 
         /// <summary>
-        /// 部署失败
+        /// 测试未通过
         /// </summary>
         [Description("测试未通过")]
         Refused = 1,
 
         /// <summary>
-        /// 部署成功
+        /// 测试通过
         /// </summary>
         [Description("测试通过")]
         Passed = 2,

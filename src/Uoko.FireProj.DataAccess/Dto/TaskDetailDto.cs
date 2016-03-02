@@ -12,6 +12,7 @@ namespace Uoko.FireProj.DataAccess.Dto
     /// </summary>
     public class TaskDetailDto
     {
+        public int Id { get; set; }
         /// <summary>
         /// 任务名称
         /// </summary>

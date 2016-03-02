@@ -40,7 +40,7 @@ namespace Uoko.FireProj.WebSite.ControllerApi
         }
         [Route("Update")]
         [HttpPost]
-        public IHttpActionResult Update([FromBody]TaskDto task)
+        public IHttpActionResult Update([FromBody]TaskWriteDto task)
         {
             _taskSvc.UpdateTask(task);
             return Ok();
@@ -48,7 +48,7 @@ namespace Uoko.FireProj.WebSite.ControllerApi
 
         [Route("Create")]
         [HttpPost]
-        public IHttpActionResult Create([FromBody]TaskDto task)
+        public IHttpActionResult Create([FromBody]TaskWriteDto task)
         {
             _taskSvc.CreatTask(task);
             return Ok();
@@ -89,15 +89,15 @@ namespace Uoko.FireProj.WebSite.ControllerApi
         public IHttpActionResult BeginDeploy(int taskId,int triggerId)
         {
             var task= _taskSvc.GetTaskById(taskId);
-            //_taskSvc.UpdateTaskStatus(new TaskDto() { Id = task.Id, DeployStatus = DeployStatus.Deploying });
-            //_taskLogsSvc.CreatTaskLogs(new TaskLogsDto()
-            //{
-            //    TaskId = taskId,
-            //    TriggeredId = triggerId,
-            //    CreateBy = 1,
-            //    Stage= task.DeployStage,
+            _taskSvc.UpdateTaskStatus(new TaskDto() { Id = task.Id, DeployStatus = DeployStatus.Deploying });
+            _taskLogsSvc.CreatTaskLogs(new TaskLogsDto()
+            {
+                TaskId = taskId,
+                //TriggeredId = triggerId,
+                //CreateBy = 1,
+                //Stage= task.DeployStage,
                 
-            //});
+            });
             return Ok();
         }
 
