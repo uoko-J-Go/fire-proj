@@ -377,6 +377,7 @@ namespace Uoko.FireProj.Concretes
                      //创建日志
                     var log = new TaskLogs
                     {
+                        TaskId=entity.Id,
                         LogType = LogType.Deploy,
                         Stage = deployStage
                     };
