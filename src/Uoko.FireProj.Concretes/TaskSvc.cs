@@ -31,44 +31,40 @@ namespace Uoko.FireProj.Concretes
         }
         #endregion
 
-        public void CreatTask(TaskDto taskDto)
+        public void CreatTask(TaskWriteDto taskDto)
         {
             var taskInfo = new TaskInfo();
-            taskInfo.ProjectId = taskDto.Project.Id;
-            taskInfo.Branch = "dev";
-            taskInfo.TaskName = "邮件发送阻塞";
+            taskInfo.ProjectId = taskDto.ProjectId;
+            taskInfo.Branch = taskDto.Branch;
+            taskInfo.TaskName = taskDto.TaskName;
+            taskInfo.CreateBy = 1;
+            taskInfo.CreateDate = DateTime.Now;
+
+            var domain = string.Empty;
 
             switch (taskDto.DeployStage)
             {
                 case StageEnum.IOC:
-                    var iocInfo = new DeployInfoIoc
+                    if (!string.IsNullOrEmpty(taskDto.IocDeployInfo.CheckUserId))
                     {
-                        DeployStage = taskDto.DeployStage,
-                        CheckUserId = string.Join(",", taskDto.CheckUsers.Select(t => t.Id)),
-                        NoticeUseId = string.Join(",", taskDto.NoticeUses.Select(t => t.Id)),
-                        DeployAddress = taskDto.DeployAddress,
-                        DeployIP = taskDto.DeployIP,
-                        Domain = taskDto.Domain,
-                        SiteName = taskDto.SiteName,
-                        Status = DeployStatus.Deploying,
-                        TaskDesc = taskDto.TaskDesc,
-                    };
-                    taskInfo.DeployInfoIocJson = JsonConvert.SerializeObject(iocInfo);
+                        var userIds = taskDto.IocDeployInfo.CheckUserId.Split(',');
+                        var userIdsStatus = userIds.Select(userId => string.Format("{0}-{1}", userId, (int) QAStatus.Waiting)).ToList();
+                        taskInfo.IocCheckUserId = string.Join(",", userIdsStatus);
+                    }
+                    domain = taskDto.IocDeployInfo.Domain;
+                    taskDto.IocDeployInfo.DeployStage = taskDto.DeployStage;
+                    taskInfo.DeployInfoIocJson = JsonConvert.SerializeObject(taskDto.IocDeployInfo);
                     break;
                 case StageEnum.PRE:
-                    var preInfo = new DeployInfoPre()
+                    if (!string.IsNullOrEmpty(taskDto.PreDeployInfo.CheckUserId))
                     {
-                        DeployStage = taskDto.DeployStage,
-                        CheckUserId = string.Join(",", taskDto.CheckUsers.Select(t => t.Id)),
-                        NoticeUseId = string.Join(",", taskDto.NoticeUses.Select(t => t.Id)),
-                        DeployAddress = taskDto.DeployAddress,
-                        DeployIP = taskDto.DeployIP,
-                        Domain = taskDto.Domain,
-                        SiteName = taskDto.SiteName,
-                        Status = DeployStatus.Deploying,
-                        TaskDesc = taskDto.TaskDesc,
-                    };
-                    taskInfo.DeployInfoPreJson = JsonConvert.SerializeObject(preInfo);
+                        var userIds = taskDto.PreDeployInfo.CheckUserId.Split(',');
+                        var userIdsStatus = userIds.Select(userId => string.Format("{0}-{1}", userId, (int)QAStatus.Waiting)).ToList();
+                        taskInfo.PreCheckUserId = string.Join(",", userIdsStatus);
+                    }
+                    domain = taskDto.PreDeployInfo.Domain;
+                    taskDto.PreDeployInfo.DeployStage = taskDto.DeployStage;
+                    taskInfo.DeployInfoPreJson = JsonConvert.SerializeObject(taskDto.PreDeployInfo);
                     break;
                 default:
                     throw new NotSupportedException("暂不支持其他阶段");
@@ -79,59 +75,21 @@ namespace Uoko.FireProj.Concretes
                 var db = dbScope.DbContexts.Get<FireProjDbContext>();
                 db.TaskInfo.Add(taskInfo);
                 db.SaveChanges();
-                taskDto.Id = taskInfo.Id;
-                UpdateResourceInfo(taskDto);
+
+                //更新域名资源使用
+                var resourceInfo = db.DomainResource.FirstOrDefault(r => r.ProjectId == taskDto.ProjectId && r.Name == domain);
+                resourceInfo.TaskId = taskInfo.Id;
+
+                db.SaveChanges();
             }
 
-
-            //try
-            //{
-            //    var entity = Mapper.Map<TaskDto,TaskInfo>(taskDto);
-            //    entity.ProjectId = taskDto.Project.Id;
-            //    entity.CheckUserId = string.Join(",", taskDto.CheckUsers.Select(t => t.Id));
-            //    entity.NoticeUseId= string.Join(",", taskDto.NoticeUses.Select(t => t.Id));
-            //    entity.CreateBy = 1;
-            //    entity.CreateDate = DateTime.Now;
-            //    entity.Status = TaskEnum.WaitingDeploy;
-            //    using (var dbScope = _dbScopeFactory.Create())
-            //    {
-            //        var db = dbScope.DbContexts.Get<FireProjDbContext>();
-            //        db.TaskInfo.Add(entity);
-            //        db.SaveChanges();
-            //        taskDto.Id = entity.Id;
-            //        UpdateResourceInfo(taskDto);
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    throw new TipInfoException(ex.Message);
-            //}
-        }
-
-        public void DeleteTask(int taskId)
-        {
-            try
-            {
-                using (var dbScope = _dbScopeFactory.Create())
-                {
-                    var db = dbScope.DbContexts.Get<FireProjDbContext>();
-                    TaskInfo entity = new TaskInfo() { Id = taskId };
-                    db.TaskInfo.Attach(entity);
-                    db.TaskInfo.Remove(entity);
-                    db.SaveChanges();
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new TipInfoException(ex.Message);
-            }
         }
 
         /// <summary>
         /// 应该是根据部署情况，更新部署信息
         /// </summary>
         /// <param name="task"></param>
-        public void UpdateTask(TaskDto task)
+        public void UpdateTask(TaskWriteDto task)
         {
             //try
             //{
@@ -154,6 +112,26 @@ namespace Uoko.FireProj.Concretes
             //    throw new TipInfoException(ex.Message);
             //}
         }
+        public void DeleteTask(int taskId)
+        {
+            try
+            {
+                using (var dbScope = _dbScopeFactory.Create())
+                {
+                    var db = dbScope.DbContexts.Get<FireProjDbContext>();
+                    TaskInfo entity = new TaskInfo() { Id = taskId };
+                    db.TaskInfo.Attach(entity);
+                    db.TaskInfo.Remove(entity);
+                    db.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new TipInfoException(ex.Message);
+            }
+        }
+
+       
 
         public TaskDto GetTaskById(int taskId)
         {
@@ -271,27 +249,6 @@ namespace Uoko.FireProj.Concretes
             //{
             //    throw new TipInfoException(ex.Message);
             //}
-        }
-
-        private void UpdateResourceInfo(TaskDto task)
-        {
-            try
-            {
-                using (var dbScope = _dbScopeFactory.Create())
-                {
-                    var db = dbScope.DbContexts.Get<FireProjDbContext>();
-                    var resourceInfo = db.DomainResource.FirstOrDefault(r => r.ProjectId == task.Project.Id && r.Name == task.Domain);
-                    resourceInfo.Status = DomainResourceStatusEnum.Enable;
-                    resourceInfo.ServerId = task.ServerId;
-                    resourceInfo.TaskId = task.Id;
-                    db.SaveChanges();
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new TipInfoException(ex.Message);
-            }
-           
         }
     }
 }

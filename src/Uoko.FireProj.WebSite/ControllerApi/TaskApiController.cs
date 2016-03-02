@@ -40,7 +40,7 @@ namespace Uoko.FireProj.WebSite.ControllerApi
         }
         [Route("Update")]
         [HttpPost]
-        public IHttpActionResult Update([FromBody]TaskDto task)
+        public IHttpActionResult Update([FromBody]TaskWriteDto task)
         {
             _taskSvc.UpdateTask(task);
             return Ok();
@@ -48,7 +48,7 @@ namespace Uoko.FireProj.WebSite.ControllerApi
 
         [Route("Create")]
         [HttpPost]
-        public IHttpActionResult Create([FromBody]TaskDto task)
+        public IHttpActionResult Create([FromBody]TaskWriteDto task)
         {
             _taskSvc.CreatTask(task);
             return Ok();

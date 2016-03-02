@@ -14,13 +14,13 @@ namespace Uoko.FireProj.Abstracts
         /// 新增任务
         /// </summary>
         /// <param name="task"></param>
-        void CreatTask(TaskDto task);
+        void CreatTask(TaskWriteDto task);
 
         /// <summary>
         /// 任务编辑
         /// </summary>
         /// <param name="task"></param>
-        void UpdateTask(TaskDto task);
+        void UpdateTask(TaskWriteDto task);
 
         /// <summary>
         /// 根据任务id删除任务信息

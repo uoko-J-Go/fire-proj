@@ -91,7 +91,7 @@ namespace Uoko.FireProj.DataAccess.Entity
         /// <summary>
         /// 任务相关通知人
         /// </summary>
-        public string NoticeUseId { get; set; }
+        public string NoticeUserId { get; set; }
 
         /// <summary>
         /// 任务描述
@@ -151,7 +151,7 @@ namespace Uoko.FireProj.DataAccess.Entity
         /// <summary>
         /// 任务相关通知人
         /// </summary>
-        public string NoticeUseId { get; set; }
+        public string NoticeUserId { get; set; }
 
         /// <summary>
         /// 任务描述
@@ -177,7 +177,10 @@ namespace Uoko.FireProj.DataAccess.Entity
 
     public class DeployInfoOnline
     {
-
+        /// <summary>
+        /// 部署环境
+        /// </summary>
+        public StageEnum DeployStage { get; set; }
         /// <summary>
         /// 验收人Id集合
         /// </summary>
@@ -186,7 +189,7 @@ namespace Uoko.FireProj.DataAccess.Entity
         /// <summary>
         /// 任务相关通知人
         /// </summary>
-        public string NoticeUseId { get; set; }
+        public string NoticeUserId { get; set; }
 
    
     }
