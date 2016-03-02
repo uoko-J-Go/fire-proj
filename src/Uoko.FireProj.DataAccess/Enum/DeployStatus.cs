@@ -16,19 +16,19 @@ namespace Uoko.FireProj.DataAccess.Enum
         /// 部署中
         /// </summary>
         [Description("部署中")]
-        Deploying= 2,
+        Deploying= 0,
 
         /// <summary>
         /// 部署失败
         /// </summary>
         [Description("部署失败")]
-        DeployFails = 4,
+        DeployFails = 1,
 
         /// <summary>
         /// 部署成功
         /// </summary>
         [Description("部署成功")]
-        DeploySuccess = 6,
+        DeploySuccess = 2,
     }
 
     /// <summary>
