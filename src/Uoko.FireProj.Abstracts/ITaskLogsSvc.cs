@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Uoko.FireProj.DataAccess.Dto;
+using Uoko.FireProj.DataAccess.Entity;
 using Uoko.FireProj.DataAccess.Enum;
 using Uoko.FireProj.DataAccess.Query;
 using Uoko.FireProj.Infrastructure.Data;
@@ -19,7 +20,7 @@ namespace Uoko.FireProj.Abstracts
         /// 新增任务记录
         /// </summary>
         /// <param name="dto"></param>
-        void CreatTaskLogs(TaskLogsDto dto);
+        void CreateTaskLogs(TaskLogs dto);
 
         /// <summary>
         /// 更新任务记录
