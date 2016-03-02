@@ -64,7 +64,7 @@
                         <tbody>
                         <tr ng-repeat="task in taskInfos">
                             <td><a  class="text-primary" href="/Task/Detail?taskId={{task.TaskInfo.Id}}">{{task.TaskInfo.TaskName}}</a> </td>
-                            <td>{{task.TaskInfo.ProjectId}}</td>
+                            <td>{{task.ProjectName}}</td>
                             <td>{{task.TaskInfo.Branch}}</td>
                             @*<td>{{task.Status|taskStatusFilter}}</td>*@
                             <td>{{task.TaskInfo.DeployInfoIocJson}}</td>
