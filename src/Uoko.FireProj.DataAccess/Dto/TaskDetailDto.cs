@@ -102,7 +102,7 @@ namespace Uoko.FireProj.DataAccess.Dto
         /// <summary>
         /// 任务相关通知人
         /// </summary>
-        public string NoticeUseId { get; set; }
+        public string NoticeUserId { get; set; }
 
         /// <summary>
         /// 任务描述
@@ -112,7 +112,7 @@ namespace Uoko.FireProj.DataAccess.Dto
         /// <summary>
         /// 任务状态
         /// </summary>
-        public string Status { get; set; }
+        public DeployStatus DeployStatus { get; set; }
 
         /// <summary>
         /// gitlab triggered Id

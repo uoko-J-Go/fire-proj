@@ -55,7 +55,7 @@ namespace Uoko.FireProj.Concretes
             using (var dbScope = _dbScopeFactory.CreateReadOnly())
             {
                 var db = dbScope.DbContexts.Get<FireProjDbContext>();
-                var entity = db.TaskLogs.Where(r => r.TaskId == taskId).ToList();
+                var entity = db.TaskLogs.Where(r => r.TaskId == taskId).OrderByDescending(r => r.CreateDate).ToList();
                 List<TaskLogsDto> data = new List<TaskLogsDto>();
                 foreach (var item in entity)
                 {
