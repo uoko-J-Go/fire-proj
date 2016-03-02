@@ -31,6 +31,13 @@ namespace Uoko.FireProj.DataAccess.Entity
         /// 备注评论
         /// </summary>
         public string Comments { get; set; }
+
+        public LogType LogType { get; set; }
     }
 
+    public enum LogType
+    {
+        Deploy = 0,
+        QA = 1,
+    }
 }

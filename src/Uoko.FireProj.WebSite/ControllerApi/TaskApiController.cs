@@ -89,7 +89,7 @@ namespace Uoko.FireProj.WebSite.ControllerApi
         public IHttpActionResult BeginDeploy(int taskId,int triggerId)
         {
             var task= _taskSvc.GetTaskById(taskId);
-            _taskSvc.UpdateTaskStatus(new TaskDto() { Id = task.Id, Status = TaskStatusEnum.Deployment });
+            _taskSvc.UpdateTaskStatus(new TaskDto() { Id = task.Id, Status = DeployStatus.Deploying });
             _taskLogsSvc.CreatTaskLogs(new TaskLogsDto()
             {
                 TaskId = taskId,

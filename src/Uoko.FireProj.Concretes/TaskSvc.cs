@@ -50,7 +50,7 @@ namespace Uoko.FireProj.Concretes
                         DeployIP = taskDto.DeployIP,
                         Domain = taskDto.Domain,
                         SiteName = taskDto.SiteName,
-                        Status = TaskStatusEnum.WaitingDeploy,
+                        Status = DeployStatus.WaitingDeploy,
                         TaskDesc = taskDto.TaskDesc,
                     };
                     taskInfo.DeployInfoIocJson = JsonConvert.SerializeObject(iocInfo);
@@ -65,7 +65,7 @@ namespace Uoko.FireProj.Concretes
                         DeployIP = taskDto.DeployIP,
                         Domain = taskDto.Domain,
                         SiteName = taskDto.SiteName,
-                        Status = TaskStatusEnum.WaitingDeploy,
+                        Status = DeployStatus.WaitingDeploy,
                         TaskDesc = taskDto.TaskDesc,
                     };
                     taskInfo.DeployInfoPreJson = JsonConvert.SerializeObject(preInfo);

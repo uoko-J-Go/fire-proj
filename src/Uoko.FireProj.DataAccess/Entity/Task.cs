@@ -27,9 +27,24 @@ namespace Uoko.FireProj.DataAccess.Entity
 
         public string DeployInfoIocJson { get; set; }
 
+        /// <summary>
+        /// 验收人Id集合
+        /// </summary>
+        public string IocCheckUserId { get; set; }
+
         public string DeployInfoPreJson { get; set; }
 
+        /// <summary>
+        /// 验收人Id集合
+        /// </summary>
+        public string PreCheckUserId { get; set; }
+
         public string DeployInfoOnlineJson { get; set; }
+
+        /// <summary>
+        /// 验收人Id集合  12-0, 14-1, 20-2 代表 12 待测试， 14 测试未通过， 20 测试通过
+        /// </summary>
+        public string OnlineCheckUserId { get; set; }
 
         public bool HasOnlineDeployed { get; set; }
 
@@ -86,7 +101,7 @@ namespace Uoko.FireProj.DataAccess.Entity
         /// <summary>
         /// 任务状态
         /// </summary>
-        public TaskStatusEnum Status { get; set; }
+        public DeployStatus Status { get; set; }
 
         /// <summary>
         /// gitlab triggered Id
@@ -146,7 +161,7 @@ namespace Uoko.FireProj.DataAccess.Entity
         /// <summary>
         /// 任务状态
         /// </summary>
-        public TaskStatusEnum Status { get; set; }
+        public DeployStatus Status { get; set; }
 
         /// <summary>
         /// gitlab triggered Id

@@ -82,7 +82,7 @@ namespace Uoko.FireProj.DataAccess.Dto
         /// <summary>
         /// 任务状态值
         /// </summary>
-        public TaskStatusEnum Status { get; set; }
+        public DeployStatus Status { get; set; }
 
         /// <summary>
         /// 任务描述

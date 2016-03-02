@@ -77,7 +77,7 @@
     <Compile Include="Enum\DeployEnum.cs" />
     <Compile Include="Enum\DicEnum.cs" />
     <Compile Include="Enum\DomainResourceStatusEnum.cs" />
-    <Compile Include="Enum\TaskStatusEnum.cs" />
+    <Compile Include="Enum\DeployStatus.cs" />
     <Compile Include="Extensions\DbContextExtensions.cs" />
     <Compile Include="FireProjDbContext.cs" />
     <Compile Include="FluentAPI\DictionaryMap.cs" />

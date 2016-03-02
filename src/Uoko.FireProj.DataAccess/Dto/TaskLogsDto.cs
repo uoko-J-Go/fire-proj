@@ -46,7 +46,7 @@ namespace Uoko.FireProj.DataAccess.Dto
         /// <summary>
         /// 记录类型
         /// </summary>
-        public TaskLogsEnum TaskLogsType { get; set; }
+        public LogType TaskLogsType { get; set; }
 
         /// <summary>
         /// 操作人
