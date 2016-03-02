@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Uoko.FireProj.DataAccess.Dto;
+using Uoko.FireProj.DataAccess.Entity;
 using Uoko.FireProj.DataAccess.Enum;
 using Uoko.FireProj.DataAccess.Query;
 using Uoko.FireProj.Infrastructure.Data;
@@ -56,6 +57,14 @@ namespace Uoko.FireProj.Abstracts
         /// <param name="deployStage"></param>
         /// <param name="triggerId"></param>
         /// <returns></returns>
-        void BeginDeploy(int taskId, StageEnum deployStage, int triggerId);
+        TaskInfo BeginDeploy(int taskId, StageEnum deployStage, int triggerId);
+        /// <summary>
+        /// 部署回调
+        /// </summary>
+        /// <param name="triggerId"></param>
+        /// <param name="buildId"></param>
+        /// <param name="deployStatus"></param>
+        /// <returns></returns>
+        TaskInfo DeployCallback( int triggerId,int buildId, DeployStatus deployStatus);
     }
 }
