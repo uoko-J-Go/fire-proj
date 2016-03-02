@@ -78,11 +78,15 @@ namespace Uoko.FireProj.DataAccess.Dto
         /// </summary>
         public string PackageDir { get; set; }
 
+        /// <summary>
+        /// 任务状态值
+        /// </summary>
+        public QAStatus QAStatus { get; set; }
 
         /// <summary>
         /// 任务状态值
         /// </summary>
-        public DeployStatus Status { get; set; }
+        public DeployStatus DeployStatus { get; set; }
 
         /// <summary>
         /// 任务描述

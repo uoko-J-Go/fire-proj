@@ -40,7 +40,7 @@ namespace Uoko.FireProj.WebSite.ControllerApi
             //部署失败
             if ("failed".Equals(bhRequest.build_status, StringComparison.OrdinalIgnoreCase))
             {
-                _taskSvc.UpdateTaskStatus(new TaskDto() {Id = taskLog.TaskId, Status = TaskEnum.DeployFails});
+                _taskSvc.UpdateTaskStatus(new TaskDto() {Id = taskLog.TaskId, DeployStatus = DeployStatus.DeployFails});
                 taskLog.BuildId = bhRequest.build_id;
                 taskLog.LogsDesc = string.Format("在执行{0} 时出错,详情gitlab  builds:{1}", bhRequest.build_name,bhRequest.build_id);
                 _taskLogsSvc.UpdateTaskLogs(taskLog);
@@ -50,7 +50,7 @@ namespace Uoko.FireProj.WebSite.ControllerApi
             {
                 if ("execFakeScript".Equals(bhRequest.build_name, StringComparison.OrdinalIgnoreCase))
                 {
-                    _taskSvc.UpdateTaskStatus(new TaskDto() { Id = taskLog.TaskId, Status = TaskEnum.DeploySuccess});
+                    _taskSvc.UpdateTaskStatus(new TaskDto() { Id = taskLog.TaskId, DeployStatus = DeployStatus.DeploySuccess});
                 }
             }
 

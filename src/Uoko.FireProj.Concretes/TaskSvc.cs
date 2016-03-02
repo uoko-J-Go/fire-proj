@@ -50,7 +50,7 @@ namespace Uoko.FireProj.Concretes
                         DeployIP = taskDto.DeployIP,
                         Domain = taskDto.Domain,
                         SiteName = taskDto.SiteName,
-                        Status = DeployStatus.WaitingDeploy,
+                        Status = DeployStatus.Deploying,
                         TaskDesc = taskDto.TaskDesc,
                     };
                     taskInfo.DeployInfoIocJson = JsonConvert.SerializeObject(iocInfo);
@@ -65,7 +65,7 @@ namespace Uoko.FireProj.Concretes
                         DeployIP = taskDto.DeployIP,
                         Domain = taskDto.Domain,
                         SiteName = taskDto.SiteName,
-                        Status = DeployStatus.WaitingDeploy,
+                        Status = DeployStatus.Deploying,
                         TaskDesc = taskDto.TaskDesc,
                     };
                     taskInfo.DeployInfoPreJson = JsonConvert.SerializeObject(preInfo);
@@ -157,118 +157,120 @@ namespace Uoko.FireProj.Concretes
 
         public TaskDto GetTaskById(int taskId)
         {
-            using (var dbScope = _dbScopeFactory.CreateReadOnly())
-            {
-                var db = dbScope.DbContexts.Get<FireProjDbContext>();
-                var taskInfo = db.TaskInfo.FirstOrDefault(t => t.Id == taskId);
-                var project=db.Project.FirstOrDefault(t => t.Id == taskInfo.ProjectId);
-                var data = Mapper.Map<TaskInfo, TaskDto>(taskInfo);
-                data.Project= Mapper.Map<Project, ProjectDto>(project);
+            return null;
+            //using (var dbScope = _dbScopeFactory.CreateReadOnly())
+            //{
+            //    var db = dbScope.DbContexts.Get<FireProjDbContext>();
+            //    var taskInfo = db.TaskInfo.FirstOrDefault(t => t.Id == taskId);
+            //    var project=db.Project.FirstOrDefault(t => t.Id == taskInfo.ProjectId);
+            //    var data = Mapper.Map<TaskInfo, TaskDto>(taskInfo);
+            //    data.Project= Mapper.Map<Project, ProjectDto>(project);
 
-                data.DeployEnvironmentName = data.DeployStage.ToString();
-               
-                //获取任务的部署的站点名称
-                var domainInfo = db.DomainResource.FirstOrDefault(r => r.TaskId == taskId);
-                if (domainInfo != null)
-                {
-                    data.SiteName = domainInfo.SiteName;
-                    //获取任务部署服务器的信息
-                    var serverInfo = db.Servers.FirstOrDefault(r => r.Id == domainInfo.ServerId);
-                    if (serverInfo != null)
-                    {
-                        data.PackageDir = serverInfo.PackageDir;
-                        data.DeployIP = serverInfo.IP;
-                    }
-                }
-                
-                    
+            //    data.DeployEnvironmentName = data.DeployStage.ToString();
 
-                var checkUsers = new List<UserDto>();
-                taskInfo.CheckUserId.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList().ForEach((item)=>
-                {
-                    checkUsers.Add(new UserDto
-                    {
-                        Id = int.Parse(item)
-                    });
-                });
-                data.CheckUsers = checkUsers;
+            //    //获取任务的部署的站点名称
+            //    var domainInfo = db.DomainResource.FirstOrDefault(r => r.TaskId == taskId);
+            //    if (domainInfo != null)
+            //    {
+            //        data.SiteName = domainInfo.SiteName;
+            //        //获取任务部署服务器的信息
+            //        var serverInfo = db.Servers.FirstOrDefault(r => r.Id == domainInfo.ServerId);
+            //        if (serverInfo != null)
+            //        {
+            //            data.PackageDir = serverInfo.PackageDir;
+            //            data.DeployIP = serverInfo.IP;
+            //        }
+            //    }
 
-                var noticeUsers = new List<UserDto>();
-                taskInfo.NoticeUseId.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList().ForEach((item) =>
-                {
-                    noticeUsers.Add(new UserDto
-                    {
-                        Id = int.Parse(item)
-                    });
-                });
-                data.NoticeUses = noticeUsers;
-                //部署失败读取最新的build Id
-                if (taskInfo.Status== TaskEnum.DeployFails)
-                {
-                    data.BuildId = db.TaskLogs.OrderByDescending(r => r.Id).FirstOrDefault(r => r.TaskId == taskId && r.BuildId > 0).BuildId;
-                }
-                return data;
-            }
+
+
+            //    var checkUsers = new List<UserDto>();
+            //    taskInfo.CheckUserId.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList().ForEach((item)=>
+            //    {
+            //        checkUsers.Add(new UserDto
+            //        {
+            //            Id = int.Parse(item)
+            //        });
+            //    });
+            //    data.CheckUsers = checkUsers;
+
+            //    var noticeUsers = new List<UserDto>();
+            //    taskInfo.NoticeUseId.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList().ForEach((item) =>
+            //    {
+            //        noticeUsers.Add(new UserDto
+            //        {
+            //            Id = int.Parse(item)
+            //        });
+            //    });
+            //    data.NoticeUses = noticeUsers;
+            //    //部署失败读取最新的build Id
+            //    if (taskInfo.Status== TaskEnum.DeployFails)
+            //    {
+            //        data.BuildId = db.TaskLogs.OrderByDescending(r => r.Id).FirstOrDefault(r => r.TaskId == taskId && r.BuildId > 0).BuildId;
+            //    }
+            //    return data;
+            //}
         }
 
         public PageGridData<TaskDto> GetTaskPage(TaskQuery query)
         {
-            using (var dbScope = _dbScopeFactory.CreateReadOnly())
-            {
-                var db = dbScope.DbContexts.Get<FireProjDbContext>();
-                var data = db.TaskInfo.Select(r => new TaskDto
-                {
-                    Id = r.Id,
-                    TaskName = r.TaskName,
-                    DeployStage = r.DeployEnvironment,
-                    Branch = r.Branch,
-                    TaskDesc = r.TaskDesc,
-                    Status = r.Status,
-                });
-                if (!string.IsNullOrEmpty(query.Search))
-                {
-                    data = data.Where(r => r.TaskName.Contains(query.Search));
-                }
-                var result = data.OrderBy(r => r.Id).Skip(query.Offset).Take(query.Limit).ToList();
-                var total = data.Count();
-                return new PageGridData<TaskDto> { rows = result, total = total };
-            }
+            return null;
+            //using (var dbScope = _dbScopeFactory.CreateReadOnly())
+            //{
+            //    var db = dbScope.DbContexts.Get<FireProjDbContext>();
+            //    var data = db.TaskInfo.Select(r => new TaskDto
+            //    {
+            //        Id = r.Id,
+            //        TaskName = r.TaskName,
+            //        DeployStage = r.DeployEnvironment,
+            //        Branch = r.Branch,
+            //        TaskDesc = r.TaskDesc,
+            //        Status = r.Status,
+            //    });
+            //    if (!string.IsNullOrEmpty(query.Search))
+            //    {
+            //        data = data.Where(r => r.TaskName.Contains(query.Search));
+            //    }
+            //    var result = data.OrderBy(r => r.Id).Skip(query.Offset).Take(query.Limit).ToList();
+            //    var total = data.Count();
+            //    return new PageGridData<TaskDto> { rows = result, total = total };
+            //}
         }
 
         public void UpdateTaskStatus(TaskDto task)
         {
-            try
-            {
-                using (var dbScope = _dbScopeFactory.Create())
-                {
-                    var db = dbScope.DbContexts.Get<FireProjDbContext>();
-                    //插入状态变更记录
-                    var taskInfo = db.TaskInfo.FirstOrDefault(r => r.Id == task.Id);
-                    TaskLogs taskinfo = new TaskLogs()
-                    {
-                        CreateBy = 0,
-                        CreateDate = DateTime.Now,
-                        Stage = taskInfo.DeployEnvironment,
-                        TaskId = task.Id,
-                        TriggeredId = task.TriggeredId,
-                        TaskLogsType = TaskLogsEnum.Status,
-                        LogsText = task.LogsText,
-                        LogsDesc = string.Format("{0}任务流程状态从{1}变更为{2}", taskInfo.TaskName, taskInfo.Status.ToDescription(), task.Status.ToDescription())
-                    };
-                    db.TaskLogs.Add(taskinfo);
+            //try
+            //{
+            //    using (var dbScope = _dbScopeFactory.Create())
+            //    {
+            //        var db = dbScope.DbContexts.Get<FireProjDbContext>();
+            //        //插入状态变更记录
+            //        var taskInfo = db.TaskInfo.FirstOrDefault(r => r.Id == task.Id);
+            //        TaskLogs taskinfo = new TaskLogs()
+            //        {
+            //            CreateBy = 0,
+            //            CreateDate = DateTime.Now,
+            //            Stage = taskInfo.DeployEnvironment,
+            //            TaskId = task.Id,
+            //            TriggeredId = task.TriggeredId,
+            //            TaskLogsType = TaskLogsEnum.Status,
+            //            LogsText = task.LogsText,
+            //            LogsDesc = string.Format("{0}任务流程状态从{1}变更为{2}", taskInfo.TaskName, taskInfo.Status.ToDescription(), task.Status.ToDescription())
+            //        };
+            //        db.TaskLogs.Add(taskinfo);
                    
-                    ///修改任务表状态
-                    taskInfo.ModifyBy = 1;
-                    taskInfo.ModifyDate = DateTime.Now;
-                    taskInfo.Status = task.Status;
+            //        ///修改任务表状态
+            //        taskInfo.ModifyBy = 1;
+            //        taskInfo.ModifyDate = DateTime.Now;
+            //        taskInfo.Status = task.Status;
 
-                    db.SaveChanges();
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new TipInfoException(ex.Message);
-            }
+            //        db.SaveChanges();
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    throw new TipInfoException(ex.Message);
+            //}
         }
 
         private void UpdateResourceInfo(TaskDto task)

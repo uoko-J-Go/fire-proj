@@ -89,7 +89,7 @@ namespace Uoko.FireProj.WebSite.ControllerApi
         public IHttpActionResult BeginDeploy(int taskId,int triggerId)
         {
             var task= _taskSvc.GetTaskById(taskId);
-            _taskSvc.UpdateTaskStatus(new TaskDto() { Id = task.Id, Status = DeployStatus.Deploying });
+            _taskSvc.UpdateTaskStatus(new TaskDto() { Id = task.Id, DeployStatus = DeployStatus.Deploying });
             _taskLogsSvc.CreatTaskLogs(new TaskLogsDto()
             {
                 TaskId = taskId,
@@ -131,7 +131,7 @@ namespace Uoko.FireProj.WebSite.ControllerApi
         [HttpPost]
         public IHttpActionResult TestFails([FromBody]TaskDto task)
         {
-            task.Status = TaskEnum.TestFails;
+            task.QAStatus = QAStatus.Refused;
             _taskSvc.UpdateTaskStatus(task);
             return Ok();
         }
@@ -145,7 +145,7 @@ namespace Uoko.FireProj.WebSite.ControllerApi
         [HttpPost]
         public IHttpActionResult Tested([FromBody]TaskDto task)
         {
-            task.Status = TaskEnum.Tested;
+            task.QAStatus = QAStatus.Passed;
             _taskSvc.UpdateTaskStatus(task);
             return Ok();
         }
