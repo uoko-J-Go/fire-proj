@@ -335,7 +335,7 @@ namespace Uoko.FireProj.Concretes
         /// <param name="taskId"></param>
         /// <param name="deployStage"></param>
         /// <param name="triggerId"></param>
-        public void BeginDeploy(int taskId, StageEnum deployStage, int triggerId)
+        public TaskInfo BeginDeploy(int taskId, StageEnum deployStage, int triggerId)
         {
             try
             {
@@ -374,37 +374,20 @@ namespace Uoko.FireProj.Concretes
                                 t.ModifierName,
                                 t.ModifyDate
                             });
-                     //创建日志
-                    var log = new TaskLogs
-                    {
-                        TaskId=entity.Id,
-                        LogType = LogType.Deploy,
-                        Stage = deployStage
-                    };
-                   switch (deployStage)
-                    {
-                        case StageEnum.IOC:
-                            log.DeployInfo=entity.DeployInfoIocJson;
-                            break;
-                        case StageEnum.PRE:
-                            log.DeployInfo =entity.DeployInfoPreJson;
-                            break;
-                        case StageEnum.PRODUCTION:
-                            break;
-                    }
-                    log.CreatorId = 1;
-                    log.CreateDate = DateTime.Now;
-                    db.TaskLogs.Add(log);
-
+                   
                     db.SaveChanges();
-
-
+                    return entity;
                 }
             }
             catch (Exception ex)
             {
                 throw new TipInfoException(ex.Message);
             }
+        }
+
+        public TaskInfo DeployCallback(int triggerId, int buildId, DeployStatus deployStatus)
+        {
+            throw new NotImplementedException();
         }
     }
 }

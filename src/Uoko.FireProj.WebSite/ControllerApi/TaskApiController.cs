@@ -8,6 +8,7 @@ using System.Text;
 using System.Web.Http;
 using Uoko.FireProj.Abstracts;
 using Uoko.FireProj.DataAccess.Dto;
+using Uoko.FireProj.DataAccess.Entity;
 using Uoko.FireProj.DataAccess.Enum;
 using Uoko.FireProj.DataAccess.Query;
 
@@ -88,7 +89,26 @@ namespace Uoko.FireProj.WebSite.ControllerApi
         [HttpPost]
         public IHttpActionResult BeginDeploy(int taskId,StageEnum deployStage, int triggerId)
         {
-            _taskSvc.BeginDeploy(taskId, deployStage, triggerId);
+           var taskInfo=_taskSvc.BeginDeploy(taskId, deployStage, triggerId);
+            //创建日志
+            var log = new TaskLogs
+            {
+                TaskId = taskInfo.Id,
+                LogType = LogType.Deploy,
+                Stage = deployStage
+            };
+            switch (deployStage)
+            {
+                case StageEnum.IOC:
+                    log.DeployInfo = taskInfo.DeployInfoIocJson;
+                    break;
+                case StageEnum.PRE:
+                    log.DeployInfo = taskInfo.DeployInfoPreJson;
+                    break;
+                case StageEnum.PRODUCTION:
+                    break;
+            }
+            _taskLogsSvc.CreateTaskLogs(log);
             return Ok();
         }
 
