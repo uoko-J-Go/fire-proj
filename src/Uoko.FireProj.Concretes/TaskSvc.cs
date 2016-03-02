@@ -391,6 +391,8 @@ namespace Uoko.FireProj.Concretes
                         case StageEnum.PRODUCTION:
                             break;
                     }
+                    log.CreatorId = 1;
+                    log.CreateDate = DateTime.Now;
                     db.TaskLogs.Add(log);
 
                     db.SaveChanges();
