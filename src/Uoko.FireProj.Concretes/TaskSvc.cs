@@ -151,6 +151,16 @@ namespace Uoko.FireProj.Concretes
                 taskDto.DeployInfoPreDto = !taskDto.DeployInfoPreJson.IsNullOrEmpty() ? JsonHelper.FromJson<DeployInfoPreDto>(taskDto.DeployInfoPreJson) : new DeployInfoPreDto();
                 taskDto.DeployInfoOnlineDto = !taskDto.DeployInfoOnlineJson.IsNullOrEmpty() ? JsonHelper.FromJson<DeployInfoOnlineDto>(taskDto.DeployInfoOnlineJson) : new DeployInfoOnlineDto();
 
+                //获取测试,通知人Id集合返回
+                taskDto.DeployInfoIocDto.CheckUser = AnalysisUser(taskDto.DeployInfoIocDto.CheckUserId);
+                taskDto.DeployInfoIocDto.NoticeUser = AnalysisUser(taskDto.DeployInfoIocDto.NoticeUserId);
+
+                taskDto.DeployInfoPreDto.CheckUser = AnalysisUser(taskDto.DeployInfoPreDto.CheckUserId);
+                taskDto.DeployInfoPreDto.NoticeUser = AnalysisUser(taskDto.DeployInfoPreDto.NoticeUserId);
+
+                taskDto.DeployInfoOnlineDto.CheckUser = AnalysisUser(taskDto.DeployInfoOnlineDto.CheckUserId);
+                taskDto.DeployInfoOnlineDto.NoticeUser = AnalysisUser(taskDto.DeployInfoOnlineDto.NoticeUserId);
+
                 return taskDto;
             }
 
@@ -297,5 +307,22 @@ namespace Uoko.FireProj.Concretes
             //    throw new TipInfoException(ex.Message);
             //}
         }
+
+        private List<UserDto> AnalysisUser(string userInfo)
+        {
+            List<UserDto> userDtoData = new List<UserDto>();
+            var userList = userInfo.Split(',');
+            foreach (var item in userList)
+            {
+                var user = item.Split('-');
+                userDtoData.Add(new UserDto
+                {
+                    Id =int.Parse(user[0]),
+                    QAStatus = (QAStatus) int.Parse(user[1])
+                });
+            }
+            return userDtoData;
+        }
+
     }
 }
