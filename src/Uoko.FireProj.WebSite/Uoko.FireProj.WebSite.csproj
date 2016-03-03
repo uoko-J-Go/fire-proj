@@ -211,7 +211,6 @@
     <Content Include="app\modals\Deploy.html" />
     <Content Include="app\modals\Deploy.js" />
     <Content Include="app\modals\TestDailog.html" />
-    <Content Include="app\modals\TestDailog.js" />
     <Content Include="app\controllers\dictionaryForm.js" />
     <Content Include="app\controllers\dictionary.js" />
     <Content Include="app\controllers\Project.js" />
@@ -219,6 +218,7 @@
     <Content Include="app\controllers\TaskDetail.js" />
     <Content Include="app\controllers\TaskEdit.js" />
     <Content Include="app\controllers\TaskList.js" />
+    <Content Include="app\modals\TestDailog.js" />
     <Content Include="app\services\ServerServer.js" />
     <Content Include="app\services\ProjectService.js" />
     <Content Include="app\services\DomainServer.js" />

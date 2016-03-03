@@ -50,9 +50,9 @@ namespace Uoko.FireProj.Abstracts
         /// </summary>
         /// <param name="taskId"></param>
         /// <param name="deployStage"></param>
-        /// <param name="triggerId"></param>
+
         /// <returns></returns>
-        TaskInfo BeginDeploy(int taskId, StageEnum deployStage, int triggerId);
+        TaskInfo BeginDeploy(int taskId, StageEnum deployStage);
         /// <summary>
         /// 部署回调
         /// </summary>

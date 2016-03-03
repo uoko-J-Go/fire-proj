@@ -46,6 +46,8 @@ namespace Uoko.FireProj.WebSite.ControllerApi
         public IHttpActionResult Update([FromBody]TaskWriteDto task)
         {
             _taskSvc.UpdateTask(task);
+            //直接调用部署
+            _taskSvc.BeginDeploy(task.Id, task.DeployStage);
             return Ok(task.Id);
         }
 
@@ -54,6 +56,8 @@ namespace Uoko.FireProj.WebSite.ControllerApi
         public IHttpActionResult Create([FromBody]TaskWriteDto task)
         {
             var taskId=_taskSvc.CreatTask(task);
+            //直接调用部署
+            var taskInfo = _taskSvc.BeginDeploy(taskId, task.DeployStage);
             return Ok(taskId);
         }
 
@@ -77,30 +81,9 @@ namespace Uoko.FireProj.WebSite.ControllerApi
         /// <returns></returns>
         [Route("BeginDeploy")]
         [HttpPost]
-        public IHttpActionResult BeginDeploy(int taskId, StageEnum deployStage, int triggerId)
+        public IHttpActionResult BeginDeploy(int taskId, StageEnum deployStage)
         {
-            var taskInfo = _taskSvc.BeginDeploy(taskId, deployStage, triggerId);
-            //创建日志
-            var log = new TaskLogs
-            {
-                TaskId = taskInfo.Id,
-                LogType = LogType.Deploy,
-                Stage = deployStage,
-                TriggeredId = triggerId
-            };
-            switch (deployStage)
-            {
-                case StageEnum.IOC:
-                    log.DeployInfo = taskInfo.DeployInfoIocJson;
-                    break;
-                case StageEnum.PRE:
-                    log.DeployInfo = taskInfo.DeployInfoPreJson;
-                    break;
-                case StageEnum.PRODUCTION:
-                    log.DeployInfo = taskInfo.DeployInfoOnlineJson;
-                    break;
-            }
-            _taskLogsSvc.CreateTaskLogs(log);
+            var taskInfo = _taskSvc.BeginDeploy(taskId, deployStage);
             return Ok();
         }
 

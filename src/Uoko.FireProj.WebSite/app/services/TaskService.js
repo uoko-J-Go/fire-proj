@@ -48,8 +48,8 @@
     };
     
 
-    this.BeginDeploy = function (taskId,deployStage,triggerId,successCallBack) {
-        $http.post("/api/TaskApi/BeginDeploy?taskId=" + taskId + "&deployStage=" + deployStage + "&triggerId=" + triggerId).success(function (data) {
+    this.BeginDeploy = function (taskId,deployStage,successCallBack) {
+        $http.post("/api/TaskApi/BeginDeploy?taskId=" + taskId + "&deployStage=" + deployStage).success(function (data) {
             if (successCallBack != undefined) {
                 successCallBack(data);
             }
