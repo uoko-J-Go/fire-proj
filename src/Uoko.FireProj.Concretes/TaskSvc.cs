@@ -409,7 +409,10 @@ namespace Uoko.FireProj.Concretes
                         TaskId = taskLog.TaskId,
                         LogType = LogType.Deploy,
                         Stage = taskLog.Stage,
-                        TriggeredId = triggerId
+                        TriggeredId = triggerId,
+                        CreateDate= DateTime.Now,
+                        CreatorId=0,
+                        CreatorName="系统"
                     };
                     switch (taskLog.Stage)
                     {
