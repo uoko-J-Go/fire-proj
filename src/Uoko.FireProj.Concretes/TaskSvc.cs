@@ -56,7 +56,7 @@ namespace Uoko.FireProj.Concretes
                     taskDto.IocDeployInfo.DeployStage = taskDto.DeployStage;
                     taskDto.IocDeployInfo.DeployAddress = string.Format("https://{0}:8172/msdeploy.axd", taskDto.IocDeployInfo.DeployIP);
                     taskDto.IocDeployInfo.DeployStatus = DeployStatus.Deploying;
-                    taskInfo.DeployInfoIocJson = JsonConvert.SerializeObject(taskDto.IocDeployInfo);
+                    taskInfo.DeployInfoIocJson = JsonHelper.ToJson(taskDto.IocDeployInfo);
                     break;
                 case StageEnum.PRE:
                     if (!string.IsNullOrEmpty(taskDto.PreDeployInfo.CheckUserId))
@@ -69,7 +69,7 @@ namespace Uoko.FireProj.Concretes
                     taskDto.PreDeployInfo.DeployStage = taskDto.DeployStage;
                     taskDto.PreDeployInfo.DeployAddress = string.Format("https://{0}:8172/msdeploy.axd", taskDto.PreDeployInfo.DeployIP);
                     taskDto.PreDeployInfo.DeployStatus = DeployStatus.Deploying;
-                    taskInfo.DeployInfoPreJson = JsonConvert.SerializeObject(taskDto.PreDeployInfo);
+                    taskInfo.DeployInfoPreJson = JsonHelper.ToJson(taskDto.PreDeployInfo);
                     break;
                 default:
                     throw new NotSupportedException("暂不支持其他阶段");
@@ -356,7 +356,76 @@ namespace Uoko.FireProj.Concretes
 
         public TaskInfo DeployCallback(int triggerId, int buildId, DeployStatus deployStatus)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (var dbScope = _dbScopeFactory.Create())
+                {
+                    var db = dbScope.DbContexts.Get<FireProjDbContext>();
+
+                    var taskLog = db.TaskLogs.Where(r => r.TriggeredId == triggerId).FirstOrDefault();
+                    if (taskLog == null)
+                    {
+                        return null;
+                    }
+
+                    var entity = db.TaskInfo.FirstOrDefault(r => r.Id == taskLog.TaskId);
+
+                    //更改任务记录
+                    switch (taskLog.Stage)
+                    {
+                        case StageEnum.IOC:
+                            var iocDeployInfo = JsonHelper.FromJson<DeployInfoIoc>(entity.DeployInfoIocJson);
+                            iocDeployInfo.DeployStatus = deployStatus;
+                            iocDeployInfo.BuildId = buildId;
+                            entity.DeployInfoIocJson = JsonHelper.ToJson(iocDeployInfo);
+                            break;
+                        case StageEnum.PRE:
+                            var preDeployInfo = JsonHelper.FromJson<DeployInfoPre>(entity.DeployInfoPreJson);
+                            preDeployInfo.DeployStatus = deployStatus;
+                            preDeployInfo.BuildId = buildId;
+                            entity.DeployInfoPreJson = JsonHelper.ToJson(preDeployInfo);
+                            break;
+                        case StageEnum.PRODUCTION:
+                            break;
+                    }
+
+                    db.Update(entity,
+                        t =>
+                            new
+                            {
+                                t.DeployInfoIocJson,
+                                t.DeployInfoPreJson,
+                                t.DeployInfoOnlineJson,
+                                t.HasOnlineDeployed
+                            });
+                    //创建日志
+                    var log = new TaskLogs
+                    {
+                        TaskId = taskLog.TaskId,
+                        LogType = LogType.Deploy,
+                        Stage = taskLog.Stage,
+                        TriggeredId = triggerId
+                    };
+                    switch (taskLog.Stage)
+                    {
+                        case StageEnum.IOC:
+                            log.DeployInfo = entity.DeployInfoIocJson;
+                            break;
+                        case StageEnum.PRE:
+                            log.DeployInfo = entity.DeployInfoPreJson;
+                            break;
+                        case StageEnum.PRODUCTION:
+                            log.DeployInfo = entity.DeployInfoOnlineJson;
+                            break;
+                    }
+                    db.SaveChanges();
+                    return entity;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new TipInfoException(ex.Message);
+            }
         }
     }
 }

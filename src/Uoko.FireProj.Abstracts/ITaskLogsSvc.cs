@@ -32,7 +32,7 @@ namespace Uoko.FireProj.Abstracts
         /// </summary>
         /// <param name="taskId"></param>
         /// <returns></returns>
-        TaskLogsDto GetTaskLogByTriggerId(int triggerId);
+        TaskLogs GetTaskLogByTriggerId(int triggerId);
         /// <summary>
         /// 获取任务记录分页
         /// </summary>

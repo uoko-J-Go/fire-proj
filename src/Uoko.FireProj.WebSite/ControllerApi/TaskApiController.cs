@@ -95,7 +95,8 @@ namespace Uoko.FireProj.WebSite.ControllerApi
             {
                 TaskId = taskInfo.Id,
                 LogType = LogType.Deploy,
-                Stage = deployStage
+                Stage = deployStage,
+                TriggeredId= triggerId
             };
             switch (deployStage)
             {
@@ -106,6 +107,7 @@ namespace Uoko.FireProj.WebSite.ControllerApi
                     log.DeployInfo = taskInfo.DeployInfoPreJson;
                     break;
                 case StageEnum.PRODUCTION:
+                    log.DeployInfo = taskInfo.DeployInfoOnlineJson;
                     break;
             }
             _taskLogsSvc.CreateTaskLogs(log);

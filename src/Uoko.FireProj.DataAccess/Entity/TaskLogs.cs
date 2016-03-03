@@ -31,6 +31,10 @@ namespace Uoko.FireProj.DataAccess.Entity
         /// 备注评论
         /// </summary>
         public string Comments { get; set; }
+        /// <summary>
+        /// 部署日志对应的 TriggeredId
+        /// </summary>
+        public int? TriggeredId { get; set; }
 
         public LogType LogType { get; set; }
     }
