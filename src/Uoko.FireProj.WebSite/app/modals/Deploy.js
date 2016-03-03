@@ -113,7 +113,7 @@
         if (server == undefined) {
             server = { Id: 0 };
         }
-        TaskService.GetDomain(param.ProjectId, server.Id, function (data) {
+        TaskService.GetDomain(param.ProjectId, server.Id,null, function (data) {
             $scope.DomainList = data;
         });
     }

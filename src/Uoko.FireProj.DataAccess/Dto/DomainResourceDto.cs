@@ -33,7 +33,7 @@ namespace Uoko.FireProj.DataAccess.Dto
         /// <summary>
         /// 任务Id
         /// </summary>
-        public int TaskId { get; set; }
+        public int? TaskId { get; set; }
 
         /// <summary>
         /// 任务名称
@@ -49,10 +49,6 @@ namespace Uoko.FireProj.DataAccess.Dto
         /// 域名在哪台服务器名称
         /// </summary>
         public string ServerName { get; set; }
-
-
-        public DomainResourceStatusEnum Status { get; set; }
-
 
     }
 }

@@ -13,7 +13,6 @@ namespace Uoko.FireProj.DataAccess.FluentAPI
         public ServerMap()
         {
             Property(r => r.IP).IsRequired();
-            Property(r => r.Status).IsRequired();
             ToTable("Server");//指定生成表名
         }
     }

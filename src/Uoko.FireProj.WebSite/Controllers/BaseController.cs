@@ -55,13 +55,6 @@ namespace Uoko.FireProj.WebSite.Controllers
                             Controller="SystemSet",
                             Action="DomainResourceMgmt"
                         },
-                          new MenuTreeVM()
-                        {
-                            MenuName = "数据字典",
-                            MenuLevel=1,
-                            Controller="SystemSet",
-                            Action="DictionaryMgmt"
-                        }
                     }
                 }
             };
