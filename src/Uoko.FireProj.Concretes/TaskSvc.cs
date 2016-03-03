@@ -418,6 +418,7 @@ namespace Uoko.FireProj.Concretes
                             log.DeployInfo = entity.DeployInfoOnlineJson;
                             break;
                     }
+                    db.TaskLogs.Add(log);
                     db.SaveChanges();
                     return entity;
                 }
