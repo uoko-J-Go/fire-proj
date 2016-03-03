@@ -18,8 +18,8 @@ var fireproj;
 //表单提交成功事件通用操作
 var formSubmitSuccessClick = function (operation) {
     bootbox.alert("操作成功", function (data) {
-        if (operation == "refresh") {
-            window.location.href = window.location.href;
+        if (operation === "refresh") {
+            window.location.reload();
         }
         else {
             window.location.href = document.referrer;

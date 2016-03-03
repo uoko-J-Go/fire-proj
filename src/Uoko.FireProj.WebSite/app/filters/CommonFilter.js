@@ -52,16 +52,7 @@ fireproj.filter("TaskLogsFilter", function () {
     }
 });
 
-fireproj.filter("DomainResourceFilter", function () {
-    return function (value) {
-        switch (value) {
-            case 0:
-                return "使用中";
-            case 1:
-                return "未使用";
-        }
-    }
-});
+
 fireproj.filter("ServerFilter", function () {
     return function (value) {
         switch (value) {

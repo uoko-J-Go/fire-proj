@@ -13,7 +13,6 @@ namespace Uoko.FireProj.DataAccess.FluentAPI
         public DomainResourceMap()
         {
             Property(r => r.Name).IsRequired();
-            Property(r => r.Status).IsRequired();
             ToTable("DomainResource");//指定生成表名
         }
     }

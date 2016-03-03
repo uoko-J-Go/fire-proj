@@ -30,7 +30,6 @@ namespace Uoko.FireProj.Concretes
             try
             {
                 var entity = Mapper.Map<ServerDto, Server>(server);
-                entity.Status = GenericStatusEnum.Enable;//默认添加 可用
                 entity.CreatorId = 1;
                 entity.CreateDate = DateTime.Now;
                 using (var dbScope = _dbScopeFactory.Create())
@@ -90,7 +89,7 @@ namespace Uoko.FireProj.Concretes
                 {
                     var db = dbScope.DbContexts.Get<FireProjDbContext>();
                     //根据实际情况修改
-                    db.Update(entity, t => new { t.Name, t.IP, t.ServerDesc, t.Status, ModifyBy = t.ModifyId, t.ModifyDate, t.PackageDir });
+                    db.Update(entity, t => new { t.Name, t.IP, t.ServerDesc, ModifyBy = t.ModifyId, t.ModifyDate, t.PackageDir });
 
                     //修改域名有主键则修改,无主键新增
                     var domainList = Mapper.Map<List<DomainResourceDto>, List<DomainResource>>(server.IISData);
@@ -105,7 +104,6 @@ namespace Uoko.FireProj.Concretes
                         {
                             item.ServerId = server.Id;
                             item.CreateDate = DateTime.Now;
-                            item.Status = DomainResourceStatusEnum.Enable;//默认添加 可用
                             db.DomainResource.Add(item);
                         }
                     }
@@ -129,7 +127,6 @@ namespace Uoko.FireProj.Concretes
                     Name = t.Name,
                     IP = t.IP,
                     ServerDesc = t.ServerDesc,
-                    Status = t.Status,
                     PackageDir = t.PackageDir,
                 });
                 if (query.StageType.HasValue)
@@ -146,23 +143,18 @@ namespace Uoko.FireProj.Concretes
             }
         }
 
-        public IList<ServerDto> GetAllServerOfEnvironment(StageEnum stageEnum, bool needEnable = true)
+        public IList<ServerDto> GetAllServerOfEnvironment(StageEnum stageEnum)
         {
             using (var dbScope = _dbScopeFactory.CreateReadOnly())
             {
                 var db = dbScope.DbContexts.Get<FireProjDbContext>();
                 var data = db.Servers.Where(t => t.StageType == stageEnum);
-                if (needEnable)
-                {
-                    data = data.Where(t => t.Status == GenericStatusEnum.Enable);
-                }
                 var result = data.Select(t => new ServerDto
                 {
                     Id = t.Id,
                     Name = t.Name,
                     IP = t.IP,
                     ServerDesc = t.ServerDesc,
-                    Status = t.Status,
                     PackageDir = t.PackageDir,
                 }).ToList();
 
@@ -181,7 +173,6 @@ namespace Uoko.FireProj.Concretes
                     Name = t.Name,
                     IP = t.IP,
                     ServerDesc = t.ServerDesc,
-                    Status = t.Status,
                     PackageDir = t.PackageDir,
                 }).FirstOrDefault(t => t.Id == serverId);
                 data.IISData = db.DomainResource.Where(r => r.ServerId == serverId).Select(r => new DomainResourceDto {
@@ -191,7 +182,6 @@ namespace Uoko.FireProj.Concretes
                     TaskId = r.TaskId,
                     ServerId = r.ServerId,
                     ServerName = r.Name,
-                    Status = r.Status,
                 }).ToList();
                 return data;
             }

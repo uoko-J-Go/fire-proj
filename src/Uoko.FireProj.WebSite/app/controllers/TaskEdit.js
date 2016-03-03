@@ -107,7 +107,7 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
             if (server == undefined) {
                 server = { Id: 0 };
             }
-            TaskService.GetDomainByTaskId(project.Id, server.Id, taskId, function (data) {
+            TaskService.GetDomain(project.Id, server.Id, taskId, function (data) {
                 $scope.DomainList = data;
             });
         }

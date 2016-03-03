@@ -35,10 +35,5 @@ namespace Uoko.FireProj.DataAccess.Entity
         /// </summary>
         public string PackageDir { get; set; }
 
-        /// <summary>
-        /// 状态
-        /// </summary>
-        public GenericStatusEnum Status { get; set; }
-
     }
 }

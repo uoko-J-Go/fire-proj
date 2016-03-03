@@ -42,7 +42,6 @@ namespace Uoko.FireProj.Concretes
                     foreach (var item in entity)
                     {
                         item.CreateDate = DateTime.Now;
-                        item.Status = DomainResourceStatusEnum.Enable;//默认添加 可用
                         db.DomainResource.Add(item);
                     }
                     db.SaveChanges();
@@ -102,7 +101,6 @@ namespace Uoko.FireProj.Concretes
                                    TaskName = parTask.TaskName,
                                    ServerId = domainresource.ServerId,
                                    ServerName = parServer.Name,
-                                   Status = domainresource.Status,
                                    SiteName = domainresource.SiteName,
                                };
                     var result = data.OrderBy(r => r.Id).Skip(query.Offset).Take(query.Limit).ToList();
@@ -135,7 +133,6 @@ namespace Uoko.FireProj.Concretes
                                    TaskId = domain.TaskId,
                                    ServerId = domain.ServerId,
                                    ServerName = domain.Name,
-                                   Status = domain.Status,
                                    SiteName = domain.SiteName,
                                    ProjectName = project.ProjectName
                                };
@@ -148,40 +145,23 @@ namespace Uoko.FireProj.Concretes
             }
         }
 
-        public List<DomainResourceDto> GetResourceList(int projectId, int serverId)
+        public List<DomainResourceDto> GetResourceList(int projectId, int serverId, int? taskId)
         {
             try
             {
                 using (var dbScope = _dbScopeFactory.CreateReadOnly())
                 {
                     var db = dbScope.DbContexts.Get<FireProjDbContext>();
-                    var data = db.DomainResource.Where(r => r.ProjectId == projectId && r.Status == DomainResourceStatusEnum.Enable && r.ServerId == serverId).Select(r => new DomainResourceDto
-                    {
-                        Id = r.Id,
-                        Name = r.Name,
-                        SiteName = r.SiteName,
-                    }).ToList();
-                    return data;
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new TipInfoException(ex.Message);
-            }
-        }
-
-        public List<DomainResourceDto> GetResourceList(int projectId, int serverId, int taskId)
-        {
-            try
-            {
-                using (var dbScope = _dbScopeFactory.CreateReadOnly())
-                {
-                    var db = dbScope.DbContexts.Get<FireProjDbContext>();
-                    var data = db.DomainResource.Where(r => r.ProjectId == projectId && (r.Status == DomainResourceStatusEnum.Enable || r.TaskId == taskId) && r.ServerId == serverId).Select(r => new DomainResourceDto
-                    {
-                        Id = r.Id,
-                        Name = r.Name,
-                    }).ToList();
+                    var data = db.DomainResource
+                                 .Where(r => r.ProjectId == projectId
+                                             && r.ServerId == serverId
+                                             && (r.TaskId == taskId || r.TaskId == null))
+                                 .Select(r => new DomainResourceDto
+                                              {
+                                                  Id = r.Id,
+                                                  Name = r.Name,
+                                                  SiteName = r.SiteName,
+                                              }).ToList();
                     return data;
                 }
             }
@@ -199,7 +179,7 @@ namespace Uoko.FireProj.Concretes
                 {
                     var db = dbScope.DbContexts.Get<FireProjDbContext>();
                     var entity = db.DomainResource.FirstOrDefault(r => r.TaskId == taskId);
-                    entity.Status = DomainResourceStatusEnum.Enable;
+                    entity.TaskId = null;
                     db.SaveChanges();
                 }
             }

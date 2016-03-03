@@ -13,6 +13,11 @@ namespace Uoko.FireProj.DataAccess.Entity
     public class DomainResource : BaseEntity
     {
         /// <summary>
+        /// 域名在哪台服务器下
+        /// </summary>
+        public int ServerId { get; set; }
+
+        /// <summary>
         /// 域名
         /// </summary>
         public string Name { get; set; }
@@ -30,13 +35,7 @@ namespace Uoko.FireProj.DataAccess.Entity
         /// <summary>
         /// 任务Id
         /// </summary>
-        public int TaskId { get; set; }
+        public int? TaskId { get; set; }
 
-        /// <summary>
-        /// 域名在哪台服务器下
-        /// </summary>
-        public int ServerId { get; set; }
-
-        public DomainResourceStatusEnum Status { get; set; }
     }
 }

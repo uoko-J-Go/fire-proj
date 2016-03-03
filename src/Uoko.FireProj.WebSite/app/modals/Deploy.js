@@ -196,7 +196,7 @@
         }
         var userData = new Array();
         var data = userInfo.split(',');
-        
+
         for (var i = 0; i < data.length; i++) {
             userData.push({
                 id: data[0],

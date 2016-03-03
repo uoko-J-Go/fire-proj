@@ -39,9 +39,8 @@ namespace Uoko.FireProj.Abstracts
         /// 获取某个环境下所有服务器
         /// </summary>
         /// <param name="stageEnum"></param>
-        /// <param name="needEnable">是否要求是可用的</param>
         /// <returns></returns>
-        IList<ServerDto> GetAllServerOfEnvironment(StageEnum stageEnum,bool needEnable=true);
+        IList<ServerDto> GetAllServerOfEnvironment(StageEnum stageEnum);
         /// <summary>
         /// 根据服务器Id获取服务器信息详情
         /// </summary>

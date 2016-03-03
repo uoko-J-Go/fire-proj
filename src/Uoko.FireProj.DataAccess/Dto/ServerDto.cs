@@ -38,10 +38,5 @@ namespace Uoko.FireProj.DataAccess.Dto
 
         public List<DomainResourceDto> IISData { get; set; }
 
-        /// <summary>
-        /// 状态
-        /// </summary>
-        public GenericStatusEnum Status { get; set; }
-
     }
 }

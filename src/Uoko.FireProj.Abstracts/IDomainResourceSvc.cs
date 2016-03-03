@@ -19,18 +19,13 @@ namespace Uoko.FireProj.Abstracts
         void CreatResource(List<DomainResourceDto> dto);
 
         /// <summary>
-        /// 根据项目id,部署服务器ip的id获取未被使用的域名list
-        /// </summary>
-        /// <param name="serverId"></param>
-        /// <returns></returns>
-        List<DomainResourceDto> GetResourceList(int projectId, int serverId);
-
-        /// <summary>
         /// 根据项目id,部署服务器ip以及当前任务的id获取未被使用的域名list
         /// </summary>
+        /// <param name="projectId"></param>
         /// <param name="serverId"></param>
+        /// <param name="taskId"></param>
         /// <returns></returns>
-        List<DomainResourceDto> GetResourceList(int projectId, int serverId,int taskId);
+        List<DomainResourceDto> GetResourceList(int projectId, int serverId,int? taskId);
 
 
         /// <summary>

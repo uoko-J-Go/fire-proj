@@ -77,10 +77,8 @@
     <Compile Include="Entity\TaskLogs.cs" />
     <Compile Include="Enum\LogType.cs" />
     <Compile Include="Enum\StageEnum.cs" />
-    <Compile Include="Enum\GenericStatusEnum.cs" />
     <Compile Include="Enum\DeployEnum.cs" />
     <Compile Include="Enum\DicEnum.cs" />
-    <Compile Include="Enum\DomainResourceStatusEnum.cs" />
     <Compile Include="Enum\DeployStatus.cs" />
     <Compile Include="Extensions\DbContextExtensions.cs" />
     <Compile Include="FireProjDbContext.cs" />
@@ -214,6 +212,10 @@
     <Compile Include="Migrations\201603030149169_updatetasklog.Designer.cs">
       <DependentUpon>201603030149169_updatetasklog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201603031412301_resource-server-refined.cs" />
+    <Compile Include="Migrations\201603031412301_resource-server-refined.Designer.cs">
+      <DependentUpon>201603031412301_resource-server-refined.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Query\BaseQuery.cs" />
@@ -318,6 +320,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201603030149169_updatetasklog.resx">
       <DependentUpon>201603030149169_updatetasklog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201603031412301_resource-server-refined.resx">
+      <DependentUpon>201603031412301_resource-server-refined.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
