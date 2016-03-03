@@ -45,10 +45,8 @@
             bootbox.alert("表单验证未通过");
             return;
         }
-        var project = $scope.taskInfo.Project;
-        if (typeof project == "string") {
-            project = JSON.parse(project);
-        }
+        var project = param;//任务详情页传递过来的参数
+       
         var server = $scope.taskInfo.Server;
         if (typeof server == "string") {
             server = JSON.parse(server);
@@ -73,8 +71,9 @@
         var taskForSave = {
             TaskName: $scope.taskInfo.TaskName,
             Branch: $scope.taskInfo.Branch,
-            ProjectId: project.Id,
-            DeployStage: $scope.taskInfo.DeployStage
+            ProjectId: project.ProjectId,
+            DeployStage: $scope.taskInfo.DeployStage,
+            Id:param.taskId,
         }
         if (taskForSave.DeployStage == 0) {
             taskForSave.IocDeployInfo = $scope.taskInfo.DeployInfo;
@@ -92,9 +91,9 @@
             taskForSave.PreDeployInfo.NoticeUserId = noticeUserIds.join(",");
         }
 
-        TaskService.CreateTask(taskForSave, function (data) {
+        TaskService.UpdateTask(taskForSave, function (data) {
             var taskId = data;
-            //发起部署任务
+            //发起部署任务                            
 
             var buildInfo = {
                 RepoId: project.RepoId,
@@ -111,10 +110,15 @@
                 buildInfo.Target = "Deploy-To-PRE";
             }
             CommonService.TriggerBuild(buildInfo, function (data) {
+                var triggerId = data.id;
                 //发起部署后更新数据库状态
+                TaskService.BeginDeploy(taskId, $scope.taskInfo.DeployStage, triggerId, function (data) {
+                    bootbox.alert("任务创建成功并发起部署...", function (data) {
+                        location.href = "/Task/Index";
+                    });
 
+                });
             });
-            location.href = "/Task/Index";
         });
     }
 
@@ -125,21 +129,16 @@
         });
     }
     //部署服务器change事件
-    $scope.GetDomain = function (project, server) {
-        if (typeof project == "string") {
-            project = JSON.parse(project);
-        }
+    $scope.GetDomain = function (server) {
         if (typeof server == "string") {
             server = JSON.parse(server);
         }
-        if (project != undefined && project != "") {
-            if (server == undefined) {
-                server = { Id: 0 };
-            }
-            TaskService.GetDomain(project.Id, server.Id, function (data) {
-                $scope.DomainList = data;
-            });
+        if (server == undefined) {
+            server = { Id: 0 };
         }
+        TaskService.GetDomain(param.ProjectId, server.Id, function (data) {
+            $scope.DomainList = data;
+        });
     }
     //根据项目Id或者分支列表
     $scope.getBranch = function (RepoId) {
@@ -154,7 +153,7 @@
         $scope.GetAllUser();
         $scope.getBranch(param.RepoId);
         $scope.$watch('taskInfo.Project + taskInfo.DeployEnvironment + taskInfo.Server', function () {
-            $scope.GetDomain($scope.taskInfo.Project, $scope.taskInfo.Server);
+            $scope.GetDomain($scope.taskInfo.Server);
         });
     }
 

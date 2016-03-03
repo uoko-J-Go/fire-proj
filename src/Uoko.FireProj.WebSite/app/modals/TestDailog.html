@@ -3,19 +3,12 @@
     <button type="button" class="close" ng-click="Cancel()"></button>
     <h4 class="modal-title">
         <i class="icon-bar"></i>
-        <span id="lblAddTitle" style="font-weight:bold">选择人员</span>
+        <span id="lblAddTitle" style="font-weight:bold">测试备注</span>
     </h4>
 </div>
 <div class="modal-body">
     <div class="row" style="padding-right: 20px;">
-        <ul>
-            <li style="display: inline; line-height: 24px;margin-right:10px;" ng-repeat="user in userList">
-
-                <label>
-                    <input type="checkbox" class="icheck" ng-model="user.selected">{{user.name}}
-                </label>
-            </li>
-        </ul>
+        <textarea rows="5" ng-model="testResult.Comments"></textarea>
   
     </div>
 </div>

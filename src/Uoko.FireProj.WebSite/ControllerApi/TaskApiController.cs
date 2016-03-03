@@ -46,7 +46,7 @@ namespace Uoko.FireProj.WebSite.ControllerApi
         public IHttpActionResult Update([FromBody]TaskWriteDto task)
         {
             _taskSvc.UpdateTask(task);
-            return Ok();
+            return Ok(task.Id);
         }
 
         [Route("Create")]
@@ -70,18 +70,6 @@ namespace Uoko.FireProj.WebSite.ControllerApi
         }
 
         /// <summary>
-        /// 根据id修改任务状态
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        [Route("Put")]
-        [HttpPost]
-        public IHttpActionResult Put([FromBody]TaskDto task)
-        {
-            _taskSvc.UpdateTaskStatus(task);
-            return Ok();
-        }
-        /// <summary>
         /// 开始部署
         /// </summary>
         /// <param name="taskId"></param>
@@ -89,16 +77,16 @@ namespace Uoko.FireProj.WebSite.ControllerApi
         /// <returns></returns>
         [Route("BeginDeploy")]
         [HttpPost]
-        public IHttpActionResult BeginDeploy(int taskId,StageEnum deployStage, int triggerId)
+        public IHttpActionResult BeginDeploy(int taskId, StageEnum deployStage, int triggerId)
         {
-           var taskInfo=_taskSvc.BeginDeploy(taskId, deployStage, triggerId);
+            var taskInfo = _taskSvc.BeginDeploy(taskId, deployStage, triggerId);
             //创建日志
             var log = new TaskLogs
             {
                 TaskId = taskInfo.Id,
                 LogType = LogType.Deploy,
                 Stage = deployStage,
-                TriggeredId= triggerId
+                TriggeredId = triggerId
             };
             switch (deployStage)
             {
@@ -116,52 +104,39 @@ namespace Uoko.FireProj.WebSite.ControllerApi
             return Ok();
         }
 
-        /* 
-        
-            暂时去除提测步骤
 
 
         /// <summary>
-        /// 提交测试动作
+        /// 更新测试结果
         /// </summary>
         /// <param name="taskId"></param>
         /// <returns></returns>
-        [Route("CommitToTest")]
+        [Route("UpdateTestStatus")]
         [HttpPost]
-        public IHttpActionResult CommitToTest([FromBody]TaskDto task)
+        public IHttpActionResult UpdateTestStatus([FromBody]TestResultDto testResult)
         {
-            task.Status = TaskEnum.Testing;
-            _taskSvc.UpdateTaskStatus(task);
-            return Ok();
-        }
-
-        */
-
-        /// <summary>
-        /// 测试不通过动作
-        /// </summary>
-        /// <param name="taskId"></param>
-        /// <returns></returns>
-        [Route("TestFails")]
-        [HttpPost]
-        public IHttpActionResult TestFails([FromBody]TaskDto task)
-        {
-            task.QAStatus = QAStatus.Refused;
-            _taskSvc.UpdateTaskStatus(task);
-            return Ok();
-        }
-
-        /// <summary>
-        /// 测试通过动作
-        /// </summary>
-        /// <param name="taskId"></param>
-        /// <returns></returns>
-        [Route("Tested")]
-        [HttpPost]
-        public IHttpActionResult Tested([FromBody]TaskDto task)
-        {
-            task.QAStatus = QAStatus.Passed;
-            _taskSvc.UpdateTaskStatus(task);
+            var taskInfo = _taskSvc.UpdateTestStatus(testResult);
+            //创建日志
+            var log = new TaskLogs
+            {
+                TaskId = taskInfo.Id,
+                LogType = LogType.QA,
+                Stage = testResult.Stage,
+                Comments= testResult.Comments
+            };
+            switch (testResult.Stage)
+            {
+                case StageEnum.IOC:
+                    log.DeployInfo = taskInfo.DeployInfoIocJson;
+                    break;
+                case StageEnum.PRE:
+                    log.DeployInfo = taskInfo.DeployInfoPreJson;
+                    break;
+                case StageEnum.PRODUCTION:
+                    log.DeployInfo = taskInfo.DeployInfoOnlineJson;
+                    break;
+            }
+            _taskLogsSvc.CreateTaskLogs(log);
             return Ok();
         }
     }
