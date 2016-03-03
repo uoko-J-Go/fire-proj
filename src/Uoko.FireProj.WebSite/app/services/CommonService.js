@@ -11,7 +11,8 @@
         });
     };
     this.getAllUsers = function (successCallBack) {
-        $http.get("http://gitlab.uoko.ioc:12015/api/v3/users?private_token=D3MR_rnRZK4xWS-CtVho").success(function (data) {
+        //$http.get("http://gitlab.uoko.ioc:12015/api/v3/users?private_token=D3MR_rnRZK4xWS-CtVho").success(function (data) {
+        $http.get("/api/UserApi").success(function (data) {
             if (successCallBack != undefined) {
                 successCallBack(data);
             }
