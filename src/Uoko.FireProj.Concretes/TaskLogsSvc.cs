@@ -103,28 +103,15 @@ namespace Uoko.FireProj.Concretes
             //    throw new TipInfoException(ex.Message);
             //}
         }
-        public TaskLogsDto GetTaskLogByTriggerId(int triggerId)
+        public TaskLogs GetTaskLogByTriggerId(int triggerId)
         {
-            return null;
 
-            //using (var dbScope = _dbScopeFactory.CreateReadOnly())
-            //{
-            //    var db = dbScope.DbContexts.Get<FireProjDbContext>();
-            //    var data = db.TaskLogs.Where(r => r.TriggeredId == triggerId).Select(r => new TaskLogsDto()
-            //    {
-            //        Id = r.Id,
-            //        LogsDesc = r.LogsDesc,
-            //        LogsText = r.LogsText,
-            //        TriggeredId = r.TriggeredId,
-            //        BuildId = r.BuildId,
-            //        TaskId = r.TaskId,
-            //        CreateBy = r.CreateBy,
-            //        CreateDate = r.CreateDate,
-            //        Stage = r.Stage,
-            //        TaskLogsType = r.TaskLogsType,
-            //    }).FirstOrDefault();
-            //    return data;
-            //}
+            using (var dbScope = _dbScopeFactory.CreateReadOnly())
+            {
+                var db = dbScope.DbContexts.Get<FireProjDbContext>();
+                var data = db.TaskLogs.Where(r => r.TriggeredId == triggerId).FirstOrDefault();
+                return data;
+            }
         }
         public PageGridData<TaskLogsDto> GetTaskLogsPage(TaskLogsQuery query)
         {
