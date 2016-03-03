@@ -1,5 +1,6 @@
 ﻿fireproj.controller("DeployController", function ($scope, $http, $uibModalInstance, TaskService, ProjectService, CommonService, param) {
-    
+    $scope.isFirstLoad = true;
+    $scope.isFirstLoads = true;
     $scope.Project = null;//当前项目对象
     $scope.Server = null;//当前服务器对象
     $scope.Server = null;//当前服务器对象
@@ -125,7 +126,27 @@
     //发布环境change事件,获取IOC环境的服务器List
     $scope.GetServerData = function (environmentId) {
         TaskService.GetResourceList(environmentId, function (data) {
+           
+            if (environmentId == 0) {
+                if (typeof param.DeployInfoIocJson == "string") {
+                    $scope.taskInfo.DeployIP = JSON.parse(param.DeployInfoIocJson).DeployIP;
+                    $scope.taskInfo.Domain = JSON.parse(param.DeployInfoIocJson).Domain;
+                }
+            }
+            else {
+                if (typeof param.DeployInfoPreJson == "string") {
+                    $scope.taskInfo.DeployIP = JSON.parse(param.DeployInfoPreJson).DeployIP;
+                    $scope.taskInfo.Domain = JSON.parse(param.DeployInfoPreJson).Domain;
+                }
+            }
             $scope.ServerList = data;
+            if ($scope.isFirstLoad) {
+                var _server = $scope.ServerList.filter(function (server) {
+                    return server.IP == $scope.taskInfo.DeployIP;
+                })[0];
+                $scope.taskInfo.Server = JSON.stringify(_server);
+                $scope.isFirstLoad = false;
+            }
         });
     }
     //部署服务器change事件
@@ -137,13 +158,32 @@
             server = { Id: 0 };
         }
         TaskService.GetDomain(param.ProjectId, server.Id, function (data) {
+            if ($scope.taskInfo.DeployStage == 0) {
+                if (typeof param.DeployInfoIocJson == "string") {
+                    $scope.taskInfo.Domain = JSON.parse(param.DeployInfoIocJson).Domain;
+                }
+            }
+            else {
+                if (typeof param.DeployInfoPreJson == "string") {
+                    $scope.taskInfo.Domain = JSON.parse(param.DeployInfoPreJson).Domain;
+                }
+            }
+
             $scope.DomainList = data;
+           // if ($scope.isFirstLoads) {
+                var _domain = $scope.DomainList.filter(function (server) {
+                    return server.Name == $scope.taskInfo.Domain;
+                })[0];
+                $scope.taskInfo.DomainInfo = JSON.stringify(_domain);
+                $scope.isFirstLoads = false;
+           // }
         });
     }
     //根据项目Id或者分支列表
     $scope.getBranch = function (RepoId) {
         CommonService.getProjectBranch(RepoId, function (data) {
             $scope.branchList = data;
+            $scope.taskInfo.Branch = param.Branch;
         });
     }
 

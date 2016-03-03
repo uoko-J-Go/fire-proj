@@ -5,12 +5,12 @@
         TaskService.GetTaskInfo(taskId, function (data) {
             $scope.model = data;
             $scope.param = {
-                "taskId": taskId,
-                "ProjectId": data.ProjectDto.Id,
-                "RepoId": data.ProjectDto.RepoId,
-                "Branch": data.Branch,
-                "ProjectSlnName": data.ProjectDto.ProjectSlnName,
-                "ProjectCsprojName": data.ProjectDto.ProjectCsprojName
+                taskId: taskId,
+                ProjectId: data.ProjectDto.Id,
+                RepoId: data.ProjectDto.RepoId,
+                Branch:data.Branch,
+                DeployInfoIocJson: data.DeployInfoIocJson,
+                DeployInfoPreJson: data.DeployInfoPreJson
             };
         });
     }
@@ -31,10 +31,6 @@
             }
            }
         });
-
-        //modalInstance.result.then(function (selectedUsers) {
-        //    $scope.taskInfo.CheckUsers = selectedUsers;
-        //});
     }
     
     $scope.Cancel = function () {
