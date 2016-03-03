@@ -388,7 +388,9 @@ namespace Uoko.FireProj.Concretes
                         case StageEnum.PRODUCTION:
                             break;
                     }
-
+                    entity.ModifyId = 0;
+                    entity.ModifierName = "系统";
+                    entity.ModifyDate = DateTime.Now;
                     db.Update(entity,
                         t =>
                             new
