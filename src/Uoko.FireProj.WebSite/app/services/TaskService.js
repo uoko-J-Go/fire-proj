@@ -1,7 +1,7 @@
 ﻿fireproj.service("TaskService", function ($http) {
 
     this.GetTaskByPage = function (params, successCallBack) {
-        $http.get("/api/TaskApi?Offset={0}&Limit={1}".Format(params.offset, params.limit)).success(function (data) {
+        $http.get("/api/TaskApi", { params: params }).success(function (data) {
             if (successCallBack != undefined) {
                 successCallBack(data);
             }
@@ -68,8 +68,9 @@
         });
     };
 
-    this.CommitToTest = function (param, successCallBack) {
-        $http.post("/api/TaskApi/CommitToTest", param).success(function (data) {
+
+    this.UpdateTestStatus = function (param, successCallBack) {
+        $http.post("/api/TaskApi/UpdateTestStatus", param).success(function (data) {
             if (successCallBack != undefined) {
                 successCallBack(data);
             }
@@ -78,25 +79,6 @@
         });
     };
 
-    this.TestFails = function (param, successCallBack) {
-        $http.post("/api/TaskApi/TestFails", param).success(function (data) {
-            if (successCallBack != undefined) {
-                successCallBack(data);
-            }
-        }).error(function (data) {
-            //错误处理
-        });
-    };
-
-    this.Tested = function (param, successCallBack) {
-        $http.post("/api/TaskApi/Tested", param).success(function (data) {
-            if (successCallBack != undefined) {
-                successCallBack(data);
-            }
-        }).error(function (data) {
-            //错误处理
-        });
-    };
 
     this.GetResourceList = function (environmentId, successCallBack) {
         $http.get("/api/ServerApi/Environment/" + environmentId + "").success(function (data) {

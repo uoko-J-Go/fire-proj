@@ -18,19 +18,20 @@ namespace Uoko.FireProj.WebSite.Controllers
         {
             List<MenuTreeVM> nodes = new List<MenuTreeVM>()
             {
+              
                  new MenuTreeVM()
+                {
+                    MenuName = "任务列表",
+                    MenuLevel=1,
+                    Controller="Task",
+                    Action="Index"
+                },
+                    new MenuTreeVM()
                 {
                     MenuName = "项目",
                     MenuLevel=1,
                     Controller="Project",
                     Action="Index",
-                },
-                 new MenuTreeVM()
-                {
-                    MenuName = "我的任务",
-                    MenuLevel=1,
-                    Controller="Task",
-                    Action="Index"
                 },
                   new MenuTreeVM()
                 {

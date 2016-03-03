@@ -14,6 +14,7 @@ using Uoko.FireProj.Infrastructure.Exception;
 using Uoko.FireProj.Model;
 using AutoMapper;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using Uoko.FireProj.DataAccess.Extensions;
 using Uoko.FireProj.Infrastructure.Extensions;
 
@@ -243,6 +244,25 @@ namespace Uoko.FireProj.Concretes
                 {
                     data = data.Where(r => r.TaskName.Contains(query.Search));
                 }
+
+                switch (query.ShowType)
+                {
+                    case TaskQuery.QueryType.QaFocus:
+                        var userIdForm = query.LoginUserId + "-";
+                        data = data.Where(item => item.IocCheckUserId.Contains(userIdForm)
+                                                  || item.PreCheckUserId.Contains(userIdForm)
+                                                  || item.OnlineCheckUserId.Contains(userIdForm));
+                        break;
+                    case TaskQuery.QueryType.CreatorFocus:
+                        data = data.Where(item => item.CreatorId == query.LoginUserId);
+                        break;
+                    case TaskQuery.QueryType.ShowAll:
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+
+
                 var total = data.Count();
 
                 var tasksFromDb = data.OrderByDescending(r => r.Id)
@@ -280,42 +300,6 @@ namespace Uoko.FireProj.Concretes
                                            };
                                 });
             return infoLists;
-        }
-
-        public void UpdateTaskStatus(TaskDto task)
-        {
-            //try
-            //{
-            //    using (var dbScope = _dbScopeFactory.Create())
-            //    {
-            //        var db = dbScope.DbContexts.Get<FireProjDbContext>();
-            //        //插入状态变更记录
-            //        var taskInfo = db.TaskInfo.FirstOrDefault(r => r.Id == task.Id);
-            //        TaskLogs taskinfo = new TaskLogs()
-            //        {
-            //            CreateBy = 0,
-            //            CreateDate = DateTime.Now,
-            //            Stage = taskInfo.DeployEnvironment,
-            //            TaskId = task.Id,
-            //            TriggeredId = task.TriggeredId,
-            //            TaskLogsType = TaskLogsEnum.Status,
-            //            LogsText = task.LogsText,
-            //            LogsDesc = string.Format("{0}任务流程状态从{1}变更为{2}", taskInfo.TaskName, taskInfo.Status.ToDescription(), task.Status.ToDescription())
-            //        };
-            //        db.TaskLogs.Add(taskinfo);
-                   
-            //        ///修改任务表状态
-            //        taskInfo.ModifyBy = 1;
-            //        taskInfo.ModifyDate = DateTime.Now;
-            //        taskInfo.Status = task.Status;
-
-            //        db.SaveChanges();
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    throw new TipInfoException(ex.Message);
-            //}
         }
 
         private List<UserDto> AnalysisCheckUser(string userInfo)
@@ -460,6 +444,99 @@ namespace Uoko.FireProj.Concretes
                             break;
                     }
                     db.TaskLogs.Add(log);
+                    db.SaveChanges();
+                    return entity;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new TipInfoException(ex.Message);
+            }
+        }
+        /// <summary>
+        /// 更新测试任务
+        /// </summary>
+        /// <param name="testResult"></param>
+        /// <returns></returns>
+        public TaskInfo UpdateTestStatus(TestResultDto testResult)
+        {
+            try
+            {
+                using (var dbScope = _dbScopeFactory.Create())
+                {
+                    var db = dbScope.DbContexts.Get<FireProjDbContext>();
+                    var entity = db.TaskInfo.FirstOrDefault(r => r.Id == testResult.TaskId);
+
+                    var currentUserId = 2;//临时模拟一个当前用户Id
+                    //更改任务记录
+                    switch (testResult.Stage)
+                    {
+                        case StageEnum.IOC:
+                            var iocDeployInfo = JsonHelper.FromJson<DeployInfoIoc>(entity.DeployInfoIocJson);
+                            if (!string.IsNullOrEmpty(iocDeployInfo.CheckUserId))
+                            {
+                                var userStatusIds = iocDeployInfo.CheckUserId.Split(',');
+                                var newUserStatusIds = new List<string>();
+                                foreach (var userStatus in userStatusIds)
+                                {
+                                    var userandstate = userStatus.Split('-');
+                                    //暂时注释判断 修改所有测试结果
+                                    //if (currentUserId.Equals(userandstate[0]))
+                                    //{
+                                        userandstate[1] = ((int) testResult.QAStatus).ToString();
+                                    //}
+
+                                    newUserStatusIds.Add(string.Join("-", userandstate));
+                                }
+                                entity.IocCheckUserId = iocDeployInfo.CheckUserId = string.Join(",", newUserStatusIds);
+                            }
+                            entity.DeployInfoIocJson = JsonHelper.ToJson(iocDeployInfo);
+                            break;
+                        case StageEnum.PRE:
+                            var preDeployInfo = JsonHelper.FromJson<DeployInfoPre>(entity.DeployInfoPreJson);
+                            if (!string.IsNullOrEmpty(preDeployInfo.CheckUserId))
+                            {
+                                var userStatusIds = preDeployInfo.CheckUserId.Split(',');
+                                var newUserStatusIds = new List<string>();
+                                foreach (var userStatus in userStatusIds)
+                                {
+                                    var userandstate = userStatus.Split('-');
+                                    //暂时注释判断 修改所有测试结果
+                                    //if (currentUserId.Equals(userandstate[0]))
+                                    //{
+                                    userandstate[1] = ((int)testResult.QAStatus).ToString();
+                                    //}
+
+                                    newUserStatusIds.Add(string.Join("-", userandstate));
+                                }
+                                entity.PreCheckUserId = preDeployInfo.CheckUserId = string.Join(",", newUserStatusIds);
+                            }
+                            entity.DeployInfoPreJson = JsonHelper.ToJson(preDeployInfo);
+                            break;
+                        case StageEnum.PRODUCTION:
+                            var onlineDeployInfo = JsonHelper.FromJson<DeployInfoOnline>(entity.DeployInfoOnlineJson);
+                            if (!string.IsNullOrEmpty(onlineDeployInfo.CheckUserId))
+                            {
+                                var userStatusIds = onlineDeployInfo.CheckUserId.Split(',');
+                                var newUserStatusIds = new List<string>();
+                                foreach (var userStatus in userStatusIds)
+                                {
+                                    var userandstate = userStatus.Split('-');
+                                    //暂时注释判断 修改所有测试结果
+                                    //if (currentUserId.Equals(userandstate[0]))
+                                    //{
+                                    userandstate[1] = ((int)testResult.QAStatus).ToString();
+                                    //}
+
+                                    newUserStatusIds.Add(string.Join("-", userandstate));
+                                }
+                                entity.OnlineCheckUserId = onlineDeployInfo.CheckUserId = string.Join(",", newUserStatusIds);
+                            }
+                            entity.DeployInfoOnlineJson = JsonHelper.ToJson(onlineDeployInfo);
+                            break;
+                    }
+                    entity.ModifyId = currentUserId;
+                    entity.ModifyDate = DateTime.Now;
                     db.SaveChanges();
                     return entity;
                 }

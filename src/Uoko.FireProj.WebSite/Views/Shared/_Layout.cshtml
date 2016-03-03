@@ -35,7 +35,7 @@
     <link href="~/Metronic/assets/global/css/components-md.css" id="style_components" rel="stylesheet" type="text/css" />
     <link href="~/Metronic/assets/global/css/plugins-md.css" rel="stylesheet" type="text/css" />
     <link href="~/Metronic/assets/admin/layout/css/layout.css" rel="stylesheet" type="text/css" />
-    <link href="~/Metronic/assets/admin/layout/css/themes/darkblue.css" rel="stylesheet" type="text/css" id="style_color" />
+    <link href="~/Metronic/assets/admin/layout/css/themes/light.css" rel="stylesheet" type="text/css" id="style_color" />
     <link href="~/Metronic/assets/admin/layout/css/custom.css" rel="stylesheet" type="text/css" />
 
     
@@ -46,16 +46,17 @@
 <!-- BEGIN BODY -->
 <body class="page-md page-header-fixed page-quick-sidebar-over-content page-full-width">
     <!-- BEGIN HEADER -->
-    <div class="page-header md-shadow-z-1-i navbar navbar-fixed-top">
+<div class="page-header md-shadow-z-1-i navbar navbar-fixed-top">
+    <div class="container">
         <!-- BEGIN HEADER INNER -->
         <div class="page-header-inner">
             <!-- BEGIN LOGO -->
             <div class="page-logo">
-                <a href="@Url.Action("Index", "Home")">
-                    <img src="~/Content/Images/logo.png"  alt="logo"  height="40" width="200"/>
+                <a href="@Url.Action("Index", "Task")">
+                    <img src="~/Content/Images/logo.png" alt="logo" height="40" width="200" />
                 </a>
             </div>
-               
+
             <div class="hor-menu hidden-sm hidden-xs">
                 <ul class="nav navbar-nav">
 
@@ -65,7 +66,8 @@
                         {
                             if (item.IsActive)
                             {
-                                if (item.Children != null && item.Children.Count > 0)
+                                if (item.Children != null
+                                    && item.Children.Count > 0)
                                 {
                                     <li class="classic-menu-dropdown active">
                                         <a data-toggle="dropdown" href="javascript:;" data-hover="megamenu-dropdown" data-close-others="true">
@@ -77,7 +79,7 @@
                                             @foreach (var subItem in item.Children)
                                             {
                                                 <li class="">
-                                                    <a href="@Url.Action(subItem.Action,subItem.Controller)">
+                                                    <a href="@Url.Action(subItem.Action, subItem.Controller)">
                                                         @subItem.MenuName
                                                     </a>
                                                 </li>
@@ -88,7 +90,7 @@
                                 else
                                 {
                                     <li class="classic-menu-dropdown active">
-                                        <a href="@Url.Action(item.Action,item.Controller)">
+                                        <a href="@Url.Action(item.Action, item.Controller)">
                                             @item.MenuName
                                             <span class="selected">
                                             </span>
@@ -99,7 +101,8 @@
                             }
                             else
                             {
-                                if (item.Children != null && item.Children.Count > 0)
+                                if (item.Children != null
+                                    && item.Children.Count > 0)
                                 {
                                     <li class="classic-menu-dropdown">
                                         <a data-toggle="dropdown" href="javascript:;" data-hover="megamenu-dropdown" data-close-others="true">
@@ -109,7 +112,7 @@
                                             @foreach (var subItem in item.Children)
                                             {
                                                 <li class="">
-                                                    <a href="@Url.Action(subItem.Action,subItem.Controller)">
+                                                    <a href="@Url.Action(subItem.Action, subItem.Controller)">
                                                         @subItem.MenuName
                                                     </a>
                                                 </li>
@@ -120,7 +123,7 @@
                                 else
                                 {
                                     <li class="classic-menu-dropdown ">
-                                        <a href="@Url.Action(item.Action,item.Controller)">
+                                        <a href="@Url.Action(item.Action, item.Controller)">
                                             @item.MenuName
                                         </a>
                                     </li>
@@ -130,7 +133,7 @@
 
                         }
                     }
-                          
+
                 </ul>
             </div>
             <!-- END LOGO -->
@@ -156,7 +159,7 @@
                             </a>
                             <ul class="dropdown-menu dropdown-menu-default">
                                 <li>
-                                    <a href="@Url.Action("LogOut","Home")">
+                                    <a href="@Url.Action("LogOut", "Task")">
                                         <i class="icon-key"></i> Log Out
                                     </a>
                                 </li>
@@ -167,19 +170,21 @@
                 </div>
                 <!-- END TOP NAVIGATION MENU -->
             </div>
-                    <!-- END PAGE TOP -->
-            </div>
-            <!-- END HEADER INNER -->
+            <!-- END PAGE TOP -->
         </div>
+        <!-- END HEADER INNER -->
+    </div>
+
+</div>
     <!-- END HEADER -->
     <div class="clearfix">
 
 
     </div>
-    <!-- BEGIN CONTAINER -->
+<!-- BEGIN CONTAINER -->
+<div class="container">
     <div class="page-container">
         <!-- BEGIN SIDEBAR -->
-       
         <!-- END SIDEBAR -->
         <!-- BEGIN CONTENT -->
         <div class="page-content-wrapper">
@@ -194,16 +199,18 @@
             </div>
         </div>
     </div>
-    <!-- END CONTAINER -->
-    <!-- BEGIN FOOTER -->
-<div class="page-footer">
-    <div class="page-footer-inner">
-        <p>&copy; 2016 - J-Go TEAM</p>
+
+    <div class="page-footer">
+        <div class="page-footer-inner">
+            <p>&copy; 2016 - J-Go TEAM</p>
+        </div>
+        <div class="scroll-to-top">
+            <i class="icon-arrow-up"></i>
+        </div>
     </div>
-    <div class="scroll-to-top">
-        <i class="icon-arrow-up"></i>
-    </div>
+
 </div>
+    <!-- END CONTAINER -->
 
 
 

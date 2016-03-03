@@ -66,6 +66,7 @@
     <Compile Include="Dto\TaskDetailDto.cs" />
     <Compile Include="Dto\TaskLogsDto.cs" />
     <Compile Include="Dto\TaskDto.cs" />
+    <Compile Include="Dto\TestResultDto.cs" />
     <Compile Include="Dto\UserDto.cs" />
     <Compile Include="Entity\BaseEntity.cs" />
     <Compile Include="Entity\Dictionary.cs" />

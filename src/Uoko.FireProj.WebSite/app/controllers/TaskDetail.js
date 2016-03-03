@@ -32,7 +32,41 @@
            }
         });
     }
-    
+    $scope.TestPassed = function (stage) {
+      
+        var testresult= {
+            TaskId: taskId,
+            Stage: stage,
+            QAStatus: 2,
+            Comments:""
+        }
+        var modalInstance = $uibModal.open({
+            templateUrl: '/app/modals/TestDailog.html',
+            controller: 'TestController',
+            resolve: {
+                param: function () {
+                    return testresult;
+                }
+            }
+        });
+    }
+    $scope.TestFails = function (stage) {
+        var testresult = {
+            TaskId: taskId,
+            Stage: stage,
+            QAStatus: 1,
+            Comments: ""
+        }
+        var modalInstance = $uibModal.open({
+            templateUrl: '/app/modals/TestDailog.html',
+            controller: 'TestController',
+            resolve: {
+                param: function () {
+                    return testresult;
+                }
+            }
+        });
+    }
     $scope.Cancel = function () {
         location.href = "/Task/Index";
     }
