@@ -9,8 +9,8 @@
                 "ProjectId": data.ProjectDto.Id,
                 "RepoId": data.ProjectDto.RepoId,
                 "Branch": data.Branch,
-                "ProjectSlnName": data.ProjectSlnName,
-                "ProjectCsprojName": data.ProjectCsprojName
+                "ProjectSlnName": data.ProjectDto.ProjectSlnName,
+                "ProjectCsprojName": data.ProjectDto.ProjectCsprojName
             };
         });
     }
