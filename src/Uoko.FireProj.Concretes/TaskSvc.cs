@@ -109,7 +109,7 @@ namespace Uoko.FireProj.Concretes
                 taskInfo.ModifyDate = DateTime.Now;
 
                 var domain = string.Empty;
-
+                var DeployInfo = string.Empty;
                 switch (taskDto.DeployStage)
                 {
                     case StageEnum.IOC:
@@ -123,7 +123,7 @@ namespace Uoko.FireProj.Concretes
                         taskDto.IocDeployInfo.DeployStage = taskDto.DeployStage;
                         taskDto.IocDeployInfo.DeployAddress = string.Format("https://{0}:8172/msdeploy.axd", taskDto.IocDeployInfo.DeployIP);
                         taskDto.IocDeployInfo.DeployStatus = DeployStatus.Deploying;
-                        taskInfo.DeployInfoIocJson = JsonHelper.ToJson(taskDto.IocDeployInfo);
+                        taskInfo.DeployInfoIocJson = DeployInfo = JsonHelper.ToJson(taskDto.IocDeployInfo);
                         break;
                     case StageEnum.PRE:
                         if (!string.IsNullOrEmpty(taskDto.PreDeployInfo.CheckUserId))
@@ -136,7 +136,7 @@ namespace Uoko.FireProj.Concretes
                         taskDto.PreDeployInfo.DeployStage = taskDto.DeployStage;
                         taskDto.PreDeployInfo.DeployAddress = string.Format("https://{0}:8172/msdeploy.axd", taskDto.PreDeployInfo.DeployIP);
                         taskDto.PreDeployInfo.DeployStatus = DeployStatus.Deploying;
-                        taskInfo.DeployInfoPreJson = JsonHelper.ToJson(taskDto.PreDeployInfo);
+                        taskInfo.DeployInfoPreJson = DeployInfo = JsonHelper.ToJson(taskDto.PreDeployInfo);
                         break;
                     default:
                         throw new NotSupportedException("暂不支持其他阶段");
@@ -144,7 +144,6 @@ namespace Uoko.FireProj.Concretes
 
 
                 //更新域名资源使用:根据环境直接更新本次占用,同时清空上次IOC环境占用的
-               
                 //更新本次占用
                 var resourceInfo = db.DomainResource.FirstOrDefault(r => r.ProjectId == taskDto.ProjectId && r.Name == domain);
                 resourceInfo.TaskId = taskDto.Id;
@@ -152,16 +151,19 @@ namespace Uoko.FireProj.Concretes
                 //清空上次占用
                 var lastTaskLogs = db.TaskLogs.OrderByDescending(r => r.CreateDate).FirstOrDefault(r => r.TaskId == taskDto.Id && r.Stage == taskDto.DeployStage);
                 string lastDomain = string.Empty;
-                switch (taskDto.DeployStage)
+                if (lastTaskLogs != null)
                 {
-                    case StageEnum.IOC:
-                        lastDomain = JsonHelper.FromJson<DeployInfoIocDto>(lastTaskLogs.DeployInfo).Domain;
-                        break;
-                    case StageEnum.PRE:
-                        lastDomain = JsonHelper.FromJson<DeployInfoPreDto>(lastTaskLogs.DeployInfo).Domain;
-                        break;
-                    default:
-                        break;
+                    switch (taskDto.DeployStage)
+                    {
+                        case StageEnum.IOC:
+                            lastDomain = JsonHelper.FromJson<DeployInfoIocDto>(lastTaskLogs.DeployInfo).Domain;
+                            break;
+                        case StageEnum.PRE:
+                            lastDomain = JsonHelper.FromJson<DeployInfoPreDto>(lastTaskLogs.DeployInfo).Domain;
+                            break;
+                        default:
+                            break;
+                    }
                 }
                 var lastResourceInfo = db.DomainResource.FirstOrDefault(r => r.ProjectId == taskDto.ProjectId && r.Name == lastDomain);
                 if (lastResourceInfo != null && lastDomain != domain)
@@ -169,6 +171,19 @@ namespace Uoko.FireProj.Concretes
                     lastResourceInfo.TaskId = 0;
                 }
 
+                //存储历史记录
+                TaskLogs taskLogs = new TaskLogs()
+                {
+                    CreateDate = DateTime.Now,
+                    CreatorId = 1,
+                    CreatorName = "庆攀",
+                    DeployInfo = DeployInfo,
+                    LogType = LogType.Deploy,
+                    Stage = taskDto.DeployStage,
+                    TaskId = taskDto.Id,
+                };
+                db.TaskLogs.Add(taskLogs);
+                
                 db.SaveChanges();
             }
            
