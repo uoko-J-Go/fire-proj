@@ -56,7 +56,7 @@ namespace Uoko.FireProj.Concretes
                     taskDto.IocDeployInfo.DeployStage = taskDto.DeployStage;
                     taskDto.IocDeployInfo.DeployAddress = string.Format("https://{0}:8172/msdeploy.axd", taskDto.IocDeployInfo.DeployIP);
                     taskDto.IocDeployInfo.DeployStatus = DeployStatus.Deploying;
-                    taskInfo.DeployInfoIocJson = JsonHelper.ToJson(taskDto.IocDeployInfo);
+                    taskInfo.DeployInfoIocJson = JsonConvert.SerializeObject(taskDto.IocDeployInfo);
                     break;
                 case StageEnum.PRE:
                     if (!string.IsNullOrEmpty(taskDto.PreDeployInfo.CheckUserId))
@@ -69,7 +69,7 @@ namespace Uoko.FireProj.Concretes
                     taskDto.PreDeployInfo.DeployStage = taskDto.DeployStage;
                     taskDto.PreDeployInfo.DeployAddress = string.Format("https://{0}:8172/msdeploy.axd", taskDto.PreDeployInfo.DeployIP);
                     taskDto.PreDeployInfo.DeployStatus = DeployStatus.Deploying;
-                    taskInfo.DeployInfoPreJson = JsonHelper.ToJson(taskDto.PreDeployInfo);
+                    taskInfo.DeployInfoPreJson = JsonConvert.SerializeObject(taskDto.PreDeployInfo);
                     break;
                 default:
                     throw new NotSupportedException("暂不支持其他阶段");
@@ -319,12 +319,12 @@ namespace Uoko.FireProj.Concretes
                         case StageEnum.IOC:
                             var iocDeployInfo = JsonHelper.FromJson<DeployInfoIoc>(entity.DeployInfoIocJson);
                             iocDeployInfo.TriggeredId = triggerId;
-                            entity.DeployInfoIocJson = JsonHelper.ToJson(iocDeployInfo);
+                            entity.DeployInfoIocJson = JsonConvert.SerializeObject(iocDeployInfo);
                             break;
                         case StageEnum.PRE:
                             var preDeployInfo = JsonHelper.FromJson<DeployInfoPre>(entity.DeployInfoPreJson);
                             preDeployInfo.TriggeredId = triggerId;
-                            entity.DeployInfoPreJson= JsonHelper.ToJson(preDeployInfo);
+                            entity.DeployInfoPreJson= JsonConvert.SerializeObject(preDeployInfo);
                             break;
                         case StageEnum.PRODUCTION:
                             break;
@@ -377,13 +377,13 @@ namespace Uoko.FireProj.Concretes
                             var iocDeployInfo = JsonHelper.FromJson<DeployInfoIoc>(entity.DeployInfoIocJson);
                             iocDeployInfo.DeployStatus = deployStatus;
                             iocDeployInfo.BuildId = buildId;
-                            entity.DeployInfoIocJson = JsonHelper.ToJson(iocDeployInfo);
+                            entity.DeployInfoIocJson = JsonConvert.SerializeObject(iocDeployInfo);
                             break;
                         case StageEnum.PRE:
                             var preDeployInfo = JsonHelper.FromJson<DeployInfoPre>(entity.DeployInfoPreJson);
                             preDeployInfo.DeployStatus = deployStatus;
                             preDeployInfo.BuildId = buildId;
-                            entity.DeployInfoPreJson = JsonHelper.ToJson(preDeployInfo);
+                            entity.DeployInfoPreJson = JsonConvert.SerializeObject(preDeployInfo);
                             break;
                         case StageEnum.PRODUCTION:
                             break;
