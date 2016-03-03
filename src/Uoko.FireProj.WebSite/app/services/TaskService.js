@@ -1,7 +1,7 @@
 ﻿fireproj.service("TaskService", function ($http) {
 
     this.GetTaskByPage = function (params, successCallBack) {
-        $http.get("/api/TaskApi?Offset={0}&Limit={1}".Format(params.offset, params.limit)).success(function (data) {
+        $http.get("/api/TaskApi", { params: params }).success(function (data) {
             if (successCallBack != undefined) {
                 successCallBack(data);
             }

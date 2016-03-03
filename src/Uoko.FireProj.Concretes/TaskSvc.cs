@@ -14,6 +14,7 @@ using Uoko.FireProj.Infrastructure.Exception;
 using Uoko.FireProj.Model;
 using AutoMapper;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using Uoko.FireProj.DataAccess.Extensions;
 using Uoko.FireProj.Infrastructure.Extensions;
 
@@ -187,6 +188,25 @@ namespace Uoko.FireProj.Concretes
                 {
                     data = data.Where(r => r.TaskName.Contains(query.Search));
                 }
+
+                switch (query.ShowType)
+                {
+                    case TaskQuery.QueryType.QaFocus:
+                        var userIdForm = query.LoginUserId + "-";
+                        data = data.Where(item => item.IocCheckUserId.Contains(userIdForm)
+                                                  || item.PreCheckUserId.Contains(userIdForm)
+                                                  || item.OnlineCheckUserId.Contains(userIdForm));
+                        break;
+                    case TaskQuery.QueryType.CreatorFocus:
+                        data = data.Where(item => item.CreatorId == query.LoginUserId);
+                        break;
+                    case TaskQuery.QueryType.ShowAll:
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+
+
                 var total = data.Count();
 
                 var tasksFromDb = data.OrderByDescending(r => r.Id)

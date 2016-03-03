@@ -1,13 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Uoko.FireProj.DataAccess.Query
+﻿namespace Uoko.FireProj.DataAccess.Query
 {
     public class TaskQuery : BaseQuery
     {
+        public enum QueryType
+        {
+            ShowAll = 0,
+            QaFocus = 2,
+            CreatorFocus = 1,
+        }
 
+        public QueryType ShowType { get; set; }
+
+        public int LoginUserId { get; set; }
     }
+
 }

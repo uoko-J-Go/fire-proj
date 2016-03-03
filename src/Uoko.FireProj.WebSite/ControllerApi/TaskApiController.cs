@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Net.Mail;
 using System.Text;
 using System.Web.Http;
+using Microsoft.AspNet.Identity;
 using Uoko.FireProj.Abstracts;
 using Uoko.FireProj.DataAccess.Dto;
 using Uoko.FireProj.DataAccess.Entity;
@@ -30,6 +31,7 @@ namespace Uoko.FireProj.WebSite.ControllerApi
 
         public IHttpActionResult Get([FromUri]TaskQuery query)
         {
+            query.LoginUserId = 1;// this.User.Identity.GetUserId<int>();
             var result = _taskSvc.GetTaskPage(query);
             return Ok(result);
         }

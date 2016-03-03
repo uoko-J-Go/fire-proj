@@ -11,12 +11,19 @@ fireproj.controller("TaskController", function ($scope, $http, TaskService, Proj
 
     $scope.taskInfos = [];
     $scope.totalItems = 0;//总数
+    $scope.queryType = 0; // 所有
 
     //查询项目
-    $scope.Query = function () {
+    $scope.Query = function (showType) {
+
+        if (showType) {
+            $scope.queryType = showType;
+        }
+
         var params = {
             offset: $scope.pageSize * ($scope.currentPage - 1),
-            limit: $scope.pageSize
+            limit: $scope.pageSize,
+            ShowType: $scope.queryType,
         }
 
         TaskService.GetTaskByPage(params,function (data) {
