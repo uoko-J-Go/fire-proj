@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
@@ -16,6 +17,7 @@ using AutoMapper;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using Uoko.FireProj.DataAccess.Extensions;
+using Uoko.FireProj.DataAccess.Gitlab;
 using Uoko.FireProj.Infrastructure.Extensions;
 
 namespace Uoko.FireProj.Concretes
@@ -357,16 +359,90 @@ namespace Uoko.FireProj.Concretes
         /// </summary>
         /// <param name="taskId"></param>
         /// <param name="deployStage"></param>
-        /// <param name="triggerId"></param>
-        public TaskInfo BeginDeploy(int taskId, StageEnum deployStage, int triggerId)
+        /// <returns></returns>
+        public TaskInfo BeginDeploy(int taskId, StageEnum deployStage)
         {
             try
             {
+                var gitlabToken = "D3MR_rnRZK4xWS-CtVho";
+                var gitLabApi = new WebApiProvider("http://gitlab.uoko.ioc:12015/api/v3/");
+                var taskDto = this.GetTaskById(taskId);
+                var triggers =gitLabApi.Get<List<Trigger>>(string.Format("projects/{0}/triggers?private_token={1}",taskDto.ProjectDto.RepoId, gitlabToken));
+                if (triggers == null || triggers.Count < 1)
+                {
+                    throw new Exception("项目在GitLab上为配置Trrigger");
+                }
+                var trigger = triggers[0];
+
+                var target = "Deploy-To-IOC";
+                var iisSiteName = string.Empty;
+                var deployIP = string.Empty;
+                var packagDir = string.Empty;
+                var _ref = taskDto.Branch;
+                switch (deployStage)
+                {
+                    case StageEnum.IOC:
+                        target = "Deploy-To-IOC";
+                        iisSiteName = taskDto.DeployInfoIocDto.SiteName;
+                        deployIP = taskDto.DeployInfoIocDto.DeployIP;
+                        using (var dbScope = _dbScopeFactory.CreateReadOnly())
+                        {
+                            var db = dbScope.DbContexts.Get<FireProjDbContext>();
+                            var server = db.Servers.FirstOrDefault(r => r.IP.Equals(deployIP));
+                            packagDir = server.PackageDir;
+                        }
+                        _ref = taskDto.Branch;
+                        break;
+                    case StageEnum.PRE:
+                        target = "Deploy-To-PRE";
+                        iisSiteName = taskDto.DeployInfoPreDto.SiteName;
+                        deployIP = taskDto.DeployInfoPreDto.DeployIP;
+                        using (var dbScope = _dbScopeFactory.CreateReadOnly())
+                        {
+                            var db = dbScope.DbContexts.Get<FireProjDbContext>();
+                            var server = db.Servers.FirstOrDefault(r => r.IP.Equals(deployIP));
+                            packagDir = server.PackageDir;
+                        }
+                        _ref = "pre";
+                        break;
+                    case StageEnum.PRODUCTION:
+                        target = "Online";
+                        iisSiteName = taskDto.DeployInfoOnlineDto.SiteName;
+                        deployIP = taskDto.DeployInfoOnlineDto.DeployIP;
+                        using (var dbScope = _dbScopeFactory.CreateReadOnly())
+                        {
+                            var db = dbScope.DbContexts.Get<FireProjDbContext>();
+                            var server = db.Servers.FirstOrDefault(r => r.IP.Equals(deployIP));
+                            packagDir = server.PackageDir;
+                        }
+                        _ref = "master";
+                        break;
+                }
+  
+                Hashtable buildInfo = new Hashtable();
+                buildInfo.Add("slnFile", taskDto.ProjectDto.ProjectSlnName);
+                buildInfo.Add("csProjFile", taskDto.ProjectDto.ProjectCsprojName);
+                buildInfo.Add("iisSiteName", iisSiteName);
+                buildInfo.Add("pkgDir", packagDir);
+                buildInfo.Add("msDeployUrl", "https://" + deployIP + ":8172/msdeploy.axd");
+                buildInfo.Add("useConfig", "Release");
+                buildInfo.Add("Target", target);
+                buildInfo.Add("mergeFromBranch", taskDto.Branch);
+                var buildRequst = new TriggerRequest()
+                {
+                    token = trigger.token,
+                    @ref = _ref,
+                    variables = buildInfo
+                };
+
+                var triggerId =gitLabApi.Post<TriggerRequest, TriggerResponse>(
+                        string.Format("projects/{0}/trigger/builds?private_token={1}", taskDto.ProjectDto.RepoId, gitlabToken),buildRequst).id;
+
+
                 using (var dbScope = _dbScopeFactory.Create())
                 {
                     var db = dbScope.DbContexts.Get<FireProjDbContext>();
                     var entity = db.TaskInfo.FirstOrDefault(r => r.Id == taskId);
-                   
                     //更改任务记录
                     switch (deployStage)
                     {
@@ -384,7 +460,33 @@ namespace Uoko.FireProj.Concretes
                             break;
                     }
                     entity.ModifyId = 2;
-                    entity.ModifyDate = DateTime.Now;                   
+                    entity.ModifyDate = DateTime.Now;
+
+                    #region 写日志
+                    var log = new TaskLogs
+                    {
+                        TaskId = entity.Id,
+                        LogType = LogType.Deploy,
+                        Stage = deployStage,
+                        TriggeredId = triggerId,
+                        CreateDate = DateTime.Now,
+                        CreatorId = 0,
+                    };
+                    switch (deployStage)
+                    {
+                        case StageEnum.IOC:
+                            log.DeployInfo = entity.DeployInfoIocJson;
+                            break;
+                        case StageEnum.PRE:
+                            log.DeployInfo = entity.DeployInfoPreJson;
+                            break;
+                        case StageEnum.PRODUCTION:
+                            log.DeployInfo = entity.DeployInfoOnlineJson;
+                            break;
+                    }
+                    db.TaskLogs.Add(log); 
+                    #endregion
+
                     db.SaveChanges();
                     return entity;
                 }
@@ -432,8 +534,8 @@ namespace Uoko.FireProj.Concretes
                     entity.ModifyId = 0;
                     entity.ModifierName = "系统";
                     entity.ModifyDate = DateTime.Now;
-                    db.SaveChanges();
 
+                    #region MyRegion
                     //创建日志
                     var log = new TaskLogs
                     {
@@ -441,9 +543,9 @@ namespace Uoko.FireProj.Concretes
                         LogType = LogType.Deploy,
                         Stage = taskLog.Stage,
                         TriggeredId = triggerId,
-                        CreateDate= DateTime.Now,
-                        CreatorId=0,
-                        CreatorName="系统"
+                        CreateDate = DateTime.Now,
+                        CreatorId = 0,
+                        CreatorName = "系统"
                     };
                     switch (taskLog.Stage)
                     {
@@ -457,7 +559,14 @@ namespace Uoko.FireProj.Concretes
                             log.DeployInfo = entity.DeployInfoOnlineJson;
                             break;
                     }
-                    db.TaskLogs.Add(log);
+                    var tTasklogs = db.TaskLogs.Count(t => t.TriggeredId == triggerId);
+                    if (tTasklogs < 2)//避免重复
+                    {
+                         db.TaskLogs.Add(log);  
+                    }
+                  
+                    #endregion
+
                     db.SaveChanges();
                     return entity;
                 }

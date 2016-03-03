@@ -91,6 +91,9 @@
     <Compile Include="FluentAPI\TaskLogsMap.cs" />
     <Compile Include="FluentAPI\TaskInfoMap.cs" />
     <Compile Include="Gitlab\BuildHookRequest.cs" />
+    <Compile Include="Gitlab\TriggerResponse.cs" />
+    <Compile Include="Gitlab\TriggerRequest.cs" />
+    <Compile Include="Gitlab\Trigger.cs" />
     <Compile Include="Migrations\201601140333406_addproject.cs" />
     <Compile Include="Migrations\201601140333406_addproject.Designer.cs">
       <DependentUpon>201601140333406_addproject.cs</DependentUpon>

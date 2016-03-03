@@ -92,32 +92,9 @@
         }
 
         TaskService.UpdateTask(taskForSave, function (data) {
-            var taskId = data;
-            //发起部署任务                            
-
-            var buildInfo = {
-                RepoId: project.RepoId,
-                Branch: $scope.taskInfo.Branch,
-                DeployIP: server.IP,
-                ProjectSlnName: project.ProjectSlnName,
-                ProjectCsprojName: project.ProjectCsprojName,
-                SiteName: domainInfo.SiteName,
-                PackageDir: server.PackageDir
-            }
-            if (taskForSave.DeployStage == 0) {
-                buildInfo.Target = "Deploy-To-IOC";
-            } else if (taskForSave.DeployStage == 1) {
-                buildInfo.Target = "Deploy-To-PRE";
-            }
-            CommonService.TriggerBuild(buildInfo, function (data) {
-                var triggerId = data.id;
-                //发起部署后更新数据库状态
-                TaskService.BeginDeploy(taskId, $scope.taskInfo.DeployStage, triggerId, function (data) {
-                    bootbox.alert("任务创建成功并发起部署...", function (data) {
-                        location.href = "/Task/Index";
-                    });
-
-                });
+            bootbox.alert("成功发起部署...", function (data) {
+                $uibModalInstance.close();
+                window.location.reload();
             });
         });
     }
