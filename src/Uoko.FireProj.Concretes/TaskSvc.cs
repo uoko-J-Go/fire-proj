@@ -398,7 +398,10 @@ namespace Uoko.FireProj.Concretes
                                 t.DeployInfoIocJson,
                                 t.DeployInfoPreJson,
                                 t.DeployInfoOnlineJson,
-                                t.HasOnlineDeployed
+                                t.HasOnlineDeployed,
+                                t.ModifyId,
+                                t.ModifierName,
+                                t.ModifyDate
                             });
                     //创建日志
                     var log = new TaskLogs
