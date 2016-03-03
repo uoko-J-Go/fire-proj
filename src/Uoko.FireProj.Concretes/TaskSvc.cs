@@ -403,6 +403,8 @@ namespace Uoko.FireProj.Concretes
                                 t.ModifierName,
                                 t.ModifyDate
                             });
+                    db.SaveChanges();
+
                     //创建日志
                     var log = new TaskLogs
                     {
