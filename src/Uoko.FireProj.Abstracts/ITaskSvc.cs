@@ -20,7 +20,7 @@ namespace Uoko.FireProj.Abstracts
         int CreatTask(TaskWriteDto task);
 
         /// <summary>
-        /// 任务编辑
+        /// 任务更新
         /// </summary>
         /// <param name="task"></param>
         void UpdateTask(TaskWriteDto task);

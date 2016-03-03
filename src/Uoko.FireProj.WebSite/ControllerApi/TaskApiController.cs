@@ -43,7 +43,7 @@ namespace Uoko.FireProj.WebSite.ControllerApi
         public IHttpActionResult Update([FromBody]TaskWriteDto task)
         {
             _taskSvc.UpdateTask(task);
-            return Ok();
+            return Ok(task.Id);
         }
 
         [Route("Create")]
@@ -90,14 +90,14 @@ namespace Uoko.FireProj.WebSite.ControllerApi
         {
             var task= _taskSvc.GetTaskById(taskId);
             _taskSvc.UpdateTaskStatus(new TaskDto() { Id = task.Id, DeployStatus = DeployStatus.Deploying });
-            _taskLogsSvc.CreatTaskLogs(new TaskLogsDto()
-            {
-                TaskId = taskId,
-                //TriggeredId = triggerId,
-                //CreateBy = 1,
-                //Stage= task.DeployStage,
+            //_taskLogsSvc.CreatTaskLogs(new TaskLogsDto()
+            //{
+            //    TaskId = taskId,
+            //    //TriggeredId = triggerId,
+            //    //CreateBy = 1,
+            //    //Stage= task.DeployStage,
                 
-            });
+            //});
             return Ok();
         }
 

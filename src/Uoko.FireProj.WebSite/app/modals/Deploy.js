@@ -73,7 +73,7 @@
             Branch: $scope.taskInfo.Branch,
             ProjectId: project.ProjectId,
             DeployStage: $scope.taskInfo.DeployStage,
-            Id: param.taskId,
+            Id:param.taskId,
         }
         if (taskForSave.DeployStage == 0) {
             taskForSave.IocDeployInfo = $scope.taskInfo.DeployInfo;
@@ -91,7 +91,7 @@
             taskForSave.PreDeployInfo.NoticeUserId = noticeUserIds.join(",");
         }
 
-        TaskService.CreateTask(taskForSave, function (data) {
+        TaskService.UpdateTask(taskForSave, function (data) {
             var taskId = data;
             //发起部署任务                            
 
@@ -127,6 +127,9 @@
     $scope.GetDomain = function (server) {
         if (typeof server == "string") {
             server = JSON.parse(server);
+        }
+        if (server == undefined) {
+            server = { Id: 0 };
         }
         TaskService.GetDomain(param.ProjectId, server.Id, function (data) {
             $scope.DomainList = data;

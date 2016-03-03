@@ -95,28 +95,83 @@ namespace Uoko.FireProj.Concretes
         /// 应该是根据部署情况，更新部署信息
         /// </summary>
         /// <param name="task"></param>
-        public void UpdateTask(TaskWriteDto task)
+        public void UpdateTask(TaskWriteDto taskDto)
         {
-            //try
-            //{
-            //    var entity = Mapper.Map<TaskDto, TaskInfo>(task);
-            //    entity.ProjectId = task.Project.Id;
-            //    entity.CheckUserId = string.Join(",", task.CheckUsers.Select(t => t.Id));
-            //    entity.NoticeUserId = string.Join(",", task.NoticeUsers.Select(t => t.Id));
-            //    entity.ModifyBy = 1;
-            //    entity.ModifyDate = DateTime.Now;
-            //    using (var dbScope = _dbScopeFactory.Create())
-            //    {
-            //        var db = dbScope.DbContexts.Get<FireProjDbContext>();
-            //        //根据实际情况修改
-            //        db.Update(entity, t => new { t.TaskName,t.ProjectId, t.Branch, t.DeployEnvironment, t.DeployIP,t.SiteName,t.DeployAddress,t.TaskDesc,t.CheckUserId,t.NoticeUserId,t.Status,t.ModifyBy,t.ModifyDate });
-            //        db.SaveChanges();
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    throw new TipInfoException(ex.Message);
-            //}
+            using (var dbScope = _dbScopeFactory.Create())
+            {
+                var db = dbScope.DbContexts.Get<FireProjDbContext>();
+
+                var taskInfo = db.TaskInfo.FirstOrDefault(r => r.Id == taskDto.Id);
+
+                taskInfo.Branch = taskDto.Branch;
+
+                taskInfo.ModifyId = 1;
+                taskInfo.ModifyDate = DateTime.Now;
+
+                var domain = string.Empty;
+
+                switch (taskDto.DeployStage)
+                {
+                    case StageEnum.IOC:
+                        if (!string.IsNullOrEmpty(taskDto.IocDeployInfo.CheckUserId))
+                        {
+                            var userIds = taskDto.IocDeployInfo.CheckUserId.Split(',');
+                            var userIdsStatus = userIds.Select(userId => string.Format("{0}-{1}", userId, (int)QAStatus.Waiting)).ToList();
+                            taskInfo.IocCheckUserId = taskDto.IocDeployInfo.CheckUserId = string.Join(",", userIdsStatus);
+                        }
+                        domain = taskDto.IocDeployInfo.Domain;
+                        taskDto.IocDeployInfo.DeployStage = taskDto.DeployStage;
+                        taskDto.IocDeployInfo.DeployAddress = string.Format("https://{0}:8172/msdeploy.axd", taskDto.IocDeployInfo.DeployIP);
+                        taskDto.IocDeployInfo.DeployStatus = DeployStatus.Deploying;
+                        taskInfo.DeployInfoIocJson = JsonHelper.ToJson(taskDto.IocDeployInfo);
+                        break;
+                    case StageEnum.PRE:
+                        if (!string.IsNullOrEmpty(taskDto.PreDeployInfo.CheckUserId))
+                        {
+                            var userIds = taskDto.PreDeployInfo.CheckUserId.Split(',');
+                            var userIdsStatus = userIds.Select(userId => string.Format("{0}-{1}", userId, (int)QAStatus.Waiting)).ToList();
+                            taskInfo.PreCheckUserId = taskDto.PreDeployInfo.CheckUserId = string.Join(",", userIdsStatus);
+                        }
+                        domain = taskDto.PreDeployInfo.Domain;
+                        taskDto.PreDeployInfo.DeployStage = taskDto.DeployStage;
+                        taskDto.PreDeployInfo.DeployAddress = string.Format("https://{0}:8172/msdeploy.axd", taskDto.PreDeployInfo.DeployIP);
+                        taskDto.PreDeployInfo.DeployStatus = DeployStatus.Deploying;
+                        taskInfo.DeployInfoPreJson = JsonHelper.ToJson(taskDto.PreDeployInfo);
+                        break;
+                    default:
+                        throw new NotSupportedException("暂不支持其他阶段");
+                }
+
+
+                //更新域名资源使用:根据环境直接更新本次占用,同时清空上次IOC环境占用的
+               
+                //更新本次占用
+                var resourceInfo = db.DomainResource.FirstOrDefault(r => r.ProjectId == taskDto.ProjectId && r.Name == domain);
+                resourceInfo.TaskId = taskDto.Id;
+
+                //清空上次占用
+                var lastTaskLogs = db.TaskLogs.OrderByDescending(r => r.CreateDate).FirstOrDefault(r => r.TaskId == taskDto.Id && r.Stage == taskDto.DeployStage);
+                string lastDomain = string.Empty;
+                switch (taskDto.DeployStage)
+                {
+                    case StageEnum.IOC:
+                        lastDomain = JsonHelper.FromJson<DeployInfoIocDto>(lastTaskLogs.DeployInfo).Domain;
+                        break;
+                    case StageEnum.PRE:
+                        lastDomain = JsonHelper.FromJson<DeployInfoPreDto>(lastTaskLogs.DeployInfo).Domain;
+                        break;
+                    default:
+                        break;
+                }
+                var lastResourceInfo = db.DomainResource.FirstOrDefault(r => r.ProjectId == taskDto.ProjectId && r.Name == lastDomain);
+                if (lastResourceInfo != null && lastDomain != domain)
+                {
+                    lastResourceInfo.TaskId = 0;
+                }
+
+                db.SaveChanges();
+            }
+           
         }
         public void DeleteTask(int taskId)
         {
