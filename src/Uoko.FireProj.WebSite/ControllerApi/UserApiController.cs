@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using Uoko.FireProj.DataAccess.Dto;
 using Uoko.FireProj.Infrastructure.Data;
 
 namespace Uoko.FireProj.WebSite.ControllerApi
@@ -13,13 +14,8 @@ namespace Uoko.FireProj.WebSite.ControllerApi
     {
         public IHttpActionResult Get()
         {
-            var result = new WebApiProvider().GetAsync("http://api.systemset.uoko.pre/api/UserOld/10000/9/ByCompanyDepId").Result;
-            if (result.IsSuccessStatusCode)
-            {
-                var user = result.Content.ReadAsAsync<dynamic>().Result;
-                return Ok(user.dataList);
-            }
-            return Ok();
+            var result = new WebApiProvider().Get<List<UserDto>>("http://api.systemset.uoko.pre/api/UserOld/10000/9/ByCompanyDepId");
+            return Ok(result);
         }
     }
 }

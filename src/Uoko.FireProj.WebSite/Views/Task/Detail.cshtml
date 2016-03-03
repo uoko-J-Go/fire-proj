@@ -120,7 +120,7 @@
                                 <div class="col-md-10">
                                     <div class="portlet-body">
                                         <a href="javascript:;" class="icon-btn blue" ng-repeat="checkUser in model.DeployInfoIocDto.CheckUser">
-                                            <div> {{checkUser.Id}}</div>
+                                            <div> {{checkUser.NickName}}</div>
                                             <span ng-show="checkUser.QAStatus==0" class="badge badge-default">{{checkUser.QAStatus|QAStatusFilter}}</span>
                                             <span ng-show="checkUser.QAStatus==1" class="badge badge-danger"> {{checkUser.QAStatus|QAStatusFilter}}</span>
                                             <span ng-show="checkUser.QAStatus==2" class="badge badge-success">{{checkUser.QAStatus|QAStatusFilter}}</span>
@@ -346,7 +346,7 @@
                                         </div>
                                         <!--测试-->
                                         <div ng-show="item.LogType==1">
-                                            <h2>测试状态 ==> {{item.DeployInfoIocDto.DeployStatus|DeployStatusFilter}}</h2>
+                                            <h2>测试状态 ==> {{(item.DeployInfoIocDto.DeployStatus|DeployStatusFilter).Title}}</h2>
                                             <div class="timeline-footer" ng-show="item.DeployStatus==4">
                                                 <span class="nav-link pull-right">
 

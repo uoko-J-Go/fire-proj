@@ -33,7 +33,7 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
     }
     $scope.loadTags = function (query) {
         var result = $scope.AllUsers.filter(function(user) {
-            return (user.name.toLowerCase().indexOf(query.toLowerCase()) != -1) || (user.username.toLowerCase().indexOf(query.toLowerCase()) != -1);
+            return (user.NickName.toLowerCase().indexOf(query.toLowerCase()) != -1) || (user.LoginName.toLowerCase().indexOf(query.toLowerCase()) != -1);
         });
         return result;
     }
@@ -63,12 +63,12 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
         var noticeUserIds = [];
         if ($scope.taskInfo.CheckUsers != null && $scope.taskInfo.CheckUsers.length > 0) {
             $.each($scope.taskInfo.CheckUsers, function (i, item) {
-                checkUserIds.push(item.id);
+                checkUserIds.push(item.UserId);
             });
         }
         if ($scope.taskInfo.NoticeUsers != null && $scope.taskInfo.NoticeUsers.length > 0) {
             $.each($scope.taskInfo.NoticeUsers, function (i, item) {
-                noticeUserIds.push(item.id);
+                noticeUserIds.push(item.UserId);
             });
         }
         

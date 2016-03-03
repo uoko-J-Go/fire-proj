@@ -15,6 +15,12 @@ namespace Uoko.FireProj.DataAccess.Dto
 
         public string Email { get; set; }
 
+        public string NickName { get; set; }
+
+        public string LoginName { get; set; }
+
+        public string UserId { get; set; }
+
         /// <summary>
         /// 测试状态
         /// </summary>
