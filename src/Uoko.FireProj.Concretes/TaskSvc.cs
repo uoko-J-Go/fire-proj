@@ -388,7 +388,9 @@ namespace Uoko.FireProj.Concretes
                         case StageEnum.PRODUCTION:
                             break;
                     }
-
+                    entity.ModifyId = 0;
+                    entity.ModifierName = "系统";
+                    entity.ModifyDate = DateTime.Now;
                     db.Update(entity,
                         t =>
                             new
@@ -396,7 +398,10 @@ namespace Uoko.FireProj.Concretes
                                 t.DeployInfoIocJson,
                                 t.DeployInfoPreJson,
                                 t.DeployInfoOnlineJson,
-                                t.HasOnlineDeployed
+                                t.HasOnlineDeployed,
+                                t.ModifyId,
+                                t.ModifierName,
+                                t.ModifyDate
                             });
                     //创建日志
                     var log = new TaskLogs
@@ -404,7 +409,10 @@ namespace Uoko.FireProj.Concretes
                         TaskId = taskLog.TaskId,
                         LogType = LogType.Deploy,
                         Stage = taskLog.Stage,
-                        TriggeredId = triggerId
+                        TriggeredId = triggerId,
+                        CreateDate= DateTime.Now,
+                        CreatorId=0,
+                        CreatorName="系统"
                     };
                     switch (taskLog.Stage)
                     {
@@ -418,6 +426,7 @@ namespace Uoko.FireProj.Concretes
                             log.DeployInfo = entity.DeployInfoOnlineJson;
                             break;
                     }
+                    db.TaskLogs.Add(log);
                     db.SaveChanges();
                     return entity;
                 }
