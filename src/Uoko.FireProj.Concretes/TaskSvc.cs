@@ -385,20 +385,7 @@ namespace Uoko.FireProj.Concretes
                             break;
                     }
                     entity.ModifyId = 2;
-                    entity.ModifyDate = DateTime.Now;
-                    db.Update(entity,
-                        t =>
-                            new
-                            {
-                                t.DeployInfoIocJson,
-                                t.DeployInfoPreJson,
-                                t.DeployInfoOnlineJson,
-                                t.HasOnlineDeployed,
-                                t.ModifyId,
-                                t.ModifierName,
-                                t.ModifyDate
-                            });
-                   
+                    entity.ModifyDate = DateTime.Now;                   
                     db.SaveChanges();
                     return entity;
                 }
@@ -446,18 +433,8 @@ namespace Uoko.FireProj.Concretes
                     entity.ModifyId = 0;
                     entity.ModifierName = "系统";
                     entity.ModifyDate = DateTime.Now;
-                    db.Update(entity,
-                        t =>
-                            new
-                            {
-                                t.DeployInfoIocJson,
-                                t.DeployInfoPreJson,
-                                t.DeployInfoOnlineJson,
-                                t.HasOnlineDeployed,
-                                t.ModifyId,
-                                t.ModifierName,
-                                t.ModifyDate
-                            });
+                    db.SaveChanges();
+
                     //创建日志
                     var log = new TaskLogs
                     {
