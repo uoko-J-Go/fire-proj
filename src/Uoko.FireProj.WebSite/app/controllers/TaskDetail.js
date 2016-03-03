@@ -6,9 +6,11 @@
             $scope.model = data;
             $scope.param = {
                 "taskId": taskId,
-                "ProjectId": data.ProjectId,
-                "RepoId": data.RepoId,
+                "ProjectId": data.ProjectDto.Id,
+                "RepoId": data.ProjectDto.RepoId,
                 "Branch": data.Branch,
+                "ProjectSlnName": data.ProjectSlnName,
+                "ProjectCsprojName": data.ProjectCsprojName
             };
         });
     }

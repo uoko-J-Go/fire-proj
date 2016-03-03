@@ -19,19 +19,9 @@ namespace Uoko.FireProj.DataAccess.Dto
         public string TaskName { get; set; }
 
         /// <summary>
-        /// 项目Id
+        /// 项目信息
         /// </summary>
-        public int ProjectId { get; set; }
-
-        /// <summary>
-        /// 项目名称
-        /// </summary>
-        public string ProjectName { get; set; }
-
-        /// <summary>
-        /// gitlab项目的id
-        /// </summary>
-        public int RepoId { get; set; }
+        public ProjectDto ProjectDto { get; set; }
 
         /// <summary>
         /// 代码分支

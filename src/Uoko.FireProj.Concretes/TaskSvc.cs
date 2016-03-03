@@ -148,9 +148,9 @@ namespace Uoko.FireProj.Concretes
                 var taskDto = Mapper.Map<TaskInfo, TaskDetailDto>(entity);
 
                 //项目信息
-                var projectInfo= db.Project.FirstOrDefault(r => r.Id == taskDto.ProjectId);
-                taskDto.ProjectName = projectInfo.ProjectName;
-                taskDto.RepoId = projectInfo.RepoId;
+                var projectEntity = db.Project.FirstOrDefault(r => r.Id == entity.ProjectId);
+                taskDto.ProjectDto= Mapper.Map<Project, ProjectDto>(projectEntity);
+
 
                 taskDto.DeployInfoIocDto = !taskDto.DeployInfoIocJson.IsNullOrEmpty() ? JsonHelper.FromJson<DeployInfoIocDto>(taskDto.DeployInfoIocJson) : new DeployInfoIocDto();
                 taskDto.DeployInfoPreDto = !taskDto.DeployInfoPreJson.IsNullOrEmpty() ? JsonHelper.FromJson<DeployInfoPreDto>(taskDto.DeployInfoPreJson) : new DeployInfoPreDto();

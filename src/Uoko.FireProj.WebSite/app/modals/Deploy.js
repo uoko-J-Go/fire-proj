@@ -45,10 +45,8 @@
             bootbox.alert("表单验证未通过");
             return;
         }
-        var project = $scope.taskInfo.Project;
-        if (typeof project == "string") {
-            project = JSON.parse(project);
-        }
+        var project = param;//任务详情页传递过来的参数
+       
         var server = $scope.taskInfo.Server;
         if (typeof server == "string") {
             server = JSON.parse(server);
@@ -73,8 +71,9 @@
         var taskForSave = {
             TaskName: $scope.taskInfo.TaskName,
             Branch: $scope.taskInfo.Branch,
-            ProjectId: project.Id,
-            DeployStage: $scope.taskInfo.DeployStage
+            ProjectId: project.ProjectId,
+            DeployStage: $scope.taskInfo.DeployStage,
+            Id: param.taskId,
         }
         if (taskForSave.DeployStage == 0) {
             taskForSave.IocDeployInfo = $scope.taskInfo.DeployInfo;

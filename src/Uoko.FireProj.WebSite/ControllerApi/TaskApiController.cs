@@ -8,7 +8,6 @@ using System.Text;
 using System.Web.Http;
 using Uoko.FireProj.Abstracts;
 using Uoko.FireProj.DataAccess.Dto;
-using Uoko.FireProj.DataAccess.Entity;
 using Uoko.FireProj.DataAccess.Enum;
 using Uoko.FireProj.DataAccess.Query;
 
@@ -51,8 +50,8 @@ namespace Uoko.FireProj.WebSite.ControllerApi
         [HttpPost]
         public IHttpActionResult Create([FromBody]TaskWriteDto task)
         {
-            //var taskId=_taskSvc.CreatTask(task);
-            return Ok();
+            var taskId=_taskSvc.CreatTask(task);
+            return Ok(taskId);
         }
 
         /// <summary>
@@ -87,30 +86,18 @@ namespace Uoko.FireProj.WebSite.ControllerApi
         /// <returns></returns>
         [Route("BeginDeploy")]
         [HttpPost]
-        public IHttpActionResult BeginDeploy(int taskId,StageEnum deployStage, int triggerId)
+        public IHttpActionResult BeginDeploy(int taskId,int triggerId)
         {
-           var taskInfo=_taskSvc.BeginDeploy(taskId, deployStage, triggerId);
-            //创建日志
-            var log = new TaskLogs
+            var task= _taskSvc.GetTaskById(taskId);
+            _taskSvc.UpdateTaskStatus(new TaskDto() { Id = task.Id, DeployStatus = DeployStatus.Deploying });
+            _taskLogsSvc.CreatTaskLogs(new TaskLogsDto()
             {
-                TaskId = taskInfo.Id,
-                LogType = LogType.Deploy,
-                Stage = deployStage,
-                TriggeredId= triggerId
-            };
-            switch (deployStage)
-            {
-                case StageEnum.IOC:
-                    log.DeployInfo = taskInfo.DeployInfoIocJson;
-                    break;
-                case StageEnum.PRE:
-                    log.DeployInfo = taskInfo.DeployInfoPreJson;
-                    break;
-                case StageEnum.PRODUCTION:
-                    log.DeployInfo = taskInfo.DeployInfoOnlineJson;
-                    break;
-            }
-            _taskLogsSvc.CreateTaskLogs(log);
+                TaskId = taskId,
+                //TriggeredId = triggerId,
+                //CreateBy = 1,
+                //Stage= task.DeployStage,
+                
+            });
             return Ok();
         }
 
