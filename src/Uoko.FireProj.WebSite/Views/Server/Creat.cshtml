@@ -17,7 +17,7 @@
                     <i class="fa fa-angle-right"></i>
                 </li>
                 <li>
-                    <a href="@Url.Action("Index","Project")">服务器管理</a>
+                    <a href="@Url.Action("ServerMgmt","SystemSet")">服务器管理</a>
                     <i class="fa fa-angle-right"></i>
                 </li>
                 <li>
@@ -64,8 +64,8 @@
                                 <div class="form-group form-md-line-input">
                                     <label class="col-md-2 control-label" for="form_control_1">环境</label>
                                     <div class="col-md-10">
-                                        <select name="deployenvironment" class="form-control" ng-model="model.EnvironmentType" required>
-                                            <option ng-repeat="environment in environmentList" value="{{environment.Id}}" ng-selected="environment.Id==taskInfo.DeployEnvironment">{{environment.Name}}</option>
+                                        <select name="deployenvironment" class="form-control" ng-model="model.StageType" required>
+                                            <option ng-repeat="environment in environmentList" value="{{environment.Id}}" >{{environment.Name}}</option>
                                         </select>
                                         <div class="form-control-focus">
                                         </div>

@@ -128,6 +128,7 @@ namespace Uoko.FireProj.Concretes
                     IP = t.IP,
                     ServerDesc = t.ServerDesc,
                     PackageDir = t.PackageDir,
+                    StageType = t.StageType,
                 });
                 if (query.StageType.HasValue)
                 {
@@ -174,6 +175,7 @@ namespace Uoko.FireProj.Concretes
                     IP = t.IP,
                     ServerDesc = t.ServerDesc,
                     PackageDir = t.PackageDir,
+                    StageType = t.StageType,
                 }).FirstOrDefault(t => t.Id == serverId);
                 data.IISData = db.DomainResource.Where(r => r.ServerId == serverId).Select(r => new DomainResourceDto {
                     Id = r.Id,

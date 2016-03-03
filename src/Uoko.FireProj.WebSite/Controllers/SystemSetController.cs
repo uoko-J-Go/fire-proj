@@ -26,10 +26,7 @@ namespace Uoko.FireProj.WebSite.Controllers
         {
             return View("~/Views/DomainResource/Index.cshtml");
         }
-        public ActionResult CreatDomain()
-        {
-            return View("~/Views/DomainResource/CreatDomain.cshtml");
-        }
+    
         #endregion
 
         #region 服务器管理
