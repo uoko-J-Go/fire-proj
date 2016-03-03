@@ -210,8 +210,8 @@
     <Content Include="app\global.js" />
     <Content Include="app\modals\Deploy.html" />
     <Content Include="app\modals\Deploy.js" />
-    <Content Include="app\modals\SelectUser.html" />
-    <Content Include="app\modals\SelectUser.js" />
+    <Content Include="app\modals\TestDailog.html" />
+    <Content Include="app\modals\TestDailog.js" />
     <Content Include="app\controllers\dictionaryForm.js" />
     <Content Include="app\controllers\dictionary.js" />
     <Content Include="app\controllers\Project.js" />

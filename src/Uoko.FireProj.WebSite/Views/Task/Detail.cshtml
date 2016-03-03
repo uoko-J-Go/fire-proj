@@ -45,7 +45,7 @@
                         <div class="form-group form-md-line-input">
                             <label class="col-md-2 control-label">项目</label>
                             <div class="col-md-10">
-                                <input disabled type="text" ng-model="model.ProjectName" class="form-control">
+                                <input disabled type="text" ng-model="model.ProjectDto.ProjectName" class="form-control">
                             </div>
                         </div>
                         <div class="form-group form-md-line-input">
@@ -68,7 +68,7 @@
                     <i class="fa fa-leaf"></i>环境信息
                 </div>
             </div>
-            <div class="portlet-body">
+            <div class="portlet-body form">
                 <ul class="nav nav-tabs">
                     <li ng-class="{'active':currLogTab==0}" ng-show="model.DeployInfoIocJson!=null" ng-click="GetCurrLog(0)">
                         <a href="#tab_1_1" data-toggle="tab">
@@ -89,7 +89,7 @@
                 <div class="tab-content">
                     <div class="tab-pane fade " ng-class="{'active in':currLogTab==0}" id="tab_1_1">
                         <!-- BEGIN IOC CONTENT-->
-                        <div>
+                        <div class="form">
                             <div class="form-group form-md-line-input">
                                 <label class="col-md-2 control-label">部署服务器IP</label>
                                 <div class="col-md-10">
@@ -147,6 +147,10 @@
                                         <textarea disabled ng-model="model.DeployInfoIocDto.TaskDesc"></textarea>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="form-actions right" ng-show="model.DeployInfoIocDto.DeployStatus==2">
+                                <button type="button" class="btn green"  ng-click="TestPassed(0)"><i class="fa fa-check"></i> 测试通过</button>
+                                <button type="button" class="btn red"   ng-click="TestFails(0)"><i class="fa fa-times"></i> 测试不通过</button>
                             </div>
                         </div>
                         <!-- END IOC CONTENT-->
@@ -212,6 +216,10 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="form-actions right" ng-show="model.DeployInfoPreDto.DeployStatus==2">
+                                <button type="button" class="btn green"  ng-click="TestPassed(1)"><i class="fa fa-check"></i> 测试通过</button>
+                                <button type="button" class="btn red"   ng-click="TestFails(1)"><i class="fa fa-times"></i> 测试不通过</button>
+                            </div>
                         </div>
                         <!-- END Pre CONTENT-->
                     </div>
@@ -276,17 +284,17 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="form-actions right" ng-show="model.DeployInfoOnlineDto.DeployStatus==2">
+                                <button type="button" class="btn green"  ng-click="TestPassed(2)"><i class="fa fa-check"></i> 测试通过</button>
+                                <button type="button" class="btn red"  ng-click="TestFails(2)"><i class="fa fa-times"></i> 测试不通过</button>
+                            </div>
                         </div>
                         <!-- END Online CONTENT-->
                     </div>
                 </div>
                 <!--操作按钮-->
                 <div class="form-actions right">
-
-                    <button type="button" class="btn blue" ng-click="Deploy()"><i class="fa fa-building-o"></i> 编译部署</button>
-                    <button type="button" class="btn blue" ng-show="taskInfo.Status==6" ng-click="CommitToTest()"><i class="fa fa-angle-up"></i> 提交测试</button>
-                    <button type="button" class="btn green" ng-show="taskInfo.Status==8" ng-click="Tested()"><i class="fa fa-check"></i> 测试通过</button>
-                    <button type="button" class="btn red" ng-show="taskInfo.Status==8" ng-click="TestFails()"><i class="fa fa-times"></i> 测试不通过</button>
+                    <button type="button" class="btn blue" ng-click="Deploy()"><i class="fa fa-building-o"></i> 部署到...</button>
                     <button type="button" class="btn default" ng-click="Cancel()">返回列表</button>
                 </div>
                 <!--操作按钮-->
@@ -375,5 +383,7 @@
     <script src="~/app/filters/CommonFilter.js"></script>
     <script src="~/app/controllers/TaskDetail.js"></script>
     <script src="~/app/modals/Deploy.js"></script>
+    <script src="~/app/modals/TestDailog.js"></script>
+    
 }
 

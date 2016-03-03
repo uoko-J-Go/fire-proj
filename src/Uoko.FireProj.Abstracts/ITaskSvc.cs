@@ -46,11 +46,6 @@ namespace Uoko.FireProj.Abstracts
         TaskDetailDto GetTaskById(int taskId);
 
         /// <summary>
-        /// 更新任务状态
-        /// </summary>
-        /// <param name="task"></param>
-        void UpdateTaskStatus(TaskDto task);
-        /// <summary>
         /// 开始部署
         /// </summary>
         /// <param name="taskId"></param>
@@ -66,5 +61,7 @@ namespace Uoko.FireProj.Abstracts
         /// <param name="deployStatus"></param>
         /// <returns></returns>
         TaskInfo DeployCallback( int triggerId,int buildId, DeployStatus deployStatus);
+
+        TaskInfo UpdateTestStatus(TestResultDto testResult);
     }
 }
