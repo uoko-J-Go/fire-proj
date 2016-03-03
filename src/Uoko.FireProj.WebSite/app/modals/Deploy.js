@@ -94,7 +94,7 @@
 
         TaskService.CreateTask(taskForSave, function (data) {
             var taskId = data;
-            //发起部署任务
+            //发起部署任务                            
 
             var buildInfo = {
                 RepoId: project.RepoId,
@@ -125,21 +125,13 @@
         });
     }
     //部署服务器change事件
-    $scope.GetDomain = function (project, server) {
-        if (typeof project == "string") {
-            project = JSON.parse(project);
-        }
+    $scope.GetDomain = function (server) {
         if (typeof server == "string") {
             server = JSON.parse(server);
         }
-        if (project != undefined && project != "") {
-            if (server == undefined) {
-                server = { Id: 0 };
-            }
-            TaskService.GetDomain(project.Id, server.Id, function (data) {
-                $scope.DomainList = data;
-            });
-        }
+        TaskService.GetDomain(param.ProjectId, server.Id, function (data) {
+            $scope.DomainList = data;
+        });
     }
     //根据项目Id或者分支列表
     $scope.getBranch = function (RepoId) {
@@ -154,7 +146,7 @@
         $scope.GetAllUser();
         $scope.getBranch(param.RepoId);
         $scope.$watch('taskInfo.Project + taskInfo.DeployEnvironment + taskInfo.Server', function () {
-            $scope.GetDomain($scope.taskInfo.Project, $scope.taskInfo.Server);
+            $scope.GetDomain($scope.taskInfo.Server);
         });
     }
 

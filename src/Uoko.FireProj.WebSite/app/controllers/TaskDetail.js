@@ -6,7 +6,7 @@
             $scope.model = data;
             $scope.param = {
                 "taskId": taskId,
-                "projectId": data.ProjectId,
+                "ProjectId": data.ProjectId,
                 "RepoId": data.RepoId,
                 "Branch": data.Branch,
             };

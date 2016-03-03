@@ -70,17 +70,17 @@
             </div>
             <div class="portlet-body">
                 <ul class="nav nav-tabs">
-                    <li ng-class="{'active':currLogTab==0}" ng-click="GetCurrLog(0)">
+                    <li ng-class="{'active':currLogTab==0}" ng-show="model.DeployInfoIocJson!=null" ng-click="GetCurrLog(0)">
                         <a href="#tab_1_1" data-toggle="tab">
                             IOC
                         </a>
                     </li>
-                    <li ng-class="{'active':currLogTab==1}" ng-click="GetCurrLog(1)">
+                    <li ng-class="{'active':currLogTab==1}" ng-show="model.DeployInfoPreJson!=null" ng-click="GetCurrLog(1)">
                         <a href="#tab_1_2" data-toggle="tab">
                             Pre
                         </a>
                     </li>
-                    <li ng-class="{'active':currLogTab==2}" ng-click="GetCurrLog(2)">
+                    <li ng-class="{'active':currLogTab==2}" ng-show="model.DeployInfoOnlineJson!=null" ng-click="GetCurrLog(2)">
                         <a href="#tab_1_3" data-toggle="tab">
                             Online
                         </a>

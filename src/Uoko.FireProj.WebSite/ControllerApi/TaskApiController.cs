@@ -51,8 +51,8 @@ namespace Uoko.FireProj.WebSite.ControllerApi
         [HttpPost]
         public IHttpActionResult Create([FromBody]TaskWriteDto task)
         {
-            var taskId=_taskSvc.CreatTask(task);
-            return Ok(taskId);
+            //var taskId=_taskSvc.CreatTask(task);
+            return Ok();
         }
 
         /// <summary>
