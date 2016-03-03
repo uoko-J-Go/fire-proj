@@ -182,6 +182,7 @@
     <Compile Include="ControllerApi\ServerApiController.cs" />
     <Compile Include="ControllerApi\TaskLogsApiController.cs" />
     <Compile Include="ControllerApi\TaskApiController.cs" />
+    <Compile Include="ControllerApi\UserApiController.cs" />
     <Compile Include="ControllerApi\WebHookApiController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\DictionaryController.cs" />

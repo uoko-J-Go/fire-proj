@@ -1,5 +1,6 @@
 ﻿fireproj.controller("DeployController", function ($scope, $http, $uibModalInstance, TaskService, ProjectService, CommonService, param) {
-    
+    $scope.isFirstLoad = true;
+    $scope.isFirstLoads = true;
     $scope.Project = null;//当前项目对象
     $scope.Server = null;//当前服务器对象
     $scope.Server = null;//当前服务器对象
@@ -18,6 +19,9 @@
     $scope.projectList = [];
     $scope.branchList = [];
 
+    
+
+
     TaskService.GetEnvironment(function (data) {
         $scope.environmentList = data.filter(function (env) {
             return env.Id != 2;
@@ -27,6 +31,7 @@
     $scope.GetAllUser = function () {
         CommonService.getAllUsers(function (data) {
             $scope.AllUsers = data;
+            $scope.GetUserName();
         });
     }
     $scope.loadTags = function (query) {
@@ -102,7 +107,34 @@
     //发布环境change事件,获取IOC环境的服务器List
     $scope.GetServerData = function (environmentId) {
         TaskService.GetResourceList(environmentId, function (data) {
+            var obj;
+            if (environmentId == 0) {
+                if (typeof param.DeployInfoIocJson == "string") {
+                     obj = JSON.parse(param.DeployInfoIocJson);
+                }
+            }
+            else {
+                if (typeof param.DeployInfoPreJson == "string") {
+                     obj = JSON.parse(param.DeployInfoPreJson);
+                }
+            }
+            if (obj != undefined) {
+                $scope.taskInfo.DeployIP = obj.DeployIP;
+                $scope.taskInfo.Domain = obj.Domain;
+                $scope.loadCheckUserList(obj.CheckUserId);
+                $scope.loadNoticeUserList(obj.NoticeUseId);
+            }
+            
             $scope.ServerList = data;
+            if ($scope.isFirstLoad) {
+                var _server = $scope.ServerList.filter(function (server) {
+                    return server.IP == $scope.taskInfo.DeployIP;
+                })[0];
+                $scope.taskInfo.Server = JSON.stringify(_server);
+                $scope.isFirstLoad = false;
+            }
+           
+            
         });
     }
     //部署服务器change事件
@@ -113,17 +145,74 @@
         if (server == undefined) {
             server = { Id: 0 };
         }
-        TaskService.GetDomain(param.ProjectId, server.Id,null, function (data) {
+        TaskService.GetDomain(param.ProjectId, server.Id, function (data) {
+            if ($scope.taskInfo.DeployStage == 0) {
+                if (typeof param.DeployInfoIocJson == "string") {
+                    $scope.taskInfo.Domain = JSON.parse(param.DeployInfoIocJson).Domain;
+                }
+            }
+            else {
+                if (typeof param.DeployInfoPreJson == "string") {
+                    $scope.taskInfo.Domain = JSON.parse(param.DeployInfoPreJson).Domain;
+                }
+            }
+
             $scope.DomainList = data;
+           // if ($scope.isFirstLoads) {
+                var _domain = $scope.DomainList.filter(function (server) {
+                    return server.Name == $scope.taskInfo.Domain;
+                })[0];
+                $scope.taskInfo.DomainInfo = JSON.stringify(_domain);
+                $scope.isFirstLoads = false;
+           // }
         });
     }
     //根据项目Id或者分支列表
     $scope.getBranch = function (RepoId) {
         CommonService.getProjectBranch(RepoId, function (data) {
             $scope.branchList = data;
+            $scope.taskInfo.Branch = param.Branch;
         });
     }
+    //根据选择环境,加载最新的通知,测试相关人
+    $scope.loadCheckUserList = function (userInfo) {
+        if (userInfo == undefined) {
+            return;
+        }
+        var data = userInfo.split(',');
+        var userData = new Array();
+        for (var i = 0; i < data.length; i++) {
+            var item = data[i].split('-');
+            userData.push({
+                id: item[0],
+                name: $scope.GetUserName(item[0]),
+            })
+        }
+        $scope.taskInfo.CheckUsers = userData;
+    }
+    $scope.loadNoticeUserList = function (userInfo) {
+        if (userInfo == undefined) {
+            return;
+        }
+        var userData = new Array();
+        var data = userInfo.split(',');
 
+        for (var i = 0; i < data.length; i++) {
+            userData.push({
+                id: data[0],
+                name: $scope.GetUserName(data[0]),
+            })
+        }
+        $scope.taskInfo.NoticeUsers = userData;
+    }
+    $scope.GetUserName = function (userId) {
+        var userData = $scope.AllUsers;
+        for (var i = 0; i < userData.length; i++) {
+            if (userId == userData[i].id) {
+                return userData[i].name;
+            }
+        }
+    };
 
     $scope.Init = function () {
         $scope.GetProjectList();

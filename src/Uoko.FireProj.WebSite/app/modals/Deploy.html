@@ -38,7 +38,7 @@
                     <label class="col-md-2 control-label">部署服务器</label>
                     <div class="col-md-10">
                         <select name="deployenvironment" class="form-control" ng-model="taskInfo.Server" required>
-                            <option ng-repeat="server in ServerList" value="{{server}}">{{server.Name}}</option>
+                            <option ng-repeat="server in ServerList" value="{{server}}" ng-selected="server.IP == taskInfo.DeployIP">{{server.Name}}</option>
                         </select>
                         <div ng-show="form.$submitted || form.deployenvironment.$touched">
                             <span class="error-msg" ng-show="form.deployenvironment.$error.required">部署服务器必选</span>
@@ -49,7 +49,7 @@
                     <label class="col-md-2 control-label">域名</label>
                     <div class="col-md-10">
                         <select name="domain" class="form-control" ng-model="taskInfo.DomainInfo" required>
-                            <option ng-repeat="domain in DomainList" value="{{domain}}">{{domain.Name}}</option>
+                            <option ng-repeat="domain in DomainList" value="{{domain}}" ng-selected="domain.Name==taskInfo.Domain">{{domain.Name}}</option>
                         </select>
                         <div ng-show="form.$submitted || form.domain.$touched">
                             <span class="error-msg" ng-show="form.domain.$error.required">域名必选.</span>
@@ -61,7 +61,7 @@
                     <div class="col-md-10">
                         <div class="form-control-wrap">
                             <tags-input ng-model="taskInfo.CheckUsers" placeholder="添加验收人员" display-property="name" add-from-autocomplete-only="true" minLength="1">
-                                <auto-complete source="loadTags($query)" load-on-focus="true" load-on-empty="true" minLength="0" max-results-to-show="32" template="my-custom-template"></auto-complete>
+                                <auto-complete  source="loadTags($query)" load-on-focus="true" load-on-empty="true" minLength="0" max-results-to-show="32" template="my-custom-template"></auto-complete>
                             </tags-input>
                         </div>
                     </div>

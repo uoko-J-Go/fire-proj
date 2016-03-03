@@ -173,20 +173,6 @@ namespace Uoko.FireProj.Concretes
                 {
                     lastResourceInfo.TaskId = 0;
                 }
-
-                //存储历史记录
-                TaskLogs taskLogs = new TaskLogs()
-                {
-                    CreateDate = DateTime.Now,
-                    CreatorId = 1,
-                    CreatorName = "庆攀",
-                    DeployInfo = DeployInfo,
-                    LogType = LogType.Deploy,
-                    Stage = taskDto.DeployStage,
-                    TaskId = taskDto.Id,
-                };
-                db.TaskLogs.Add(taskLogs);
-                
                 db.SaveChanges();
             }
            

@@ -11,7 +11,8 @@
         });
     };
     this.getAllUsers = function (successCallBack) {
-        $http.get("http://gitlab.uoko.ioc:12015/api/v3/users?private_token=D3MR_rnRZK4xWS-CtVho").success(function (data) {
+        //$http.get("http://gitlab.uoko.ioc:12015/api/v3/users?private_token=D3MR_rnRZK4xWS-CtVho").success(function (data) {
+        $http.get("/api/UserApi").success(function (data) {
             if (successCallBack != undefined) {
                 successCallBack(data);
             }
@@ -64,5 +65,51 @@
 
         });
        
+    };
+
+    //根据选择环境,加载最新的通知,测试相关人
+    this.loadCheckUserList = function (userInfo,successCallBack) {
+        if (userInfo == undefined) {
+            return;
+        }
+        var data = userInfo.split(',');
+        var userData = new Array();
+        for (var i = 0; i < data.length; i++) {
+            var item = data[i].split('-');
+            userData.push({
+                UserId: item[0],
+                NickName: GetUserName(item[0]),
+            })
+        }
+        if (successCallBack != undefined) {
+            successCallBack(data);
+        }
+        //$scope.taskInfo.CheckUsers = userData;
+    }
+    this.loadNoticeUserList = function (userInfo, successCallBack) {
+        if (userInfo == undefined) {
+            return;
+        }
+        var userData = new Array();
+        var data = userInfo.split(',');
+
+        for (var i = 0; i < data.length; i++) {
+            userData.push({
+                UserId: data[0],
+                NickName: GetUserName(data[0]),
+            })
+        }
+        if (successCallBack != undefined) {
+            successCallBack(data);
+        }
+        //$scope.taskInfo.NoticeUsers = userData;
+    }
+    this.GetUserName = function (userId) {
+        var userData = AllUsers();
+        for (var i = 0; i < userData.length; i++) {
+            if (userId == userData[i].UserId) {
+                return userData[i].NickName;
+            }
+        }
     };
 });
