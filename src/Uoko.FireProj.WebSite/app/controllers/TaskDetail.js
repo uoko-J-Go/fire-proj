@@ -73,6 +73,10 @@
             }
         });
     }
+    $scope.GotoGitLabBuildPage=function(buildId) {
+        var url = $scope.model.ProjectDto.ProjectRepo.replace(".git","") + "/builds/" + buildId;
+        window.open(url, "_blank");
+    }
     $scope.Cancel = function () {
         location.href = "/Task/Index";
     }
