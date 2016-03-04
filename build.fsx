@@ -60,13 +60,14 @@ let deploy() =
 
 
 let ensureOnBranch branchNeeded =
+    gitCommand null (sprintf "checkout %s"  branchNeeded)
     let branchName = getBranchName null
     if branchName <> branchNeeded then failwithf "you need do this only on [%s] branch,but now you are on [%s]" branchNeeded branchName
         
 let ffMergeAndDeploy onBranch =
     let mergeFromBranch = getBuildParamEnsure "mergeFromBranch"
 
-    merge null "--ff-only" mergeFromBranch
+    merge null "--ff-only" ("origin/" + mergeFromBranch)
 
     if onBranch = "master" then
         let onlineDate = System.DateTime.Today.Date.ToString("yyyy-MM-dd")
@@ -134,8 +135,7 @@ Target "BuildSolution" (fun _ ->
 )
 
 Target "test" (fun _ ->
-    let branchName = getBranchName null
-    Console.WriteLine(branchName)
+    ensureOnBranch "pre"    
 )
 
 "BuildSolution"
