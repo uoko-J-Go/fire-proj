@@ -331,28 +331,33 @@
                                         <!--开发-->
                                         <div ng-show="item.LogType==0">
                                             <h2>
-                                                部署状态 ==> {{(item.DeployInfoIocDto.DeployStatus|DeployStatusFilter).Title}}
-
                                                 <span class="nav-link pull" ng-show="item.Stage==0">
-                                                    <a class="text-danger" href="javascript:;" ng-click="GotoGitLabBuildPage(item.DeployInfoIocDto.BuildId)"><i class="m-icon-swapright m-icon-white"></i></a>
+                                                    部署状态 ==> {{(item.DeployInfoIocDto.DeployStatus|DeployStatusFilter).Title}}
+                                                    <a ng-show="item.DeployInfoIocDto.DeployStatus!=0" class="text-danger" href="javascript:;" ng-click="GotoGitLabBuildPage(item.DeployInfoIocDto.BuildId)"><i class="m-icon-swapright m-icon-white"></i></a>
                                                 </span>
                                                 <span class="nav-link pull" ng-show="item.Stage==1">
-                                                    <a class="text-danger" href="javascript:;" ng-click="GotoGitLabBuildPage(item.DeployInfoPreDto.BuildId)">详情<i class="m-icon-swapright m-icon-white"></i></a>
+                                                    部署状态 ==> {{(item.DeployInfoPreDto.DeployStatus|DeployStatusFilter).Title}}
+                                                    <a ng-show="item.DeployInfoPreDto.DeployStatus!=0" class="text-danger" href="javascript:;" ng-click="GotoGitLabBuildPage(item.DeployInfoPreDto.BuildId)"><i class="m-icon-swapright m-icon-white"></i></a>
                                                 </span>
                                                 <span class="nav-link pull" ng-show="item.Stage==2">
-                                                    <a class="text-danger" href="javascript:;" ng-click="GotoGitLabBuildPage(item.DeployInfoOnlineDto.BuildId)">详情<i class="m-icon-swapright m-icon-white"></i></a>
+                                                    部署状态 ==> {{(item.DeployInfoOnlineDto.DeployStatus|DeployStatusFilter).Title}}
+                                                    <a ng-show="item.DeployInfoOnlineDto.DeployStatus!=0" class="text-danger" href="javascript:;" ng-click="GotoGitLabBuildPage(item.DeployInfoOnlineDto.BuildId)"><i class="m-icon-swapright m-icon-white"></i></a>
                                                 </span>
                                             </h2>
                                         </div>
                                         <!--测试-->
                                         <div ng-show="item.LogType==1">
-                                            <h2>测试状态 ==> {{(item.DeployInfoIocDto.DeployStatus|DeployStatusFilter).Title}}</h2>
-                                            <div class="timeline-footer" ng-show="item.DeployStatus==4">
-                                                <span class="nav-link pull-right">
-
+                                            <h2>
+                                                <span class="nav-link pull" ng-show="item.Stage==0">
+                                                    测试状态 ==> {{item.DeployInfoIocDto.QAStatus|QAStatusFilter}}
                                                 </span>
-
-                                            </div>
+                                                <span class="nav-link pull" ng-show="item.Stage==1">
+                                                    测试状态 ==> {{item.DeployInfoPreDto.QAStatus|QAStatusFilter}}
+                                                </span>
+                                                <span class="nav-link pull" ng-show="item.Stage==2">
+                                                    测试状态 ==> {{item.DeployInfoOnlineDto.QAStatus|QAStatusFilter}}
+                                                </span>
+                                            </h2>
                                         </div>
 
                                         <!--Comments-->
