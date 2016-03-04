@@ -72,9 +72,9 @@ let ffMergeAndDeploy onBranch =
     if onBranch = "master" then
         let onlineDate = System.DateTime.Today.Date.ToString("yyyy-MM-dd")
         let tagName = getBuildParamEnsure "onlineTagName"
-        gitCommand null (sprintf "tag -a v-%s-%s -m 'deploy %s to %s'" tagName onlineDate mergeFromBranch onBranch)
+        gitCommand null (sprintf "tag -a v-%s-%s -m \"deploy %s to %s\"" tagName onlineDate mergeFromBranch onBranch)
     else
-        gitCommand null (sprintf "tag -a %s-to-%s -m 'deploy %s to %s'"  mergeFromBranch onBranch mergeFromBranch onBranch)
+        gitCommand null (sprintf "tag -a %s-to-%s -m \"deploy %s to %s\""  mergeFromBranch onBranch mergeFromBranch onBranch)
                 
     deploy()
 
@@ -114,7 +114,7 @@ Target "Deploy-To-IOC" (fun _ ->
 // 测试通过的时候调用，方便后期合并，回滚进行跟踪
 Target "QA-Passed-IOC" (fun _ ->
     let passedDate = System.DateTime.Today.Date.ToString("MM-dd-HH-mm")
-    gitCommand null (sprintf "tag -a pass-test-%s -m 'QA passed'"  passedDate)
+    gitCommand null (sprintf "tag -a pass-test-%s -m \"QA passed\""  passedDate)
     gitCommand null "push --follow-tags"
 )
 
@@ -135,7 +135,7 @@ Target "BuildSolution" (fun _ ->
 )
 
 Target "test" (fun _ ->
-    ensureOnBranch "pre"    
+    gitCommand null (sprintf "tag -a %s-to-%s -m \"deploy %s to %s\""  "dev" "pre" "dev" "pre")
 )
 
 "BuildSolution"
