@@ -188,6 +188,9 @@
     $scope.GetTaskInfo = function () {
         TaskService.GetTaskInfo(param.taskId, function (data) {
             $scope.taskInfo = data;
+            if (param.stage != undefined) {
+                $scope.taskInfo.DeployStage = param.stage;
+            }
             $scope.getBranch(data.ProjectDto.RepoId);//加载分支list
             $scope.taskInfo.Project = data.ProjectDto;
             
