@@ -63,8 +63,10 @@ namespace Uoko.FireProj.Concretes
                     taskLogsDto.Stage = item.Stage;
                     taskLogsDto.Comments = item.Comments;
                     taskLogsDto.LogType = item.LogType;
+                    taskLogsDto.CreatorId = item.CreatorId;
                     taskLogsDto.CreatorName = item.CreatorName;
                     taskLogsDto.CreateDate = item.CreateDate;
+                    
                     switch (item.Stage)
                     {
                         case StageEnum.IOC:

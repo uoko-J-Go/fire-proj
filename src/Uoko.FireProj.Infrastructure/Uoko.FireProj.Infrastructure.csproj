@@ -51,6 +51,7 @@
     <Compile Include="Data\GridData.cs" />
     <Compile Include="Data\WebApiProvider.cs" />
     <Compile Include="Exception\TipInfoException.cs" />
+    <Compile Include="Extensions\AnalysisUser.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Extensions\JsonHelper.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
@@ -62,6 +63,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="NewFolder1\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Uoko.FireProj.DataAccess\Uoko.FireProj.DataAccess.csproj">
+      <Project>{efb5f078-cf15-41f0-89d1-dba2c9fb975d}</Project>
+      <Name>Uoko.FireProj.DataAccess</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

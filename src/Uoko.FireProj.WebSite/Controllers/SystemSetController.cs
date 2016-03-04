@@ -49,5 +49,11 @@ namespace Uoko.FireProj.WebSite.Controllers
             return View("~/Views/Server/Detail.cshtml");
         }
         #endregion
+
+        public ActionResult Logout()
+        {
+            Request.GetOwinContext().Authentication.SignOut();
+            return Redirect("/");
+        }
     }
 }

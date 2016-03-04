@@ -60,10 +60,11 @@ String.prototype.Format = function () {
 var AnalysisUser = function (userInfo, UserAll) {
     var UserData = [];
     $.each(userInfo, function (i, item) {
-        item = UserAll.filter(function (user) {
+        var obj = UserAll.filter(function (user) {
             return item.Id == user.UserId;
         })[0];
-        UserData.push(item);
+        obj.QAStatus = item.QAStatus;
+        UserData.push(obj);
     });
     return UserData;
 }
