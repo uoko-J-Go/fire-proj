@@ -8,11 +8,15 @@
             $scope.GetTaskInfo();
         });
     }
+    $scope.TabChanged=function(index) {
+        $scope.currLogTab = index;
+    }
     $scope.GetTaskInfo = function () {
         TaskService.GetTaskInfo(taskId, function (data) {
             $scope.model = data;
             $scope.param = {
                 taskId: taskId,
+                stage: $scope.currLogTab
             };
             $scope.model.DeployInfoIocDto.CheckUser = AnalysisUser($scope.model.DeployInfoIocDto.CheckUser,$scope.AllUsers);
             $scope.model.DeployInfoIocDto.NoticeUser = AnalysisUser($scope.model.DeployInfoIocDto.NoticeUser, $scope.AllUsers);
