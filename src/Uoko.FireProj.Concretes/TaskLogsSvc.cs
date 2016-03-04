@@ -63,18 +63,30 @@ namespace Uoko.FireProj.Concretes
                     taskLogsDto.Stage = item.Stage;
                     taskLogsDto.Comments = item.Comments;
                     taskLogsDto.LogType = item.LogType;
+                    taskLogsDto.CreatorId = item.CreatorId;
                     taskLogsDto.CreatorName = item.CreatorName;
                     taskLogsDto.CreateDate = item.CreateDate;
+                    
                     switch (item.Stage)
                     {
                         case StageEnum.IOC:
                             taskLogsDto.DeployInfoIocDto = !item.DeployInfo.IsNullOrEmpty() ? JsonHelper.FromJson<DeployInfoIocDto>(item.DeployInfo) : new DeployInfoIocDto();
+                            taskLogsDto.DeployInfoIocDto.CheckUser = AnalysisUser.AnalysisCheckUser(taskLogsDto.DeployInfoIocDto.CheckUserId);
+                            taskLogsDto.DeployInfoIocDto.NoticeUser = AnalysisUser.AnalysisNoticeUser(taskLogsDto.DeployInfoIocDto.NoticeUserId);
+
+                            //taskLogsDto.QAStatus = taskLogsDto.DeployInfoIocDto.CheckUser.SingleOrDefault(r => r.Id == taskLogsDto.CreatorId).QAStatus;
                             break;
                         case StageEnum.PRE:
                             taskLogsDto.DeployInfoPreDto = !item.DeployInfo.IsNullOrEmpty() ? JsonHelper.FromJson<DeployInfoPreDto>(item.DeployInfo) : new DeployInfoPreDto();
+                            taskLogsDto.DeployInfoPreDto.CheckUser = AnalysisUser.AnalysisCheckUser(taskLogsDto.DeployInfoPreDto.CheckUserId);
+                            taskLogsDto.DeployInfoPreDto.NoticeUser = AnalysisUser.AnalysisNoticeUser(taskLogsDto.DeployInfoPreDto.NoticeUserId);
+                            //taskLogsDto.QAStatus = taskLogsDto.DeployInfoIocDto.CheckUser.SingleOrDefault(r => r.Id == taskLogsDto.CreatorId).QAStatus;
                             break;
                         case StageEnum.PRODUCTION:
                             taskLogsDto.DeployInfoOnlineDto = !item.DeployInfo.IsNullOrEmpty() ? JsonHelper.FromJson<DeployInfoOnlineDto>(item.DeployInfo) : new DeployInfoOnlineDto();
+                            taskLogsDto.DeployInfoOnlineDto.CheckUser = AnalysisUser.AnalysisCheckUser(taskLogsDto.DeployInfoOnlineDto.CheckUserId);
+                            taskLogsDto.DeployInfoOnlineDto.NoticeUser = AnalysisUser.AnalysisNoticeUser(taskLogsDto.DeployInfoOnlineDto.NoticeUserId);
+                           // taskLogsDto.QAStatus = taskLogsDto.DeployInfoIocDto.CheckUser.SingleOrDefault(r => r.Id == taskLogsDto.CreatorId).QAStatus;
                             break;
                         default:
                             break;

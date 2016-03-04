@@ -205,7 +205,7 @@ namespace Uoko.FireProj.Concretes
                 var db = dbScope.DbContexts.Get<FireProjDbContext>();
                 var entity = db.TaskInfo.FirstOrDefault(r => r.Id == taskId);
                 var taskDto = Mapper.Map<TaskInfo, TaskDetailDto>(entity);
-
+                
                 //项目信息
                 var projectEntity = db.Project.FirstOrDefault(r => r.Id == entity.ProjectId);
                 taskDto.ProjectDto= Mapper.Map<Project, ProjectDto>(projectEntity);
@@ -216,14 +216,14 @@ namespace Uoko.FireProj.Concretes
                 taskDto.DeployInfoOnlineDto = !taskDto.DeployInfoOnlineJson.IsNullOrEmpty() ? JsonHelper.FromJson<DeployInfoOnlineDto>(taskDto.DeployInfoOnlineJson) : new DeployInfoOnlineDto();
 
                 //获取测试,通知人Id集合返回
-                taskDto.DeployInfoIocDto.CheckUser = AnalysisCheckUser(taskDto.DeployInfoIocDto.CheckUserId);
-                taskDto.DeployInfoIocDto.NoticeUser = AnalysisNoticeUser(taskDto.DeployInfoIocDto.NoticeUserId);
+                taskDto.DeployInfoIocDto.CheckUser = AnalysisUser.AnalysisCheckUser(taskDto.DeployInfoIocDto.CheckUserId);
+                taskDto.DeployInfoIocDto.NoticeUser = AnalysisUser.AnalysisNoticeUser(taskDto.DeployInfoIocDto.NoticeUserId);
 
-                taskDto.DeployInfoPreDto.CheckUser = AnalysisCheckUser(taskDto.DeployInfoPreDto.CheckUserId);
-                taskDto.DeployInfoPreDto.NoticeUser = AnalysisNoticeUser(taskDto.DeployInfoPreDto.NoticeUserId);
+                taskDto.DeployInfoPreDto.CheckUser = AnalysisUser.AnalysisCheckUser(taskDto.DeployInfoPreDto.CheckUserId);
+                taskDto.DeployInfoPreDto.NoticeUser = AnalysisUser.AnalysisNoticeUser(taskDto.DeployInfoPreDto.NoticeUserId);
 
-                taskDto.DeployInfoOnlineDto.CheckUser = AnalysisCheckUser(taskDto.DeployInfoOnlineDto.CheckUserId);
-                taskDto.DeployInfoOnlineDto.NoticeUser = AnalysisNoticeUser(taskDto.DeployInfoOnlineDto.NoticeUserId);
+                taskDto.DeployInfoOnlineDto.CheckUser = AnalysisUser.AnalysisCheckUser(taskDto.DeployInfoOnlineDto.CheckUserId);
+                taskDto.DeployInfoOnlineDto.NoticeUser = AnalysisUser.AnalysisNoticeUser(taskDto.DeployInfoOnlineDto.NoticeUserId);
 
                 return taskDto;
             }
@@ -304,42 +304,7 @@ namespace Uoko.FireProj.Concretes
             return infoLists;
         }
 
-        private List<UserDto> AnalysisCheckUser(string userInfo)
-        {
-            List<UserDto> userDtoData = new List<UserDto>();
-            if (string.IsNullOrEmpty(userInfo))
-            {
-                return userDtoData;
-            }
-            var userList = userInfo.Split(',');
-            foreach (var item in userList)
-            {
-                var user = item.Split('-');
-                userDtoData.Add(new UserDto
-                {
-                    Id =int.Parse(user[0]),
-                    QAStatus = (QAStatus) int.Parse(user[1])
-                });
-            }
-            return userDtoData;
-        }
-        private List<UserDto> AnalysisNoticeUser(string userInfo)
-        {
-            List<UserDto> userDtoData = new List<UserDto>();
-            if (string.IsNullOrEmpty(userInfo))
-            {
-                return userDtoData;
-            }
-            var userList = userInfo.Split(',');
-            foreach (var item in userList)
-            {
-                userDtoData.Add(new UserDto
-                {
-                    Id = int.Parse(item),
-                });
-            }
-            return userDtoData;
-        }
+        
         /// <summary>
         /// 执行部署
         /// </summary>
