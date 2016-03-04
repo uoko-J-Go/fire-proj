@@ -332,7 +332,7 @@
                                         <div ng-show="item.LogType==0">
                                             <h2>
                                                 <span class="nav-link pull">
-                                                    部署状态 ==> {{(item.DeployStatus|DeployStatusFilter).Title}}
+                                                    {{item.CreatorName}} ==> {{(item.DeployStatus|DeployStatusFilter).Title}}
                                                     <a ng-show="item.DeployStatus!=0" class="text-danger" href="javascript:;" ng-click="GotoGitLabBuildPage(item.BuildId)"><i class="m-icon-swapright m-icon-white"></i></a>
                                                 </span>
                                             </h2>
@@ -341,7 +341,7 @@
                                         <div ng-show="item.LogType==1">
                                             <h2>
                                                 <span class="nav-link pull">
-                                                    测试状态 ==> {{item.QAStatus|QAStatusFilter}}
+                                                    {{item.CreatorName}} ==> {{item.QAStatus|QAStatusFilter}}
                                                 </span>
                                             </h2>
                                         </div>
@@ -350,11 +350,11 @@
                                         <div class="timeline-content">
                                             <h4>{{item.Comments}}</h4>
                                         </div>
-                                        <div class="timeline-footer">
+                                        @*<div class="timeline-footer">
                                             <span class="nav-link pull-right">
                                                 {{item.CreatorName}}
                                             </span>
-                                        </div>
+                                        </div>*@
                                     </div>
                                 </li>
                             </ul>
