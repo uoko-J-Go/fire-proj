@@ -13,24 +13,11 @@
             $scope.model = data;
             $scope.param = {
                 taskId: taskId,
-                ProjectId: data.ProjectDto.Id,
-                RepoId: data.ProjectDto.RepoId,
-                Branch:data.Branch,
-                DeployInfoIocJson: data.DeployInfoIocJson,
-                DeployInfoPreJson: data.DeployInfoPreJson
             };
-
-            var _CheckUsers=[];
-            var _NoticeUsers=[];
-            $.each($scope.model.DeployInfoIocDto.CheckUser, function (i, item) {
-                item = $scope.AllUsers.filter(function (user) {
-                    return item.Id == user.UserId;
-                })[0];
-                _CheckUsers.push(item);
-            });
-            $scope.model.DeployInfoIocDto.CheckUser = _CheckUsers;
-            $scope.$apply();
-            
+            $scope.model.DeployInfoIocDto.CheckUser = AnalysisUser($scope.model.DeployInfoIocDto.CheckUser,$scope.AllUsers);
+            $scope.model.DeployInfoIocDto.NoticeUser = AnalysisUser($scope.model.DeployInfoIocDto.NoticeUser, $scope.AllUsers);
+            $scope.model.DeployInfoPreDto.CheckUser = AnalysisUser($scope.model.DeployInfoPreDto.CheckUser, $scope.AllUsers);
+            $scope.model.DeployInfoPreDto.NoticeUser = AnalysisUser($scope.model.DeployInfoPreDto.NoticeUser, $scope.AllUsers);
         });
     }
     $scope.GetTaskLogsByTaskId = function () {

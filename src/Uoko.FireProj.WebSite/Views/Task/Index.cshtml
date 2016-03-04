@@ -91,7 +91,7 @@
                             <td>{{task.TaskInfo.ModifierName}}</td>
                             <td>
                                 <div>
-                                    <a class="btn btn-success btn-xs" ng-show="!task.TaskInfo.HasOnlineDeployed && task.TaskInfo.CreatorId == @loginUserId" ng-click="Deploy(item)">部署到...</a>
+                                    <a class="btn btn-success btn-xs" ng-show="!task.TaskInfo.HasOnlineDeployed && task.TaskInfo.CreatorId == @loginUserId" ng-click="Deploy(task)">部署到...</a>
                                 </div>
                             </td>
                         </tr>
@@ -113,11 +113,12 @@
     </div>
 </div>
 @section Scripts {
-   <script src="~/app/services/CommonService.js"></script>
+    <script src="~/app/services/CommonService.js"></script>
     <script src="~/app/services/ProjectService.js"></script>
     <script src="~/app/services/TaskService.js"></script>
     <script src="~/app/filters/CommonFilter.js"></script>
     <script src="~/app/controllers/TaskList.js"></script>
+    <script src="~/app/modals/Deploy.js"></script>
 }
 
 
