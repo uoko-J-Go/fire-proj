@@ -1,5 +1,5 @@
 ﻿
-fireproj.controller("TaskController", function ($scope, $http, TaskService, ProjectService, CommonService) {
+fireproj.controller("TaskController", function ($scope, $http, $uibModal,TaskService, ProjectService, CommonService) {
     $scope.projectList = [];
     $scope.GetProjectList = function () {
         ProjectService.getAllProject(function (data) {
@@ -52,17 +52,18 @@ fireproj.controller("TaskController", function ($scope, $http, TaskService, Proj
         });
     }
 
-    $scope.Deploy = function (item) {
-        TaskService.GetTaskInfo(item.Id, function (data) {
-            var taskInfo = data;
-            CommonService.TriggerBuild(taskInfo, function (data) {
-                bootbox.alert("已经成功发起部署任务，点击查看详细!", function () {              
-                    TaskService.BeginDeploy(taskInfo.Id, data.id, function (data) {
-                        location.reload();
-                    });
-                });
-                
-            });
+    $scope.Deploy = function (task) {
+        $scope.param = {
+            taskId: task.TaskInfo.Id,
+        };
+        var modalInstance = $uibModal.open({
+            templateUrl: '/app/modals/Deploy.html',
+            controller: 'DeployController',
+            resolve: {
+                param: function () {
+                    return $scope.param;
+                }
+            }
         });
     }
     $scope.Init = function () {

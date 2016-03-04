@@ -56,3 +56,14 @@ String.prototype.Format = function () {
         return args[arguments[1]];
     });
 }
+//根据用户id获取用户名
+var AnalysisUser = function (userInfo, UserAll) {
+    var UserData = [];
+    $.each(userInfo, function (i, item) {
+        item = UserAll.filter(function (user) {
+            return item.Id == user.UserId;
+        })[0];
+        UserData.push(item);
+    });
+    return UserData;
+}
