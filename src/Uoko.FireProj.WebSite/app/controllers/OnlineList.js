@@ -1,5 +1,4 @@
-﻿
-fireproj.controller("TaskController", function ($scope, $http, $uibModal,TaskService, ProjectService, CommonService) {
+﻿fireproj.controller("OnlineListController", function ($scope, $http, $uibModal,TaskService, ProjectService) {
     $scope.projectList = [];
     $scope.GetProjectList = function () {
         ProjectService.getAllProject(function (data) {

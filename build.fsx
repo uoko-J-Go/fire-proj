@@ -133,6 +133,11 @@ Target "BuildSolution" (fun _ ->
     build setParams slnFile
 )
 
+Target "test" (fun _ ->
+    let branchName = getBranchName null
+    Console.WriteLine(branchName)
+)
+
 "BuildSolution"
     ==> "QA-Passed-IOC"
 

@@ -18,7 +18,7 @@
     </ul>
 </div>
 
-<div class="row" ng-controller="TaskController">
+<div class="row" ng-controller="OnlineListController">
     <div class="col-md-12">
         <!-- BEGIN EXAMPLE TABLE PORTLET-->
         <div class="portlet light">
@@ -60,11 +60,11 @@
                         </div>
                     </div>
                     <div class="form-group form-md-line-input">
-                        <label class="col-md-2 control-label">备注</label>
+                        <label class="col-md-2 control-label">
+                            <a target="_blank" href="http://semver.org/lang/zh-CN/">上线版本</a>
+                        </label>
                         <div class="col-md-10">
-                            <div class="form-control-wrap">
-                                <textarea class="ng-pristine ng-untouched ng-valid" rows="4" ng-model="taskInfo.DeployInfo.TaskDesc"></textarea>
-                            </div>
+                           <input name="onlineVersion" ng-model="taskInfo.OnlineVersion" class="form-control ng-pristine ng-invalid ng-invalid-required ng-touched" placeholder="主版本.次版本.修订版本" required="" type="text">
                         </div>
                     </div>
                            
@@ -76,9 +76,6 @@
                   
                 </form>
 
-                
-
-                这里是一堆 上线需要的内容数据
             </div>
 
             <div class="portlet-body">
@@ -87,14 +84,12 @@
                         <thead>
                         <tr>
                             <th rowspan="2">任务名称</th>
-                            <th rowspan="2">项目</th>
                             <th rowspan="2">分支</th>
                             <th colspan="2">IOC</th>
                             <th colspan="2">Pre</th>
                             <th colspan="2">Online</th>
                             <th rowspan="2">发起人</th>
                             <th rowspan="2">最后操作人</th>
-                            <th rowspan="2">操作</th>
                         </tr>
                         <tr>
                             <th>部署</th>
@@ -108,7 +103,6 @@
                         <tbody>
                         <tr ng-repeat="task in taskInfos">
                             <td><a class="text-primary" href="/Task/Detail?taskId={{task.TaskInfo.Id}}">{{task.TaskInfo.TaskName}}</a> </td>
-                            <td>{{task.ProjectName}}</td>
                             <td>{{task.TaskInfo.Branch}}</td>
                             <td title="{{(task.DeployInfoIoc.DeployStatus | DeployStatusFilter).Title}}">
                                 <div ng-if="task.DeployInfoIoc">
@@ -130,11 +124,6 @@
                             </td>
                             <td>{{task.TaskInfo.CreatorName}}</td>
                             <td>{{task.TaskInfo.ModifierName}}</td>
-                            <td>
-                                <div>
-                                    <a class="btn btn-success btn-xs" ng-show="!task.TaskInfo.HasOnlineDeployed && task.TaskInfo.CreatorId == @loginUserId" ng-click="Deploy(item)">部署到...</a>
-                                </div>
-                            </td>
                         </tr>
                         </tbody>
                     </table>
@@ -155,9 +144,8 @@
 </div>
 
 @section Scripts {
-    <script src="~/app/services/CommonService.js"></script>
     <script src="~/app/services/ProjectService.js"></script>
     <script src="~/app/services/TaskService.js"></script>
     <script src="~/app/filters/CommonFilter.js"></script>
-    <script src="~/app/controllers/TaskList.js"></script>
+    <script src="~/app/controllers/OnlineList.js"></script>
 }
