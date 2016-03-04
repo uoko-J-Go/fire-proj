@@ -60,6 +60,7 @@ let deploy() =
 
 
 let ensureOnBranch branchNeeded =
+    gitCommand null (sprintf "checkout %s"  branchNeeded)
     let branchName = getBranchName null
     if branchName <> branchNeeded then failwithf "you need do this only on [%s] branch,but now you are on [%s]" branchNeeded branchName
         
@@ -134,8 +135,7 @@ Target "BuildSolution" (fun _ ->
 )
 
 Target "test" (fun _ ->
-    let branchName = getBranchName null
-    Console.WriteLine(branchName)
+    ensureOnBranch "pre"    
 )
 
 "BuildSolution"
