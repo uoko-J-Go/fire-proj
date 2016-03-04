@@ -32,15 +32,25 @@ namespace Uoko.FireProj.DataAccess.Dto
 
         public LogType LogType { get; set; }
 
+        public DeployStatus DeployStatus { get; set; }
+
+        public QAStatus QAStatus { get; set; }
+
+        public int? BuildId { get; set; }
+
         public DeployInfoIocDto DeployInfoIocDto { get; set; }
 
         public DeployInfoPreDto DeployInfoPreDto { get; set; }
 
         public DeployInfoOnlineDto DeployInfoOnlineDto { get; set; }
 
+        public int CreatorId { get; set; }
+
         public string CreatorName { get; set; }
 
-
         public DateTime CreateDate { get; set; }
+
+       
+
     }
 }

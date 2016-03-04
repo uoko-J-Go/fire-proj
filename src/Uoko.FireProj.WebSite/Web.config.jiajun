@@ -16,6 +16,8 @@
     <add key="webpages:Enabled" value="*" />
     <add key="ClientValidationEnabled" value="*" />
     <add key="UnobtrusiveJavaScriptEnabled" value="*" />
+    <add key="sso.url" value="*" />
+    <add key="domain.url" value="*" />
   </appSettings>
   <system.web>
     <compilation debug="true" targetFramework="4.5" />
