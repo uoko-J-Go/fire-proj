@@ -1,4 +1,4 @@
-﻿fireproj.filter("environmentFilter", function() {
+﻿fireproj.filter("StageTypeFilter", function () {
 
     return function(value) {
         switch (value) {
