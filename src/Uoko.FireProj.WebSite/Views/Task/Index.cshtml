@@ -50,7 +50,7 @@
                             <th rowspan="2">分支</th>
                             <th colspan="2">IOC</th>
                             <th colspan="2">Pre</th>
-                            <th colspan="2">Online</th>
+                            <th colspan="3">Online</th>
                             <th rowspan="2">发起人</th>
                             <th rowspan="2">最后操作人</th>
                             <th rowspan="2">操作</th>
@@ -60,6 +60,7 @@
                             <th>测试</th>
                             <th>部署</th>
                             <th>测试</th>
+                            <th>上线版本</th>
                             <th>部署</th>
                             <th>测试</th>
                         </tr>
@@ -82,6 +83,9 @@
                             </td>
                             <td title="{{task.PreTestAllPassed ? '测试全部通过' : ''}}">
                                 <span class="glyphicon glyphicon-ok" ng-show="task.PreTestAllPassed"></span>
+                            </td>
+                            <td>
+                                <a ng-show="task.TaskInfo.OnlineTaskId" ng-href="@Url.Action("OnlineInfo","Task")?taskId={{task.TaskInfo.OnlineTaskId}}">test</a>
                             </td>
                             <td>{{task.TaskInfo.DeployInfoOnlineJson}}</td>
                             <td title="{{task.OnlineTestAllPassed ? '测试全部通过' : ''}}">

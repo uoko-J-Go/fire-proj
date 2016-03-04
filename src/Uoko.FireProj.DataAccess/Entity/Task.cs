@@ -59,6 +59,17 @@ namespace Uoko.FireProj.DataAccess.Entity
         /// </summary>
         public string OnlineVersion { get; set; }
 
+
+        /// <summary>
+        /// 项目Id
+        /// </summary>
+        public int ProjectId { get; set; }
+
+        /// <summary>
+        /// 项目Id
+        /// </summary>
+        public int ProjectName { get; set; }
+
         /// <summary>
         /// 部署服务器IP地址
         /// </summary>
