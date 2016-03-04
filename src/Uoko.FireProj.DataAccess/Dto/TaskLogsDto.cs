@@ -50,10 +50,7 @@ namespace Uoko.FireProj.DataAccess.Dto
 
         public DateTime CreateDate { get; set; }
 
-        /// <summary>
-        /// 任务状态值
-        /// </summary>
-        public QAStatus QAStatus { get; set; }
+       
 
     }
 }
