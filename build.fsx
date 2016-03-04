@@ -67,7 +67,7 @@ let ensureOnBranch branchNeeded =
 let ffMergeAndDeploy onBranch =
     let mergeFromBranch = getBuildParamEnsure "mergeFromBranch"
 
-    merge null "--ff-only" mergeFromBranch
+    merge null "--ff-only" ("origin/" + mergeFromBranch)
 
     if onBranch = "master" then
         let onlineDate = System.DateTime.Today.Date.ToString("yyyy-MM-dd")
