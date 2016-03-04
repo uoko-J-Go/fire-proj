@@ -204,6 +204,7 @@
     <Content Include="app\controllers\ProjectEdit.js" />
     <Content Include="app\controllers\ProjectCreat.js" />
     <Content Include="app\controllers\ServerCreate.js" />
+    <Content Include="app\controllers\OnlineList.js" />
     <Content Include="app\controllers\TaskLogs.js" />
     <Content Include="app\directives\ProjectTree.js" />
     <Content Include="app\filters\CommonFilter.js" />
@@ -1186,6 +1187,7 @@
     <Content Include="Views\Server\Edit.cshtml" />
     <Content Include="Views\Server\Detail.cshtml" />
     <Content Include="Views\Task\Detail_bp.cshtml" />
+    <None Include="Views\Task\OnlineInfo.cshtml" />
     <None Include="Views\Task\OnlineList.cshtml" />
   </ItemGroup>
   <ItemGroup>
