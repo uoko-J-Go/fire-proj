@@ -54,9 +54,9 @@ namespace Uoko.FireProj.Concretes
             using (var dbScope = _dbScopeFactory.CreateReadOnly())
             {
                 var db = dbScope.DbContexts.Get<FireProjDbContext>();
-                var entity = db.TaskLogs.Where(r => r.TaskId == taskId).OrderByDescending(r => r.CreateDate).ToList();
+                var entitys = db.TaskLogs.Where(r => r.TaskId == taskId).OrderByDescending(r => r.CreateDate).ToList();
                 List<TaskLogsDto> data = new List<TaskLogsDto>();
-                foreach (var item in entity)
+                foreach (var item in entitys)
                 {
                     TaskLogsDto taskLogsDto = new TaskLogsDto();
                     taskLogsDto.TaskId = item.TaskId;
@@ -71,22 +71,34 @@ namespace Uoko.FireProj.Concretes
                     {
                         case StageEnum.IOC:
                             taskLogsDto.DeployInfoIocDto = !item.DeployInfo.IsNullOrEmpty() ? JsonHelper.FromJson<DeployInfoIocDto>(item.DeployInfo) : new DeployInfoIocDto();
-                            taskLogsDto.DeployInfoIocDto.CheckUser = AnalysisUser.AnalysisCheckUser(taskLogsDto.DeployInfoIocDto.CheckUserId);
-                            taskLogsDto.DeployInfoIocDto.NoticeUser = AnalysisUser.AnalysisNoticeUser(taskLogsDto.DeployInfoIocDto.NoticeUserId);
-
-                            //taskLogsDto.QAStatus = taskLogsDto.DeployInfoIocDto.CheckUser.SingleOrDefault(r => r.Id == taskLogsDto.CreatorId).QAStatus;
+                            var checkUsers = this.AnalysisCheckUser(taskLogsDto.DeployInfoIocDto.CheckUserId);
+                            var currUser = checkUsers.FirstOrDefault(t => t.Id == item.CreatorId);
+                            if (currUser != null)
+                            {
+                                taskLogsDto.QAStatus = currUser.QAStatus;
+                            }
+                            taskLogsDto.BuildId = taskLogsDto.DeployInfoIocDto.BuildId;
+                            taskLogsDto.DeployStatus = taskLogsDto.DeployInfoIocDto.DeployStatus;
                             break;
                         case StageEnum.PRE:
                             taskLogsDto.DeployInfoPreDto = !item.DeployInfo.IsNullOrEmpty() ? JsonHelper.FromJson<DeployInfoPreDto>(item.DeployInfo) : new DeployInfoPreDto();
-                            taskLogsDto.DeployInfoPreDto.CheckUser = AnalysisUser.AnalysisCheckUser(taskLogsDto.DeployInfoPreDto.CheckUserId);
-                            taskLogsDto.DeployInfoPreDto.NoticeUser = AnalysisUser.AnalysisNoticeUser(taskLogsDto.DeployInfoPreDto.NoticeUserId);
-                            //taskLogsDto.QAStatus = taskLogsDto.DeployInfoIocDto.CheckUser.SingleOrDefault(r => r.Id == taskLogsDto.CreatorId).QAStatus;
+                            var checkUsers1 = this.AnalysisCheckUser(taskLogsDto.DeployInfoPreDto.CheckUserId);
+                            var currUser1 = checkUsers1.FirstOrDefault(t => t.Id == item.CreatorId);
+                            if (currUser1 != null)
+                            {
+                                taskLogsDto.QAStatus = currUser1.QAStatus;
+                            }
+                            taskLogsDto.BuildId = taskLogsDto.DeployInfoPreDto.BuildId;
+                            taskLogsDto.DeployStatus = taskLogsDto.DeployInfoPreDto.DeployStatus;
                             break;
                         case StageEnum.PRODUCTION:
                             taskLogsDto.DeployInfoOnlineDto = !item.DeployInfo.IsNullOrEmpty() ? JsonHelper.FromJson<DeployInfoOnlineDto>(item.DeployInfo) : new DeployInfoOnlineDto();
-                            taskLogsDto.DeployInfoOnlineDto.CheckUser = AnalysisUser.AnalysisCheckUser(taskLogsDto.DeployInfoOnlineDto.CheckUserId);
-                            taskLogsDto.DeployInfoOnlineDto.NoticeUser = AnalysisUser.AnalysisNoticeUser(taskLogsDto.DeployInfoOnlineDto.NoticeUserId);
-                           // taskLogsDto.QAStatus = taskLogsDto.DeployInfoIocDto.CheckUser.SingleOrDefault(r => r.Id == taskLogsDto.CreatorId).QAStatus;
+                            var checkUsers2 = this.AnalysisCheckUser(taskLogsDto.DeployInfoPreDto.CheckUserId);
+                            var currUser2 = checkUsers2.FirstOrDefault(t => t.Id == item.CreatorId);
+                            if (currUser2 != null)
+                            {
+                                taskLogsDto.QAStatus = currUser2.QAStatus;
+                            }
                             break;
                         default:
                             break;
@@ -164,7 +176,25 @@ namespace Uoko.FireProj.Concretes
             //    }
             //}
         }
-
+        private List<UserDto> AnalysisCheckUser(string userInfo)
+        {
+            List<UserDto> userDtoData = new List<UserDto>();
+            if (string.IsNullOrEmpty(userInfo))
+            {
+                return userDtoData;
+            }
+            var userList = userInfo.Split(',');
+            foreach (var item in userList)
+            {
+                var user = item.Split('-');
+                userDtoData.Add(new UserDto
+                {
+                    Id = int.Parse(user[0]),
+                    QAStatus = (QAStatus)int.Parse(user[1])
+                });
+            }
+            return userDtoData;
+        }
         public int GetLogTotalByEnvironment(int taskId, StageEnum stage)
         {
             using (var dbScope = _dbScopeFactory.CreateReadOnly())
