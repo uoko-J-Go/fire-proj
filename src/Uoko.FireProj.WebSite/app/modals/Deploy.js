@@ -11,6 +11,8 @@
         DomainInfo: null,
         CheckUsers: [],
         NoticeUsers: [],
+        OnlineCheckUsers: [],
+        OnlineNoticeUsers: [],
         DeployInfo: {}
     };
 
@@ -90,10 +92,30 @@
             taskForSave.PreDeployInfo.SiteName = domainInfo.SiteName;
             taskForSave.PreDeployInfo.CheckUserId = checkUserIds.join(",");
             taskForSave.PreDeployInfo.NoticeUserId = noticeUserIds.join(",");
+
+            /*添加上线相关信息*/
+            var onlineCheckUserIds = [];
+            var onlineNoticeUserIds = [];
+            if ($scope.taskInfo.OnlineCheckUsers != null && $scope.taskInfo.OnlineCheckUsers.length > 0) {
+                $.each($scope.taskInfo.OnlineCheckUsers, function (i, item) {
+                    onlineCheckUserIds.push(item.UserId);
+                });
+            }
+            if ($scope.taskInfo.OnlineNoticeUsers != null && $scope.taskInfo.OnlineNoticeUsers.length > 0) {
+                $.each($scope.taskInfo.OnlineNoticeUsers, function (i, item) {
+                    onlineNoticeUserIds.push(item.UserId);
+                });
+            }
+            taskForSave.OnlineDeployInfo = {
+                CheckUserId: onlineCheckUserIds.join(","),
+                NoticeUserId: onlineNoticeUserIds.join(",")
+            }
+            /*添加上线相关信息*/
         }
 
         TaskService.UpdateTask(taskForSave, function (data) {
-            location.href = "/Task/Index";
+            $uibModalInstance.close();
+            window.location.reload();
         });
     }
 
@@ -109,6 +131,11 @@
             }
             else {
                 obj = $scope.taskInfo.DeployInfoPreDto;
+
+                //绑定上线信息相关人
+                //绑定测试,通知人
+                $scope.taskInfo.OnlineCheckUsers = AnalysisUser($scope.taskInfo.DeployInfoOnlineDto.CheckUser, $scope.AllUsers);
+                $scope.taskInfo.OnlineNoticeUsers = AnalysisUser($scope.taskInfo.DeployInfoOnlineDto.NoticeUser, $scope.AllUsers);
             }
             //绑定服务器
             $scope.taskInfo.DeployIP = obj.DeployIP;

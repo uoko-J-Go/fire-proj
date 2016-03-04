@@ -73,6 +73,17 @@ namespace Uoko.FireProj.Concretes
                     taskDto.PreDeployInfo.DeployAddress = string.Format("https://{0}:8172/msdeploy.axd", taskDto.PreDeployInfo.DeployIP);
                     taskDto.PreDeployInfo.DeployStatus = DeployStatus.Deploying;
                     taskInfo.DeployInfoPreJson = JsonHelper.ToJson(taskDto.PreDeployInfo);
+
+                    //添加Online信息
+                    if (!string.IsNullOrEmpty(taskDto.OnlineDeployInfo.CheckUserId))
+                    {
+                        var userIds = taskDto.OnlineDeployInfo.CheckUserId.Split(',');
+                        var userIdsStatus = userIds.Select(userId => string.Format("{0}-{1}", userId, (int)QAStatus.Waiting)).ToList();
+                        taskInfo.OnlineCheckUserId = taskDto.OnlineDeployInfo.CheckUserId = string.Join(",", userIdsStatus);
+                    }
+                    taskDto.OnlineDeployInfo.DeployStage = StageEnum.PRODUCTION;
+                    taskInfo.DeployInfoOnlineJson = JsonHelper.ToJson(taskDto.OnlineDeployInfo);
+
                     break;
                 default:
                     throw new NotSupportedException("暂不支持其他阶段");
@@ -140,6 +151,18 @@ namespace Uoko.FireProj.Concretes
                         taskDto.PreDeployInfo.DeployAddress = string.Format("https://{0}:8172/msdeploy.axd", taskDto.PreDeployInfo.DeployIP);
                         taskDto.PreDeployInfo.DeployStatus = DeployStatus.Deploying;
                         taskInfo.DeployInfoPreJson = DeployInfo = JsonHelper.ToJson(taskDto.PreDeployInfo);
+
+
+                        //添加或修改Online信息
+                        if (!string.IsNullOrEmpty(taskDto.OnlineDeployInfo.CheckUserId))
+                        {
+                            var userIds = taskDto.OnlineDeployInfo.CheckUserId.Split(',');
+                            var userIdsStatus = userIds.Select(userId => string.Format("{0}-{1}", userId, (int)QAStatus.Waiting)).ToList();
+                            taskInfo.OnlineCheckUserId = taskDto.OnlineDeployInfo.CheckUserId = string.Join(",", userIdsStatus);     
+                        }
+                        taskDto.OnlineDeployInfo.DeployStage = StageEnum.PRODUCTION;
+                        taskInfo.DeployInfoOnlineJson = JsonHelper.ToJson(taskDto.OnlineDeployInfo);
+                        
                         break;
                     default:
                         throw new NotSupportedException("暂不支持其他阶段");
