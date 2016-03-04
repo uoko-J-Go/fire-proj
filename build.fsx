@@ -89,8 +89,8 @@ Target "Deoply-To-PRE" (fun _ ->
     let branchPre = "pre"
     ensureOnBranch branchPre
         
-    // 保证 pre 和 master 永远保持最新
-    merge null "--ff-only" "pre"
+    // 保证 pre 和 master 永远保持最新,即：在上pre这个过程里面，没有人越过上线。否则需要人为合并这部分数据过来 pre 上。
+    merge null "--ff-only" "master"
     
     ffMergeAndDeploy branchPre
 )

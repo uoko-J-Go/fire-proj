@@ -1186,6 +1186,7 @@
     <Content Include="Views\Server\Edit.cshtml" />
     <Content Include="Views\Server\Detail.cshtml" />
     <Content Include="Views\Task\Detail_bp.cshtml" />
+    <None Include="Views\Task\OnlineList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -55,9 +55,9 @@ namespace Uoko.FireProj.DataAccess.Entity
     public class OnlineTaskInfo:BaseEntity
     {
         /// <summary>
-        /// 部署环境
+        /// 上线版本指定，作为一次上线任务的标志
         /// </summary>
-        public StageEnum DeployStage { get; set; }
+        public string OnlineVersion { get; set; }
 
         /// <summary>
         /// 部署服务器IP地址
@@ -78,6 +78,21 @@ namespace Uoko.FireProj.DataAccess.Entity
         /// IIS站点名称
         /// </summary>
         public string SiteName { get; set; }
+
+        /// <summary>
+        /// 任务状态
+        /// </summary>
+        public DeployStatus DeployStatus { get; set; }
+
+        /// <summary>
+        /// gitlab triggered Id
+        /// </summary>
+        public int? TriggeredId { get; set; }
+
+        /// <summary>
+        /// 用于记录失败时 GitLab的BuildId
+        /// </summary>
+        public int? BuildId { get; set; }
     }
 
     /// <summary>
@@ -155,6 +170,11 @@ namespace Uoko.FireProj.DataAccess.Entity
 
     public class DeployInfoOnline
     {
+        /// <summary>
+        /// 部署环境
+        /// </summary>
+        public StageEnum DeployStage { get; set; }
+
         public int? OnlineTaskId { get; set; }
 
         /// <summary>

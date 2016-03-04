@@ -82,5 +82,12 @@ namespace Uoko.FireProj.WebSite.Controllers
 
             return Json(taskInfo,JsonRequestBehavior.AllowGet);
         }
+
+
+        public ActionResult OnlineList()
+        {
+            return View();
+        }
+
     }
 }
