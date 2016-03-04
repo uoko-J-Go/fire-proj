@@ -89,5 +89,18 @@ namespace Uoko.FireProj.WebSite.Controllers
             return View();
         }
 
+        /// <summary>
+        /// 上线任务详情，获取该上线任务的部署信息，以及该次上线对应的上线任务列表
+        /// </summary>
+        /// <param name="taskId"></param>
+        /// <returns></returns>
+        public ActionResult OnlineInfo(int? taskId)
+        {
+
+
+            return View();
+        }
+
+
     }
 }
