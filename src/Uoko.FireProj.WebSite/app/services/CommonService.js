@@ -3,6 +3,10 @@
     this.getProjectBranch = function (id, successCallBack) {
         $http.get("http://gitlab.uoko.ioc:12015/api/v3/projects/{0}/repository/branches?private_token=D3MR_rnRZK4xWS-CtVho".Format(id)).success(function (data) {
             if (successCallBack != undefined) {
+            //排除pre和master分支
+                data=data.filter(function (branch) {
+                    return branch.name.toLowerCase() != "pre" && branch.name.toLowerCase() != "master";
+                });
                 successCallBack(data);
             }
         }).error(function (data) {

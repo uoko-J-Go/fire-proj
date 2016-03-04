@@ -321,54 +321,54 @@
                                             {{item.CreateDate| date : 'yyyy-MM-dd'}}
                                         </span>
                                         <span class="time">
-                                            {{item.CreateDate| date : 'HH:mm:ss'}}
+                                            {{item.CreateDate| date : 'HH:MM:ss'}}
                                         </span>
                                     </div>
                                     <div class="timeline-icon">
                                         <i>{{item.Stage|StageTypeFilter}}</i>
                                     </div>
-                                    <div class="timeline-body" >
+                                    <div class="timeline-body">
                                         <!--开发-->
                                         <div ng-show="item.LogType==0">
-                                            <h2 ng-show="item.Stage==0">
-                                               {{item.CreatorName}} ==>
-                                                <span class="nav-link pull">
-                                                    <a class="text-default" href="javascript:;" ng-show="item.DeployInfoIocDto.DeployStatus==0" ng-click="GotoGitLabBuildPage(item.DeployInfoIocDto.BuildId)">{{(item.DeployInfoIocDto.DeployStatus|DeployStatusFilter).Title}}</a>
-                                                    <a class="text-danger" href="javascript:;"  ng-show="item.DeployInfoIocDto.DeployStatus==1" ng-click="GotoGitLabBuildPage(item.DeployInfoIocDto.BuildId)">{{(item.DeployInfoIocDto.DeployStatus|DeployStatusFilter).Title}}</a>
-                                                    <a class="text-success" href="javascript:;" ng-show="item.DeployInfoIocDto.DeployStatus==2" ng-click="GotoGitLabBuildPage(item.DeployInfoIocDto.BuildId)">{{(item.DeployInfoIocDto.DeployStatus|DeployStatusFilter).Title}}</a>
+                                            <h2>
+                                                <span class="nav-link pull" ng-show="item.Stage==0">
+                                                    部署状态 ==> {{(item.DeployInfoIocDto.DeployStatus|DeployStatusFilter).Title}}
+                                                    <a ng-show="item.DeployInfoIocDto.DeployStatus!=0" class="text-danger" href="javascript:;" ng-click="GotoGitLabBuildPage(item.DeployInfoIocDto.BuildId)"><i class="m-icon-swapright m-icon-white"></i></a>
                                                 </span>
-                                            </h2>
-                                            <h2 ng-show="item.Stage==1">
-                                                {{item.CreatorName}} ==> 
-                                                <span class="nav-link pull">
-                                                    <a class="text-default" href="javascript:;" ng-show="item.DeployInfoPreDto.DeployStatus==0" ng-click="GotoGitLabBuildPage(item.DeployInfoPreDto.BuildId)">{{(item.DeployInfoPreDto.DeployStatus|DeployStatusFilter).Title}}</a>
-                                                    <a class="text-danger" href="javascript:;" ng-show="item.DeployInfoPreDto.DeployStatus==1" ng-click="GotoGitLabBuildPage(item.DeployInfoPreDto.BuildId)">{{(item.DeployInfoPreDto.DeployStatus|DeployStatusFilter).Title}}</a>
-                                                    <a class="text-success" href="javascript:;" ng-show="item.DeployInfoPreDto.DeployStatus==2" ng-click="GotoGitLabBuildPage(item.DeployInfoPreDto.BuildId)">{{(item.DeployInfoPreDto.DeployStatus|DeployStatusFilter).Title}}</a>
-                                                 </span>
-                                            </h2>
-                                            <h2 ng-show="item.Stage==2">
-                                                {{item.CreatorName}} ==> 
-                                                <span class="nav-link pull">
-                                                    <a class="text-default" href="javascript:;" ng-show="item.DeployInfoOnlineDto.DeployStatus==0" ng-click="GotoGitLabBuildPage(item.DeployInfoOnlineDto.BuildId)">{{(item.DeployInfoOnlineDto.DeployStatus|DeployStatusFilter).Title}}</a>
-                                                    <a class="text-danger" href="javascript:;" ng-show="item.DeployInfoOnlineDto.DeployStatus==1" ng-click="GotoGitLabBuildPage(item.DeployInfoOnlineDto.BuildId)">{{(item.DeployInfoOnlineDto.DeployStatus|DeployStatusFilter).Title}}</a>
-                                                    <a class="text-success" href="javascript:;" ng-show="item.DeployInfoOnlineDto.DeployStatus==2" ng-click="GotoGitLabBuildPage(item.DeployInfoOnlineDto.BuildId)">{{(item.DeployInfoOnlineDto.DeployStatus|DeployStatusFilter).Title}}</a>
+                                                <span class="nav-link pull" ng-show="item.Stage==1">
+                                                    部署状态 ==> {{(item.DeployInfoPreDto.DeployStatus|DeployStatusFilter).Title}}
+                                                    <a ng-show="item.DeployInfoPreDto.DeployStatus!=0" class="text-danger" href="javascript:;" ng-click="GotoGitLabBuildPage(item.DeployInfoPreDto.BuildId)"><i class="m-icon-swapright m-icon-white"></i></a>
+                                                </span>
+                                                <span class="nav-link pull" ng-show="item.Stage==2">
+                                                    部署状态 ==> {{(item.DeployInfoOnlineDto.DeployStatus|DeployStatusFilter).Title}}
+                                                    <a ng-show="item.DeployInfoOnlineDto.DeployStatus!=0" class="text-danger" href="javascript:;" ng-click="GotoGitLabBuildPage(item.DeployInfoOnlineDto.BuildId)"><i class="m-icon-swapright m-icon-white"></i></a>
                                                 </span>
                                             </h2>
                                         </div>
                                         <!--测试-->
                                         <div ng-show="item.LogType==1">
-                                            <h2>{{item.CreatorName}}  ==> {{item.QAStatus|QAStatusFilter}}</h2>
+                                            <h2>
+                                                <span class="nav-link pull" ng-show="item.Stage==0">
+                                                    测试状态 ==> {{item.DeployInfoIocDto.QAStatus|QAStatusFilter}}
+                                                </span>
+                                                <span class="nav-link pull" ng-show="item.Stage==1">
+                                                    测试状态 ==> {{item.DeployInfoPreDto.QAStatus|QAStatusFilter}}
+                                                </span>
+                                                <span class="nav-link pull" ng-show="item.Stage==2">
+                                                    测试状态 ==> {{item.DeployInfoOnlineDto.QAStatus|QAStatusFilter}}
+                                                </span>
+                                            </h2>
                                         </div>
-                                       
+
                                         <!--Comments-->
                                         <div class="timeline-content">
                                             <h4>{{item.Comments}}</h4>
                                         </div>
-                                        @*<div class="timeline-footer">
+                                        <div class="timeline-footer">
                                             <span class="nav-link pull-right">
                                                 {{item.CreatorName}}
                                             </span>
-                                        </div>*@
+                                        </div>
                                     </div>
                                 </li>
                             </ul>

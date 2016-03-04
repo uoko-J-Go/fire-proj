@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace Uoko.FireProj.WebSite.Models
 {
-    public class IdentityUser : IUser
+    public class ApplicationUser : IdentityUser
     {
-        public string Id { get; set; }
-        
-        public string UserName { get; set; }
-        
+      
+       
+      
+         
     }
 }

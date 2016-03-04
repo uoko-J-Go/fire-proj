@@ -85,7 +85,7 @@ let ffMergeAndDeploy onBranch =
     deploy
     tag & push  git tag -a xxx-to-pre -m "deploy xxx to pre" & git push --follow-tags
 *)
-Target "Deoply-To-PRE" (fun _ ->
+Target "Deploy-To-PRE" (fun _ ->
     let branchPre = "pre"
     ensureOnBranch branchPre
         
@@ -131,6 +131,11 @@ Target "BuildSolution" (fun _ ->
             
     RestoreMSSolutionPackages (fun p -> p) slnFile
     build setParams slnFile
+)
+
+Target "test" (fun _ ->
+    let branchName = getBranchName null
+    Console.WriteLine(branchName)
 )
 
 "BuildSolution"
