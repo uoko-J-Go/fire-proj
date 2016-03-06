@@ -78,6 +78,10 @@ let ffMergeAndDeploy onBranch =
                 
     deploy()
 
+    let useRunnerAccountUrl = System.Text.RegularExpressions.Regex.Replace(environVar "CI_BUILD_REPO", @".*(@.+?)(:\d+)?/(.*)", "git$1:$3"); 
+
+    gitCommand null (sprintf "remote set-url --push origin %s" useRunnerAccountUrl)
+
     gitCommand null "push --follow-tags"
 
 
@@ -111,7 +115,7 @@ Target "Deploy-To-IOC" (fun _ ->
     deploy()
 )
 
-// 测试通过的时候调用，方便后期合并，回滚进行跟踪
+// 测试通过的时候调用，方便后期合并，回滚进行跟踪. 这里考虑通过 api 进行调用 打 tag
 Target "QA-Passed-IOC" (fun _ ->
     let passedDate = System.DateTime.Today.Date.ToString("MM-dd-HH-mm")
     gitCommand null (sprintf "tag -a pass-test-%s -m \"QA passed\""  passedDate)
