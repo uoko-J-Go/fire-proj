@@ -150,14 +150,14 @@
                                 <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
                                     <img alt="" class="img-circle" src="~/Metronic/assets/admin/layout2/img/avatar3_small.jpg" />
                                     <span class="username username-hide-on-mobile">
-                                        @User.Identity.Name
+                                        @ViewBag.NickName
                                     </span>
                                     <i class="fa fa-angle-down"></i>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-default">
                                     <li>
                                         <a href="@Url.Action("LogOut", "SystemSet")">
-                                            <i class="icon-key"></i> Log Out
+                                            <i class="icon-key"></i> 注 销
                                         </a>
                                     </li>
                                 </ul>
