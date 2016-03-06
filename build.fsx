@@ -26,7 +26,7 @@ let pkgProject pkgDir =
     let setParams defaults =
         {
             defaults with
-                Verbosity = Some(Minimal)
+                Verbosity = Some(Quiet)
                 Targets = ["Build"]
                 Properties =
                     [
