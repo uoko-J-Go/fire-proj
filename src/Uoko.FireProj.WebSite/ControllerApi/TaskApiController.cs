@@ -32,7 +32,7 @@ namespace Uoko.FireProj.WebSite.ControllerApi
 
         public IHttpActionResult Get([FromUri]TaskQuery query)
         {
-            query.LoginUserId = this.User.Identity.GetUserId<int>();
+            query.LoginUserId = UserHelp.userInfo.UserId;
             var result = _taskSvc.GetTaskPage(query);
             return Ok(result);
         }
@@ -111,8 +111,6 @@ namespace Uoko.FireProj.WebSite.ControllerApi
         [HttpPost]
         public IHttpActionResult UpdateTestStatus([FromBody]TestResultDto testResult)
         {
-            testResult.ModifyId = UserHelp.userInfo.UserId;
-            testResult.CreatorName = UserHelp.userInfo.NickName;
             var taskInfo = _taskSvc.UpdateTestStatus(testResult);
             //创建日志
             var log = new TaskLogs
