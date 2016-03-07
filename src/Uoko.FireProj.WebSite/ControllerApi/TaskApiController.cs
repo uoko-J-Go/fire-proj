@@ -44,6 +44,22 @@ namespace Uoko.FireProj.WebSite.ControllerApi
             return Ok(result);
         }
 
+
+
+        [Route("DeployOnline")]
+        public IHttpActionResult DeployOnlineTask([FromBody] OnlineTaskInfo onlineTask)
+        {
+            // 创建完成上线任务以后
+            var taskFromDb = _taskSvc.CreateOnlineTask(onlineTask);
+
+            // 进行任务的部署
+            _taskSvc.DeployOnlineTask(taskFromDb);
+
+
+
+            return Ok();
+        }
+
         [Route("{taskId}")]
         public IHttpActionResult Get(int taskId)
         {

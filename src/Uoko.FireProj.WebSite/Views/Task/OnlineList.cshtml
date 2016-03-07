@@ -1,8 +1,5 @@
-﻿@using Microsoft.AspNet.Identity
-@using Uoko.FireProj.DataAccess.Query
-@{
+﻿@{
     ViewBag.Title = "上线列表";
-    var loginUserId = this.User.Identity.GetUserId();
 }
 
 <div class="page-bar">
@@ -24,7 +21,7 @@
         <div class="portlet light">
             <div class="portlet-title">
 
-                <form role="form" class="form form-horizontal" name="form" ng-submit="Save(form.$valid)" >
+                <form role="form" class="form form-horizontal" name="form" ng-submit="Fire(form.$valid)" >
                  <div class="form-body">
                      <div class="form-group form-md-line-input">
                          <label class="col-md-2 control-label">项目</label>
@@ -51,7 +48,7 @@
                      <div class="form-group form-md-line-input">
                          <label class="col-md-2 control-label">域名</label>
                          <div class="col-md-10">
-                             <select name="domain" class="form-control" ng-model="domainSelected"  ng-options="domain.Name for domain in domains track by domain.Id" required>
+                             <select name="domain" class="form-control" ng-model="domainSelected"  ng-options="domain.Name for domain in domains track by domain.Name" required>
                              </select>
                              <div ng-show="form.$submitted || form.domain.$touched">
                                  <span class="error-msg" ng-show="form.domain.$error.required">域名必选.</span>

@@ -29,12 +29,6 @@
     }
 
     function getDomain(project, server) {
-        if (typeof project == "string") {
-            project = JSON.parse(project);
-        }
-        if (typeof server == "string") {
-            server = JSON.parse(server);
-        }
         if (project) {
             if (!server) {
                 server = { Id: 0 };
@@ -69,24 +63,29 @@
     }
 
 
-    $scope.Deploy = function(task) {
-        $scope.param = {
-            taskId: task.TaskInfo.Id,
-        };
-        var modalInstance = $uibModal.open({
-            templateUrl: '/app/modals/Deploy.html',
-            controller: 'DeployController',
-            resolve: {
-                param: function() {
-                    return $scope.param;
-                }
-            }
+    $scope.Fire = function (isValid) {
+        console.log($scope);
+
+        if (!isValid) {
+            bootbox.alert("表单验证未通过");
+            return;
+        }
+
+        return;
+
+        var taskForSave = null;
+
+        TaskService.CreateTask(taskForSave, function(data) {
+
+            location.href = "/Task/Index";
+
         });
     }
 
+
     $scope.$watch('projectSelected + serverSelected', function() {
-        getDomain($scope.onlineTaskInfo.Project, $scope.onlineTaskInfo.Server);
-    });
+        getDomain($scope.projectSelected, $scope.serverSelected);
+    }, true);
 
     (function() {
         $scope.Query();

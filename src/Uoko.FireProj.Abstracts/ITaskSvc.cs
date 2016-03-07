@@ -7,7 +7,11 @@ using Uoko.FireProj.Infrastructure.Data;
 namespace Uoko.FireProj.Abstracts
 {
    public interface ITaskSvc
-    {
+   {
+
+        OnlineTaskInfo CreateOnlineTask(OnlineTaskInfo taskInfo);
+
+
         /// <summary>
         /// 新增任务
         /// </summary>
@@ -62,5 +66,6 @@ namespace Uoko.FireProj.Abstracts
 
        PageGridData<TaskInfoForList> GetTasksNeedOnline(TaskNeedOnlineQuery query);
 
-    }
+       void DeployOnlineTask(OnlineTaskInfo taskFromDb);
+   }
 }

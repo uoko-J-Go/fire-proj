@@ -112,4 +112,6 @@ namespace Uoko.FireProj.DataAccess.Dto
 
         public OnlineTaskInfo OnlineTaskInfo { get; set; }
     }
+    
+
 }

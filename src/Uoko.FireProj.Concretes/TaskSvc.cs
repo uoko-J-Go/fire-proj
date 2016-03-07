@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using Mehdime.Entity;
+using Newtonsoft.Json;
 using Uoko.FireProj.Abstracts;
 using Uoko.FireProj.DataAccess.Dto;
 using Uoko.FireProj.DataAccess.Entity;
@@ -30,6 +31,73 @@ namespace Uoko.FireProj.Concretes
         }
 
         #endregion
+
+        /// <summary>
+        /// 创建 上线任务，并且关联 待上线任务, 写日志
+        /// </summary>
+        /// <param name="taskInfo"></param>
+        /// <returns></returns>
+        public OnlineTaskInfo CreateOnlineTask(OnlineTaskInfo taskInfo)
+        {
+            using (var dbScope = _dbScopeFactory.Create())
+            {
+                var db = dbScope.DbContexts.Get<FireProjDbContext>();
+                db.OnlineTaskInfos.Add(taskInfo);
+                db.SaveChanges();
+
+                var onlineTaskId = taskInfo.Id;
+
+                // 已经上线过 pre，但未上线的任务
+                var tasksToBeOnline = db.TaskInfo
+                                        .Where(task => task.ProjectId == taskInfo.ProjectId
+                                                       && task.OnlineTaskId == null
+                                                       && task.DeployInfoPreJson != null)
+                                        .ToList();
+
+                foreach (var taskToBeOnline in tasksToBeOnline)
+                {
+                    taskToBeOnline.OnlineTaskId = onlineTaskId;
+                    var deployOnlineInfo = new DeployInfoOnline();
+                    if (!string.IsNullOrEmpty(taskToBeOnline.DeployInfoOnlineJson))
+                    {
+                        deployOnlineInfo =
+                            JsonConvert.DeserializeObject<DeployInfoOnline>(taskToBeOnline.DeployInfoOnlineJson);
+                    }
+                    deployOnlineInfo.OnlineTaskId = onlineTaskId;
+                    deployOnlineInfo.DeployStage = StageEnum.PRODUCTION;
+                    deployOnlineInfo.CheckUserId = taskToBeOnline.OnlineCheckUserId;
+                }
+
+                db.SaveChanges();
+                return taskInfo;
+            }
+        }
+
+
+        public OnlineTaskInfo ReDeployOnlineTask(OnlineTaskInfo taskInfo)
+        {
+            using (var dbScope = _dbScopeFactory.Create())
+            {
+                var db = dbScope.DbContexts.Get<FireProjDbContext>();
+                var taskFromDb = db.OnlineTaskInfos.Find(taskInfo.Id);
+                if (taskFromDb != null)
+                {
+                    taskInfo.OnlineVersion = taskFromDb.OnlineVersion;
+                    taskInfo.OnlineVersion = taskFromDb.OnlineVersion;
+                }
+
+
+                db.SaveChanges();
+                return taskInfo;
+            }
+        }
+
+        public void DeployOnlineTask(OnlineTaskInfo taskFromDb)
+        {
+
+
+        }
+
 
         public int CreatTask(TaskWriteDto taskDto)
         {
