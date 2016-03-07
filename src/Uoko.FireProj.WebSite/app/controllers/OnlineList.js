@@ -12,6 +12,8 @@
     $scope.taskInfos = [];
     $scope.totalItems = 0; //总数
     $scope.queryType = 0; // 所有
+    $scope.projectSelected = null;
+    $scope.serverSelected = null;
 
 
     function getProjectList() {
@@ -47,11 +49,16 @@
     //查询项目
     $scope.Query = function() {
 
+        var projectId = 0;
+        if ($scope.projectSelected) {
+            projectId = $scope.projectSelected.Id;
+        }
+
         var params = {
             offset: $scope.pageSize * ($scope.currentPage - 1),
             limit: $scope.pageSize,
-            ProjectId: 2025,
-        }
+            ProjectId: projectId,
+        };
 
         TaskService.GetTasksNeedToBeOnline(params, function(data) {
             $scope.totalItems = data.total;
@@ -77,7 +84,7 @@
         });
     }
 
-    $scope.$watch('onlineTaskInfo.Project + onlineTaskInfo.Server', function() {
+    $scope.$watch('projectSelected + serverSelected', function() {
         getDomain($scope.onlineTaskInfo.Project, $scope.onlineTaskInfo.Server);
     });
 

@@ -29,8 +29,7 @@
                      <div class="form-group form-md-line-input">
                          <label class="col-md-2 control-label">项目</label>
                          <div class="col-md-10">
-                             <select class="form-control" name="project" ng-model="onlineTaskInfo.Project" required>
-                                 <option ng-repeat="project in projects" value="{{project}}" ng-selected="project.Id==onlineTaskInfo.ProjectId">{{project.ProjectName}}</option>
+                             <select class="form-control" name="project" ng-model="projectSelected" ng-change="Query()" ng-options="project.ProjectName for project in projects track by project.Id" required>
                              </select>
                              <div ng-show="form.$submitted || form.project.$touched">
                                  <span class="error-msg" ng-show="form.project.$error.required">请选择项目</span>
@@ -41,8 +40,7 @@
                      <div class="form-group form-md-line-input">
                          <label class="col-md-2 control-label">部署服务器</label>
                          <div class="col-md-10">
-                             <select name="server" class="form-control" ng-model="onlineTaskInfo.Server" required>
-                                 <option ng-repeat="server in servers" value="{{server}}" ng-selected="server.Id==onlineTaskInfo.ServerId">{{server.Name}}</option>
+                             <select name="server" class="form-control" ng-model="serverSelected" ng-options="server.Name for server in servers track by server.Id" required>
                              </select>
                              <div class="" ng-show="form.$submitted || form.server.$touched">
                                  <span class="error-msg" ng-show="form.server.$error.required">请选择服务器</span>
@@ -53,8 +51,7 @@
                      <div class="form-group form-md-line-input">
                          <label class="col-md-2 control-label">域名</label>
                          <div class="col-md-10">
-                             <select name="domain" class="form-control" ng-model="onlineTaskInfo.DomainInfo" required>
-                                 <option ng-repeat="domain in domains" value="{{domain}}">{{domain.Name}}</option>
+                             <select name="domain" class="form-control" ng-model="domainSelected"  ng-options="domain.Name for domain in domains track by domain.Id" required>
                              </select>
                              <div ng-show="form.$submitted || form.domain.$touched">
                                  <span class="error-msg" ng-show="form.domain.$error.required">域名必选.</span>
@@ -67,7 +64,7 @@
                             <a target="_blank" href="http://semver.org/lang/zh-CN/">上线版本</a>
                         </label>
                         <div class="col-md-10">
-                           <input name="onlineVersion" ng-model="onlineTaskInfo.OnlineVersion" class="form-control ng-pristine ng-invalid ng-invalid-required ng-touched" placeholder="主版本.次版本.修订版本" required="" type="text">
+                           <input name="onlineVersion" ng-model="OnlineVersion" class="form-control ng-pristine ng-invalid ng-invalid-required ng-touched" placeholder="主版本.次版本.修订版本" required="" type="text">
                         </div>
                     </div>
                            
