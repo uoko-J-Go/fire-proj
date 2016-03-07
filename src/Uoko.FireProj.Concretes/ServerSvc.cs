@@ -83,12 +83,12 @@ namespace Uoko.FireProj.Concretes
             try
             {
                 var entity = Mapper.Map<ServerDto, Server>(server);
-                entity.CreateDate = DateTime.Now;
+                entity.ModifyDate = DateTime.Now;
                 using (var dbScope = _dbScopeFactory.Create())
                 {
                     var db = dbScope.DbContexts.Get<FireProjDbContext>();
                     //根据实际情况修改
-                    db.Update(entity, t => new { t.Name, t.IP, t.ServerDesc, ModifyBy = t.ModifyId, t.ModifyDate, t.PackageDir });
+                    db.Update(entity, t => new { t.Name, t.IP, t.ServerDesc, t.ModifyId, t.ModifierName, t.ModifyDate, t.PackageDir });
 
                     //修改域名有主键则修改,无主键新增
                     var domainList = Mapper.Map<List<DomainResourceDto>, List<DomainResource>>(server.IISData);
@@ -103,6 +103,8 @@ namespace Uoko.FireProj.Concretes
                         {
                             item.ServerId = server.Id;
                             item.CreateDate = DateTime.Now;
+                            item.CreatorId = entity.CreatorId;
+                            item.CreatorName = entity.CreatorName;
                             db.DomainResource.Add(item);
                         }
                     }
