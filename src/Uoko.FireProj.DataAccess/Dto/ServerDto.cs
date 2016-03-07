@@ -7,7 +7,7 @@ using Uoko.FireProj.DataAccess.Enum;
 
 namespace Uoko.FireProj.DataAccess.Dto
 {
-    public class ServerDto
+    public class ServerDto: BaseDto
     {
         public int Id { get; set; }
 
@@ -15,14 +15,17 @@ namespace Uoko.FireProj.DataAccess.Dto
         /// 服务器名称
         /// </summary>
         public string Name { get; set; }
+
         /// <summary>
         /// 服务器IP
         /// </summary>
         public string IP { get; set; }
+
         /// <summary>
         /// 环境类型
         /// </summary>
-        public EnvironmentEnum EnvironmentType { get; set; }
+        public StageEnum StageType { get; set; }
+
         /// <summary>
         /// 服务器描述 操作系统 配置等等
         /// </summary>
@@ -35,9 +38,5 @@ namespace Uoko.FireProj.DataAccess.Dto
 
         public List<DomainResourceDto> IISData { get; set; }
 
-        /// <summary>
-        /// 状态
-        /// </summary>
-        public GenericStatusEnum Status { get; set; }
     }
 }

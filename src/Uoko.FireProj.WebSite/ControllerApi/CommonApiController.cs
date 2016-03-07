@@ -20,7 +20,7 @@ namespace Uoko.FireProj.WebSite.ControllerApi
         public IHttpActionResult GetEnvironment()
         {
             List<object> data = new List<object>();
-            foreach (Enum item in Enum.GetValues(typeof(EnvironmentEnum)))
+            foreach (Enum item in Enum.GetValues(typeof(StageEnum)))
             {
                 data.Add(new { Id = item.GetHashCode(), Name = item.ToDescription() });
             }

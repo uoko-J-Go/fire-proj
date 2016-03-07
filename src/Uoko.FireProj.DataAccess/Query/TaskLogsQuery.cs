@@ -11,6 +11,6 @@ namespace Uoko.FireProj.DataAccess.Query
     {
         public int TaskId { get; set; }
 
-        public EnvironmentEnum? Environment { get; set; }
+        public StageEnum? Stage { get; set; }
     }
 }

@@ -31,8 +31,8 @@ namespace Uoko.FireProj.WebSite.ControllerApi
         [HttpPost]
         public IHttpActionResult BuildCallback(BuildHookRequest bhRequest)
         {
-            var taskLog = _taskLogsSvc.GetTaskLogByTriggerId(bhRequest.trigger_request_id);
-            if (!"build".Equals(bhRequest.object_kind, StringComparison.OrdinalIgnoreCase)|| bhRequest.trigger_request_id==0|| taskLog==null)
+
+            if (!"build".Equals(bhRequest.object_kind, StringComparison.OrdinalIgnoreCase)|| bhRequest.trigger_request_id==0)
             {
                 return Ok();
             }
@@ -40,17 +40,14 @@ namespace Uoko.FireProj.WebSite.ControllerApi
             //部署失败
             if ("failed".Equals(bhRequest.build_status, StringComparison.OrdinalIgnoreCase))
             {
-                _taskSvc.UpdateTaskStatus(new TaskDto() {Id = taskLog.TaskId, Status = TaskEnum.DeployFails});
-                taskLog.BuildId = bhRequest.build_id;
-                taskLog.LogsDesc = string.Format("在执行{0} 时出错,详情gitlab  builds:{1}", bhRequest.build_name,bhRequest.build_id);
-                _taskLogsSvc.UpdateTaskLogs(taskLog);
+                _taskSvc.DeployCallback(bhRequest.trigger_request_id, bhRequest.build_id, DeployStatus.DeployFails);
             }
             //部署成功
             if ("success".Equals(bhRequest.build_status, StringComparison.OrdinalIgnoreCase))
             {
                 if ("execFakeScript".Equals(bhRequest.build_name, StringComparison.OrdinalIgnoreCase))
                 {
-                    _taskSvc.UpdateTaskStatus(new TaskDto() { Id = taskLog.TaskId, Status = TaskEnum.DeploySuccess});
+                    _taskSvc.DeployCallback(bhRequest.trigger_request_id, bhRequest.build_id, DeployStatus.DeploySuccess);
                 }
             }
 

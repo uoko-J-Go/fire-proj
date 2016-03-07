@@ -1,72 +1,101 @@
-﻿
+﻿@using Microsoft.AspNet.Identity
+@using Uoko.FireProj.DataAccess.Query
 @{
-    ViewBag.Title = "我的任务";
+    ViewBag.Title = "任务列表";
+    var loginUserId = 1;//this.User.Identity.GetUserId();
+
+
 }
+
 <div class="page-bar">
     <ul class="page-breadcrumb">
         <li>
             <i class="fa fa-home"></i>
-            <a href="@Url.Action("Index","Home")">首页</a>
+            <a href="@Url.Action("Index", "Task")">首页</a>
             <i class="fa fa-angle-right"></i>
         </li>
         <li>
-            <a href="@Url.Action("Index", "Task")">我的任务</a>
-            <i class="fa fa-angle-right"></i>
-        </li>
-        <li>
-            <a href="#">任务列表</a>
+            <a href="@Url.Action("Index", "Task")">任务列表</a>
         </li>
     </ul>
 </div>
+
 <div class="row" ng-controller="TaskController">
     <div class="col-md-12">
         <!-- BEGIN EXAMPLE TABLE PORTLET-->
-        <div class="portlet box blue">
+        <div class="portlet light">
             <div class="portlet-title">
-                <div class="caption">
-                    <i class="fa fa-star"></i>我的任务
+                <div>
+                    <div class="btn-group">
+                        <a href="@Url.Action("Create", "Task")" class="btn green btn">
+                            创建任务 <i class="fa fa-plus"></i>
+                        </a>
+                    </div>
                 </div>
-                <div class="tools">
-                    <a href="javascript:;" class="reload" data-original-title="" title="reload" ng-click="Query()"></a>
+                <div class="caption">
+                    <a href="javascript:;" ng-click="Query('@TaskQuery.QueryType.ShowAll')">全部</a>
+                    <a href="javascript:;" ng-click="Query('@TaskQuery.QueryType.CreatorFocus')">我的</a>
+                    <a href="javascript:;" ng-click="Query('@TaskQuery.QueryType.QaFocus')">@@我的</a>
+                </div>
+                <div class="actions">
                 </div>
             </div>
             <div class="portlet-body">
-                <div class="table-toolbar">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="btn-group">
-                                <a href="@Url.Action("Create", "Task")" class="btn green">
-                                    创建任务 <i class="fa fa-plus"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <div class="table-responsive">
-                    <table class="table table-bordered table-hover">
+                    <table class="table table-bordered table-hover table-condensed">
                         <thead>
                         <tr>
-                            <th>任务名称</th>
-                            <th>环境</th>
-                            <th>分支</th>
-                            <th>状态</th>
-                            <th>任务描述</th>
-                            <th>操作</th>
+                            <th rowspan="2">任务名称</th>
+                            <th rowspan="2">项目</th>
+                            <th rowspan="2">分支</th>
+                            <th colspan="2">IOC</th>
+                            <th colspan="2">Pre</th>
+                            <th colspan="3">Online</th>
+                            <th rowspan="2">发起人</th>
+                            <th rowspan="2">最后操作人</th>
+                            <th rowspan="2">操作</th>
+                        </tr>
+                        <tr>
+                            <th>部署</th>
+                            <th>测试</th>
+                            <th>部署</th>
+                            <th>测试</th>
+                            <th>上线版本</th>
+                            <th>部署</th>
+                            <th>测试</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr ng-repeat="item in items">
-                            <td><a  class="text-primary" href="/Task/Detail?taskId={{item.Id}}">{{item.TaskName}}</a> </td>
-                            <td>{{item.DeployEnvironment|environmentFilter}}</td>
-                            <td>{{item.Branch}}</td>
-                            <td>{{item.Status|taskStatusFilter}}</td>
-                            <td>{{item.TaskDesc}}</td>
+                        <tr ng-repeat="task in taskInfos">
+                            <td><a class="text-primary" href="/Task/Detail?taskId={{task.TaskInfo.Id}}">{{task.TaskInfo.TaskName}}</a> </td>
+                            <td>{{task.ProjectName}}</td>
+                            <td>{{task.TaskInfo.Branch}}</td>
+                            <td title="{{(task.DeployInfoIoc.DeployStatus | DeployStatusFilter).Title}}">
+                                <div ng-if="task.DeployInfoIoc">
+                                    <span ng-class="(task.DeployInfoIoc.DeployStatus | DeployStatusFilter).IconClass" ></span>
+                                </div>
+                            </td>
+                            <td title="{{task.IocTestAllPassed ? '测试全部通过' : ''}}">
+                                <span class="glyphicon glyphicon-ok" ng-show="task.IocTestAllPassed"></span>
+                            </td>
+                            <td title="{{(task.DeployInfoPre.DeployStatus | DeployStatusFilter).Title}}">
+                                <span ng-class="(task.DeployInfoPre.DeployStatus | DeployStatusFilter).IconClass" ng-show="task.DeployInfoPre" ></span>
+                            </td>
+                            <td title="{{task.PreTestAllPassed ? '测试全部通过' : ''}}">
+                                <span class="glyphicon glyphicon-ok" ng-show="task.PreTestAllPassed"></span>
+                            </td>
+                            <td>
+                                <a ng-show="task.TaskInfo.OnlineTaskId" ng-href="@Url.Action("OnlineInfo","Task")?taskId={{task.TaskInfo.OnlineTaskId}}">test</a>
+                            </td>
+                            <td>{{task.TaskInfo.DeployInfoOnlineJson}}</td>
+                            <td title="{{task.OnlineTestAllPassed ? '测试全部通过' : ''}}">
+                                <span class="glyphicon glyphicon-ok" ng-show="task.OnlineTestAllPassed"></span>
+                            </td>
+                            <td>{{task.TaskInfo.CreatorName}}</td>
+                            <td>{{task.TaskInfo.ModifierName}}</td>
                             <td>
                                 <div>
-                                    <a class="btn btn-success" ng-show="item.Status==0||item.Status==4||item.Status==10" ng-click="Deploy(item)">编译部署</a>
-                                    <a class="btn btn-success" ng-show="item.Status==6" ng-click="CommitToTest(item)">提交测试</a>
-                                    <a class="btn btn-success" href="/Task/Logs/{{item.Id}}">任务记录</a>
-                                    <a class="btn btn-success" ng-click="ReleaseDomain(item.Id)">释放域名</a>
+                                    <a class="btn btn-success btn-xs" ng-show="!task.TaskInfo.HasOnlineDeployed && task.TaskInfo.CreatorId == @loginUserId" ng-click="Deploy(task)">部署到...</a>
                                 </div>
                             </td>
                         </tr>
@@ -84,14 +113,16 @@
             </div>
         </div>
         <!-- END EXAMPLE TABLE PORTLET-->
+
     </div>
 </div>
 @section Scripts {
-   <script src="~/app/services/CommonService.js"></script>
+    <script src="~/app/services/CommonService.js"></script>
     <script src="~/app/services/ProjectService.js"></script>
     <script src="~/app/services/TaskService.js"></script>
     <script src="~/app/filters/CommonFilter.js"></script>
     <script src="~/app/controllers/TaskList.js"></script>
+    <script src="~/app/modals/Deploy.js"></script>
 }
 
 

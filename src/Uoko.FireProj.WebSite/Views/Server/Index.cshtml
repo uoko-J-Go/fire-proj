@@ -7,11 +7,11 @@
     <ul class="page-breadcrumb">
         <li>
             <i class="fa fa-home"></i>
-            <a href="@Url.Action("Index","Home")">首页</a>
+            <a href="@Url.Action("Index","Task")">首页</a>
             <i class="fa fa-angle-right"></i>
         </li>
         <li>
-            <a href="@Url.Action("Index", "Project")">服务器</a>
+            <a href="@Url.Action("ServerMgmt", "SystemSet")">服务器</a>
             <i class="fa fa-angle-right"></i>
         </li>
         <li>
@@ -27,7 +27,7 @@
                 <i class="fa fa-github"></i>服务器列表
             </div>
             <div class="tools">
-                <a href="javascript:;" class="reload" data-original-title="" title="reload" ng-click="Query()"></a>
+                <a href="javascript:;" class="reload" data-original-title="" title="刷新" ng-click="Query()"></a>
             </div>
         </div>
         <div class="portlet-body">
@@ -53,7 +53,6 @@
                             <th>环境</th>
                             <th>存储路径</th>
                             <th>描述</th>
-                            <th>状态</th>
                             <th>操作</th>
                         </tr>
                     </thead>
@@ -61,10 +60,9 @@
                         <tr ng-repeat="item in items">
                             <td>{{item.Name}}</td>
                             <td>{{item.IP}}</td>
-                            <td>{{item.EnvironmentType|environmentFilter}}</td>
+                            <td>{{item.StageType|StageTypeFilter}}</td>
                             <td>{{item.PackageDir}}</td>
                             <td>{{item.ServerDesc}}</td>
-                            <td>{{item.Status|DomainResourceFilter}}</td>
                             <td>
                                 <div>
                                     <a class="btn btn-success" href="/SystemSet/Edit/{{item.Id}}">编辑</a>

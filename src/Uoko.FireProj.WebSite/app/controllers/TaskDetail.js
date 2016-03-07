@@ -1,118 +1,99 @@
-﻿
-fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskService, ProjectService, CommonService) {
-    $scope.taskInfo = {};
-    $scope.tasklogTotal = {};
-    $scope.currLogTab = 0;
+﻿fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskService, ProjectService,CommonService) {
+    var taskId = $("#taskIdParam").val();
+    $scope.AllUsers = [];
+    $scope.GetAllUser = function () {
+        CommonService.getAllUsers(function (data) {
+            $scope.AllUsers = data;
+            $scope.GetTaskInfo();
+        });
+    }
+    $scope.TabChanged=function(index) {
+        $scope.currLogTab = index;
+    }
     $scope.GetTaskInfo = function () {
-        var taskId = $("#taskIdParam").val();
         TaskService.GetTaskInfo(taskId, function (data) {
-            $scope.taskInfo = data;
-            $scope.GetLogTotal($scope.taskInfo.Id);
-            $scope.GetAllUserDetail($scope.taskInfo.CheckUsers, 0);
-            $scope.GetAllUserDetail($scope.taskInfo.NoticeUses, 0);
-         
+            $scope.model = data;
+            $scope.param = {
+                taskId: taskId 
+            };
+            $scope.model.DeployInfoIocDto.CheckUser = AnalysisUser($scope.model.DeployInfoIocDto.CheckUser,$scope.AllUsers);
+            $scope.model.DeployInfoIocDto.NoticeUser = AnalysisUser($scope.model.DeployInfoIocDto.NoticeUser, $scope.AllUsers);
+            $scope.model.DeployInfoPreDto.CheckUser = AnalysisUser($scope.model.DeployInfoPreDto.CheckUser, $scope.AllUsers);
+            $scope.model.DeployInfoPreDto.NoticeUser = AnalysisUser($scope.model.DeployInfoPreDto.NoticeUser, $scope.AllUsers);
+
+            if ($scope.model.DeployInfoIocJson != null) {
+                $scope.currLogTab = 0;
+            }else if ($scope.model.DeployInfoPreJson != null) {
+                $scope.currLogTab = 1;
+            }
+            
         });
     }
-    //获取当前任务在各个环境中的任务记录数
-    $scope.GetLogTotal = function (taskId) {
-        TaskService.GetLogTotal(taskId, function (data) {
-            $scope.tasklogTotal = data;
-            $scope.currLogTab = $scope.taskInfo.DeployEnvironment;
-            $scope.Query();
+    $scope.GetTaskLogsByTaskId = function () {
+        TaskService.GetTaskLogsByTaskId(taskId, function (data) {
+            $scope.items = data;
         });
     }
-
-    $scope.GetAllUserDetail = function (userList, index) {
-        if (index < userList.length) {
-            var user = userList[index];
-            CommonService.getSingleUser(user.Id, function (data) {
-                userList.splice(index, 1, data);
-                if (index < userList.length) {
-                    ++index;
-                    $scope.GetAllUserDetail(userList, index);
-                }
-            });
-        }
-    }
-
     
-    $scope.Edit = function () {
-        location.href = "/Task/Edit?taskId=" + $scope.taskInfo.Id;
+    //编译部署
+    $scope.Deploy = function () {
+        var modalInstance = $uibModal.open({
+            templateUrl: '/app/modals/Deploy.html',
+            controller: 'DeployController',
+            resolve: {
+                param: function () {
+                    $scope.param.stage = $scope.currLogTab;
+                    return $scope.param;
+            }
+           }
+        });
     }
-
+    $scope.TestPassed = function (stage) {
+      
+        var testresult= {
+            TaskId: taskId,
+            Stage: stage,
+            QAStatus: 2,
+            Comments:""
+        }
+        var modalInstance = $uibModal.open({
+            templateUrl: '/app/modals/TestDailog.html',
+            controller: 'TestController',
+            resolve: {
+                param: function () {
+                    return testresult;
+                }
+            }
+        });
+    }
+    $scope.TestFails = function (stage) {
+        var testresult = {
+            TaskId: taskId,
+            Stage: stage,
+            QAStatus: 1,
+            Comments: ""
+        }
+        var modalInstance = $uibModal.open({
+            templateUrl: '/app/modals/TestDailog.html',
+            controller: 'TestController',
+            resolve: {
+                param: function () {
+                    return testresult;
+                }
+            }
+        });
+    }
+    $scope.GotoGitLabBuildPage=function(buildId) {
+        var url = $scope.model.ProjectDto.ProjectRepo.replace(".git","") + "/builds/" + buildId;
+        window.open(url, "_blank");
+    }
     $scope.Cancel = function () {
         location.href = "/Task/Index";
     }
 
-    $scope.TestFails = function () {
-        TaskService.TestFails($scope.taskInfo.Id, function (data) {
-            formSubmitSuccessClick();
-        });
-    }
-
-    $scope.Tested = function () {
-        TaskService.Tested($scope.taskInfo.Id, function (data) {
-            formSubmitSuccessClick();
-        });
-    }
-    $scope.Deploy = function () {
-        CommonService.TriggerBuild($scope.taskInfo, function (data) {
-            bootbox.alert("已经成功发起部署任务!", function () {
-                TaskService.BeginDeploy($scope.taskInfo.Id, data.id, function (data) {
-                    location.reload();
-                });
-            });
-
-        });
-    }
-
-    $scope.CommitToTest = function () {
-        TaskService.CommitToTest($scope.taskInfo.Id, function (data) {
-            bootbox.alert("已经成功提交测试!", function () {
-                location.reload();
-            });
-        });
-    }
-
-    /*任务记录相关*/
-    $scope.pageSize = 0;
-    $scope.currentPage = 1;
-    $scope.items = [];
-    $scope.totalItems = 0;//总数
-    //查询项目
-    $scope.Query = function () {
-        var params = {
-            offset: $scope.pageSize * ($scope.currentPage - 1),
-            limit: $scope.pageSize,
-            taskId: $scope.taskInfo.Id,
-            environment: $scope.currLogTab,
-            sort: "CreateDate",
-            order:"desc"
-        }
-        TaskService.GetTaskLogsByPage(params, function (data) {
-            $scope.totalItems = data.total;
-            $scope.items = data.rows;
-        });
-
-    }
-
-    $scope.GotoGitLabBuildPage = function (buildId) {
-        ProjectService.getByTaskId($scope.taskInfo.Id,function(data) {
-            var url = data.ProjectRepo.replace(".git", "") + "/builds/" + buildId;
-            window.open(url, '_blank');
-        });
-    }
-    $scope.GetCurrLog = function (enviroment) {
-        $scope.currLogTab = enviroment;
-        $scope.currentPage = 1;
-        $scope.items = [];
-        $scope.totalItems = 0;//总数
-        $scope.Query();
-    }
-
-    /*任务记录相关*/
     $scope.Init = function () {
-        $scope.GetTaskInfo();
+        $scope.GetAllUser();
+        $scope.GetTaskLogsByTaskId();
     }
 
     $scope.Init();

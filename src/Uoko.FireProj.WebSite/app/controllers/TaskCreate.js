@@ -1,77 +1,49 @@
 ﻿
 
 fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskService, ProjectService, CommonService) {
+
+    $scope.Project = null;//当前项目对象
+    $scope.Server = null;//当前服务器对象
+    $scope.Server = null;//当前服务器对象
     $scope.taskInfo = {
         TaskName: "",
         Project: null,
         Branch: "",
-        DeployEnvironment: "",
-        DeployIP: "",
-        DeployAddress: "",
-        SiteName: "",
-        CheckUsers: [],
-        NoticeUses: [],
-        TaskDesc: "",
-        Domain: "",
+        DeployStage: "",
+        Server: null,
+        DomainInfo: null,
+        CheckUsers:[],
+        NoticeUsers: [],
+        OnlineCheckUsers: [],
+        OnlineNoticeUsers: [],
+        DeployInfo: {}
     };
-    $scope.taskInfo.Server;
-    if (typeof project == "string") {
-        $scope.serverIP = JSON.parse(project);
-    }
-
 
     $scope.projectList = [];
     $scope.branchList = [];
+
     TaskService.GetEnvironment(function (data) {
-        $scope.environmentList = data;
+        $scope.environmentList = data.filter(function (env) {
+            return env.Id !=2;
+        });
     });
+    $scope.AllUsers = [];
+    $scope.GetAllUser = function () {
+        CommonService.getAllUsers(function (data) {
+            $scope.AllUsers = data;
+        });
+    }
+    $scope.loadTags = function (query) {
+        var result = $scope.AllUsers.filter(function(user) {
+            return (user.NickName.toLowerCase().indexOf(query.toLowerCase()) != -1) || (user.LoginName.toLowerCase().indexOf(query.toLowerCase()) != -1);
+        });
+        return result;
+    }
     $scope.GetProjectList = function() {
         ProjectService.getAllProject(function(data) {
             $scope.projectList = data;
         });
     };
-    //选择审核人
-    $scope.selectCheckUser = function () {
-        var modalInstance = $uibModal.open({
-            templateUrl: '/app/modals/SelectUser.html',
-            controller: 'SelectUserController',
-            resolve: {
-                selectedUsers: function () {
-                    return $scope.taskInfo.CheckUsers;
-                }
-            }
-        });
-
-        modalInstance.result.then(function (selectedUsers) {
-            $scope.taskInfo.CheckUsers = selectedUsers;
-        });
-    }
-    //选择相关人
-    $scope.selectNoticeUser = function () {
-        var modalInstance = $uibModal.open({
-            templateUrl: '/app/modals/SelectUser.html',
-            controller: 'SelectUserController',
-            resolve: {
-                selectedUsers: function () {
-                    return $scope.taskInfo.NoticeUses;
-                }
-            }
-        });
-
-        modalInstance.result.then(function (selectedUsers) {
-            $scope.taskInfo.NoticeUses = selectedUsers;
-        });
-    }
-    //移除审核人
-    $scope.removeCheckUser = function (index) {
-        $scope.taskInfo.CheckUsers.splice(index, 1);
-        $scope.$evalAsync();
-    }
-    //移除相关人
-    $scope.removeNoticeUser = function (index) {
-        $scope.taskInfo.NoticeUses.splice(index, 1);
-        $scope.$evalAsync();
-    }
     $scope.Save = function (isValid) {
         if (!isValid) {
             bootbox.alert("表单验证未通过");
@@ -79,16 +51,74 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
         }
         var project = $scope.taskInfo.Project;
         if (typeof project == "string") {
-            $scope.taskInfo.Project = JSON.parse(project);
+            project = JSON.parse(project);
         }
         var server = $scope.taskInfo.Server;
-        if (typeof project == "string") {
+        if (typeof server == "string") {
             server = JSON.parse(server);
-            $scope.taskInfo.DeployIP = server.IP;
-            $scope.taskInfo.ServerId = server.Id;
         }
-        TaskService.CreateTask($scope.taskInfo, function() {
+        var domainInfo = $scope.taskInfo.DomainInfo;
+        if (typeof domainInfo == "string") {
+            domainInfo = JSON.parse(domainInfo);
+        }
+        var checkUserIds = [];
+        var noticeUserIds = [];
+        if ($scope.taskInfo.CheckUsers != null && $scope.taskInfo.CheckUsers.length > 0) {
+            $.each($scope.taskInfo.CheckUsers, function (i, item) {
+                checkUserIds.push(item.UserId);
+            });
+        }
+        if ($scope.taskInfo.NoticeUsers != null && $scope.taskInfo.NoticeUsers.length > 0) {
+            $.each($scope.taskInfo.NoticeUsers, function (i, item) {
+                noticeUserIds.push(item.UserId);
+            });
+        }
+        
+        var taskForSave= {
+            TaskName:$scope.taskInfo.TaskName,
+            Branch:$scope.taskInfo.Branch,
+            ProjectId: project.Id,
+            DeployStage: $scope.taskInfo.DeployStage
+        }
+        if (taskForSave.DeployStage == 0) {
+            taskForSave.IocDeployInfo = $scope.taskInfo.DeployInfo;
+            taskForSave.IocDeployInfo.DeployIP =server.IP;
+            taskForSave.IocDeployInfo.Domain =domainInfo.Name;
+            taskForSave.IocDeployInfo.SiteName =domainInfo.SiteName;
+            taskForSave.IocDeployInfo.CheckUserId = checkUserIds.join(",");
+            taskForSave.IocDeployInfo.NoticeUserId = noticeUserIds.join(",");
+        } else if (taskForSave.DeployStage == 1) {
+            taskForSave.PreDeployInfo = $scope.taskInfo.DeployInfo;
+            taskForSave.PreDeployInfo.DeployIP = server.IP;
+            taskForSave.PreDeployInfo.Domain =domainInfo.Name;
+            taskForSave.PreDeployInfo.SiteName =domainInfo.SiteName;
+            taskForSave.PreDeployInfo.CheckUserId = checkUserIds.join(",");
+            taskForSave.PreDeployInfo.NoticeUserId = noticeUserIds.join(",");
+
+            /*添加上线相关信息*/
+            var onlineCheckUserIds = [];
+            var onlineNoticeUserIds = [];
+            if ($scope.taskInfo.OnlineCheckUsers != null && $scope.taskInfo.OnlineCheckUsers.length > 0) {
+                $.each($scope.taskInfo.OnlineCheckUsers, function (i, item) {
+                    onlineCheckUserIds.push(item.UserId);
+                });
+            }
+            if ($scope.taskInfo.OnlineNoticeUsers != null && $scope.taskInfo.OnlineNoticeUsers.length > 0) {
+                $.each($scope.taskInfo.OnlineNoticeUsers, function (i, item) {
+                    onlineNoticeUserIds.push(item.UserId);
+                });
+            }
+            taskForSave.OnlineDeployInfo = {
+                CheckUserId: onlineCheckUserIds.join(","),
+                NoticeUserId: onlineNoticeUserIds.join(",")
+            }
+            /*添加上线相关信息*/   
+        }
+
+        TaskService.CreateTask(taskForSave, function (data) {
+
             location.href = "/Task/Index";
+            
         });
     }
 
@@ -106,12 +136,11 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
         if (typeof server == "string") {
             server = JSON.parse(server);
         }
-
         if (project != undefined && project!= "") {
             if (server == undefined) {
                 server = { Id: 0 };
             }
-            TaskService.GetDomain(project.Id, server.Id, function (data) {
+            TaskService.GetDomain(project.Id, server.Id,0, function (data) {
                 $scope.DomainList = data;
             });
         }   
@@ -121,7 +150,7 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
         if (typeof project == "string") {
             project = JSON.parse(project);
         }
-        CommonService.getProjectBranch(project.ProjectId, function (data) {
+        CommonService.getProjectBranch(project.RepoId, function (data) {
             $scope.branchList = data;
         });
     }
@@ -129,17 +158,11 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
     $scope.Cancel = function () {
         location.href = "/Task/Index";
     }
-    
-    $scope.CreatDeployAddress = function (server) {
-        if (typeof server == "string") {
-            server = JSON.parse(server);
-            $scope.taskInfo.DeployAddress = "https://" + server.IP + "/msdeploy.axd";
-        }
-    }
 
     $scope.Init = function () {
         $scope.GetProjectList();
-        $scope.$watch('taskInfo.Project + taskInfo.DeployEnvironment + taskInfo.Server', function () {
+        $scope.GetAllUser();
+        $scope.$watch('taskInfo.Project + taskInfo.DeployStage + taskInfo.Server', function () {
             $scope.GetDomain($scope.taskInfo.Project, $scope.taskInfo.Server);
         });
     }

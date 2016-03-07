@@ -8,11 +8,12 @@ using Uoko.FireProj.Abstracts;
 using Uoko.FireProj.DataAccess.Dto;
 using Uoko.FireProj.DataAccess.Enum;
 using Uoko.FireProj.DataAccess.Query;
+using Uoko.FireProj.Infrastructure.Data;
 
 namespace Uoko.FireProj.WebSite.ControllerApi
 {
     [RoutePrefix("api/ServerApi")]
-    public class ServerApiController : ApiController
+    public class ServerApiController : BaseApiController
     {
         private IServerSvc _serverSvc { get; set; }
         public ServerApiController(IServerSvc serverSvc)
@@ -26,7 +27,7 @@ namespace Uoko.FireProj.WebSite.ControllerApi
             return Ok(result);
         }
         [Route("Environment/{en}")]
-        public IHttpActionResult Get(EnvironmentEnum en)
+        public IHttpActionResult Get(StageEnum en)
         {
             var result = _serverSvc.GetAllServerOfEnvironment(en);
             return Ok(result);
@@ -36,6 +37,8 @@ namespace Uoko.FireProj.WebSite.ControllerApi
         [HttpPost]
         public IHttpActionResult Update([FromBody]ServerDto server)
         {
+            server.ModifyId = UserHelp.userInfo.UserId;
+            server.ModifierName = UserHelp.userInfo.NickName;
             _serverSvc.UpdateServer(server);
             return Ok();
         }
@@ -44,6 +47,8 @@ namespace Uoko.FireProj.WebSite.ControllerApi
         [HttpPost]
         public IHttpActionResult Create([FromBody]ServerDto server)
         {
+            server.CreatorId = UserHelp.userInfo.UserId;
+            server.CreatorName = UserHelp.userInfo.NickName;
             _serverSvc.CreateServer(server);
             return Ok();
         }

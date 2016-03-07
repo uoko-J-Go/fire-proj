@@ -1,8 +1,40 @@
-﻿.form-control-wrap .tags { float:left;list-style:none }
+﻿/*.form-control-wrap .tags { float:left;list-style:none }
 .form-control-wrap .tags li{ float:left; height:60px;padding:10px 20px; position:relative;cursor:pointer; }
 .form-control-wrap .tags li img{width:60px;height:60px;}
 .form-control-wrap .tags li .close{ position:absolute;top:0;right:0;width: 20px;height: 20px;cursor: pointer; color:#f00;text-decoration:none;text-align:center;line-height:20px;font-weight: bold; }
 .form-control-wrap .tags li .close:hover{ color:#003cff;text-decoration:none; }
 .form-control-wrap .add-tag{ width:60px;height:60px; background:url(Images/add-tag.png) no-repeat center;cursor:pointer;float:left;margin-top:10px; }
-.form-control-wrap .add-tag:hover{border:1px dotted  #808080}
+.form-control-wrap .add-tag:hover{border:1px dotted  #808080}*/
 .form-control-wrap textarea{ border: 1px solid #808080;width:100%;margin:5px;}
+
+
+.left-panel {
+  float: left;
+}
+
+.left-panel img {
+  width: 48px;
+  height: 48px;
+  vertical-align: middle;
+}
+
+.right-panel {
+  float: left;
+  margin-left: 5px;
+  margin-top: 7px;
+}
+
+.right-panel span:first-child {
+  font-size: 16px;
+}
+
+.right-panel span:nth-child(2) {
+  font-size: 14px;
+  color: gray;
+}
+
+.right-panel span:last-child {
+  display: block;
+  font-size: 14px;
+  font-style: italic;
+}

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Uoko.FireProj.DataAccess.Dto
 {
-    public class ProjectDto
+    public class ProjectDto: BaseDto
     {
         public int Id { get; set; }
         /// <summary>
@@ -27,7 +27,7 @@ namespace Uoko.FireProj.DataAccess.Dto
         /// <summary>
         /// gitlab项目的id
         /// </summary>
-        public int ProjectId { get; set; }
+        public int RepoId { get; set; }
 
         /// <summary>
         /// 项目文件(csproj)相对路径

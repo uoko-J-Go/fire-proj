@@ -55,6 +55,8 @@ namespace Uoko.FireProj.Concretes
                 using (var dbScope = _dbScopeFactory.Create())
                 {
                     var db = dbScope.DbContexts.Get<FireProjDbContext>();
+                    
+
                     Project entity = new Project() { Id = projectId };
                     db.Project.Attach(entity);
                     db.Project.Remove(entity);
@@ -72,11 +74,11 @@ namespace Uoko.FireProj.Concretes
             try
             {
                 var entity = Mapper.Map<ProjectDto, Project>(dto);
-               
+                entity.CreateDate = DateTime.Now;
                 using (var dbScope = _dbScopeFactory.Create())
                 {
                     var db = dbScope.DbContexts.Get<FireProjDbContext>();
-                    db.Update(entity, r => new { r.ProjectDesc, r.ProjectName, r.ProjectRepo,r.ProjectId, r.ProjectSlnName });
+                    db.Update(entity, r => new { r.ProjectDesc, r.ProjectName, r.ProjectRepo,ProjectId = r.RepoId, r.ProjectSlnName });
                     db.SaveChanges();
                 }
             }
@@ -99,7 +101,7 @@ namespace Uoko.FireProj.Concretes
                     ProjectDesc = r.ProjectDesc,
                     ProjectSlnName = r.ProjectSlnName,
                     ProjectCsprojName = r.ProjectCsprojName,
-                    ProjectId = r.ProjectId,
+                    RepoId = r.RepoId,
                     DomainRule = r.DomainRule,
                 });
                 var result = data.ToList();
@@ -119,7 +121,7 @@ namespace Uoko.FireProj.Concretes
                     ProjectRepo = r.ProjectRepo,
                     ProjectDesc = r.ProjectDesc,
                     ProjectSlnName = r.ProjectSlnName,
-                    ProjectId = r.ProjectId,
+                    RepoId = r.RepoId,
                     ProjectCsprojName=r.ProjectCsprojName,
                     DomainRule = r.DomainRule,
                 }).FirstOrDefault();
@@ -145,7 +147,7 @@ namespace Uoko.FireProj.Concretes
                         ProjectDesc = p.ProjectDesc,
                         ProjectSlnName = p.ProjectSlnName,
                         ProjectCsprojName = p.ProjectCsprojName,
-                        ProjectId = p.ProjectId,
+                        RepoId = p.RepoId,
                         DomainRule = p.DomainRule,
                     };
                 return data.FirstOrDefault();
@@ -165,7 +167,7 @@ namespace Uoko.FireProj.Concretes
                     ProjectDesc = r.ProjectDesc,
                     ProjectSlnName = r.ProjectSlnName,
                     ProjectCsprojName = r.ProjectCsprojName,
-                    ProjectId = r.ProjectId,
+                    RepoId = r.RepoId,
                 });
                 if (!string.IsNullOrEmpty(query.Search))
                 {

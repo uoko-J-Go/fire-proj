@@ -26,6 +26,7 @@ namespace Uoko.FireProj.WebSite.Controllers
         {
             return View("~/Views/DomainResource/Index.cshtml");
         }
+    
         #endregion
 
         #region 服务器管理
@@ -48,5 +49,11 @@ namespace Uoko.FireProj.WebSite.Controllers
             return View("~/Views/Server/Detail.cshtml");
         }
         #endregion
+
+        public ActionResult Logout()
+        {
+            Request.GetOwinContext().Authentication.SignOut();
+            return Redirect("/");
+        }
     }
 }

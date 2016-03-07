@@ -6,10 +6,13 @@ using System.Net.Http;
 using System.Net.Mail;
 using System.Text;
 using System.Web.Http;
+using Microsoft.AspNet.Identity;
 using Uoko.FireProj.Abstracts;
 using Uoko.FireProj.DataAccess.Dto;
+using Uoko.FireProj.DataAccess.Entity;
 using Uoko.FireProj.DataAccess.Enum;
 using Uoko.FireProj.DataAccess.Query;
+using Uoko.FireProj.Infrastructure.Data;
 
 namespace Uoko.FireProj.WebSite.ControllerApi
 {
@@ -29,9 +32,18 @@ namespace Uoko.FireProj.WebSite.ControllerApi
 
         public IHttpActionResult Get([FromUri]TaskQuery query)
         {
+            query.LoginUserId = UserHelp.userInfo.UserId;
             var result = _taskSvc.GetTaskPage(query);
             return Ok(result);
         }
+
+        [Route("tasksNeedOnline/{projectId}")]
+        public IHttpActionResult GetTasksNeedToBeOnline([FromUri] TaskNeedOnlineQuery query)
+        {
+            var result = _taskSvc.GetTasksNeedOnline(query);
+            return Ok(result);
+        }
+
         [Route("{taskId}")]
         public IHttpActionResult Get(int taskId)
         {
@@ -40,18 +52,26 @@ namespace Uoko.FireProj.WebSite.ControllerApi
         }
         [Route("Update")]
         [HttpPost]
-        public IHttpActionResult Update([FromBody]TaskDto task)
+        public IHttpActionResult Update([FromBody]TaskWriteDto task)
         {
+            task.ModifyId = UserHelp.userInfo.UserId;
+            task.ModifierName = UserHelp.userInfo.NickName;
             _taskSvc.UpdateTask(task);
-            return Ok();
+            //直接调用部署
+            _taskSvc.BeginDeploy(task.Id, task.DeployStage);
+            return Ok(task.Id);
         }
 
         [Route("Create")]
         [HttpPost]
-        public IHttpActionResult Create([FromBody]TaskDto task)
+        public IHttpActionResult Create([FromBody]TaskWriteDto task)
         {
-            _taskSvc.CreatTask(task);
-            return Ok();
+            task.CreatorId = UserHelp.userInfo.UserId;
+            task.CreatorName = UserHelp.userInfo.NickName;
+            var taskId=_taskSvc.CreatTask(task);
+            //直接调用部署
+            var taskInfo = _taskSvc.BeginDeploy(taskId, task.DeployStage);
+            return Ok(taskId);
         }
 
         /// <summary>
@@ -67,18 +87,6 @@ namespace Uoko.FireProj.WebSite.ControllerApi
         }
 
         /// <summary>
-        /// 根据id修改任务状态
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        [Route("Put")]
-        [HttpPost]
-        public IHttpActionResult Put([FromBody]TaskDto task)
-        {
-            _taskSvc.UpdateTaskStatus(task);
-            return Ok();
-        }
-        /// <summary>
         /// 开始部署
         /// </summary>
         /// <param name="taskId"></param>
@@ -86,57 +94,47 @@ namespace Uoko.FireProj.WebSite.ControllerApi
         /// <returns></returns>
         [Route("BeginDeploy")]
         [HttpPost]
-        public IHttpActionResult BeginDeploy(int taskId,int triggerId)
+        public IHttpActionResult BeginDeploy(int taskId, StageEnum deployStage)
         {
-            var task= _taskSvc.GetTaskById(taskId);
-            _taskSvc.UpdateTaskStatus(new TaskDto() { Id = task.Id, Status = TaskEnum.Deployment });
-            _taskLogsSvc.CreatTaskLogs(new TaskLogsDto()
+            var taskInfo = _taskSvc.BeginDeploy(taskId, deployStage);
+            return Ok();
+        }
+
+
+
+        /// <summary>
+        /// 更新测试结果
+        /// </summary>
+        /// <param name="taskId"></param>
+        /// <returns></returns>
+        [Route("UpdateTestStatus")]
+        [HttpPost]
+        public IHttpActionResult UpdateTestStatus([FromBody]TestResultDto testResult)
+        {
+            var taskInfo = _taskSvc.UpdateTestStatus(testResult);
+            //创建日志
+            var log = new TaskLogs
             {
-                TaskId = taskId,
-                TriggeredId = triggerId,
-                CreateBy = 1,
-                Environment= task.DeployEnvironment,
-                TaskLogsType = TaskLogsEnum.CI
-            });
-            return Ok();
-        }
-
-        /// <summary>
-        /// 提交测试动作
-        /// </summary>
-        /// <param name="taskId"></param>
-        /// <returns></returns>
-        [Route("CommitToTest")]
-        [HttpPost]
-        public IHttpActionResult CommitToTest(int taskId)
-        {
-            _taskSvc.UpdateTaskStatus(new TaskDto() { Id = taskId, Status = TaskEnum.Testing  });
-            return Ok();
-        }
-
-        /// <summary>
-        /// 测试不通过动作
-        /// </summary>
-        /// <param name="taskId"></param>
-        /// <returns></returns>
-        [Route("TestFails")]
-        [HttpPost]
-        public IHttpActionResult TestFails(int taskId)
-        {
-            _taskSvc.UpdateTaskStatus(new TaskDto() { Id = taskId, Status = TaskEnum.TestFails });
-            return Ok();
-        }
-
-        /// <summary>
-        /// 测试通过动作
-        /// </summary>
-        /// <param name="taskId"></param>
-        /// <returns></returns>
-        [Route("Tested")]
-        [HttpPost]
-        public IHttpActionResult Tested(int taskId)
-        {
-            _taskSvc.UpdateTaskStatus(new TaskDto() { Id = taskId, Status = TaskEnum.Tested });
+                TaskId = taskInfo.Id,
+                LogType = LogType.QA,
+                Stage = testResult.Stage,
+                Comments= testResult.Comments
+            };
+            switch (testResult.Stage)
+            {
+                case StageEnum.IOC:
+                    log.DeployInfo = taskInfo.DeployInfoIocJson;
+                    break;
+                case StageEnum.PRE:
+                    log.DeployInfo = taskInfo.DeployInfoPreJson;
+                    break;
+                case StageEnum.PRODUCTION:
+                    log.DeployInfo = taskInfo.DeployInfoOnlineJson;
+                    break;
+            }
+            log.CreatorId = UserHelp.userInfo.UserId;
+            log.CreatorName = UserHelp.userInfo.NickName;
+            _taskLogsSvc.CreateTaskLogs(log);
             return Ok();
         }
     }

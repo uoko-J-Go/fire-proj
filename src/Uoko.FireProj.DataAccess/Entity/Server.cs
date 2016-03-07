@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using Uoko.FireProj.DataAccess.Enum;
 
 namespace Uoko.FireProj.DataAccess.Entity
@@ -22,7 +23,7 @@ namespace Uoko.FireProj.DataAccess.Entity
         /// <summary>
         /// 环境类型
         /// </summary>
-        public EnvironmentEnum EnvironmentType { get; set; }
+        public StageEnum StageType { get; set; }
 
         /// <summary>
         /// 服务器描述 操作系统 配置等等
@@ -34,9 +35,5 @@ namespace Uoko.FireProj.DataAccess.Entity
         /// </summary>
         public string PackageDir { get; set; }
 
-        /// <summary>
-        /// 状态
-        /// </summary>
-        public GenericStatusEnum Status { get; set; }
     }
 }

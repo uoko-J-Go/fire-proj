@@ -20,10 +20,18 @@ namespace Uoko.FireProj.WebSite.ControllerApi
            
         }
 
-        [Route("{projectId}/{serverId}")]
-        public IHttpActionResult Get(int projectId, int serverId)
+        [Route("{projectId}/{serverId}/{taskId}")]
+        public IHttpActionResult Get(int projectId, int serverId,int? taskId)
         {
-            var result = _domainResourceSvc.GetResourceList(projectId, serverId);
+            var result = _domainResourceSvc.GetResourceList(projectId, serverId, taskId);
+            return Ok(result);
+        }
+
+        
+        [Route("{serverId}")]
+        public IHttpActionResult Get(int serverId)
+        {
+            var result = _domainResourceSvc.GetResourceList(serverId);
             return Ok(result);
         }
 
@@ -49,6 +57,19 @@ namespace Uoko.FireProj.WebSite.ControllerApi
         {
             var result = _domainResourceSvc.GetDomainPage(query);
             return Ok(result);
+        }
+
+        /// <summary>
+        /// 删除域名信息
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [Route("DeleteDomain/{id}")]
+        [HttpPost]
+        public IHttpActionResult DeleteDomain(int id)
+        {
+            _domainResourceSvc.DeleteDomain(id);
+            return Ok();
         }
     }
 }

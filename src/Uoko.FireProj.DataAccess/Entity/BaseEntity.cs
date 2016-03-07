@@ -13,12 +13,13 @@ namespace Uoko.FireProj.DataAccess.Entity
         public int Id { get; set; }
 
    
-        public int CreateBy { get; set; }
-
+        public int CreatorId { get; set; }
+        public string CreatorName { get; set; }
 
         public DateTime CreateDate { get; set; }
 
-        public int? ModifyBy { get; set; }
+        public int? ModifyId { get; set; }
+        public string ModifierName { get; set; }
 
         public DateTime? ModifyDate { get; set; }
     }

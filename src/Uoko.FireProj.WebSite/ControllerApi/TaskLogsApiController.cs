@@ -6,8 +6,10 @@ using System.Net.Http;
 using System.Web.Http;
 using Uoko.FireProj.Abstracts;
 using Uoko.FireProj.DataAccess.Dto;
+using Uoko.FireProj.DataAccess.Entity;
 using Uoko.FireProj.DataAccess.Enum;
 using Uoko.FireProj.DataAccess.Query;
+using Uoko.FireProj.Infrastructure.Data;
 
 namespace Uoko.FireProj.WebSite.ControllerApi
 {
@@ -37,9 +39,9 @@ namespace Uoko.FireProj.WebSite.ControllerApi
         {
             var result = new
             {
-                IocTotal= _taskLogsSvc.GetLogTotalByEnvironment(taskId,EnvironmentEnum.IOC),
-                PreTotal = _taskLogsSvc.GetLogTotalByEnvironment(taskId, EnvironmentEnum.PRE),
-                ProductionTotal = _taskLogsSvc.GetLogTotalByEnvironment(taskId, EnvironmentEnum.PRODUCTION),
+                IocTotal= _taskLogsSvc.GetLogTotalByEnvironment(taskId,StageEnum.IOC),
+                PreTotal = _taskLogsSvc.GetLogTotalByEnvironment(taskId, StageEnum.PRE),
+                ProductionTotal = _taskLogsSvc.GetLogTotalByEnvironment(taskId, StageEnum.PRODUCTION),
             };
             return Ok(result);
         }
@@ -59,13 +61,15 @@ namespace Uoko.FireProj.WebSite.ControllerApi
         /// </summary>
         /// <param name="dto"></param>
         /// <returns></returns>
-        public IHttpActionResult Post([FromBody]TaskLogsDto dto)
+        public IHttpActionResult Post([FromBody]TaskLogs entity)
         {
             if (ModelState.IsValid == false)
             {
                 return BadRequest(ModelState);
             }
-            _taskLogsSvc.CreatTaskLogs(dto);
+            entity.CreatorId = UserHelp.userInfo.UserId;
+            entity.CreatorName = UserHelp.userInfo.NickName;
+            _taskLogsSvc.CreateTaskLogs(entity);
             return Ok();
         }
     }

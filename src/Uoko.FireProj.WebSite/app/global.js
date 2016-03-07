@@ -3,15 +3,23 @@
 */
 var fireproj;
 (function () {
-    fireproj = angular.module("FireProj", ['ngMessages','ui.bootstrap']);
+    fireproj = angular.module("FireProj", ['ngMessages', 'ui.bootstrap', 'ngTagsInput']);
+    fireproj.config(function (tagsInputConfigProvider) {
+        tagsInputConfigProvider.setDefaults('tagsInput', {
+            minLength: 1
+        }).setDefaults('autoComplete', {
+            minLength: 0,
+            selectFirstMatch: true
+        });
+    });
 })();
 
 
 //表单提交成功事件通用操作
 var formSubmitSuccessClick = function (operation) {
     bootbox.alert("操作成功", function (data) {
-        if (operation == "refresh") {
-            window.location.href = window.location.href
+        if (operation === "refresh") {
+            window.location.reload();
         }
         else {
             window.location.href = document.referrer;
@@ -47,4 +55,16 @@ String.prototype.Format = function () {
     return this.replace(/{(\d{1})}/g, function () {
         return args[arguments[1]];
     });
+}
+//根据用户id获取用户名
+var AnalysisUser = function (userInfo, UserAll) {
+    var UserData = [];
+    $.each(userInfo, function (i, item) {
+        var obj = UserAll.filter(function (user) {
+            return item.Id == user.UserId;
+        })[0];
+        obj.QAStatus = item.QAStatus;
+        UserData.push(obj);
+    });
+    return UserData;
 }

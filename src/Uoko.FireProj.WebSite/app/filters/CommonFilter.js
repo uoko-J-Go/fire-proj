@@ -1,39 +1,40 @@
-﻿fireproj.filter("environmentFilter", function() {
+﻿fireproj.filter("StageTypeFilter", function () {
 
     return function(value) {
         switch (value) {
         case 0:
-            return "IOC环境";
+            return "IOC";
         case 1:
-            return "Pre环境";
+            return "Pre";
         case 2:
-            return "正式环境";
+            return "Online";
         default:
             return "未知";
         }
     }
 });
 
-fireproj.filter("taskStatusFilter", function () {
+fireproj.filter("DeployStatusFilter", function () {
 
     return function (value) {
         switch (value) {
             case 0:
-                return "待部署";
+                return {
+                    Title: "部署中",
+                    IconClass: "glyphicon glyphicon-refresh"
+                };
+            case 1:
+                return {
+                    Title: "部署失败",
+                    IconClass: "glyphicon glyphicon-exclamation-sign"
+                }; 
             case 2:
-                return "部署中";
-            case 4:
-                return "部署失败";
-            case 6:
-                return "部署成功";
-            case 8:
-                return "测试中";
-            case 10:
-                return "测试未通过";
-            case 12:
-                return "测试通过";
+                return {
+                    Title: "部署成功",
+                    IconClass: "glyphicon glyphicon-ok"
+                };
             default:
-                return "未知";
+                return null;
         }
     }
 });
@@ -51,23 +52,27 @@ fireproj.filter("TaskLogsFilter", function () {
     }
 });
 
-fireproj.filter("DomainResourceFilter", function () {
-    return function (value) {
-        switch (value) {
-            case 0:
-                return "未使用";
-            case 1:
-                return "使用中";
-        }
-    }
-});
+
 fireproj.filter("ServerFilter", function () {
     return function (value) {
         switch (value) {
             case 0:
-                return "未使用";
+                return "不可用";
             case 1:
-                return "使用中";
+                return "可用";
+        }
+    }
+});
+
+fireproj.filter("QAStatusFilter", function () {
+    return function (value) {
+        switch (value) {
+            case 0:
+                return "待测试";
+            case 1:
+                return "测试未通过";
+            case 2:
+                return "测试通过";
         }
     }
 });

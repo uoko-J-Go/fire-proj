@@ -19,11 +19,14 @@ namespace Uoko.FireProj.Abstracts
         void CreatResource(List<DomainResourceDto> dto);
 
         /// <summary>
-        /// 根据项目id,部署服务器ip的id获取未被使用的域名list
+        /// 根据项目id,部署服务器ip以及当前任务的id获取未被使用的域名list
         /// </summary>
+        /// <param name="projectId"></param>
         /// <param name="serverId"></param>
+        /// <param name="taskId"></param>
         /// <returns></returns>
-        List<DomainResourceDto> GetResourceList(int projectId, int serverId);
+        List<DomainResourceDto> GetResourceList(int projectId, int serverId,int? taskId);
+
 
         /// <summary>
         /// 根据任务Id释放域名
@@ -38,5 +41,18 @@ namespace Uoko.FireProj.Abstracts
         /// <param name="query"></param>
         /// <returns></returns>
         PageGridData<DomainResourceDto> GetDomainPage(DomainResourceQuery query);
+
+        /// <summary>
+        /// 根据项部署服务器的id获取全部域名信息
+        /// </summary>
+        /// <param name="serverId"></param>
+        /// <returns></returns>
+        List<DomainResourceDto> GetResourceList(int serverId);
+
+        /// <summary>
+        /// 根据主键删除信息
+        /// </summary>
+        /// <param name="Id"></param>
+        void DeleteDomain(int Id);
     }
 }

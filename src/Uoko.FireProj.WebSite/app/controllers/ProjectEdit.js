@@ -23,7 +23,7 @@ fireproj.controller("ProjectController", function ($scope, $http, ProjectService
             gitlabInfo = JSON.parse(gitlabInfo);
         }  
         model.ProjectRepo = gitlabInfo.http_url_to_repo;
-        model.ProjectId = gitlabInfo.id;
+        model.RepoId = gitlabInfo.id;
         model.ProjectGitlabName = gitlabInfo.name;
         ProjectService.put(model.Id,model).success(function (data) {
             location.href = "/Project/Index";

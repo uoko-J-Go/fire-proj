@@ -16,8 +16,11 @@
     <add key="webpages:Enabled" value="*" />
     <add key="ClientValidationEnabled" value="*" />
     <add key="UnobtrusiveJavaScriptEnabled" value="*" />
+    <add key="sso.url" value="*" />
+    <add key="domain.url" value="*" />
   </appSettings>
   <system.web>
+    <customErrors mode="Off"></customErrors>
     <compilation debug="true" targetFramework="4.5" />
     <httpRuntime targetFramework="4.5" />
   </system.web>
@@ -66,6 +69,14 @@
       <remove name="TRACEVerbHandler" />
       <add name="ExtensionlessUrlHandler-Integrated-4.0" path="*." verb="*" type="System.Web.Handlers.TransferRequestHandler" preCondition="integratedMode,runtimeVersionv4.0" />
     </handlers>
+        <security>
+            <requestFiltering>
+                <fileExtensions>
+                    <add fileExtension=".woff2" allowed="true" />
+                    <add fileExtension=".woff" allowed="true" />
+                </fileExtensions>
+            </requestFiltering>
+        </security>
   </system.webServer>
   <entityFramework>
     <defaultConnectionFactory type="System.Data.Entity.Infrastructure.LocalDbConnectionFactory, EntityFramework">

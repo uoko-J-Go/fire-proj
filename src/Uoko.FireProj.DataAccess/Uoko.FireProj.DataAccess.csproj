@@ -42,6 +42,10 @@
       <HintPath>..\..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.8.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -54,12 +58,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AutoMapper\AutoMapper.cs" />
+    <Compile Include="Dto\BaseDto.cs" />
     <Compile Include="Dto\DictionaryDto.cs" />
     <Compile Include="Dto\ProjectDto.cs" />
     <Compile Include="Dto\DomainResourceDto.cs" />
     <Compile Include="Dto\ServerDto.cs" />
+    <Compile Include="Dto\TaskWriteDto.cs" />
+    <Compile Include="Dto\TaskDetailDto.cs" />
     <Compile Include="Dto\TaskLogsDto.cs" />
     <Compile Include="Dto\TaskDto.cs" />
+    <Compile Include="Dto\TestResultDto.cs" />
     <Compile Include="Dto\UserDto.cs" />
     <Compile Include="Entity\BaseEntity.cs" />
     <Compile Include="Entity\Dictionary.cs" />
@@ -68,13 +76,11 @@
     <Compile Include="Entity\Server.cs" />
     <Compile Include="Entity\Task.cs" />
     <Compile Include="Entity\TaskLogs.cs" />
-    <Compile Include="Enum\EnvironmentEnum.cs" />
-    <Compile Include="Enum\GenericStatusEnum.cs" />
-    <Compile Include="Enum\TaskLogsEnum.cs" />
+    <Compile Include="Enum\LogType.cs" />
+    <Compile Include="Enum\StageEnum.cs" />
     <Compile Include="Enum\DeployEnum.cs" />
     <Compile Include="Enum\DicEnum.cs" />
-    <Compile Include="Enum\DomainResourceStatusEnum.cs" />
-    <Compile Include="Enum\TaskEnum.cs" />
+    <Compile Include="Enum\DeployStatus.cs" />
     <Compile Include="Extensions\DbContextExtensions.cs" />
     <Compile Include="FireProjDbContext.cs" />
     <Compile Include="FluentAPI\DictionaryMap.cs" />
@@ -84,6 +90,9 @@
     <Compile Include="FluentAPI\TaskLogsMap.cs" />
     <Compile Include="FluentAPI\TaskInfoMap.cs" />
     <Compile Include="Gitlab\BuildHookRequest.cs" />
+    <Compile Include="Gitlab\TriggerResponse.cs" />
+    <Compile Include="Gitlab\TriggerRequest.cs" />
+    <Compile Include="Gitlab\Trigger.cs" />
     <Compile Include="Migrations\201601140333406_addproject.cs" />
     <Compile Include="Migrations\201601140333406_addproject.Designer.cs">
       <DependentUpon>201601140333406_addproject.cs</DependentUpon>
@@ -176,6 +185,50 @@
     <Compile Include="Migrations\201602260403523_addfieldSiteNametoDomainResource.Designer.cs">
       <DependentUpon>201602260403523_addfieldSiteNametoDomainResource.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201602290948059_addremark.cs" />
+    <Compile Include="Migrations\201602290948059_addremark.Designer.cs">
+      <DependentUpon>201602290948059_addremark.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201602290950218_addSiteInfo.cs" />
+    <Compile Include="Migrations\201602290950218_addSiteInfo.Designer.cs">
+      <DependentUpon>201602290950218_addSiteInfo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201603020549542_omg.cs" />
+    <Compile Include="Migrations\201603020549542_omg.Designer.cs">
+      <DependentUpon>201603020549542_omg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201603021004455_addNameForBaseEntity.cs" />
+    <Compile Include="Migrations\201603021004455_addNameForBaseEntity.Designer.cs">
+      <DependentUpon>201603021004455_addNameForBaseEntity.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201603021105436_serverTrans.cs" />
+    <Compile Include="Migrations\201603021105436_serverTrans.Designer.cs">
+      <DependentUpon>201603021105436_serverTrans.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201603021152037_repoIdInProject.cs" />
+    <Compile Include="Migrations\201603021152037_repoIdInProject.Designer.cs">
+      <DependentUpon>201603021152037_repoIdInProject.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201603030149169_updatetasklog.cs" />
+    <Compile Include="Migrations\201603030149169_updatetasklog.Designer.cs">
+      <DependentUpon>201603030149169_updatetasklog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201603031412301_resource-server-refined.cs" />
+    <Compile Include="Migrations\201603031412301_resource-server-refined.Designer.cs">
+      <DependentUpon>201603031412301_resource-server-refined.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201603040634395_addOnlineTaskInfo.cs" />
+    <Compile Include="Migrations\201603040634395_addOnlineTaskInfo.Designer.cs">
+      <DependentUpon>201603040634395_addOnlineTaskInfo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201603040834498_test.cs" />
+    <Compile Include="Migrations\201603040834498_test.Designer.cs">
+      <DependentUpon>201603040834498_test.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201603070701436_onlineTask.cs" />
+    <Compile Include="Migrations\201603070701436_onlineTask.Designer.cs">
+      <DependentUpon>201603070701436_onlineTask.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Query\BaseQuery.cs" />
@@ -259,6 +312,39 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201602260403523_addfieldSiteNametoDomainResource.resx">
       <DependentUpon>201602260403523_addfieldSiteNametoDomainResource.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201602290948059_addremark.resx">
+      <DependentUpon>201602290948059_addremark.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201602290950218_addSiteInfo.resx">
+      <DependentUpon>201602290950218_addSiteInfo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201603020549542_omg.resx">
+      <DependentUpon>201603020549542_omg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201603021004455_addNameForBaseEntity.resx">
+      <DependentUpon>201603021004455_addNameForBaseEntity.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201603021105436_serverTrans.resx">
+      <DependentUpon>201603021105436_serverTrans.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201603021152037_repoIdInProject.resx">
+      <DependentUpon>201603021152037_repoIdInProject.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201603030149169_updatetasklog.resx">
+      <DependentUpon>201603030149169_updatetasklog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201603031412301_resource-server-refined.resx">
+      <DependentUpon>201603031412301_resource-server-refined.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201603040634395_addOnlineTaskInfo.resx">
+      <DependentUpon>201603040634395_addOnlineTaskInfo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201603040834498_test.resx">
+      <DependentUpon>201603040834498_test.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201603070701436_onlineTask.resx">
+      <DependentUpon>201603070701436_onlineTask.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

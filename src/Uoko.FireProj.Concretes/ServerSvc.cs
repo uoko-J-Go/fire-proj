@@ -30,11 +30,10 @@ namespace Uoko.FireProj.Concretes
             try
             {
                 var entity = Mapper.Map<ServerDto, Server>(server);
-                entity.CreateBy = 1;
-                entity.CreateDate = DateTime.Now;
                 using (var dbScope = _dbScopeFactory.Create())
                 {
                     var db = dbScope.DbContexts.Get<FireProjDbContext>();
+                    entity.CreateDate = DateTime.Now;
                     db.Servers.Add(entity);
                     db.SaveChanges();
                     //保存域名信息
@@ -46,7 +45,8 @@ namespace Uoko.FireProj.Concretes
                             SiteName = item.SiteName,
                             ProjectId = item.ProjectId,
                             ServerId = entity.Id,
-                            CreateBy = 1,
+                            CreatorId = server.CreatorId.Value,
+                            CreatorName = server.CreatorName,
                             CreateDate = DateTime.Now,
                         };
                         db.DomainResource.Add(domainEntity);
@@ -83,13 +83,31 @@ namespace Uoko.FireProj.Concretes
             try
             {
                 var entity = Mapper.Map<ServerDto, Server>(server);
-                entity.ModifyBy = 1;
                 entity.ModifyDate = DateTime.Now;
                 using (var dbScope = _dbScopeFactory.Create())
                 {
                     var db = dbScope.DbContexts.Get<FireProjDbContext>();
                     //根据实际情况修改
-                    db.Update(entity, t => new { t.Name, t.IP, t.ServerDesc, t.Status, t.ModifyBy, t.ModifyDate, t.PackageDir });
+                    db.Update(entity, t => new { t.Name, t.IP, t.ServerDesc, t.ModifyId, t.ModifierName, t.ModifyDate, t.PackageDir });
+
+                    //修改域名有主键则修改,无主键新增
+                    var domainList = Mapper.Map<List<DomainResourceDto>, List<DomainResource>>(server.IISData);
+
+                    foreach (var item in domainList)
+                    {
+                        if (item.Id > 0)
+                        {
+                            db.Update(item, r => new { r.Name, r.SiteName, r.ProjectId });
+                        }
+                        else
+                        {
+                            item.ServerId = server.Id;
+                            item.CreateDate = DateTime.Now;
+                            item.CreatorId = entity.CreatorId;
+                            item.CreatorName = entity.CreatorName;
+                            db.DomainResource.Add(item);
+                        }
+                    }
                     db.SaveChanges();
                 }
             }
@@ -110,12 +128,12 @@ namespace Uoko.FireProj.Concretes
                     Name = t.Name,
                     IP = t.IP,
                     ServerDesc = t.ServerDesc,
-                    Status = t.Status,
                     PackageDir = t.PackageDir,
+                    StageType = t.StageType,
                 });
-                if (query.EnvironmentType.HasValue)
+                if (query.StageType.HasValue)
                 {
-                    data = data.Where(t => t.EnvironmentType==query.EnvironmentType.Value);
+                    data = data.Where(t => t.StageType==query.StageType.Value);
                 }
                 if (!string.IsNullOrEmpty(query.Search))
                 {
@@ -127,23 +145,18 @@ namespace Uoko.FireProj.Concretes
             }
         }
 
-        public IList<ServerDto> GetAllServerOfEnvironment(EnvironmentEnum environmentEnum, bool needEnable = true)
+        public IList<ServerDto> GetAllServerOfEnvironment(StageEnum stageEnum)
         {
             using (var dbScope = _dbScopeFactory.CreateReadOnly())
             {
                 var db = dbScope.DbContexts.Get<FireProjDbContext>();
-                var data = db.Servers.Where(t => t.EnvironmentType == environmentEnum);
-                //if (needEnable)
-                //{
-                //    data = data.Where(t => t.Status == GenericStatusEnum.Enable);
-                //}
+                var data = db.Servers.Where(t => t.StageType == stageEnum);
                 var result = data.Select(t => new ServerDto
                 {
                     Id = t.Id,
                     Name = t.Name,
                     IP = t.IP,
                     ServerDesc = t.ServerDesc,
-                    Status = t.Status,
                     PackageDir = t.PackageDir,
                 }).ToList();
 
@@ -162,9 +175,17 @@ namespace Uoko.FireProj.Concretes
                     Name = t.Name,
                     IP = t.IP,
                     ServerDesc = t.ServerDesc,
-                    Status = t.Status,
                     PackageDir = t.PackageDir,
+                    StageType = t.StageType,
                 }).FirstOrDefault(t => t.Id == serverId);
+                data.IISData = db.DomainResource.Where(r => r.ServerId == serverId).Select(r => new DomainResourceDto {
+                    Id = r.Id,
+                    Name = r.Name,
+                    ProjectId = r.ProjectId,
+                    TaskId = r.TaskId,
+                    ServerId = r.ServerId,
+                    ServerName = r.Name,
+                }).ToList();
                 return data;
             }
         }

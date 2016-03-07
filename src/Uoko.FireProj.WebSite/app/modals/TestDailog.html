@@ -1,0 +1,19 @@
+﻿
+<div class="modal-header bg-primary">
+    <button type="button" class="close" ng-click="Cancel()"></button>
+    <h4 class="modal-title">
+        <i class="icon-bar"></i>
+        <span id="lblAddTitle" style="font-weight:bold">测试备注</span>
+    </h4>
+</div>
+<div class="modal-body">
+    <div class="row" style="padding-right: 20px;">
+        <textarea rows="5" ng-model="testResult.Comments"></textarea>
+  
+    </div>
+</div>
+<div class="modal-footer bg-info">
+    <button type="button" class="btn btn-default" ng-click="Cancel()">取消</button>
+    <button type="button" class="btn btn-primary"  ng-click="Ok()">确定</button>
+
+</div>

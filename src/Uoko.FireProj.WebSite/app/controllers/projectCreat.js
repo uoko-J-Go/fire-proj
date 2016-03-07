@@ -20,7 +20,15 @@ fireproj.controller("ProjectController", function ($scope, $http, ProjectService
            return "http://gitlab.uoko.ioc:12015/api/v3/projects/" + projectId + "/repository/tree?private_token=JX4Gb7W_gfp7PdzpBjpG";
        }
        else {
-           return "http://gitlab.uoko.ioc:12015/api/v3/projects/" + projectId + "/repository/tree?private_token=JX4Gb7W_gfp7PdzpBjpG&path=" + getFullPath() + "";
+           var path = "";
+           var node = treeNode.getPath();
+           if (typeof node != "undefined") {
+
+               for (var i = 0; i < node.length; i++) {
+                   path += node[i].name + "/";
+               }
+           }
+           return "http://gitlab.uoko.ioc:12015/api/v3/projects/" + projectId + "/repository/tree?private_token=JX4Gb7W_gfp7PdzpBjpG&path=" + path + "";
        }
    };
 
@@ -56,21 +64,23 @@ fireproj.controller("ProjectController", function ($scope, $http, ProjectService
        }
    }
    function getFullPath() {
-       var panth = "";
+       var path = "";
        var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
        var sNodes = treeObj.getSelectedNodes();
        if (sNodes.length > 0) {
            var node = sNodes[0].getPath();
 
            if (typeof node != "undefined") {
-               var panth = "";
                //遍历获取完整的相对路径
-               for (var i = 0; i < node.length; i++) {
-                   panth += node[i].name + "/";
+               for (var i = 0; i < node.length; i++) {     
+                   path += node[i].name;
+                   if (node[i].isParent) {
+                       path += "/";
+                   }
                }
            }
        }
-       return panth;
+       return path;
    }
 
 
@@ -81,9 +91,14 @@ fireproj.controller("ProjectController", function ($scope, $http, ProjectService
             gitlabInfo = JSON.parse(gitlabInfo);
         }
         model.ProjectRepo = gitlabInfo.http_url_to_repo;
-        model.ProjectId = gitlabInfo.id;
+        model.RepoId = gitlabInfo.id;
         model.ProjectGitlabName = gitlabInfo.name;
-        model.ProjectCsprojName = $("#ProjectCsprojName").val();
+        var projectCsprojName = $("#ProjectCsprojName").val();
+
+        //model.ProjectCsprojName = projectCsprojName.substring(0, projectCsprojName.length - 1);
+
+        model.ProjectCsprojName = projectCsprojName;
+
         ProjectService.post(model).success(function (data) {
             location.href = "/Project/Index";
         }).error(function (data) {

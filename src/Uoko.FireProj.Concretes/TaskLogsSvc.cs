@@ -28,15 +28,12 @@ namespace Uoko.FireProj.Concretes
         }
 
 
-        public void CreatTaskLogs(TaskLogsDto dto)
+        public void CreateTaskLogs(TaskLogs entity)
         {
             try
             {
-                var entity = Mapper.Map<TaskLogsDto, TaskLogs>(dto);
                 using (var dbScope = _dbScopeFactory.Create())
                 {
-                    entity.CreateBy = 1;
-                    entity.CreateDate = DateTime.Now;
                     var db = dbScope.DbContexts.Get<FireProjDbContext>();
                     db.TaskLogs.Add(entity);
                     db.SaveChanges();
@@ -48,110 +45,160 @@ namespace Uoko.FireProj.Concretes
             }
         }
 
+
         public List<TaskLogsDto> GetTaskLogsByTaskId(int taskId)
         {
+          
             using (var dbScope = _dbScopeFactory.CreateReadOnly())
             {
                 var db = dbScope.DbContexts.Get<FireProjDbContext>();
-                var data = db.TaskLogs.Where(r => r.TaskId == taskId).Select(r => new TaskLogsDto()
+                var entitys = db.TaskLogs.Where(r => r.TaskId == taskId).OrderByDescending(r => r.CreateDate).ToList();
+                List<TaskLogsDto> data = new List<TaskLogsDto>();
+                foreach (var item in entitys)
                 {
-                    Id = r.Id,
-                    LogsDesc = r.LogsDesc,
-                    LogsText = r.LogsText,
-                    TriggeredId = r.TriggeredId,
-                    BuildId=r.BuildId,
-                    TaskLogsType = r.TaskLogsType,
-                    TaskId = r.TaskId,
-                    CreateBy = r.CreateBy,
-                    CreateDate = r.CreateDate
-                }).ToList();
+                    TaskLogsDto taskLogsDto = new TaskLogsDto();
+                    taskLogsDto.TaskId = item.TaskId;
+                    taskLogsDto.Stage = item.Stage;
+                    taskLogsDto.Comments = item.Comments;
+                    taskLogsDto.LogType = item.LogType;
+                    taskLogsDto.CreatorId = item.CreatorId;
+                    taskLogsDto.CreatorName = item.CreatorName;
+                    taskLogsDto.CreateDate = item.CreateDate;
+                    
+                    switch (item.Stage)
+                    {
+                        case StageEnum.IOC:
+                            taskLogsDto.DeployInfoIocDto = !item.DeployInfo.IsNullOrEmpty() ? JsonHelper.FromJson<DeployInfoIocDto>(item.DeployInfo) : new DeployInfoIocDto();
+                            var checkUsers = this.AnalysisCheckUser(taskLogsDto.DeployInfoIocDto.CheckUserId);
+                            var currUser = checkUsers.FirstOrDefault(t => t.Id == item.CreatorId);
+                            if (currUser != null)
+                            {
+                                taskLogsDto.QAStatus = currUser.QAStatus;
+                            }
+                            taskLogsDto.BuildId = taskLogsDto.DeployInfoIocDto.BuildId;
+                            taskLogsDto.DeployStatus = taskLogsDto.DeployInfoIocDto.DeployStatus;
+                            break;
+                        case StageEnum.PRE:
+                            taskLogsDto.DeployInfoPreDto = !item.DeployInfo.IsNullOrEmpty() ? JsonHelper.FromJson<DeployInfoPreDto>(item.DeployInfo) : new DeployInfoPreDto();
+                            var checkUsers1 = this.AnalysisCheckUser(taskLogsDto.DeployInfoPreDto.CheckUserId);
+                            var currUser1 = checkUsers1.FirstOrDefault(t => t.Id == item.CreatorId);
+                            if (currUser1 != null)
+                            {
+                                taskLogsDto.QAStatus = currUser1.QAStatus;
+                            }
+                            taskLogsDto.BuildId = taskLogsDto.DeployInfoPreDto.BuildId;
+                            taskLogsDto.DeployStatus = taskLogsDto.DeployInfoPreDto.DeployStatus;
+                            break;
+                        case StageEnum.PRODUCTION:
+                            taskLogsDto.DeployInfoOnlineDto = !item.DeployInfo.IsNullOrEmpty() ? JsonHelper.FromJson<DeployInfoOnlineDto>(item.DeployInfo) : new DeployInfoOnlineDto();
+                            var checkUsers2 = this.AnalysisCheckUser(taskLogsDto.DeployInfoPreDto.CheckUserId);
+                            var currUser2 = checkUsers2.FirstOrDefault(t => t.Id == item.CreatorId);
+                            if (currUser2 != null)
+                            {
+                                taskLogsDto.QAStatus = currUser2.QAStatus;
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                    data.Add(taskLogsDto);
+                }
                 return data;
             }
         }
 
+
         public void UpdateTaskLogs(TaskLogsDto dto)
         {
-            try
-            {
-                var entity = Mapper.Map<TaskLogsDto, TaskLogs>(dto);
-                using (var dbScope = _dbScopeFactory.Create())
-                {
-                    var db = dbScope.DbContexts.Get<FireProjDbContext>();
-                    db.Update(entity, r => new { r.ModifyBy,r.TaskLogsType,r.LogsDesc,r.BuildId});
-                    db.SaveChanges();
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new TipInfoException(ex.Message);
-            }
+            //try
+            //{
+            //    var entity = Mapper.Map<TaskLogsDto, TaskLogs>(dto);
+            //    using (var dbScope = _dbScopeFactory.Create())
+            //    {
+            //        var db = dbScope.DbContexts.Get<FireProjDbContext>();
+            //        db.Update(entity, r => new { r.ModifyBy,r.TaskLogsType,r.LogsDesc,r.BuildId});
+            //        db.SaveChanges();
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    throw new TipInfoException(ex.Message);
+            //}
         }
-        public TaskLogsDto GetTaskLogByTriggerId(int triggerId)
+        public TaskLogs GetTaskLogByTriggerId(int triggerId)
         {
+
             using (var dbScope = _dbScopeFactory.CreateReadOnly())
             {
                 var db = dbScope.DbContexts.Get<FireProjDbContext>();
-                var data = db.TaskLogs.Where(r => r.TriggeredId == triggerId).Select(r => new TaskLogsDto()
-                {
-                    Id = r.Id,
-                    LogsDesc = r.LogsDesc,
-                    LogsText = r.LogsText,
-                    TriggeredId = r.TriggeredId,
-                    BuildId = r.BuildId,
-                    TaskId = r.TaskId,
-                    CreateBy = r.CreateBy,
-                    CreateDate = r.CreateDate,
-                    Environment = r.Environment,
-                    TaskLogsType = r.TaskLogsType,
-                }).FirstOrDefault();
+                var data = db.TaskLogs.Where(r => r.TriggeredId == triggerId).FirstOrDefault();
                 return data;
             }
         }
         public PageGridData<TaskLogsDto> GetTaskLogsPage(TaskLogsQuery query)
         {
-            using (var dbScope = _dbScopeFactory.CreateReadOnly())
-            {
-                var db = dbScope.DbContexts.Get<FireProjDbContext>();
+            return null;
+            //using (var dbScope = _dbScopeFactory.CreateReadOnly())
+            //{
+            //    var db = dbScope.DbContexts.Get<FireProjDbContext>();
 
-                var data1 = db.TaskLogs.Where(r => r.TaskId == query.TaskId);
-                if (query.Environment.HasValue)
-                {
-                    data1 = data1.Where(r => r.Environment == query.Environment.Value);
-                }
-                var data = data1.Select(r => new TaskLogsDto
-                {
-                    Id = r.Id,
-                    LogsDesc = r.LogsDesc,
-                    LogsText = r.LogsText,
-                    TriggeredId = r.TriggeredId,
-                    BuildId = r.BuildId,
-                    TaskLogsType = r.TaskLogsType,
-                    TaskId = r.TaskId,
-                    CreateBy = r.CreateBy,
-                    CreateDate = r.CreateDate
-                });
-                //分页和不分页情况
-                if (query.Limit == 0)
-                {
-                    var result = data.OrderByDescending(r => r.Id).ToList();
-                    var total = data.Count();
-                    return new PageGridData<TaskLogsDto> { rows = result, total = total };
-                }
-                else
-                {
-                    var result = data.OrderByDescending(r => r.Id).Skip(query.Offset).Take(query.Limit).ToList();
-                    var total = data.Count();
-                    return new PageGridData<TaskLogsDto> { rows = result, total = total };
-                }
-            }
+            //    var data1 = db.TaskLogs.Where(r => r.TaskId == query.TaskId);
+            //    if (query.Stage.HasValue)
+            //    {
+            //        data1 = data1.Where(r => r.Stage == query.Stage.Value);
+            //    }
+            //    var data = data1.Select(r => new TaskLogsDto
+            //    {
+            //        Id = r.Id,
+            //        LogsDesc = r.LogsDesc,
+            //        LogsText = r.LogsText,
+            //        TriggeredId = r.TriggeredId,
+            //        BuildId = r.BuildId,
+            //        TaskLogsType = r.TaskLogsType,
+            //        TaskId = r.TaskId,
+            //        CreateBy = r.CreateBy,
+            //        CreateDate = r.CreateDate
+            //    });
+            //    //分页和不分页情况
+            //    if (query.Limit == 0)
+            //    {
+            //        var result = data.OrderByDescending(r => r.Id).ToList();
+            //        var total = data.Count();
+            //        return new PageGridData<TaskLogsDto> { rows = result, total = total };
+            //    }
+            //    else
+            //    {
+            //        var result = data.OrderByDescending(r => r.Id).Skip(query.Offset).Take(query.Limit).ToList();
+            //        var total = data.Count();
+            //        return new PageGridData<TaskLogsDto> { rows = result, total = total };
+            //    }
+            //}
         }
-
-        public int GetLogTotalByEnvironment(int taskId, EnvironmentEnum environment)
+        private List<UserDto> AnalysisCheckUser(string userInfo)
+        {
+            List<UserDto> userDtoData = new List<UserDto>();
+            if (string.IsNullOrEmpty(userInfo))
+            {
+                return userDtoData;
+            }
+            var userList = userInfo.Split(',');
+            foreach (var item in userList)
+            {
+                var user = item.Split('-');
+                userDtoData.Add(new UserDto
+                {
+                    Id = int.Parse(user[0]),
+                    QAStatus = (QAStatus)int.Parse(user[1])
+                });
+            }
+            return userDtoData;
+        }
+        public int GetLogTotalByEnvironment(int taskId, StageEnum stage)
         {
             using (var dbScope = _dbScopeFactory.CreateReadOnly())
             {
                 var db = dbScope.DbContexts.Get<FireProjDbContext>();
-                var data = db.TaskLogs.Where(t=>t.TaskId==taskId&&t.Environment==environment);
+                var data = db.TaskLogs.Where(t=>t.TaskId==taskId&&t.Stage==stage);
                 var total = data.Count();
                 return total;
             }
