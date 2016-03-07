@@ -30,11 +30,10 @@ namespace Uoko.FireProj.Concretes
             try
             {
                 var entity = Mapper.Map<ServerDto, Server>(server);
-                entity.CreatorId = 1;
-                entity.CreateDate = DateTime.Now;
                 using (var dbScope = _dbScopeFactory.Create())
                 {
                     var db = dbScope.DbContexts.Get<FireProjDbContext>();
+                    entity.CreateDate = DateTime.Now;
                     db.Servers.Add(entity);
                     db.SaveChanges();
                     //保存域名信息
@@ -46,7 +45,8 @@ namespace Uoko.FireProj.Concretes
                             SiteName = item.SiteName,
                             ProjectId = item.ProjectId,
                             ServerId = entity.Id,
-                            CreatorId = 1,
+                            CreatorId = server.CreatorId.Value,
+                            CreatorName = server.CreatorName,
                             CreateDate = DateTime.Now,
                         };
                         db.DomainResource.Add(domainEntity);
@@ -83,8 +83,7 @@ namespace Uoko.FireProj.Concretes
             try
             {
                 var entity = Mapper.Map<ServerDto, Server>(server);
-                entity.ModifyId = 1;
-                entity.ModifyDate = DateTime.Now;
+                entity.CreateDate = DateTime.Now;
                 using (var dbScope = _dbScopeFactory.Create())
                 {
                     var db = dbScope.DbContexts.Get<FireProjDbContext>();

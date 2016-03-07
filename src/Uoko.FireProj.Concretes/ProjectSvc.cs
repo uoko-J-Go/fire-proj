@@ -74,7 +74,7 @@ namespace Uoko.FireProj.Concretes
             try
             {
                 var entity = Mapper.Map<ProjectDto, Project>(dto);
-               
+                entity.CreateDate = DateTime.Now;
                 using (var dbScope = _dbScopeFactory.Create())
                 {
                     var db = dbScope.DbContexts.Get<FireProjDbContext>();

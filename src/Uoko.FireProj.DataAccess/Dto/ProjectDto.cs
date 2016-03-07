@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Uoko.FireProj.DataAccess.Dto
 {
-    public class ProjectDto
+    public class ProjectDto: BaseDto
     {
         public int Id { get; set; }
         /// <summary>

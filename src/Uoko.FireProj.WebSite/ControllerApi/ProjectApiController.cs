@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Security.Claims;
 using System.Web.Http;
 using Uoko.FireProj.Abstracts;
 using Uoko.FireProj.DataAccess.Dto;
@@ -68,34 +69,9 @@ namespace Uoko.FireProj.WebSite.ControllerApi
             {
                 return BadRequest(ModelState);
             }
+            dto.CreatorId = userInfo.UserId;
+            dto.CreatorName = userInfo.NickName;
             var projectId = _projectSvc.CreatProject(dto);
-            //if (projectId > 0)
-            //{
-            //    //创建内部测试环境地址: 
-            //    List<DomainResourceDto> resourceInfoList = new List<DomainResourceDto>();
-            //    for (int i = 0; i < 10; i++)
-            //    {
-            //        if (!string.IsNullOrEmpty(dto.DomainRule)&& dto.DomainRule.IndexOf("{编号}")>=0)
-            //        {
-            //            resourceInfoList.Add(new DomainResourceDto()
-            //            {
-            //                ProjectId = projectId,
-            //                Name = dto.DomainRule.Replace("{编号}", i == 0 ? "" : i.ToString())
-            //            });
-                        
-            //        }
-            //        else
-            //        {
-            //            resourceInfoList.Add(new DomainResourceDto()
-            //            {
-            //                ProjectId = projectId,
-            //                Name = string.Format("{0}{1}.uoko.ioc", dto.ProjectGitlabName, i == 0 ? "" : i.ToString())
-            //            });
-            //        }
-                    
-            //    }
-            //    DomainResourceSvc.CreatResource(resourceInfoList);
-            //}
             return Ok();
         }
 
@@ -118,6 +94,8 @@ namespace Uoko.FireProj.WebSite.ControllerApi
                 return BadRequest(ModelState);
             }
             dto.Id = id;
+            dto.ModifyId = userInfo.UserId;
+            dto.ModifierName = userInfo.NickName;
             _projectSvc.EditProject(dto);
             return Ok();
         }

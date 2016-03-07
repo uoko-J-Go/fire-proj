@@ -41,8 +41,9 @@ namespace Uoko.FireProj.Concretes
             taskInfo.ProjectId = taskDto.ProjectId;
             taskInfo.Branch = taskDto.Branch;
             taskInfo.TaskName = taskDto.TaskName;
-            taskInfo.CreatorId = 1;
             taskInfo.CreateDate = DateTime.Now;
+            taskInfo.CreatorId = taskDto.CreatorId.Value;
+            taskInfo.CreatorName = taskDto.CreatorName;
 
             var domain = string.Empty;
 
@@ -118,8 +119,6 @@ namespace Uoko.FireProj.Concretes
                 var taskInfo = db.TaskInfo.FirstOrDefault(r => r.Id == taskDto.Id);
 
                 taskInfo.Branch = taskDto.Branch;
-
-                taskInfo.ModifyId = 1;
                 taskInfo.ModifyDate = DateTime.Now;
 
                 var domain = string.Empty;
@@ -433,7 +432,8 @@ namespace Uoko.FireProj.Concretes
                         case StageEnum.PRODUCTION:
                             break;
                     }
-                    entity.ModifyId = 2;
+                    entity.ModifyId = taskDto.CreatorId;
+                    entity.ModifierName = taskDto.CreatorName;
                     entity.ModifyDate = DateTime.Now;
 
                     #region 写日志
@@ -444,7 +444,8 @@ namespace Uoko.FireProj.Concretes
                         Stage = deployStage,
                         TriggeredId = triggerId,
                         CreateDate = DateTime.Now,
-                        CreatorId = 0,
+                        CreatorId = taskDto.CreatorId.Value,
+                        CreatorName = taskDto.CreatorName,
                     };
                     switch (deployStage)
                     {
@@ -505,8 +506,8 @@ namespace Uoko.FireProj.Concretes
                         case StageEnum.PRODUCTION:
                             break;
                     }
-                    entity.ModifyId = 0;
-                    entity.ModifierName = "系统";
+                    entity.ModifyId = entity.CreatorId;
+                    entity.ModifierName = entity.CreatorName;
                     entity.ModifyDate = DateTime.Now;
 
                     #region MyRegion
@@ -518,8 +519,8 @@ namespace Uoko.FireProj.Concretes
                         Stage = taskLog.Stage,
                         TriggeredId = triggerId,
                         CreateDate = DateTime.Now,
-                        CreatorId = 0,
-                        CreatorName = "系统"
+                        CreatorId = entity.CreatorId,
+                        CreatorName = entity.CreatorName,
                     };
                     switch (taskLog.Stage)
                     {
