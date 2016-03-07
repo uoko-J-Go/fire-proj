@@ -120,8 +120,4 @@ Target "BuildSolution" (fun _ ->
     build setParams slnFile
 )
 
-
-"BuildSolution"
-    ==> "QA-Passed-IOC"
-
 RunTargetOrDefault "BuildSolution"
