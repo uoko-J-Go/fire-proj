@@ -53,8 +53,8 @@ namespace Uoko.FireProj.WebSite.Controllers
                                          {
                                              MenuName = "上线",
                                              MenuLevel = 1,
-                                             Controller = "Task",
-                                             Action = "OnlineList"
+                                             Controller = "Online",
+                                             Action = "Index"
                                          },
                                          new MenuTreeVM()
                                          {
@@ -90,7 +90,7 @@ namespace Uoko.FireProj.WebSite.Controllers
                                      };
             var activeMenu = nodes.FirstOrDefault(t => t.MenuLevel == 1
                                                        && controller == t.Controller
-                                                       && action == t.Action);
+                                                       );
             if (activeMenu != null)
             {
                 activeMenu.IsActive = true;

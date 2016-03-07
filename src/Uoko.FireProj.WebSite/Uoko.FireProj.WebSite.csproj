@@ -234,6 +234,7 @@
     <Compile Include="ControllerApi\WebHookApiController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\DictionaryController.cs" />
+    <Compile Include="Controllers\OnlineController.cs" />
     <Compile Include="Controllers\ProjectController.cs" />
     <Compile Include="Controllers\SystemSetController.cs" />
     <Compile Include="Controllers\TaskController.cs" />
@@ -1238,8 +1239,8 @@
     <Content Include="Views\Server\Edit.cshtml" />
     <Content Include="Views\Server\Detail.cshtml" />
     <Content Include="Views\Task\Detail_bp.cshtml" />
-    <None Include="Views\Task\OnlineInfo.cshtml" />
-    <None Include="Views\Task\OnlineList.cshtml" />
+    <None Include="Views\Online\Detail.cshtml" />
+    <None Include="Views\Online\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

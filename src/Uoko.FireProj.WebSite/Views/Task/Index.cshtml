@@ -83,7 +83,7 @@
                                 <span class="glyphicon glyphicon-ok" ng-if="task.PreTestAllPassed"></span>
                             </td>
                             <td>
-                                <a ng-if="task.TaskInfo.OnlineTaskId" ng-href="@Url.Action("OnlineInfo","Task")?taskId={{task.TaskInfo.OnlineTaskId}}">test</a>
+                                <a ng-if="task.TaskInfo.OnlineTaskId" ng-href="@Url.Action("Detail","Online")?taskId={{task.TaskInfo.OnlineTaskId}}">test</a>
                             </td>
                             <td>{{task.TaskInfo.DeployInfoOnlineJson}}</td>
                             <td title="{{task.OnlineTestAllPassed ? '测试全部通过' : ''}}">
