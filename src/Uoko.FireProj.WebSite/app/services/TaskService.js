@@ -35,15 +35,15 @@
     };
 
 
-    this.GetTasksNeedToBeOnline = function(params,cb) {
-          $http.get("/api/TaskApi/tasksNeedOnline/"+params.projectId, { params: params }).success(function (data) {
+    this.GetTasksNeedToBeOnline = function(params, cb) {
+        $http.get("/api/TaskApi/tasksNeedOnline/" + params.projectId, { params: params }).success(function(data) {
 
-              data.rows = transfTaskData(data.rows);
+            data.rows = transfTaskData(data.rows);
 
-            if (successCallBack != undefined) {
-                successCallBack(data);
+            if (cb != undefined) {
+                cb(data);
             }
-        }).error(function (data) {
+        }).error(function(data) {
             //错误处理
         });;
     }
