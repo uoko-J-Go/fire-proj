@@ -35,7 +35,7 @@ namespace Uoko.FireProj.WebSite.Controllers
 
             UserHelper.CurrUserInfo.UserId = int.Parse(user.FindFirst("userid").Value.ToString());
             UserHelper.CurrUserInfo.NickName = user.FindFirst("NickName").Value;
-
+            ViewBag.UserId = UserHelper.CurrUserInfo.UserId;
             ViewBag.NickName = user.FindFirst("NickName").Value;
         }
         public void GetMenuData(string controller, string action)

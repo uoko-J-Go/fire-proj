@@ -1,5 +1,6 @@
 ﻿fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskService, ProjectService,CommonService) {
     var taskId = $("#taskIdParam").val();
+    var userId = $("#userId").val();
     $scope.AllUsers = [];
     $scope.GetAllUser = function () {
         CommonService.getAllUsers(function (data) {
@@ -26,7 +27,16 @@
             }else if ($scope.model.DeployInfoPreJson != null) {
                 $scope.currLogTab = 1;
             }
-            
+            //测试操作按钮控制
+            $scope.IocTestShow = $scope.model.DeployInfoIocDto.DeployStatus==2&&$scope.model.DeployInfoIocDto.CheckUser.filter(function (user) {
+                return user.UserId == userId;
+            }).length > 0;
+            $scope.PreTestShow = $scope.model.DeployInfoPreDto.DeployStatus == 2&&$scope.model.DeployInfoPreDto.CheckUser.filter(function (user) {
+                return user.UserId == userId;
+            }).length > 0;
+            $scope.OnlineTestShow = $scope.model.DeployInfoOnlineDto.OnlineTaskId>0&&$scope.model.DeployInfoOnlineDto.CheckUser.filter(function (user) {
+                return user.UserId == userId;
+            }).length > 0;
         });
     }
     $scope.GetTaskLogsByTaskId = function () {
