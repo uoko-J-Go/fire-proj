@@ -37,8 +37,8 @@ namespace Uoko.FireProj.WebSite.ControllerApi
         [HttpPost]
         public IHttpActionResult Update([FromBody]ServerDto server)
         {
-            server.ModifyId = UserHelp.userInfo.UserId;
-            server.ModifierName = UserHelp.userInfo.NickName;
+            server.ModifyId = UserHelper.CurrUserInfo.UserId;
+            server.ModifierName = UserHelper.CurrUserInfo.NickName;
             _serverSvc.UpdateServer(server);
             return Ok();
         }
@@ -47,8 +47,8 @@ namespace Uoko.FireProj.WebSite.ControllerApi
         [HttpPost]
         public IHttpActionResult Create([FromBody]ServerDto server)
         {
-            server.CreatorId = UserHelp.userInfo.UserId;
-            server.CreatorName = UserHelp.userInfo.NickName;
+            server.CreatorId = UserHelper.CurrUserInfo.UserId;
+            server.CreatorName = UserHelper.CurrUserInfo.NickName;
             _serverSvc.CreateServer(server);
             return Ok();
         }
