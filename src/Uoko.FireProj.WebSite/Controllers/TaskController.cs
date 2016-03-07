@@ -9,6 +9,7 @@ using Uoko.FireProj.Model;
 using System.Security.Claims;
 using Microsoft.AspNet.Identity.EntityFramework;
 
+
 namespace Uoko.FireProj.WebSite.Controllers
 {
     public class TaskController : BaseController
@@ -16,11 +17,6 @@ namespace Uoko.FireProj.WebSite.Controllers
         // GET: Task
         public ActionResult Index()
         {
-            
-            var userId = User.Identity.Name;
-            var user = User as ClaimsPrincipal;
-            //获取Claim信息
-            var userid = user.FindFirst("userid").Value; //userid是服务端提供的Claim信息,获取之前需要跟服务端确认提供了哪些用户信息
             return View();
         }
 
