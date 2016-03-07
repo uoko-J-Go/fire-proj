@@ -28,8 +28,8 @@
                          <div class="col-md-10">
                              <select class="form-control" name="project" ng-model="projectSelected" ng-change="Query()" ng-options="project.ProjectName for project in projects track by project.Id" required>
                              </select>
-                             <div ng-show="form.$submitted || form.project.$touched">
-                                 <span class="error-msg" ng-show="form.project.$error.required">请选择项目</span>
+                             <div ng-if="form.$submitted || form.project.$touched">
+                                 <span class="error-msg" ng-if="form.project.$error.required">请选择项目</span>
                              </div>
                          </div>
                      </div>
@@ -39,8 +39,8 @@
                          <div class="col-md-10">
                              <select name="server" class="form-control" ng-model="serverSelected" ng-options="server.Name for server in servers track by server.Id" required>
                              </select>
-                             <div class="" ng-show="form.$submitted || form.server.$touched">
-                                 <span class="error-msg" ng-show="form.server.$error.required">请选择服务器</span>
+                             <div class="" ng-if="form.$submitted || form.server.$touched">
+                                 <span class="error-msg" ng-if="form.server.$error.required">请选择服务器</span>
                              </div>
                          </div>
                      </div>
@@ -50,8 +50,8 @@
                          <div class="col-md-10">
                              <select name="domain" class="form-control" ng-model="domainSelected"  ng-options="domain.Name for domain in domains track by domain.Name" required>
                              </select>
-                             <div ng-show="form.$submitted || form.domain.$touched">
-                                 <span class="error-msg" ng-show="form.domain.$error.required">域名必选.</span>
+                             <div ng-if="form.$submitted || form.domain.$touched">
+                                 <span class="error-msg" ng-if="form.domain.$error.required">域名必选.</span>
                              </div>
                          </div>
                      </div>
@@ -106,17 +106,17 @@
                                 </div>
                             </td>
                             <td title="{{task.IocTestAllPassed ? '测试全部通过' : ''}}">
-                                <span class="glyphicon glyphicon-ok" ng-show="task.IocTestAllPassed"></span>
+                                <span class="glyphicon glyphicon-ok" ng-if="task.IocTestAllPassed"></span>
                             </td>
                             <td title="{{(task.DeployInfoPre.DeployStatus | DeployStatusFilter).Title}}">
-                                <span ng-class="(task.DeployInfoPre.DeployStatus | DeployStatusFilter).IconClass" ng-show="task.DeployInfoPre" ></span>
+                                <span ng-class="(task.DeployInfoPre.DeployStatus | DeployStatusFilter).IconClass" ng-if="task.DeployInfoPre" ></span>
                             </td>
                             <td title="{{task.PreTestAllPassed ? '测试全部通过' : ''}}">
-                                <span class="glyphicon glyphicon-ok" ng-show="task.PreTestAllPassed"></span>
+                                <span class="glyphicon glyphicon-ok" ng-if="task.PreTestAllPassed"></span>
                             </td>
                             <td>{{task.TaskInfo.DeployInfoOnlineJson}}</td>
                             <td title="{{task.OnlineTestAllPassed ? '测试全部通过' : ''}}">
-                                <span class="glyphicon glyphicon-ok" ng-show="task.OnlineTestAllPassed"></span>
+                                <span class="glyphicon glyphicon-ok" ng-if="task.OnlineTestAllPassed"></span>
                             </td>
                             <td>{{task.TaskInfo.CreatorName}}</td>
                             <td>{{task.TaskInfo.ModifierName}}</td>
