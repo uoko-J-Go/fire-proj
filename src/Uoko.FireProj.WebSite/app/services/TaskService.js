@@ -1,26 +1,30 @@
 ﻿fireproj.service("TaskService", function ($http) {
 
+
+    function transfTaskData(taskList) {
+        return _.each(taskList, function (task, key) {
+            if (task.TaskInfo.DeployInfoIocJson) {
+                task.DeployInfoIoc = JSON.parse(task.TaskInfo.DeployInfoIocJson);
+            }
+            if (task.TaskInfo.DeployInfoPreJson) {
+                task.DeployInfoPre = JSON.parse(task.TaskInfo.DeployInfoPreJson);
+            }
+            if (task.TaskInfo.DeployInfoOnlineJson) {
+                task.DeployInfoOnline = JSON.parse(task.TaskInfo.DeployInfoOnlineJson);
+            }
+
+            task.IocTestAllPassed = task.TaskInfo.IocCheckUserId && !(/-[01]/m.test(task.TaskInfo.IocCheckUserId));
+
+            task.PreTestAllPassed = task.TaskInfo.PreCheckUserId && !(/-[01]/m.test(task.TaskInfo.PreCheckUserId));
+
+            task.OnlineTestAllPassed = task.TaskInfo.OnlineCheckUserId && !(/-[01]/m.test(task.TaskInfo.OnlineCheckUserId));
+        });
+    }
+
     this.GetTaskByPage = function (params, successCallBack) {
         $http.get("/api/TaskApi", { params: params }).success(function (data) {
 
-            _.each(data.rows, function(task, key) {
-                if (task.TaskInfo.DeployInfoIocJson) {
-                    task.DeployInfoIoc = JSON.parse(task.TaskInfo.DeployInfoIocJson);
-                }
-                if (task.TaskInfo.DeployInfoPreJson) {
-                    task.DeployInfoPre = JSON.parse(task.TaskInfo.DeployInfoPreJson);
-                }
-                if (task.TaskInfo.DeployInfoOnlineJson) {
-                    task.DeployInfoOnline = JSON.parse(task.TaskInfo.DeployInfoOnlineJson);
-                }
-
-                task.IocTestAllPassed = task.TaskInfo.IocCheckUserId && !(/-[01]/m.test(task.TaskInfo.IocCheckUserId));
-
-                task.PreTestAllPassed = task.TaskInfo.PreCheckUserId && !(/-[01]/m.test(task.TaskInfo.PreCheckUserId));
-
-                task.OnlineTestAllPassed = task.TaskInfo.OnlineCheckUserId && !(/-[01]/m.test(task.TaskInfo.OnlineCheckUserId));
-
-            });
+            data.rows = transfTaskData(data.rows);
 
             if (successCallBack != undefined) {
                 successCallBack(data);
@@ -29,6 +33,22 @@
             //错误处理
         });;
     };
+
+
+    this.GetTasksNeedToBeOnline = function(params,cb) {
+          $http.get("/api/TaskApi/tasksNeedOnline/"+params.projectId, { params: params }).success(function (data) {
+
+              data.rows = transfTaskData(data.rows);
+
+            if (successCallBack != undefined) {
+                successCallBack(data);
+            }
+        }).error(function (data) {
+            //错误处理
+        });;
+    }
+
+
     this.GetTaskLogsByPage = function (params, successCallBack) {
         $http.get("/api/TaskLogsApi?Offset={0}&Limit={1}&taskId={2}&environment={3}&sort={4}&order={5}".Format(params.offset, params.limit, params.taskId, params.environment, params.sort, params.order)).success(function (data) {
             if (successCallBack != undefined) {

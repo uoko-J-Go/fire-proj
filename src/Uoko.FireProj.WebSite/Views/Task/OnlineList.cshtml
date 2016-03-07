@@ -2,7 +2,7 @@
 @using Uoko.FireProj.DataAccess.Query
 @{
     ViewBag.Title = "上线列表";
-    var loginUserId = 1;//this.User.Identity.GetUserId();
+    var loginUserId = this.User.Identity.GetUserId();
 }
 
 <div class="page-bar">
@@ -24,54 +24,56 @@
         <div class="portlet light">
             <div class="portlet-title">
 
-                <form role="form" class="form form-horizontal ng-pristine ng-invalid ng-invalid-required ng-valid-minlength ng-valid-max-tags ng-valid-min-tags ng-valid-leftover-text" name="form" ng-submit="Save(form.$valid)" novalidate="">
+                <form role="form" class="form form-horizontal" name="form" ng-submit="Save(form.$valid)" >
                  <div class="form-body">
                      <div class="form-group form-md-line-input">
                          <label class="col-md-2 control-label">项目</label>
                          <div class="col-md-10">
-                             <select class="form-control">
-                                 <option>fire-project</option>
-                                 <option>sso-project</option>
-                                 <option>ids-project</option>
+                             <select class="form-control" name="project" ng-model="onlineTaskInfo.Project" required>
+                                 <option ng-repeat="project in projects" value="{{project}}" ng-selected="project.Id==onlineTaskInfo.ProjectId">{{project.ProjectName}}</option>
                              </select>
+                             <div ng-show="form.$submitted || form.project.$touched">
+                                 <span class="error-msg" ng-show="form.project.$error.required">请选择项目</span>
+                             </div>
                          </div>
                      </div>
 
-                    <div class="form-group form-md-line-input">
-                        <label class="col-md-2 control-label">部署服务器</label>
-                        <div class="col-md-10">
-                            <select name="deployenvironment" class="form-control ng-pristine ng-invalid ng-invalid-required ng-touched" ng-model="taskInfo.Server" required=""><option value="? object:null ?"></option>
-                                <!-- ngRepeat: server in ServerList -->
-                            </select>
-                            <div class="" ng-show="form.$submitted || form.deployenvironment.$touched">
-                                <span class="error-msg" ng-show="form.deployenvironment.$error.required">部署服务器必选</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group form-md-line-input">
-                        <label class="col-md-2 control-label">域名</label>
-                        <div class="col-md-10">
-                            <select name="domain" class="form-control ng-pristine ng-untouched ng-invalid ng-invalid-required" ng-model="taskInfo.DomainInfo" required=""><option value="? object:null ?"></option>
-                                <!-- ngRepeat: domain in DomainList -->
-                            </select>
-                            <div class="ng-hide" ng-show="form.$submitted || form.domain.$touched">
-                                <span class="error-msg" ng-show="form.domain.$error.required">域名必选.</span>
-                            </div>
-                        </div>
-                    </div>
+                     <div class="form-group form-md-line-input">
+                         <label class="col-md-2 control-label">部署服务器</label>
+                         <div class="col-md-10">
+                             <select name="server" class="form-control" ng-model="onlineTaskInfo.Server" required>
+                                 <option ng-repeat="server in servers" value="{{server}}" ng-selected="server.Id==onlineTaskInfo.ServerId">{{server.Name}}</option>
+                             </select>
+                             <div class="" ng-show="form.$submitted || form.server.$touched">
+                                 <span class="error-msg" ng-show="form.server.$error.required">请选择服务器</span>
+                             </div>
+                         </div>
+                     </div>
+
+                     <div class="form-group form-md-line-input">
+                         <label class="col-md-2 control-label">域名</label>
+                         <div class="col-md-10">
+                             <select name="domain" class="form-control" ng-model="onlineTaskInfo.DomainInfo" required>
+                                 <option ng-repeat="domain in domains" value="{{domain}}">{{domain.Name}}</option>
+                             </select>
+                             <div ng-show="form.$submitted || form.domain.$touched">
+                                 <span class="error-msg" ng-show="form.domain.$error.required">域名必选.</span>
+                             </div>
+                         </div>
+                     </div>
+       
                     <div class="form-group form-md-line-input">
                         <label class="col-md-2 control-label">
                             <a target="_blank" href="http://semver.org/lang/zh-CN/">上线版本</a>
                         </label>
                         <div class="col-md-10">
-                           <input name="onlineVersion" ng-model="taskInfo.OnlineVersion" class="form-control ng-pristine ng-invalid ng-invalid-required ng-touched" placeholder="主版本.次版本.修订版本" required="" type="text">
+                           <input name="onlineVersion" ng-model="onlineTaskInfo.OnlineVersion" class="form-control ng-pristine ng-invalid ng-invalid-required ng-touched" placeholder="主版本.次版本.修订版本" required="" type="text">
                         </div>
                     </div>
                            
                     </div>
                     <div class="form-actions right">
-                        <button type="button" class="btn default" ng-click="Cancel()">取消</button>
-                        <button type="submit" class="btn blue" ng-click=""><i class="fa fa-check"></i> 保存</button>
+                        <button type="submit" class="btn blue" ng-click="">Fire <i class="fa fa-fire"></i></button>
                     </div>
                   
                 </form>

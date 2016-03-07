@@ -31,10 +31,18 @@ namespace Uoko.FireProj.WebSite.ControllerApi
 
         public IHttpActionResult Get([FromUri]TaskQuery query)
         {
-            query.LoginUserId = 1;// this.User.Identity.GetUserId<int>();
+            query.LoginUserId = this.User.Identity.GetUserId<int>();
             var result = _taskSvc.GetTaskPage(query);
             return Ok(result);
         }
+
+        [Route("tasksNeedOnline/{projectId}")]
+        public IHttpActionResult GetTasksNeedToBeOnline([FromUri] TaskNeedOnlineQuery query)
+        {
+            var result = _taskSvc.GetTasksNeedOnline(query);
+            return Ok(result);
+        }
+
         [Route("{taskId}")]
         public IHttpActionResult Get(int taskId)
         {

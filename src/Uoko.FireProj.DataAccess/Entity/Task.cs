@@ -46,8 +46,6 @@ namespace Uoko.FireProj.DataAccess.Entity
         /// </summary>
         public string OnlineCheckUserId { get; set; }
 
-        public bool HasOnlineDeployed { get; set; }
-
         public int? OnlineTaskId { get; set; }
 
     }
@@ -74,6 +72,11 @@ namespace Uoko.FireProj.DataAccess.Entity
         /// 部署服务器IP地址
         /// </summary>
         public string DeployIP { get; set; }
+
+        /// <summary>
+        /// 部署机器名称
+        /// </summary>
+        public string DeployServerName { get; set; }
 
         /// <summary>
         /// 部署地址

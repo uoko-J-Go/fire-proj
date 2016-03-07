@@ -1,39 +1,68 @@
-﻿fireproj.controller("OnlineListController", function ($scope, $http, $uibModal,TaskService, ProjectService) {
-    $scope.projectList = [];
-    $scope.GetProjectList = function () {
-        ProjectService.getAllProject(function (data) {
-            $scope.projectList = data;
-        });
-    };
+﻿fireproj.controller("OnlineListController", function($scope, $http, $uibModal, TaskService, ProjectService) {
+
+    $scope.projects = [];
+    $scope.servers = [];
+    $scope.domains = [];
+
+    $scope.onlineTaskInfo = {};
+
     $scope.pageSize = 10;
     $scope.currentPage = 1;
 
     $scope.taskInfos = [];
-    $scope.totalItems = 0;//总数
+    $scope.totalItems = 0; //总数
     $scope.queryType = 0; // 所有
 
-    //查询项目
-    $scope.Query = function (showType) {
 
-        if (showType) {
-            $scope.queryType = showType;
+    function getProjectList() {
+        ProjectService.getAllProject(function(data) {
+            $scope.projects = data;
+        });
+    };
+
+    function getServerData() {
+        TaskService.GetResourceList(2, function(data) {
+            $scope.servers = data;
+        });
+    }
+
+    function getDomain(project, server) {
+        if (typeof project == "string") {
+            project = JSON.parse(project);
         }
+        if (typeof server == "string") {
+            server = JSON.parse(server);
+        }
+        if (project) {
+            if (!server) {
+                server = { Id: 0 };
+            }
+
+            TaskService.GetDomain(project.Id, server.Id, 0, function(data) {
+                $scope.domains = data;
+            });
+        }
+    }
+
+    //查询项目
+    $scope.Query = function() {
 
         var params = {
             offset: $scope.pageSize * ($scope.currentPage - 1),
             limit: $scope.pageSize,
-            ShowType: $scope.queryType,
+            ProjectId: 2025,
         }
 
-        TaskService.GetTaskByPage(params,function (data) {
+        TaskService.GetTasksNeedToBeOnline(params, function(data) {
             $scope.totalItems = data.total;
             var tasks = data.rows;
-            
+
             $scope.taskInfos = tasks;
         });
     }
 
-    $scope.Deploy = function (task) {
+
+    $scope.Deploy = function(task) {
         $scope.param = {
             taskId: task.TaskInfo.Id,
         };
@@ -41,39 +70,23 @@
             templateUrl: '/app/modals/Deploy.html',
             controller: 'DeployController',
             resolve: {
-                param: function () {
+                param: function() {
                     return $scope.param;
                 }
             }
         });
     }
 
-    $scope.Init = function () {
+    $scope.$watch('onlineTaskInfo.Project + onlineTaskInfo.Server', function() {
+        getDomain($scope.onlineTaskInfo.Project, $scope.onlineTaskInfo.Server);
+    });
+
+    (function() {
         $scope.Query();
-        $scope.GetProjectList();
-    }
 
-    ///提交测试,状态改为8测试中
-    $scope.CommitToTest = function (item) {
-        bootbox.prompt("批示", function (result) {
-            if (result != null) {
-             paran = {
-                "Id": item.Id,
-                "LogsText": result
-            }
-            TaskService.CommitToTest(paran, function (data) {
-                formSubmitSuccessClick("refresh");
-            });
-            }
-        });
-       }
-    ///释放资源操作
-    $scope.ReleaseDomain = function (taskId) {
-        TaskService.ReleaseDomain(taskId, function (data) {
-            formSubmitSuccessClick("refresh");
-        });
-    }
-    $scope.Init();
+        getServerData();
+        getProjectList();
+
+    })();
+
 });
-
-

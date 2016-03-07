@@ -4,21 +4,16 @@ using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using Mehdime.Entity;
-using Newtonsoft.Json;
 using Uoko.FireProj.Abstracts;
 using Uoko.FireProj.DataAccess.Dto;
 using Uoko.FireProj.DataAccess.Entity;
 using Uoko.FireProj.DataAccess.Enum;
+using Uoko.FireProj.DataAccess.Gitlab;
 using Uoko.FireProj.DataAccess.Query;
 using Uoko.FireProj.Infrastructure.Data;
 using Uoko.FireProj.Infrastructure.Exception;
-using Uoko.FireProj.Model;
-using AutoMapper;
-using System.Collections.Generic;
-using System.Linq.Expressions;
-using Uoko.FireProj.DataAccess.Extensions;
-using Uoko.FireProj.DataAccess.Gitlab;
 using Uoko.FireProj.Infrastructure.Extensions;
+using Uoko.FireProj.Model;
 
 namespace Uoko.FireProj.Concretes
 {
@@ -33,6 +28,7 @@ namespace Uoko.FireProj.Concretes
         {
             _dbScopeFactory = dbScopeFactory;
         }
+
         #endregion
 
         public int CreatTask(TaskWriteDto taskDto)
@@ -52,12 +48,14 @@ namespace Uoko.FireProj.Concretes
                     if (!string.IsNullOrEmpty(taskDto.IocDeployInfo.CheckUserId))
                     {
                         var userIds = taskDto.IocDeployInfo.CheckUserId.Split(',');
-                        var userIdsStatus = userIds.Select(userId => string.Format("{0}-{1}", userId, (int)QAStatus.Waiting)).ToList();
+                        var userIdsStatus =
+                            userIds.Select(userId => string.Format("{0}-{1}", userId, (int) QAStatus.Waiting)).ToList();
                         taskInfo.IocCheckUserId = taskDto.IocDeployInfo.CheckUserId = string.Join(",", userIdsStatus);
                     }
                     domain = taskDto.IocDeployInfo.Domain;
                     taskDto.IocDeployInfo.DeployStage = taskDto.DeployStage;
-                    taskDto.IocDeployInfo.DeployAddress = string.Format("https://{0}:8172/msdeploy.axd", taskDto.IocDeployInfo.DeployIP);
+                    taskDto.IocDeployInfo.DeployAddress = string.Format("https://{0}:8172/msdeploy.axd",
+                        taskDto.IocDeployInfo.DeployIP);
                     taskDto.IocDeployInfo.DeployStatus = DeployStatus.Deploying;
                     taskInfo.DeployInfoIocJson = JsonHelper.ToJson(taskDto.IocDeployInfo);
                     break;
@@ -65,12 +63,14 @@ namespace Uoko.FireProj.Concretes
                     if (!string.IsNullOrEmpty(taskDto.PreDeployInfo.CheckUserId))
                     {
                         var userIds = taskDto.PreDeployInfo.CheckUserId.Split(',');
-                        var userIdsStatus = userIds.Select(userId => string.Format("{0}-{1}", userId, (int)QAStatus.Waiting)).ToList();
-                        taskInfo.PreCheckUserId= taskDto.PreDeployInfo.CheckUserId = string.Join(",", userIdsStatus);
+                        var userIdsStatus =
+                            userIds.Select(userId => string.Format("{0}-{1}", userId, (int) QAStatus.Waiting)).ToList();
+                        taskInfo.PreCheckUserId = taskDto.PreDeployInfo.CheckUserId = string.Join(",", userIdsStatus);
                     }
                     domain = taskDto.PreDeployInfo.Domain;
                     taskDto.PreDeployInfo.DeployStage = taskDto.DeployStage;
-                    taskDto.PreDeployInfo.DeployAddress = string.Format("https://{0}:8172/msdeploy.axd", taskDto.PreDeployInfo.DeployIP);
+                    taskDto.PreDeployInfo.DeployAddress = string.Format("https://{0}:8172/msdeploy.axd",
+                        taskDto.PreDeployInfo.DeployIP);
                     taskDto.PreDeployInfo.DeployStatus = DeployStatus.Deploying;
                     taskInfo.DeployInfoPreJson = JsonHelper.ToJson(taskDto.PreDeployInfo);
 
@@ -78,8 +78,10 @@ namespace Uoko.FireProj.Concretes
                     if (!string.IsNullOrEmpty(taskDto.OnlineDeployInfo.CheckUserId))
                     {
                         var userIds = taskDto.OnlineDeployInfo.CheckUserId.Split(',');
-                        var userIdsStatus = userIds.Select(userId => string.Format("{0}-{1}", userId, (int)QAStatus.Waiting)).ToList();
-                        taskInfo.OnlineCheckUserId = taskDto.OnlineDeployInfo.CheckUserId = string.Join(",", userIdsStatus);
+                        var userIdsStatus =
+                            userIds.Select(userId => string.Format("{0}-{1}", userId, (int) QAStatus.Waiting)).ToList();
+                        taskInfo.OnlineCheckUserId =
+                            taskDto.OnlineDeployInfo.CheckUserId = string.Join(",", userIdsStatus);
                     }
                     taskDto.OnlineDeployInfo.DeployStage = StageEnum.PRODUCTION;
                     taskInfo.DeployInfoOnlineJson = JsonHelper.ToJson(taskDto.OnlineDeployInfo);
@@ -96,7 +98,8 @@ namespace Uoko.FireProj.Concretes
                 db.SaveChanges();
 
                 //更新域名资源使用
-                var resourceInfo = db.DomainResource.FirstOrDefault(r => r.ProjectId == taskDto.ProjectId && r.Name == domain);
+                var resourceInfo =
+                    db.DomainResource.FirstOrDefault(r => r.ProjectId == taskDto.ProjectId && r.Name == domain);
                 resourceInfo.TaskId = taskInfo.Id;
 
                 db.SaveChanges();
@@ -130,12 +133,16 @@ namespace Uoko.FireProj.Concretes
                         if (!string.IsNullOrEmpty(taskDto.IocDeployInfo.CheckUserId))
                         {
                             var userIds = taskDto.IocDeployInfo.CheckUserId.Split(',');
-                            var userIdsStatus = userIds.Select(userId => string.Format("{0}-{1}", userId, (int)QAStatus.Waiting)).ToList();
-                            taskInfo.IocCheckUserId = taskDto.IocDeployInfo.CheckUserId = string.Join(",", userIdsStatus);
+                            var userIdsStatus =
+                                userIds.Select(userId => string.Format("{0}-{1}", userId, (int) QAStatus.Waiting))
+                                       .ToList();
+                            taskInfo.IocCheckUserId =
+                                taskDto.IocDeployInfo.CheckUserId = string.Join(",", userIdsStatus);
                         }
                         domain = taskDto.IocDeployInfo.Domain;
                         taskDto.IocDeployInfo.DeployStage = taskDto.DeployStage;
-                        taskDto.IocDeployInfo.DeployAddress = string.Format("https://{0}:8172/msdeploy.axd", taskDto.IocDeployInfo.DeployIP);
+                        taskDto.IocDeployInfo.DeployAddress = string.Format("https://{0}:8172/msdeploy.axd",
+                            taskDto.IocDeployInfo.DeployIP);
                         taskDto.IocDeployInfo.DeployStatus = DeployStatus.Deploying;
                         taskInfo.DeployInfoIocJson = DeployInfo = JsonHelper.ToJson(taskDto.IocDeployInfo);
                         break;
@@ -143,12 +150,16 @@ namespace Uoko.FireProj.Concretes
                         if (!string.IsNullOrEmpty(taskDto.PreDeployInfo.CheckUserId))
                         {
                             var userIds = taskDto.PreDeployInfo.CheckUserId.Split(',');
-                            var userIdsStatus = userIds.Select(userId => string.Format("{0}-{1}", userId, (int)QAStatus.Waiting)).ToList();
-                            taskInfo.PreCheckUserId = taskDto.PreDeployInfo.CheckUserId = string.Join(",", userIdsStatus);
+                            var userIdsStatus =
+                                userIds.Select(userId => string.Format("{0}-{1}", userId, (int) QAStatus.Waiting))
+                                       .ToList();
+                            taskInfo.PreCheckUserId =
+                                taskDto.PreDeployInfo.CheckUserId = string.Join(",", userIdsStatus);
                         }
                         domain = taskDto.PreDeployInfo.Domain;
                         taskDto.PreDeployInfo.DeployStage = taskDto.DeployStage;
-                        taskDto.PreDeployInfo.DeployAddress = string.Format("https://{0}:8172/msdeploy.axd", taskDto.PreDeployInfo.DeployIP);
+                        taskDto.PreDeployInfo.DeployAddress = string.Format("https://{0}:8172/msdeploy.axd",
+                            taskDto.PreDeployInfo.DeployIP);
                         taskDto.PreDeployInfo.DeployStatus = DeployStatus.Deploying;
                         taskInfo.DeployInfoPreJson = DeployInfo = JsonHelper.ToJson(taskDto.PreDeployInfo);
 
@@ -157,12 +168,15 @@ namespace Uoko.FireProj.Concretes
                         if (!string.IsNullOrEmpty(taskDto.OnlineDeployInfo.CheckUserId))
                         {
                             var userIds = taskDto.OnlineDeployInfo.CheckUserId.Split(',');
-                            var userIdsStatus = userIds.Select(userId => string.Format("{0}-{1}", userId, (int)QAStatus.Waiting)).ToList();
-                            taskInfo.OnlineCheckUserId = taskDto.OnlineDeployInfo.CheckUserId = string.Join(",", userIdsStatus);     
+                            var userIdsStatus =
+                                userIds.Select(userId => string.Format("{0}-{1}", userId, (int) QAStatus.Waiting))
+                                       .ToList();
+                            taskInfo.OnlineCheckUserId =
+                                taskDto.OnlineDeployInfo.CheckUserId = string.Join(",", userIdsStatus);
                         }
                         taskDto.OnlineDeployInfo.DeployStage = StageEnum.PRODUCTION;
                         taskInfo.DeployInfoOnlineJson = JsonHelper.ToJson(taskDto.OnlineDeployInfo);
-                        
+
                         break;
                     default:
                         throw new NotSupportedException("暂不支持其他阶段");
@@ -171,11 +185,14 @@ namespace Uoko.FireProj.Concretes
 
                 //更新域名资源使用:根据环境直接更新本次占用,同时清空上次IOC环境占用的
                 //更新本次占用
-                var resourceInfo = db.DomainResource.FirstOrDefault(r => r.ProjectId == taskDto.ProjectId && r.Name == domain);
+                var resourceInfo =
+                    db.DomainResource.FirstOrDefault(r => r.ProjectId == taskDto.ProjectId && r.Name == domain);
                 resourceInfo.TaskId = taskDto.Id;
 
                 //清空上次占用
-                var lastTaskLogs = db.TaskLogs.OrderByDescending(r => r.CreateDate).FirstOrDefault(r => r.TaskId == taskDto.Id && r.Stage == taskDto.DeployStage);
+                var lastTaskLogs =
+                    db.TaskLogs.OrderByDescending(r => r.CreateDate)
+                      .FirstOrDefault(r => r.TaskId == taskDto.Id && r.Stage == taskDto.DeployStage);
                 string lastDomain = string.Empty;
                 if (lastTaskLogs != null)
                 {
@@ -191,15 +208,18 @@ namespace Uoko.FireProj.Concretes
                             break;
                     }
                 }
-                var lastResourceInfo = db.DomainResource.FirstOrDefault(r => r.ProjectId == taskDto.ProjectId && r.Name == lastDomain);
-                if (lastResourceInfo != null && lastDomain != domain)
+                var lastResourceInfo =
+                    db.DomainResource.FirstOrDefault(r => r.ProjectId == taskDto.ProjectId && r.Name == lastDomain);
+                if (lastResourceInfo != null
+                    && lastDomain != domain)
                 {
                     lastResourceInfo.TaskId = 0;
                 }
                 db.SaveChanges();
             }
-           
+
         }
+
         public void DeleteTask(int taskId)
         {
             try
@@ -207,7 +227,7 @@ namespace Uoko.FireProj.Concretes
                 using (var dbScope = _dbScopeFactory.Create())
                 {
                     var db = dbScope.DbContexts.Get<FireProjDbContext>();
-                    TaskInfo entity = new TaskInfo() { Id = taskId };
+                    TaskInfo entity = new TaskInfo() {Id = taskId};
                     db.TaskInfo.Attach(entity);
                     db.TaskInfo.Remove(entity);
                     db.SaveChanges();
@@ -219,7 +239,7 @@ namespace Uoko.FireProj.Concretes
             }
         }
 
-       
+
 
         public TaskDetailDto GetTaskById(int taskId)
         {
@@ -228,35 +248,38 @@ namespace Uoko.FireProj.Concretes
                 var db = dbScope.DbContexts.Get<FireProjDbContext>();
                 var entity = db.TaskInfo.FirstOrDefault(r => r.Id == taskId);
                 var taskDto = Mapper.Map<TaskInfo, TaskDetailDto>(entity);
-                
+
                 //项目信息
                 var projectEntity = db.Project.FirstOrDefault(r => r.Id == entity.ProjectId);
-                taskDto.ProjectDto= Mapper.Map<Project, ProjectDto>(projectEntity);
+                taskDto.ProjectDto = Mapper.Map<Project, ProjectDto>(projectEntity);
 
 
-                taskDto.DeployInfoIocDto = !taskDto.DeployInfoIocJson.IsNullOrEmpty() ? JsonHelper.FromJson<DeployInfoIocDto>(taskDto.DeployInfoIocJson) : new DeployInfoIocDto();
-                taskDto.DeployInfoPreDto = !taskDto.DeployInfoPreJson.IsNullOrEmpty() ? JsonHelper.FromJson<DeployInfoPreDto>(taskDto.DeployInfoPreJson) : new DeployInfoPreDto();
-                taskDto.DeployInfoOnlineDto = !taskDto.DeployInfoOnlineJson.IsNullOrEmpty() ? JsonHelper.FromJson<DeployInfoOnlineDto>(taskDto.DeployInfoOnlineJson) : new DeployInfoOnlineDto();
+                taskDto.DeployInfoIocDto = !taskDto.DeployInfoIocJson.IsNullOrEmpty()
+                    ? JsonHelper.FromJson<DeployInfoIocDto>(taskDto.DeployInfoIocJson)
+                    : new DeployInfoIocDto();
+                taskDto.DeployInfoPreDto = !taskDto.DeployInfoPreJson.IsNullOrEmpty()
+                    ? JsonHelper.FromJson<DeployInfoPreDto>(taskDto.DeployInfoPreJson)
+                    : new DeployInfoPreDto();
+                taskDto.DeployInfoOnlineDto = !taskDto.DeployInfoOnlineJson.IsNullOrEmpty()
+                    ? JsonHelper.FromJson<DeployInfoOnlineDto>(taskDto.DeployInfoOnlineJson)
+                    : new DeployInfoOnlineDto();
 
                 //获取测试,通知人Id集合返回
                 taskDto.DeployInfoIocDto.CheckUser = AnalysisUser.AnalysisCheckUser(taskDto.DeployInfoIocDto.CheckUserId);
-                taskDto.DeployInfoIocDto.NoticeUser = AnalysisUser.AnalysisNoticeUser(taskDto.DeployInfoIocDto.NoticeUserId);
+                taskDto.DeployInfoIocDto.NoticeUser =
+                    AnalysisUser.AnalysisNoticeUser(taskDto.DeployInfoIocDto.NoticeUserId);
 
                 taskDto.DeployInfoPreDto.CheckUser = AnalysisUser.AnalysisCheckUser(taskDto.DeployInfoPreDto.CheckUserId);
-                taskDto.DeployInfoPreDto.NoticeUser = AnalysisUser.AnalysisNoticeUser(taskDto.DeployInfoPreDto.NoticeUserId);
+                taskDto.DeployInfoPreDto.NoticeUser =
+                    AnalysisUser.AnalysisNoticeUser(taskDto.DeployInfoPreDto.NoticeUserId);
 
-                taskDto.DeployInfoOnlineDto.CheckUser = AnalysisUser.AnalysisCheckUser(taskDto.DeployInfoOnlineDto.CheckUserId);
-                taskDto.DeployInfoOnlineDto.NoticeUser = AnalysisUser.AnalysisNoticeUser(taskDto.DeployInfoOnlineDto.NoticeUserId);
+                taskDto.DeployInfoOnlineDto.CheckUser =
+                    AnalysisUser.AnalysisCheckUser(taskDto.DeployInfoOnlineDto.CheckUserId);
+                taskDto.DeployInfoOnlineDto.NoticeUser =
+                    AnalysisUser.AnalysisNoticeUser(taskDto.DeployInfoOnlineDto.NoticeUserId);
 
                 return taskDto;
             }
-
-
-
-
-
-
-
         }
 
         public PageGridData<TaskInfoForList> GetTaskPage(TaskQuery query)
@@ -299,6 +322,35 @@ namespace Uoko.FireProj.Concretes
             }
         }
 
+
+        /// <summary>
+        /// 获取需要上线的任务
+        /// </summary>
+        /// <returns></returns>
+        public PageGridData<TaskInfoForList> GetTasksNeedOnline(TaskNeedOnlineQuery query)
+        {
+            using (var dbScope = _dbScopeFactory.CreateReadOnly())
+            {
+                var db = dbScope.DbContexts.Get<FireProjDbContext>();
+
+                // 已经上线过 pre，但未上线的任务
+                var taskToBeOnlineQuery = db.TaskInfo
+                                            .Where(task => task.ProjectId == query.ProjectId
+                                                           && task.OnlineTaskId == null
+                                                           && task.DeployInfoPreJson != null);
+                var total = taskToBeOnlineQuery.Count();
+
+                var tasksFromDb = taskToBeOnlineQuery.OrderByDescending(task => task.Id)
+                                                     .Skip(query.Offset)
+                                                     .Take(query.Limit)
+                                                     .ToList();
+
+                var tasksToBeOnline = TransferTask(tasksFromDb);
+                return new PageGridData<TaskInfoForList> {rows = tasksToBeOnline, total = total};
+            }
+        }
+
+
         public IEnumerable<TaskInfoForList> TransferTask(IEnumerable<TaskInfo> tasks)
         {
             Dictionary<int, string> projDic;
@@ -314,20 +366,20 @@ namespace Uoko.FireProj.Concretes
             }
 
             var infoLists = taskInfos.Select(task =>
-                                {
-                                    string projectName;
-                                    projDic.TryGetValue(task.ProjectId, out projectName);
-                                    return new TaskInfoForList
-                                           {
-                                               TaskInfo = task,
-                                               OnlineTaskInfo = null,
-                                               ProjectName = projectName
-                                           };
-                                });
+                                             {
+                                                 string projectName;
+                                                 projDic.TryGetValue(task.ProjectId, out projectName);
+                                                 return new TaskInfoForList
+                                                        {
+                                                            TaskInfo = task,
+                                                            OnlineTaskInfo = null,
+                                                            ProjectName = projectName
+                                                        };
+                                             });
             return infoLists;
         }
 
-        
+
         /// <summary>
         /// 执行部署
         /// </summary>
@@ -341,8 +393,11 @@ namespace Uoko.FireProj.Concretes
                 var gitlabToken = "D3MR_rnRZK4xWS-CtVho";
                 var gitLabApi = new WebApiProvider("http://gitlab.uoko.ioc:12015/api/v3/");
                 var taskDto = this.GetTaskById(taskId);
-                var triggers =gitLabApi.Get<List<Trigger>>(string.Format("projects/{0}/triggers?private_token={1}",taskDto.ProjectDto.RepoId, gitlabToken));
-                if (triggers == null || triggers.Count < 1)
+                var triggers =
+                    gitLabApi.Get<List<Trigger>>(string.Format("projects/{0}/triggers?private_token={1}",
+                        taskDto.ProjectDto.RepoId, gitlabToken));
+                if (triggers == null
+                    || triggers.Count < 1)
                 {
                     throw new Exception("项目在GitLab上为配置Trrigger");
                 }
@@ -392,7 +447,7 @@ namespace Uoko.FireProj.Concretes
                         _ref = "master";
                         break;
                 }
-  
+
                 Hashtable buildInfo = new Hashtable();
                 buildInfo.Add("slnFile", taskDto.ProjectDto.ProjectSlnName);
                 buildInfo.Add("csProjFile", taskDto.ProjectDto.ProjectCsprojName);
@@ -403,14 +458,15 @@ namespace Uoko.FireProj.Concretes
                 buildInfo.Add("Target", target);
                 buildInfo.Add("mergeFromBranch", taskDto.Branch);
                 var buildRequst = new TriggerRequest()
-                {
-                    token = trigger.token,
-                    @ref = _ref,
-                    variables = buildInfo
-                };
+                                  {
+                                      token = trigger.token,
+                                      @ref = _ref,
+                                      variables = buildInfo
+                                  };
 
-                var triggerId =gitLabApi.Post<TriggerRequest, TriggerResponse>(
-                        string.Format("projects/{0}/trigger/builds?private_token={1}", taskDto.ProjectDto.RepoId, gitlabToken),buildRequst).id;
+                var triggerId = gitLabApi.Post<TriggerRequest, TriggerResponse>(
+                    string.Format("projects/{0}/trigger/builds?private_token={1}", taskDto.ProjectDto.RepoId,
+                        gitlabToken), buildRequst).id;
 
 
                 using (var dbScope = _dbScopeFactory.Create())
@@ -428,7 +484,7 @@ namespace Uoko.FireProj.Concretes
                         case StageEnum.PRE:
                             var preDeployInfo = JsonHelper.FromJson<DeployInfoPre>(entity.DeployInfoPreJson);
                             preDeployInfo.TriggeredId = triggerId;
-                            entity.DeployInfoPreJson= JsonHelper.ToJson(preDeployInfo);
+                            entity.DeployInfoPreJson = JsonHelper.ToJson(preDeployInfo);
                             break;
                         case StageEnum.PRODUCTION:
                             break;
@@ -437,15 +493,16 @@ namespace Uoko.FireProj.Concretes
                     entity.ModifyDate = DateTime.Now;
 
                     #region 写日志
+
                     var log = new TaskLogs
-                    {
-                        TaskId = entity.Id,
-                        LogType = LogType.Deploy,
-                        Stage = deployStage,
-                        TriggeredId = triggerId,
-                        CreateDate = DateTime.Now,
-                        CreatorId = 0,
-                    };
+                              {
+                                  TaskId = entity.Id,
+                                  LogType = LogType.Deploy,
+                                  Stage = deployStage,
+                                  TriggeredId = triggerId,
+                                  CreateDate = DateTime.Now,
+                                  CreatorId = 0,
+                              };
                     switch (deployStage)
                     {
                         case StageEnum.IOC:
@@ -458,7 +515,8 @@ namespace Uoko.FireProj.Concretes
                             log.DeployInfo = entity.DeployInfoOnlineJson;
                             break;
                     }
-                    db.TaskLogs.Add(log); 
+                    db.TaskLogs.Add(log);
+
                     #endregion
 
                     db.SaveChanges();
@@ -510,17 +568,18 @@ namespace Uoko.FireProj.Concretes
                     entity.ModifyDate = DateTime.Now;
 
                     #region MyRegion
+
                     //创建日志
                     var log = new TaskLogs
-                    {
-                        TaskId = taskLog.TaskId,
-                        LogType = LogType.Deploy,
-                        Stage = taskLog.Stage,
-                        TriggeredId = triggerId,
-                        CreateDate = DateTime.Now,
-                        CreatorId = 0,
-                        CreatorName = "系统"
-                    };
+                              {
+                                  TaskId = taskLog.TaskId,
+                                  LogType = LogType.Deploy,
+                                  Stage = taskLog.Stage,
+                                  TriggeredId = triggerId,
+                                  CreateDate = DateTime.Now,
+                                  CreatorId = 0,
+                                  CreatorName = "系统"
+                              };
                     switch (taskLog.Stage)
                     {
                         case StageEnum.IOC:
@@ -534,11 +593,11 @@ namespace Uoko.FireProj.Concretes
                             break;
                     }
                     var tTasklogs = db.TaskLogs.Count(t => t.TriggeredId == triggerId);
-                    if (tTasklogs < 2)//避免重复
+                    if (tTasklogs < 2) //避免重复
                     {
-                         db.TaskLogs.Add(log);  
+                        db.TaskLogs.Add(log);
                     }
-                  
+
                     #endregion
 
                     db.SaveChanges();
@@ -550,6 +609,7 @@ namespace Uoko.FireProj.Concretes
                 throw new TipInfoException(ex.Message);
             }
         }
+
         /// <summary>
         /// 更新测试任务
         /// </summary>
@@ -564,7 +624,7 @@ namespace Uoko.FireProj.Concretes
                     var db = dbScope.DbContexts.Get<FireProjDbContext>();
                     var entity = db.TaskInfo.FirstOrDefault(r => r.Id == testResult.TaskId);
 
-                    var currentUserId = 2;//临时模拟一个当前用户Id
+                    var currentUserId = 2; //临时模拟一个当前用户Id
                     //更改任务记录
                     switch (testResult.Stage)
                     {
@@ -580,7 +640,7 @@ namespace Uoko.FireProj.Concretes
                                     //暂时注释判断 修改所有测试结果
                                     //if (currentUserId.Equals(userandstate[0]))
                                     //{
-                                        userandstate[1] = ((int) testResult.QAStatus).ToString();
+                                    userandstate[1] = ((int) testResult.QAStatus).ToString();
                                     //}
 
                                     newUserStatusIds.Add(string.Join("-", userandstate));
@@ -601,7 +661,7 @@ namespace Uoko.FireProj.Concretes
                                     //暂时注释判断 修改所有测试结果
                                     //if (currentUserId.Equals(userandstate[0]))
                                     //{
-                                    userandstate[1] = ((int)testResult.QAStatus).ToString();
+                                    userandstate[1] = ((int) testResult.QAStatus).ToString();
                                     //}
 
                                     newUserStatusIds.Add(string.Join("-", userandstate));
@@ -622,12 +682,13 @@ namespace Uoko.FireProj.Concretes
                                     //暂时注释判断 修改所有测试结果
                                     //if (currentUserId.Equals(userandstate[0]))
                                     //{
-                                    userandstate[1] = ((int)testResult.QAStatus).ToString();
+                                    userandstate[1] = ((int) testResult.QAStatus).ToString();
                                     //}
 
                                     newUserStatusIds.Add(string.Join("-", userandstate));
                                 }
-                                entity.OnlineCheckUserId = onlineDeployInfo.CheckUserId = string.Join(",", newUserStatusIds);
+                                entity.OnlineCheckUserId =
+                                    onlineDeployInfo.CheckUserId = string.Join(",", newUserStatusIds);
                             }
                             entity.DeployInfoOnlineJson = JsonHelper.ToJson(onlineDeployInfo);
                             break;
