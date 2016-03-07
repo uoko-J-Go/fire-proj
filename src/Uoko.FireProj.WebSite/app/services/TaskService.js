@@ -111,7 +111,7 @@
     };
 
     this.GetDomain = function (projectId, serverId, taskId, successCallBack) {
-        $http.get("/api/DomainResourceApi/" + projectId + "/" + serverId + "/" + taskId + "").success(function (data) {
+        $http.get("/api/DomainResourceApi/" + projectId + "/" + serverId + "/" + taskId).success(function (data) {
             if (successCallBack != undefined) {
                 successCallBack(data);
             }

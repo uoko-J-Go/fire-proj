@@ -73,8 +73,6 @@ let ffMergeAndDeploy onBranch =
         let onlineDate = System.DateTime.Today.Date.ToString("yyyy-MM-dd")
         let tagName = getBuildParamEnsure "onlineTagName"
         gitCommand null (sprintf "tag -a v-%s-%s -m \"deploy %s to %s\"" tagName onlineDate mergeFromBranch onBranch)
-    else
-        gitCommand null (sprintf "tag -a %s-to-%s -m \"deploy %s to %s\""  mergeFromBranch onBranch mergeFromBranch onBranch)
                 
     deploy()
 
@@ -85,26 +83,17 @@ let ffMergeAndDeploy onBranch =
     gitCommand null "push --follow-tags"
 
 
-(*
-    做 合并 git pull origin branch-xxx --ff-only
-    deploy
-    tag & push  git tag -a xxx-to-pre -m "deploy xxx to pre" & git push --follow-tags
-*)
 Target "Deploy-To-PRE" (fun _ ->
     let branchPre = "pre"
     ensureOnBranch branchPre
         
     // 保证 pre 和 master 永远保持最新,即：在上pre这个过程里面，没有人越过上线。否则需要人为合并这部分数据过来 pre 上。
-    merge null "--ff-only" "master"
+    merge null "--ff-only" "origin/master"
     
     ffMergeAndDeploy branchPre
 )
 
-(*
-    做 合并 git pull origin pre --ff-only
-    deploy
-    tag & push  git tag -a xxx-to-master -m "deploy xxx to online" & git push --follow-tags
-*)
+
 Target "Online" (fun _ ->
     let branchMaster = "master"
     ensureOnBranch branchMaster    
@@ -113,13 +102,6 @@ Target "Online" (fun _ ->
 
 Target "Deploy-To-IOC" (fun _ ->
     deploy()
-)
-
-// 测试通过的时候调用，方便后期合并，回滚进行跟踪. 这里考虑通过 api 进行调用 打 tag
-Target "QA-Passed-IOC" (fun _ ->
-    let passedDate = System.DateTime.Today.Date.ToString("MM-dd-HH-mm")
-    gitCommand null (sprintf "tag -a pass-test-%s -m \"QA passed\""  passedDate)
-    gitCommand null "push --follow-tags"
 )
 
 Target "BuildSolution" (fun _ ->
@@ -137,12 +119,5 @@ Target "BuildSolution" (fun _ ->
     RestoreMSSolutionPackages (fun p -> p) slnFile
     build setParams slnFile
 )
-
-Target "test" (fun _ ->
-    gitCommand null (sprintf "tag -a %s-to-%s -m \"deploy %s to %s\""  "dev" "pre" "dev" "pre")
-)
-
-"BuildSolution"
-    ==> "QA-Passed-IOC"
 
 RunTargetOrDefault "BuildSolution"
