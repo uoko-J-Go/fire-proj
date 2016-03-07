@@ -62,9 +62,7 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="NewFolder1\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\Uoko.FireProj.DataAccess\Uoko.FireProj.DataAccess.csproj">
       <Project>{efb5f078-cf15-41f0-89d1-dba2c9fb975d}</Project>

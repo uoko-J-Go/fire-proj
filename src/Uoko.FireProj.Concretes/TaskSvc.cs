@@ -38,8 +38,8 @@ namespace Uoko.FireProj.Concretes
             taskInfo.Branch = taskDto.Branch;
             taskInfo.TaskName = taskDto.TaskName;
             taskInfo.CreateDate = DateTime.Now;
-            taskInfo.CreatorId = taskDto.CreatorId.Value;
-            taskInfo.CreatorName = taskDto.CreatorName;
+            taskInfo.CreatorId = UserHelp.userInfo.UserId;
+            taskInfo.CreatorName = UserHelp.userInfo.NickName;
 
             var domain = string.Empty;
 
@@ -123,7 +123,8 @@ namespace Uoko.FireProj.Concretes
 
                 taskInfo.Branch = taskDto.Branch;
                 taskInfo.ModifyDate = DateTime.Now;
-
+                taskInfo.ModifyId = UserHelp.userInfo.UserId;
+                taskInfo.ModifierName = UserHelp.userInfo.NickName;
                 var domain = string.Empty;
                 var DeployInfo = string.Empty;
                 switch (taskDto.DeployStage)
@@ -488,8 +489,8 @@ namespace Uoko.FireProj.Concretes
                         case StageEnum.PRODUCTION:
                             break;
                     }
-                    entity.ModifyId = taskDto.CreatorId;
-                    entity.ModifierName = taskDto.CreatorName;
+                    entity.ModifyId = UserHelp.userInfo.UserId;
+                    entity.ModifierName = UserHelp.userInfo.NickName;
                     entity.ModifyDate = DateTime.Now;
 
                     #region 写日志
@@ -501,8 +502,8 @@ namespace Uoko.FireProj.Concretes
                         Stage = deployStage,
                         TriggeredId = triggerId,
                         CreateDate = DateTime.Now,
-                        CreatorId = taskDto.CreatorId.Value,
-                        CreatorName = taskDto.CreatorName,
+                        CreatorId = UserHelp.userInfo.UserId,
+                        CreatorName = UserHelp.userInfo.NickName,
                     };
                     switch (deployStage)
                     {
@@ -564,11 +565,11 @@ namespace Uoko.FireProj.Concretes
                         case StageEnum.PRODUCTION:
                             break;
                     }
-                    entity.ModifyId = entity.CreatorId;
-                    entity.ModifierName = entity.CreatorName;
+                    entity.ModifyId = UserHelp.userInfo.UserId;
+                    entity.ModifierName = UserHelp.userInfo.NickName;
                     entity.ModifyDate = DateTime.Now;
 
-                    #region MyRegion
+                    #region 写日志
 
                     //创建日志
                     var log = new TaskLogs
@@ -578,8 +579,8 @@ namespace Uoko.FireProj.Concretes
                         Stage = taskLog.Stage,
                         TriggeredId = triggerId,
                         CreateDate = DateTime.Now,
-                        CreatorId = entity.CreatorId,
-                        CreatorName = entity.CreatorName,
+                        CreatorId = UserHelp.userInfo.UserId,
+                        CreatorName = UserHelp.userInfo.NickName,
                     };
                     switch (taskLog.Stage)
                     {
@@ -625,7 +626,7 @@ namespace Uoko.FireProj.Concretes
                     var db = dbScope.DbContexts.Get<FireProjDbContext>();
                     var entity = db.TaskInfo.FirstOrDefault(r => r.Id == testResult.TaskId);
 
-                    var currentUserId = 2; //临时模拟一个当前用户Id
+                    var currentUserId = UserHelp.userInfo.UserId; //临时模拟一个当前用户Id
                     //更改任务记录
                     switch (testResult.Stage)
                     {
@@ -638,11 +639,11 @@ namespace Uoko.FireProj.Concretes
                                 foreach (var userStatus in userStatusIds)
                                 {
                                     var userandstate = userStatus.Split('-');
-                                    //暂时注释判断 修改所有测试结果
-                                    //if (currentUserId.Equals(userandstate[0]))
-                                    //{
+                                    
+                                    if (currentUserId.Equals(userandstate[0]))
+                                    {
                                         userandstate[1] = ((int) testResult.QAStatus).ToString();
-                                    //}
+                                    }
 
                                     newUserStatusIds.Add(string.Join("-", userandstate));
                                 }
@@ -659,11 +660,11 @@ namespace Uoko.FireProj.Concretes
                                 foreach (var userStatus in userStatusIds)
                                 {
                                     var userandstate = userStatus.Split('-');
-                                    //暂时注释判断 修改所有测试结果
-                                    //if (currentUserId.Equals(userandstate[0]))
-                                    //{
-                                    userandstate[1] = ((int) testResult.QAStatus).ToString();
-                                    //}
+                                   
+                                    if (currentUserId.Equals(userandstate[0]))
+                                    {
+                                        userandstate[1] = ((int)testResult.QAStatus).ToString();
+                                    }
 
                                     newUserStatusIds.Add(string.Join("-", userandstate));
                                 }
@@ -680,11 +681,11 @@ namespace Uoko.FireProj.Concretes
                                 foreach (var userStatus in userStatusIds)
                                 {
                                     var userandstate = userStatus.Split('-');
-                                    //暂时注释判断 修改所有测试结果
-                                    //if (currentUserId.Equals(userandstate[0]))
-                                    //{
-                                    userandstate[1] = ((int) testResult.QAStatus).ToString();
-                                    //}
+                                    
+                                    if (currentUserId.Equals(userandstate[0]))
+                                    {
+                                        userandstate[1] = ((int)testResult.QAStatus).ToString();
+                                    }
 
                                     newUserStatusIds.Add(string.Join("-", userandstate));
                                 }
@@ -696,6 +697,7 @@ namespace Uoko.FireProj.Concretes
                     }
                     entity.ModifyId = currentUserId;
                     entity.ModifyDate = DateTime.Now;
+                    entity.ModifierName = UserHelp.userInfo.NickName;
                     db.SaveChanges();
                     return entity;
                 }
