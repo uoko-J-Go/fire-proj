@@ -52,27 +52,6 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal,TaskSer
         $scope.Query();
         $scope.GetProjectList();
     }
-
-    ///提交测试,状态改为8测试中
-    $scope.CommitToTest = function (item) {
-        bootbox.prompt("批示", function (result) {
-            if (result != null) {
-             paran = {
-                "Id": item.Id,
-                "LogsText": result
-            }
-            TaskService.CommitToTest(paran, function (data) {
-                formSubmitSuccessClick("refresh");
-            });
-            }
-        });
-       }
-    ///释放资源操作
-    $scope.ReleaseDomain = function (taskId) {
-        TaskService.ReleaseDomain(taskId, function (data) {
-            formSubmitSuccessClick("refresh");
-        });
-    }
     $scope.Init();
 });
 
