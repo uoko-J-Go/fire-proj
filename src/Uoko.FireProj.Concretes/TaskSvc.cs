@@ -37,8 +37,9 @@ namespace Uoko.FireProj.Concretes
             taskInfo.ProjectId = taskDto.ProjectId;
             taskInfo.Branch = taskDto.Branch;
             taskInfo.TaskName = taskDto.TaskName;
-            taskInfo.CreatorId = 1;
             taskInfo.CreateDate = DateTime.Now;
+            taskInfo.CreatorId = taskDto.CreatorId.Value;
+            taskInfo.CreatorName = taskDto.CreatorName;
 
             var domain = string.Empty;
 
@@ -121,8 +122,6 @@ namespace Uoko.FireProj.Concretes
                 var taskInfo = db.TaskInfo.FirstOrDefault(r => r.Id == taskDto.Id);
 
                 taskInfo.Branch = taskDto.Branch;
-
-                taskInfo.ModifyId = 1;
                 taskInfo.ModifyDate = DateTime.Now;
 
                 var domain = string.Empty;
@@ -176,7 +175,7 @@ namespace Uoko.FireProj.Concretes
                         }
                         taskDto.OnlineDeployInfo.DeployStage = StageEnum.PRODUCTION;
                         taskInfo.DeployInfoOnlineJson = JsonHelper.ToJson(taskDto.OnlineDeployInfo);
-
+                        
                         break;
                     default:
                         throw new NotSupportedException("暂不支持其他阶段");
@@ -217,7 +216,7 @@ namespace Uoko.FireProj.Concretes
                 }
                 db.SaveChanges();
             }
-
+           
         }
 
         public void DeleteTask(int taskId)
@@ -239,7 +238,7 @@ namespace Uoko.FireProj.Concretes
             }
         }
 
-
+       
 
         public TaskDetailDto GetTaskById(int taskId)
         {
@@ -248,7 +247,7 @@ namespace Uoko.FireProj.Concretes
                 var db = dbScope.DbContexts.Get<FireProjDbContext>();
                 var entity = db.TaskInfo.FirstOrDefault(r => r.Id == taskId);
                 var taskDto = Mapper.Map<TaskInfo, TaskDetailDto>(entity);
-
+                
                 //项目信息
                 var projectEntity = db.Project.FirstOrDefault(r => r.Id == entity.ProjectId);
                 taskDto.ProjectDto = Mapper.Map<Project, ProjectDto>(projectEntity);
@@ -366,20 +365,20 @@ namespace Uoko.FireProj.Concretes
             }
 
             var infoLists = taskInfos.Select(task =>
-                                             {
-                                                 string projectName;
-                                                 projDic.TryGetValue(task.ProjectId, out projectName);
-                                                 return new TaskInfoForList
-                                                        {
-                                                            TaskInfo = task,
-                                                            OnlineTaskInfo = null,
-                                                            ProjectName = projectName
-                                                        };
-                                             });
+                                {
+                                    string projectName;
+                                    projDic.TryGetValue(task.ProjectId, out projectName);
+                                    return new TaskInfoForList
+                                           {
+                                               TaskInfo = task,
+                                               OnlineTaskInfo = null,
+                                               ProjectName = projectName
+                                           };
+                                });
             return infoLists;
         }
 
-
+        
         /// <summary>
         /// 执行部署
         /// </summary>
@@ -447,7 +446,7 @@ namespace Uoko.FireProj.Concretes
                         _ref = "master";
                         break;
                 }
-
+  
                 Hashtable buildInfo = new Hashtable();
                 buildInfo.Add("slnFile", taskDto.ProjectDto.ProjectSlnName);
                 buildInfo.Add("csProjFile", taskDto.ProjectDto.ProjectCsprojName);
@@ -458,11 +457,11 @@ namespace Uoko.FireProj.Concretes
                 buildInfo.Add("Target", target);
                 buildInfo.Add("mergeFromBranch", taskDto.Branch);
                 var buildRequst = new TriggerRequest()
-                                  {
-                                      token = trigger.token,
-                                      @ref = _ref,
-                                      variables = buildInfo
-                                  };
+                {
+                    token = trigger.token,
+                    @ref = _ref,
+                    variables = buildInfo
+                };
 
                 var triggerId = gitLabApi.Post<TriggerRequest, TriggerResponse>(
                     string.Format("projects/{0}/trigger/builds?private_token={1}", taskDto.ProjectDto.RepoId,
@@ -489,20 +488,22 @@ namespace Uoko.FireProj.Concretes
                         case StageEnum.PRODUCTION:
                             break;
                     }
-                    entity.ModifyId = 2;
+                    entity.ModifyId = taskDto.CreatorId;
+                    entity.ModifierName = taskDto.CreatorName;
                     entity.ModifyDate = DateTime.Now;
 
                     #region 写日志
 
                     var log = new TaskLogs
-                              {
-                                  TaskId = entity.Id,
-                                  LogType = LogType.Deploy,
-                                  Stage = deployStage,
-                                  TriggeredId = triggerId,
-                                  CreateDate = DateTime.Now,
-                                  CreatorId = 0,
-                              };
+                    {
+                        TaskId = entity.Id,
+                        LogType = LogType.Deploy,
+                        Stage = deployStage,
+                        TriggeredId = triggerId,
+                        CreateDate = DateTime.Now,
+                        CreatorId = taskDto.CreatorId.Value,
+                        CreatorName = taskDto.CreatorName,
+                    };
                     switch (deployStage)
                     {
                         case StageEnum.IOC:
@@ -515,7 +516,7 @@ namespace Uoko.FireProj.Concretes
                             log.DeployInfo = entity.DeployInfoOnlineJson;
                             break;
                     }
-                    db.TaskLogs.Add(log);
+                    db.TaskLogs.Add(log); 
 
                     #endregion
 
@@ -563,23 +564,23 @@ namespace Uoko.FireProj.Concretes
                         case StageEnum.PRODUCTION:
                             break;
                     }
-                    entity.ModifyId = 0;
-                    entity.ModifierName = "系统";
+                    entity.ModifyId = entity.CreatorId;
+                    entity.ModifierName = entity.CreatorName;
                     entity.ModifyDate = DateTime.Now;
 
                     #region MyRegion
 
                     //创建日志
                     var log = new TaskLogs
-                              {
-                                  TaskId = taskLog.TaskId,
-                                  LogType = LogType.Deploy,
-                                  Stage = taskLog.Stage,
-                                  TriggeredId = triggerId,
-                                  CreateDate = DateTime.Now,
-                                  CreatorId = 0,
-                                  CreatorName = "系统"
-                              };
+                    {
+                        TaskId = taskLog.TaskId,
+                        LogType = LogType.Deploy,
+                        Stage = taskLog.Stage,
+                        TriggeredId = triggerId,
+                        CreateDate = DateTime.Now,
+                        CreatorId = entity.CreatorId,
+                        CreatorName = entity.CreatorName,
+                    };
                     switch (taskLog.Stage)
                     {
                         case StageEnum.IOC:
@@ -595,9 +596,9 @@ namespace Uoko.FireProj.Concretes
                     var tTasklogs = db.TaskLogs.Count(t => t.TriggeredId == triggerId);
                     if (tTasklogs < 2) //避免重复
                     {
-                        db.TaskLogs.Add(log);
+                         db.TaskLogs.Add(log);  
                     }
-
+                  
                     #endregion
 
                     db.SaveChanges();
@@ -640,7 +641,7 @@ namespace Uoko.FireProj.Concretes
                                     //暂时注释判断 修改所有测试结果
                                     //if (currentUserId.Equals(userandstate[0]))
                                     //{
-                                    userandstate[1] = ((int) testResult.QAStatus).ToString();
+                                        userandstate[1] = ((int) testResult.QAStatus).ToString();
                                     //}
 
                                     newUserStatusIds.Add(string.Join("-", userandstate));

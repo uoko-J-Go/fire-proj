@@ -11,7 +11,7 @@ namespace Uoko.FireProj.DataAccess.Dto
     /// <summary>
     /// 任务写入 数据对象
     /// </summary>
-    public class TaskWriteDto
+    public class TaskWriteDto:BaseDto
     {
 
         public int Id { get; set; }

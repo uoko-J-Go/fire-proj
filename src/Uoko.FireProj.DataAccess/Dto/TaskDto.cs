@@ -8,7 +8,7 @@ using Uoko.FireProj.DataAccess.Enum;
 
 namespace Uoko.FireProj.DataAccess.Dto
 {
-    public class TaskDto
+    public class TaskDto: BaseDto
     {
         public int Id { get; set; }
 

@@ -7,7 +7,7 @@ using Uoko.FireProj.DataAccess.Enum;
 
 namespace Uoko.FireProj.DataAccess.Dto
 {
-    public class ServerDto
+    public class ServerDto: BaseDto
     {
         public int Id { get; set; }
 

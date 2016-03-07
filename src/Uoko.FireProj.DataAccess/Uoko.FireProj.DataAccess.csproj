@@ -58,6 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AutoMapper\AutoMapper.cs" />
+    <Compile Include="Dto\BaseDto.cs" />
     <Compile Include="Dto\DictionaryDto.cs" />
     <Compile Include="Dto\ProjectDto.cs" />
     <Compile Include="Dto\DomainResourceDto.cs" />

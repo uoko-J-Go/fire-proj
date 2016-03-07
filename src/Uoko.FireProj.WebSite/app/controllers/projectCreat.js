@@ -91,11 +91,13 @@ fireproj.controller("ProjectController", function ($scope, $http, ProjectService
             gitlabInfo = JSON.parse(gitlabInfo);
         }
         model.ProjectRepo = gitlabInfo.http_url_to_repo;
-        model.ProjectId = gitlabInfo.id;
+        model.RepoId = gitlabInfo.id;
         model.ProjectGitlabName = gitlabInfo.name;
         var projectCsprojName = $("#ProjectCsprojName").val();
 
-        model.ProjectCsprojName = projectCsprojName.substring(0, projectCsprojName.length - 1);
+        //model.ProjectCsprojName = projectCsprojName.substring(0, projectCsprojName.length - 1);
+
+        model.ProjectCsprojName = projectCsprojName;
 
         ProjectService.post(model).success(function (data) {
             location.href = "/Project/Index";

@@ -188,8 +188,10 @@
 
             if (param.stage != undefined) {
                 $scope.taskInfo.DeployStage = param.stage;
-                $scope.GetServerData($scope.taskInfo.DeployStage);
-            }  
+            } else {
+                $scope.taskInfo.DeployStage = 0;
+            }
+            $scope.GetServerData($scope.taskInfo.DeployStage);
         });
     }
 
