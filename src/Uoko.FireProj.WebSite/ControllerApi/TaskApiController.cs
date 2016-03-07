@@ -45,6 +45,8 @@ namespace Uoko.FireProj.WebSite.ControllerApi
         [HttpPost]
         public IHttpActionResult Update([FromBody]TaskWriteDto task)
         {
+            task.ModifyId = userInfo.UserId;
+            task.ModifierName = userInfo.NickName;
             _taskSvc.UpdateTask(task);
             //直接调用部署
             _taskSvc.BeginDeploy(task.Id, task.DeployStage);
@@ -55,6 +57,8 @@ namespace Uoko.FireProj.WebSite.ControllerApi
         [HttpPost]
         public IHttpActionResult Create([FromBody]TaskWriteDto task)
         {
+            task.CreatorId = userInfo.UserId;
+            task.CreatorName = userInfo.NickName;
             var taskId=_taskSvc.CreatTask(task);
             //直接调用部署
             var taskInfo = _taskSvc.BeginDeploy(taskId, task.DeployStage);
@@ -98,6 +102,8 @@ namespace Uoko.FireProj.WebSite.ControllerApi
         [HttpPost]
         public IHttpActionResult UpdateTestStatus([FromBody]TestResultDto testResult)
         {
+            testResult.ModifyId = userInfo.UserId;
+            testResult.CreatorName = userInfo.NickName;
             var taskInfo = _taskSvc.UpdateTestStatus(testResult);
             //创建日志
             var log = new TaskLogs
@@ -119,6 +125,8 @@ namespace Uoko.FireProj.WebSite.ControllerApi
                     log.DeployInfo = taskInfo.DeployInfoOnlineJson;
                     break;
             }
+            log.CreatorId = userInfo.UserId;
+            log.CreatorName = userInfo.NickName;
             _taskLogsSvc.CreateTaskLogs(log);
             return Ok();
         }

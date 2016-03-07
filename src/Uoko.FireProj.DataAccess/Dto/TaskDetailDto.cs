@@ -10,7 +10,7 @@ namespace Uoko.FireProj.DataAccess.Dto
     /// <summary>
     /// 任务详情Dto
     /// </summary>
-    public class TaskDetailDto
+    public class TaskDetailDto:BaseDto
     {
         public int Id { get; set; }
         /// <summary>

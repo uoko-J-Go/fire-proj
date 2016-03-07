@@ -34,8 +34,6 @@ namespace Uoko.FireProj.Concretes
             {
                 using (var dbScope = _dbScopeFactory.Create())
                 {
-                    entity.CreatorId = 1;
-                    entity.CreateDate = DateTime.Now;
                     var db = dbScope.DbContexts.Get<FireProjDbContext>();
                     db.TaskLogs.Add(entity);
                     db.SaveChanges();

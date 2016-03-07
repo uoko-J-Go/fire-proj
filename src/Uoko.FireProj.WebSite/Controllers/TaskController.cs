@@ -41,50 +41,50 @@ namespace Uoko.FireProj.WebSite.Controllers
             return View();
         }
 
-        public ActionResult Seed()
-        {
-            var deployInfo = new DeployInfoIoc()
-            {
-                CheckUserId = "1-0,2-1,3-2",
-                DeployAddress ="",
-                DeployIP ="192.168.200.25",
-                DeployStage = StageEnum.IOC,
-                Domain = "fire.uoko.ioc",
-                NoticeUserId =null,
-                SiteName ="fire.uoko.ioc",
-                DeployStatus = DeployStatus.Deploying,
-                TaskDesc = "Seed data",
-                TriggeredId = null,
-                BuildId = null,
-            };
-            var taskInfo = new TaskInfo()
-            {
-                TaskName = DateTime.Now.ToString(CultureInfo.InvariantCulture),
-                ProjectId = 2025,
-                Branch = "dev",
-                CreatorId = 1,
-                CreateDate = DateTime.Now,
-                DeployInfoIocJson = JsonConvert.SerializeObject(deployInfo) ,
-                DeployInfoOnlineJson = null,
-                DeployInfoPreJson = null,
-                HasOnlineDeployed = false,
-                IocCheckUserId = "1-0,2-1,3-2",
-                PreCheckUserId = "1-0,2-1,3-2",
-                OnlineCheckUserId ="1-0,2-1,3-2" ,
-                OnlineTaskId = null,
-            };
+        //public ActionResult Seed()
+        //{
+        //    var deployInfo = new DeployInfoIoc()
+        //    {
+        //        CheckUserId = "1-0,2-1,3-2",
+        //        DeployAddress ="",
+        //        DeployIP ="192.168.200.25",
+        //        DeployStage = StageEnum.IOC,
+        //        Domain = "fire.uoko.ioc",
+        //        NoticeUserId =null,
+        //        SiteName ="fire.uoko.ioc",
+        //        DeployStatus = DeployStatus.Deploying,
+        //        TaskDesc = "Seed data",
+        //        TriggeredId = null,
+        //        BuildId = null,
+        //    };
+        //    var taskInfo = new TaskInfo()
+        //    {
+        //        TaskName = DateTime.Now.ToString(CultureInfo.InvariantCulture),
+        //        ProjectId = 2025,
+        //        Branch = "dev",
+        //        CreatorId = 1,
+        //        CreateDate = DateTime.Now,
+        //        DeployInfoIocJson = JsonConvert.SerializeObject(deployInfo) ,
+        //        DeployInfoOnlineJson = null,
+        //        DeployInfoPreJson = null,
+        //        HasOnlineDeployed = false,
+        //        IocCheckUserId = "1-0,2-1,3-2",
+        //        PreCheckUserId = "1-0,2-1,3-2",
+        //        OnlineCheckUserId ="1-0,2-1,3-2" ,
+        //        OnlineTaskId = null,
+        //    };
 
 
-            using (var dbScope = new DbContextScopeFactory().CreateReadOnly())
-            {
-                var db = dbScope.DbContexts.Get<FireProjDbContext>();
-                db.TaskInfo.Add(taskInfo);
-                db.SaveChanges();
-            }
+        //    using (var dbScope = new DbContextScopeFactory().CreateReadOnly())
+        //    {
+        //        var db = dbScope.DbContexts.Get<FireProjDbContext>();
+        //        db.TaskInfo.Add(taskInfo);
+        //        db.SaveChanges();
+        //    }
 
 
-            return Json(taskInfo,JsonRequestBehavior.AllowGet);
-        }
+        //    return Json(taskInfo,JsonRequestBehavior.AllowGet);
+        //}
 
 
         public ActionResult OnlineList()

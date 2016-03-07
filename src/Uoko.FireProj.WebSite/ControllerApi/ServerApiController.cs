@@ -12,7 +12,7 @@ using Uoko.FireProj.DataAccess.Query;
 namespace Uoko.FireProj.WebSite.ControllerApi
 {
     [RoutePrefix("api/ServerApi")]
-    public class ServerApiController : ApiController
+    public class ServerApiController : BaseApiController
     {
         private IServerSvc _serverSvc { get; set; }
         public ServerApiController(IServerSvc serverSvc)
@@ -36,6 +36,8 @@ namespace Uoko.FireProj.WebSite.ControllerApi
         [HttpPost]
         public IHttpActionResult Update([FromBody]ServerDto server)
         {
+            server.ModifyId = userInfo.UserId;
+            server.ModifierName = userInfo.NickName;
             _serverSvc.UpdateServer(server);
             return Ok();
         }
@@ -44,6 +46,8 @@ namespace Uoko.FireProj.WebSite.ControllerApi
         [HttpPost]
         public IHttpActionResult Create([FromBody]ServerDto server)
         {
+            server.CreatorId = userInfo.UserId;
+            server.CreatorName = userInfo.NickName;
             _serverSvc.CreateServer(server);
             return Ok();
         }

@@ -66,6 +66,8 @@ namespace Uoko.FireProj.WebSite.ControllerApi
             {
                 return BadRequest(ModelState);
             }
+            entity.CreatorId = userInfo.UserId;
+            entity.CreatorName = userInfo.NickName;
             _taskLogsSvc.CreateTaskLogs(entity);
             return Ok();
         }

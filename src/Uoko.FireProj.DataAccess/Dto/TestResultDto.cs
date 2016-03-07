@@ -7,7 +7,7 @@ using Uoko.FireProj.DataAccess.Enum;
 
 namespace Uoko.FireProj.DataAccess.Dto
 {
-    public class TestResultDto
+    public class TestResultDto:BaseDto
     {
         public int TaskId { get; set; }
 
