@@ -1,6 +1,5 @@
 ﻿fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskService, ProjectService,CommonService) {
     var taskId = $("#taskIdParam").val();
-    $scope.currLogTab = 0;
     $scope.AllUsers = [];
     $scope.GetAllUser = function () {
         CommonService.getAllUsers(function (data) {
@@ -15,13 +14,19 @@
         TaskService.GetTaskInfo(taskId, function (data) {
             $scope.model = data;
             $scope.param = {
-                taskId: taskId,
-                stage: $scope.currLogTab
+                taskId: taskId 
             };
             $scope.model.DeployInfoIocDto.CheckUser = AnalysisUser($scope.model.DeployInfoIocDto.CheckUser,$scope.AllUsers);
             $scope.model.DeployInfoIocDto.NoticeUser = AnalysisUser($scope.model.DeployInfoIocDto.NoticeUser, $scope.AllUsers);
             $scope.model.DeployInfoPreDto.CheckUser = AnalysisUser($scope.model.DeployInfoPreDto.CheckUser, $scope.AllUsers);
             $scope.model.DeployInfoPreDto.NoticeUser = AnalysisUser($scope.model.DeployInfoPreDto.NoticeUser, $scope.AllUsers);
+
+            if ($scope.model.DeployInfoIocJson != null) {
+                $scope.currLogTab = 0;
+            }else if ($scope.model.DeployInfoPreJson != null) {
+                $scope.currLogTab = 1;
+            }
+            
         });
     }
     $scope.GetTaskLogsByTaskId = function () {
@@ -36,8 +41,9 @@
             templateUrl: '/app/modals/Deploy.html',
             controller: 'DeployController',
             resolve: {
-            param: function () {
-                return $scope.param;
+                param: function () {
+                    $scope.param.stage = $scope.currLogTab;
+                    return $scope.param;
             }
            }
         });
