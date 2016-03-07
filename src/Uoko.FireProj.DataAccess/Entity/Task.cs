@@ -64,24 +64,21 @@ namespace Uoko.FireProj.DataAccess.Entity
         public int ProjectId { get; set; }
 
         /// <summary>
-        /// 项目Id
+        /// 项目名称
         /// </summary>
-        public int ProjectName { get; set; }
+        public string ProjectName { get; set; }
+
+        public int DeployServerId { get; set; }
 
         /// <summary>
         /// 部署服务器IP地址
         /// </summary>
-        public string DeployIP { get; set; }
+        public string DeployServerIP { get; set; }
 
         /// <summary>
         /// 部署机器名称
         /// </summary>
         public string DeployServerName { get; set; }
-
-        /// <summary>
-        /// 部署地址
-        /// </summary>
-        public string DeployAddress { get; set; }
 
         /// <summary>
         /// 部署域名

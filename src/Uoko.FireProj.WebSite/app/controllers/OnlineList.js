@@ -4,8 +4,6 @@
     $scope.servers = [];
     $scope.domains = [];
 
-    $scope.onlineTaskInfo = {};
-
     $scope.pageSize = 10;
     $scope.currentPage = 1;
 
@@ -14,6 +12,7 @@
     $scope.queryType = 0; // 所有
     $scope.projectSelected = null;
     $scope.serverSelected = null;
+    $scope.onlineVersion = null;
 
 
     function getProjectList() {
@@ -64,21 +63,24 @@
 
 
     $scope.Fire = function (isValid) {
-        console.log($scope);
-
         if (!isValid) {
             bootbox.alert("表单验证未通过");
             return;
         }
 
-        return;
+        var onlineTaskInfo = {
+            OnlineVersion: $scope.onlineVersion,
+            ProjectId: $scope.projectSelected.Id,
+            ProjectName: $scope.projectSelected.ProjectName,
+            DeployServerId: $scope.serverSelected.Id,
+            DeployServerIP: $scope.serverSelected.IP,
+            DeployServerName: $scope.serverSelected.Name,
+            Domain: $scope.domainSelected.Name,
+            SiteName: $scope.domainSelected.SiteName,
+        };
 
-        var taskForSave = null;
-
-        TaskService.CreateTask(taskForSave, function(data) {
-
+        TaskService.FireProject(onlineTaskInfo, function(data) {
             location.href = "/Task/Index";
-
         });
     }
 

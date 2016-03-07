@@ -61,7 +61,7 @@
                             <a target="_blank" href="http://semver.org/lang/zh-CN/">上线版本</a>
                         </label>
                         <div class="col-md-10">
-                           <input name="onlineVersion" ng-model="OnlineVersion" class="form-control ng-pristine ng-invalid ng-invalid-required ng-touched" placeholder="主版本.次版本.修订版本" required="" type="text">
+                           <input name="onlineVersion" ng-model="onlineVersion" class="form-control ng-pristine ng-invalid ng-invalid-required ng-touched" placeholder="主版本.次版本.修订版本" required="" type="text">
                         </div>
                     </div>
                            
@@ -114,7 +114,9 @@
                             <td title="{{task.PreTestAllPassed ? '测试全部通过' : ''}}">
                                 <span class="glyphicon glyphicon-ok" ng-if="task.PreTestAllPassed"></span>
                             </td>
-                            <td>{{task.TaskInfo.Id}}</td>
+                           <td title="{{(task.OnlineTaskInfo.DeployStatus | DeployStatusFilter).Title}}">
+                                <span ng-class="(task.OnlineTaskInfo.DeployStatus | DeployStatusFilter).IconClass" ng-if="task.OnlineTaskInfo"></span>
+                            </td>
                             <td title="{{task.OnlineTestAllPassed ? '测试全部通过' : ''}}">
                                 <span class="glyphicon glyphicon-ok" ng-if="task.OnlineTestAllPassed"></span>
                             </td>

@@ -24,10 +24,14 @@ namespace Uoko.FireProj.Concretes
         #region 构造函数注册上下文
 
         private readonly IDbContextScopeFactory _dbScopeFactory;
+        private readonly IProjectSvc _projectSvc;
+        private readonly IServerSvc _serverSvc;
 
-        public TaskSvc(IDbContextScopeFactory dbScopeFactory)
+        public TaskSvc(IDbContextScopeFactory dbScopeFactory,IProjectSvc projectSvc,IServerSvc serverSvc)
         {
             _dbScopeFactory = dbScopeFactory;
+            _projectSvc = projectSvc;
+            _serverSvc = serverSvc;
         }
 
         #endregion
@@ -66,9 +70,11 @@ namespace Uoko.FireProj.Concretes
                     deployOnlineInfo.OnlineTaskId = onlineTaskId;
                     deployOnlineInfo.DeployStage = StageEnum.PRODUCTION;
                     deployOnlineInfo.CheckUserId = taskToBeOnline.OnlineCheckUserId;
+
+                    taskToBeOnline.DeployInfoOnlineJson = JsonConvert.SerializeObject(deployOnlineInfo);
                 }
 
-                db.SaveChanges();
+                dbScope.SaveChanges();
                 return taskInfo;
             }
         }
@@ -92,10 +98,69 @@ namespace Uoko.FireProj.Concretes
             }
         }
 
-        public void DeployOnlineTask(OnlineTaskInfo taskFromDb)
+        public void DeployOnlineTask(OnlineTaskInfo onlineTaskInfo)
         {
+            var gitlabToken = "D3MR_rnRZK4xWS-CtVho";
+            var gitLabApi = new WebApiProvider("http://gitlab.uoko.ioc:12015/api/v3/");
 
+            var project = _projectSvc.GetProjectById(onlineTaskInfo.ProjectId);
+            if (project == null)
+            {
+                throw new TipInfoException("找不到 Project");
+            }
 
+            var deployServer = _serverSvc.GetServerById(onlineTaskInfo.DeployServerId);
+            if (deployServer == null)
+            {
+                throw new TipInfoException("没有 server 信息");
+            }
+
+            var repoId = project.RepoId;
+
+            var triggers = gitLabApi.Get<List<Trigger>>($"projects/{repoId}/triggers?private_token={gitlabToken}")
+                           ?? new List<Trigger>();
+            var trigger = triggers.FirstOrDefault();
+            if (trigger == null)
+            {
+                throw new TipInfoException("项目在GitLab上未配置 triggers");
+            }
+
+            var onlineTagName = $"{onlineTaskInfo.OnlineVersion}-{onlineTaskInfo.Id}";
+            var buildInfo = new Dictionary<string, object>
+                            {
+                                {"slnFile", project.ProjectSlnName},
+                                {"csProjFile", project.ProjectCsprojName},
+                                {"iisSiteName", onlineTaskInfo.SiteName},
+                                {"pkgDir", deployServer.PackageDir},
+                                {"msDeployUrl", "https://" + onlineTaskInfo.DeployServerIP + ":8172/msdeploy.axd"},
+                                {"useConfig", "Release"},
+                                {"Target", "Online"},
+                                {"mergeFromBranch", "pre"},
+                                {"onlineTagName", onlineTagName}
+                            };
+
+            var buildRequst = new TriggerRequest()
+                              {
+                                  token = trigger.token,
+                                  @ref = "master",
+                                  variables = buildInfo
+                              };
+
+            var triggerUri = $"projects/{repoId}/trigger/builds?private_token={gitlabToken}";
+            var triggerId = gitLabApi.Post<TriggerRequest, TriggerResponse>(triggerUri, buildRequst).id;
+
+            using (var dbScope = _dbScopeFactory.Create())
+            {
+                var db = dbScope.DbContexts.Get<FireProjDbContext>();
+                var taskFromDb = db.OnlineTaskInfos.Find(onlineTaskInfo.Id);
+                if (taskFromDb != null)
+                {
+                    taskFromDb.TriggeredId = triggerId;
+                    taskFromDb.DeployStatus = DeployStatus.Deploying;
+                }
+
+                dbScope.SaveChanges();
+            }
         }
 
 
@@ -423,7 +488,7 @@ namespace Uoko.FireProj.Concretes
         {
             Dictionary<int, string> projDic;
             var taskInfos = tasks as TaskInfo[] ?? tasks.ToArray();
-
+            List<OnlineTaskInfo> onlineTaskInfos;
             using (var dbScope = _dbScopeFactory.CreateReadOnly())
             {
 
@@ -431,19 +496,29 @@ namespace Uoko.FireProj.Concretes
                 var projectIds = taskInfos.Select(item => item.ProjectId).Distinct();
                 projDic = db.Project.Where(item => projectIds.Contains(item.Id))
                             .ToDictionary(item => item.Id, item => item.ProjectName);
+
+                var onlineTaskIds = taskInfos.Select(item => item.OnlineTaskId)
+                                             .Where(item => item != null)
+                                             .Distinct();
+                onlineTaskInfos = db.OnlineTaskInfos
+                          .Where(item => onlineTaskIds.Contains(item.Id))
+                          .ToList();
+
             }
 
             var infoLists = taskInfos.Select(task =>
-                                {
-                                    string projectName;
-                                    projDic.TryGetValue(task.ProjectId, out projectName);
-                                    return new TaskInfoForList
-                                           {
-                                               TaskInfo = task,
-                                               OnlineTaskInfo = null,
-                                               ProjectName = projectName
-                                           };
-                                });
+                                             {
+                                                 string projectName;
+                                                 projDic.TryGetValue(task.ProjectId, out projectName);
+                                                 var onlineInfo = onlineTaskInfos.FirstOrDefault(item =>
+                                                     item.Id == task.OnlineTaskId);
+                                                 return new TaskInfoForList
+                                                        {
+                                                            TaskInfo = task,
+                                                            OnlineTaskInfo = onlineInfo,
+                                                            ProjectName = projectName
+                                                        };
+                                             });
             return infoLists;
         }
 

@@ -22,7 +22,7 @@ namespace Uoko.FireProj.WebSite
         {
             app.UseCookieAuthentication(new CookieAuthenticationOptions()
             {
-                AuthenticationType = OpenIdConnectAuthenticationDefaults.AuthenticationType //AuthenticationType必须保持一致
+                AuthenticationType = OpenIdConnectAuthenticationDefaults.AuthenticationType, //AuthenticationType必须保持一致
             });
             app.UseOpenIdConnectAuthentication(new OpenIdConnectAuthenticationOptions
             {
@@ -32,7 +32,7 @@ namespace Uoko.FireProj.WebSite
                 ResponseType = "id_token token",
                 RedirectUri = _domainUrl, //登录成功跳转地址=>接入网站地址
                 PostLogoutRedirectUri = _domainUrl, //登出跳转地址=>接入网站地址
-
+                UseTokenLifetime = false,
                 SignInAsAuthenticationType = OpenIdConnectAuthenticationDefaults.AuthenticationType,//AuthenticationType必须保持一致
                 Notifications = new OpenIdConnectAuthenticationNotifications
                 {

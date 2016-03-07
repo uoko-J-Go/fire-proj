@@ -49,13 +49,15 @@ namespace Uoko.FireProj.WebSite.ControllerApi
         [Route("DeployOnline")]
         public IHttpActionResult DeployOnlineTask([FromBody] OnlineTaskInfo onlineTask)
         {
+            onlineTask.CreateDate = DateTime.Now;
+            onlineTask.CreatorId = UserHelper.CurrUserInfo.UserId;
+            onlineTask.CreatorName = UserHelper.CurrUserInfo.NickName;
+
             // 创建完成上线任务以后
             var taskFromDb = _taskSvc.CreateOnlineTask(onlineTask);
 
             // 进行任务的部署
             _taskSvc.DeployOnlineTask(taskFromDb);
-
-
 
             return Ok();
         }
