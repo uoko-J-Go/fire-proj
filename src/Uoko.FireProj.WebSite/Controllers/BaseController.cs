@@ -33,8 +33,8 @@ namespace Uoko.FireProj.WebSite.Controllers
             //cache.Add("NickName", user.FindFirst("NickName").Value);
 
 
-            UserHelp.userInfo.UserId = int.Parse(user.FindFirst("userid").Value.ToString());
-            UserHelp.userInfo.NickName = user.FindFirst("NickName").Value;
+            UserHelper.CurrUserInfo.UserId = int.Parse(user.FindFirst("userid").Value.ToString());
+            UserHelper.CurrUserInfo.NickName = user.FindFirst("NickName").Value;
 
             ViewBag.NickName = user.FindFirst("NickName").Value;
         }

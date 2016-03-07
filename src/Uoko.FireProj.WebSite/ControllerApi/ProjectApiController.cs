@@ -70,8 +70,8 @@ namespace Uoko.FireProj.WebSite.ControllerApi
             {
                 return BadRequest(ModelState);
             }
-            dto.CreatorId = UserHelp.userInfo.UserId;
-            dto.CreatorName = UserHelp.userInfo.NickName;
+            dto.CreatorId = UserHelper.CurrUserInfo.UserId;
+            dto.CreatorName = UserHelper.CurrUserInfo.NickName;
             var projectId = _projectSvc.CreatProject(dto);
             return Ok();
         }
@@ -95,8 +95,8 @@ namespace Uoko.FireProj.WebSite.ControllerApi
                 return BadRequest(ModelState);
             }
             dto.Id = id;
-            dto.ModifyId = UserHelp.userInfo.UserId;
-            dto.ModifierName = UserHelp.userInfo.NickName;
+            dto.ModifyId = UserHelper.CurrUserInfo.UserId;
+            dto.ModifierName = UserHelper.CurrUserInfo.NickName;
             _projectSvc.EditProject(dto);
             return Ok();
         }

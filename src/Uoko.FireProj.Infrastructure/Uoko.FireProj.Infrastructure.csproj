@@ -49,7 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\GridData.cs" />
-    <Compile Include="Data\UserHelp.cs" />
+    <Compile Include="Data\UserHelper.cs" />
     <Compile Include="Data\WebApiProvider.cs" />
     <Compile Include="Exception\TipInfoException.cs" />
     <Compile Include="Extensions\AnalysisUser.cs" />

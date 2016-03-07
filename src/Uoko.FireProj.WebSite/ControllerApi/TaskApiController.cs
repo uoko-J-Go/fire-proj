@@ -32,7 +32,7 @@ namespace Uoko.FireProj.WebSite.ControllerApi
 
         public IHttpActionResult Get([FromUri]TaskQuery query)
         {
-            query.LoginUserId = UserHelp.userInfo.UserId;
+            query.LoginUserId = UserHelper.CurrUserInfo.UserId;
             var result = _taskSvc.GetTaskPage(query);
             return Ok(result);
         }
@@ -54,8 +54,8 @@ namespace Uoko.FireProj.WebSite.ControllerApi
         [HttpPost]
         public IHttpActionResult Update([FromBody]TaskWriteDto task)
         {
-            task.ModifyId = UserHelp.userInfo.UserId;
-            task.ModifierName = UserHelp.userInfo.NickName;
+            task.ModifyId = UserHelper.CurrUserInfo.UserId;
+            task.ModifierName = UserHelper.CurrUserInfo.NickName;
             _taskSvc.UpdateTask(task);
             //直接调用部署
             _taskSvc.BeginDeploy(task.Id, task.DeployStage);
@@ -66,8 +66,8 @@ namespace Uoko.FireProj.WebSite.ControllerApi
         [HttpPost]
         public IHttpActionResult Create([FromBody]TaskWriteDto task)
         {
-            task.CreatorId = UserHelp.userInfo.UserId;
-            task.CreatorName = UserHelp.userInfo.NickName;
+            task.CreatorId = UserHelper.CurrUserInfo.UserId;
+            task.CreatorName = UserHelper.CurrUserInfo.NickName;
             var taskId=_taskSvc.CreatTask(task);
             //直接调用部署
             var taskInfo = _taskSvc.BeginDeploy(taskId, task.DeployStage);
@@ -132,8 +132,8 @@ namespace Uoko.FireProj.WebSite.ControllerApi
                     log.DeployInfo = taskInfo.DeployInfoOnlineJson;
                     break;
             }
-            log.CreatorId = UserHelp.userInfo.UserId;
-            log.CreatorName = UserHelp.userInfo.NickName;
+            log.CreatorId = UserHelper.CurrUserInfo.UserId;
+            log.CreatorName = UserHelper.CurrUserInfo.NickName;
             _taskLogsSvc.CreateTaskLogs(log);
             return Ok();
         }

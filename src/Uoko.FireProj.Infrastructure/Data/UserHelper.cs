@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Uoko.FireProj.Infrastructure.Data
 {
-    public class UserHelp
+    public class UserHelper
     {
-        public static ApplicationUser userInfo = new ApplicationUser();
+        public static ApplicationUser CurrUserInfo = new ApplicationUser();
         
     }
     public class ApplicationUser
