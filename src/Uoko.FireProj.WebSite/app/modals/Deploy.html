@@ -19,7 +19,7 @@
                             <option ng-repeat="environment in environmentList" value="{{environment.Id}}" ng-selected="environment.Id == taskInfo.DeployStage">{{environment.Name}}</option>
                         </select>
                         <div ng-show="form.$submitted || form.deployenvironment.$touched">
-                            <span class="error-msg" ng-show="form.deployenvironment.$error.required">项目必选.</span>
+                            <span class="error-msg" ng-show="form.deployenvironment.$error.required">环境必选.</span>
                         </div>
                     </div>
                 </div>

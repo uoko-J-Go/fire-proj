@@ -162,7 +162,7 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
     $scope.Init = function () {
         $scope.GetProjectList();
         $scope.GetAllUser();
-        $scope.$watch('taskInfo.Project + taskInfo.DeployEnvironment + taskInfo.Server', function () {
+        $scope.$watch('taskInfo.Project + taskInfo.DeployStage + taskInfo.Server', function () {
             $scope.GetDomain($scope.taskInfo.Project, $scope.taskInfo.Server);
         });
     }

@@ -1,33 +1,21 @@
 ﻿fireproj.controller("DeployController", function ($scope, $http, $uibModalInstance, TaskService, ProjectService, CommonService, param) {
-    $scope.Project = null;//当前项目对象
-    $scope.Server = null;//当前服务器对象
-    $scope.Server = null;//当前服务器对象
-    $scope.taskInfo = {
-        TaskName: "",
-        Project: null,
-        Branch: "",
-        DeployStage: "",
-        Server: null,
-        DomainInfo: null,
-        CheckUsers: [],
-        NoticeUsers: [],
-        OnlineCheckUsers: [],
-        OnlineNoticeUsers: [],
-        DeployInfo: {}
-    };
-
     $scope.projectList = [];
     $scope.branchList = [];
-
-    TaskService.GetEnvironment(function (data) {
-        $scope.environmentList = data.filter(function (env) {
-            return env.Id != 2;
+    $scope.GetDeployStage=function() {
+        TaskService.GetEnvironment(function (data) {
+            $scope.environmentList = data.filter(function (env) {
+                return env.Id != 2;
+            });
+            $scope.GetProjectList();
         });
-    });
+    }
     $scope.AllUsers = [];
     $scope.GetAllUser = function () {
         CommonService.getAllUsers(function (data) {
             $scope.AllUsers = data;
+
+            $scope.GetDeployStage();
+           
         });
     }
     $scope.loadTags = function (query) {
@@ -39,6 +27,8 @@
     $scope.GetProjectList = function () {
         ProjectService.getAllProject(function (data) {
             $scope.projectList = data;
+
+            $scope.GetTaskInfo();
         });
     };
     $scope.Save = function (isValid) {
@@ -152,6 +142,11 @@
             $scope.taskInfo.DeployInfo = {
                 TaskDesc: obj.TaskDesc
             };
+
+
+            $scope.$watch('taskInfo.DeployStage + taskInfo.Server', function () {
+                $scope.GetDomain($scope.taskInfo.Project, $scope.taskInfo.Server);
+            });
         });
     }
     //部署服务器change事件
@@ -187,13 +182,14 @@
     //获得任务详情
     $scope.GetTaskInfo = function () {
         TaskService.GetTaskInfo(param.taskId, function (data) {
-            $scope.taskInfo = data;
-            if (param.stage != undefined) {
-                $scope.taskInfo.DeployStage = param.stage;
-            }
+            $scope.taskInfo = data;  
             $scope.getBranch(data.ProjectDto.RepoId);//加载分支list
             $scope.taskInfo.Project = data.ProjectDto;
-            
+
+            if (param.stage != undefined) {
+                $scope.taskInfo.DeployStage = param.stage;
+                $scope.GetServerData($scope.taskInfo.DeployStage);
+            }  
         });
     }
 
@@ -201,13 +197,9 @@
         $uibModalInstance.dismiss('cancel');
     }
 
-    $scope.Init = function () {
-        $scope.GetProjectList();
-        $scope.GetAllUser();
-        $scope.GetTaskInfo();
-        $scope.$watch('taskInfo.Project + taskInfo.DeployEnvironment + taskInfo.Server', function () {
-            $scope.GetDomain($scope.taskInfo.Project, $scope.taskInfo.Server);
-        });
+    $scope.Init = function () {      
+        $scope.GetAllUser(); 
+       
     }
 
     $scope.Init();
