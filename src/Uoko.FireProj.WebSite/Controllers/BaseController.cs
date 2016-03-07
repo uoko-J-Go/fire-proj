@@ -8,6 +8,7 @@ using Uoko.FireProj.WebSite.Models;
 
 namespace Uoko.FireProj.WebSite.Controllers
 {
+    [Authorize]
     public class BaseController : Controller
     {
         protected override void OnActionExecuted(ActionExecutedContext filterContext)
@@ -17,6 +18,12 @@ namespace Uoko.FireProj.WebSite.Controllers
             base.OnActionExecuted(filterContext);
         }
 
+        protected override void OnActionExecuting(ActionExecutingContext context)
+        {
+            base.OnActionExecuting(context);
+            var user = User as ClaimsPrincipal;
+           ViewBag.NickName = user.FindFirst("NickName").Value;
+        }
         public void GetMenuData(string controller, string action)
         {
             List<MenuTreeVM> nodes = new List<MenuTreeVM>()
