@@ -1,9 +1,12 @@
-﻿using System;
+﻿using CacheManager.Core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Web;
+using System.Web.Caching;
 using System.Web.Mvc;
+using Uoko.FireProj.Infrastructure.Data;
 using Uoko.FireProj.WebSite.Models;
 
 namespace Uoko.FireProj.WebSite.Controllers
@@ -22,7 +25,18 @@ namespace Uoko.FireProj.WebSite.Controllers
         {
             base.OnActionExecuting(context);
             var user = User as ClaimsPrincipal;
-           ViewBag.NickName = user.FindFirst("NickName").Value;
+            //var cache = CacheFactory.Build("getStartedCache", settings =>
+            //{
+            //    settings.WithSystemRuntimeCacheHandle("handleName");
+            //});
+            //cache.Add("UserId", user.FindFirst("userid").Value);
+            //cache.Add("NickName", user.FindFirst("NickName").Value);
+
+
+            UserHelp.userInfo.UserId = int.Parse(user.FindFirst("userid").Value.ToString());
+            UserHelp.userInfo.NickName = user.FindFirst("NickName").Value;
+
+            ViewBag.NickName = user.FindFirst("NickName").Value;
         }
         public void GetMenuData(string controller, string action)
         {

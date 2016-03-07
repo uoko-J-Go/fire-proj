@@ -9,6 +9,7 @@ using System.Web.Http;
 using Uoko.FireProj.Abstracts;
 using Uoko.FireProj.DataAccess.Dto;
 using Uoko.FireProj.DataAccess.Query;
+using Uoko.FireProj.Infrastructure.Data;
 
 namespace Uoko.FireProj.WebSite.ControllerApi
 {
@@ -69,8 +70,8 @@ namespace Uoko.FireProj.WebSite.ControllerApi
             {
                 return BadRequest(ModelState);
             }
-            dto.CreatorId = userInfo.UserId;
-            dto.CreatorName = userInfo.NickName;
+            dto.CreatorId = UserHelp.userInfo.UserId;
+            dto.CreatorName = UserHelp.userInfo.NickName;
             var projectId = _projectSvc.CreatProject(dto);
             return Ok();
         }
@@ -94,8 +95,8 @@ namespace Uoko.FireProj.WebSite.ControllerApi
                 return BadRequest(ModelState);
             }
             dto.Id = id;
-            dto.ModifyId = userInfo.UserId;
-            dto.ModifierName = userInfo.NickName;
+            dto.ModifyId = UserHelp.userInfo.UserId;
+            dto.ModifierName = UserHelp.userInfo.NickName;
             _projectSvc.EditProject(dto);
             return Ok();
         }

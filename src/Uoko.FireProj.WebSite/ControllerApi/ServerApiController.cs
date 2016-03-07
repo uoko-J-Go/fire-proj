@@ -8,6 +8,7 @@ using Uoko.FireProj.Abstracts;
 using Uoko.FireProj.DataAccess.Dto;
 using Uoko.FireProj.DataAccess.Enum;
 using Uoko.FireProj.DataAccess.Query;
+using Uoko.FireProj.Infrastructure.Data;
 
 namespace Uoko.FireProj.WebSite.ControllerApi
 {
@@ -36,8 +37,8 @@ namespace Uoko.FireProj.WebSite.ControllerApi
         [HttpPost]
         public IHttpActionResult Update([FromBody]ServerDto server)
         {
-            server.ModifyId = userInfo.UserId;
-            server.ModifierName = userInfo.NickName;
+            server.ModifyId = UserHelp.userInfo.UserId;
+            server.ModifierName = UserHelp.userInfo.NickName;
             _serverSvc.UpdateServer(server);
             return Ok();
         }
@@ -46,8 +47,8 @@ namespace Uoko.FireProj.WebSite.ControllerApi
         [HttpPost]
         public IHttpActionResult Create([FromBody]ServerDto server)
         {
-            server.CreatorId = userInfo.UserId;
-            server.CreatorName = userInfo.NickName;
+            server.CreatorId = UserHelp.userInfo.UserId;
+            server.CreatorName = UserHelp.userInfo.NickName;
             _serverSvc.CreateServer(server);
             return Ok();
         }

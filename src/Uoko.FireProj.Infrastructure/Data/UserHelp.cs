@@ -8,11 +8,8 @@ namespace Uoko.FireProj.Infrastructure.Data
 {
     public class UserHelp
     {
-        public static ApplicationUser GetUserInfo()
-        {
-            ApplicationUser user = new ApplicationUser();
-            return user;
-        }
+        public static ApplicationUser userInfo = new ApplicationUser();
+        
     }
     public class ApplicationUser
     {

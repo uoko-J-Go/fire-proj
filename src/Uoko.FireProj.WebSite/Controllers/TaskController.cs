@@ -8,7 +8,7 @@ using Uoko.FireProj.DataAccess.Enum;
 using Uoko.FireProj.Model;
 using System.Security.Claims;
 using Microsoft.AspNet.Identity.EntityFramework;
-
+using Uoko.FireProj.Infrastructure.Data;
 
 namespace Uoko.FireProj.WebSite.Controllers
 {

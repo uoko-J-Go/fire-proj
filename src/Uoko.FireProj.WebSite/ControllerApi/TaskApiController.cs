@@ -12,6 +12,7 @@ using Uoko.FireProj.DataAccess.Dto;
 using Uoko.FireProj.DataAccess.Entity;
 using Uoko.FireProj.DataAccess.Enum;
 using Uoko.FireProj.DataAccess.Query;
+using Uoko.FireProj.Infrastructure.Data;
 
 namespace Uoko.FireProj.WebSite.ControllerApi
 {
@@ -45,8 +46,8 @@ namespace Uoko.FireProj.WebSite.ControllerApi
         [HttpPost]
         public IHttpActionResult Update([FromBody]TaskWriteDto task)
         {
-            task.ModifyId = userInfo.UserId;
-            task.ModifierName = userInfo.NickName;
+            task.ModifyId = UserHelp.userInfo.UserId;
+            task.ModifierName = UserHelp.userInfo.NickName;
             _taskSvc.UpdateTask(task);
             //直接调用部署
             _taskSvc.BeginDeploy(task.Id, task.DeployStage);
@@ -57,8 +58,8 @@ namespace Uoko.FireProj.WebSite.ControllerApi
         [HttpPost]
         public IHttpActionResult Create([FromBody]TaskWriteDto task)
         {
-            task.CreatorId = userInfo.UserId;
-            task.CreatorName = userInfo.NickName;
+            task.CreatorId = UserHelp.userInfo.UserId;
+            task.CreatorName = UserHelp.userInfo.NickName;
             var taskId=_taskSvc.CreatTask(task);
             //直接调用部署
             var taskInfo = _taskSvc.BeginDeploy(taskId, task.DeployStage);
@@ -102,8 +103,8 @@ namespace Uoko.FireProj.WebSite.ControllerApi
         [HttpPost]
         public IHttpActionResult UpdateTestStatus([FromBody]TestResultDto testResult)
         {
-            testResult.ModifyId = userInfo.UserId;
-            testResult.CreatorName = userInfo.NickName;
+            testResult.ModifyId = UserHelp.userInfo.UserId;
+            testResult.CreatorName = UserHelp.userInfo.NickName;
             var taskInfo = _taskSvc.UpdateTestStatus(testResult);
             //创建日志
             var log = new TaskLogs
@@ -125,8 +126,8 @@ namespace Uoko.FireProj.WebSite.ControllerApi
                     log.DeployInfo = taskInfo.DeployInfoOnlineJson;
                     break;
             }
-            log.CreatorId = userInfo.UserId;
-            log.CreatorName = userInfo.NickName;
+            log.CreatorId = UserHelp.userInfo.UserId;
+            log.CreatorName = UserHelp.userInfo.NickName;
             _taskLogsSvc.CreateTaskLogs(log);
             return Ok();
         }

@@ -9,6 +9,7 @@ using Uoko.FireProj.DataAccess.Dto;
 using Uoko.FireProj.DataAccess.Entity;
 using Uoko.FireProj.DataAccess.Enum;
 using Uoko.FireProj.DataAccess.Query;
+using Uoko.FireProj.Infrastructure.Data;
 
 namespace Uoko.FireProj.WebSite.ControllerApi
 {
@@ -66,8 +67,8 @@ namespace Uoko.FireProj.WebSite.ControllerApi
             {
                 return BadRequest(ModelState);
             }
-            entity.CreatorId = userInfo.UserId;
-            entity.CreatorName = userInfo.NickName;
+            entity.CreatorId = UserHelp.userInfo.UserId;
+            entity.CreatorName = UserHelp.userInfo.NickName;
             _taskLogsSvc.CreateTaskLogs(entity);
             return Ok();
         }

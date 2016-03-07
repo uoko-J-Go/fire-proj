@@ -8,10 +8,5 @@ using System.Threading.Tasks;
 
 namespace Uoko.FireProj.WebSite.Models
 {
-    public class ApplicationUser
-    {
-        public int UserId { get; set; }
-      
-        public string NickName { get; set; }
-    }
+    
 }
