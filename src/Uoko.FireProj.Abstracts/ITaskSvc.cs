@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Uoko.FireProj.DataAccess.Dto;
+﻿using Uoko.FireProj.DataAccess.Dto;
 using Uoko.FireProj.DataAccess.Entity;
 using Uoko.FireProj.DataAccess.Enum;
 using Uoko.FireProj.DataAccess.Query;
@@ -63,5 +59,8 @@ namespace Uoko.FireProj.Abstracts
         TaskInfo DeployCallback( int triggerId,int buildId, DeployStatus deployStatus);
 
         TaskInfo UpdateTestStatus(TestResultDto testResult);
+
+       PageGridData<TaskInfoForList> GetTasksNeedOnline(TaskNeedOnlineQuery query);
+
     }
 }

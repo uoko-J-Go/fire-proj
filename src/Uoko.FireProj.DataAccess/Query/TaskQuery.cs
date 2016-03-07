@@ -14,4 +14,10 @@
         public int LoginUserId { get; set; }
     }
 
+
+    public class TaskNeedOnlineQuery : BaseQuery
+    {
+        public int ProjectId { get; set; }
+
+    }
 }
