@@ -848,7 +848,8 @@ namespace Uoko.FireProj.Concretes
                         Stage = testResult.Stage,
                         Comments = testResult.Comments,
                         CreatorId = UserHelper.CurrUserInfo.UserId,
-                        CreatorName = UserHelper.CurrUserInfo.NickName
+                        CreatorName = UserHelper.CurrUserInfo.NickName,
+                        CreateDate=DateTime.Now
                     };
 
                     //更改任务记录
