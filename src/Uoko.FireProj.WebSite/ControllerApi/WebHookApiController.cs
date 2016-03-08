@@ -51,7 +51,7 @@ namespace Uoko.FireProj.WebSite.ControllerApi
                 {
                      _taskSvc.DeployCallback(bhRequest.trigger_request_id, bhRequest.build_id, DeployStatus.DeploySuccess);
 
-                    _taskSvc.NotifyDeployResult(bhRequest.trigger_request_id, bhRequest.build_id, DeployStatus.DeployFails);
+                    _taskSvc.NotifyDeployResult(bhRequest.trigger_request_id, bhRequest.build_id, DeployStatus.DeploySuccess);
                 }
             }
 
