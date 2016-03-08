@@ -112,6 +112,10 @@ namespace Uoko.FireProj.DataAccess.Dto
 
         public OnlineTaskInfo OnlineTaskInfo { get; set; }
     }
-    
 
+    public class OnlineTaskDetailDto
+    {
+        public OnlineTaskInfo OnlineTask { get; set; }
+        public IEnumerable<TaskInfoForList> TaskBelongOnline { get; set; }
+    }
 }

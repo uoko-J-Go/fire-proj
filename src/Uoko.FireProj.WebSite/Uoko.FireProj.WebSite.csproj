@@ -240,6 +240,7 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="app\controllers\OnlineDetail.js" />
     <Content Include="app\controllers\ServerDetail.js" />
     <Content Include="app\controllers\ServerEdit.js" />
     <Content Include="app\controllers\ServerList.js" />

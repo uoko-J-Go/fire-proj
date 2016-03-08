@@ -80,24 +80,6 @@ namespace Uoko.FireProj.Concretes
         }
 
 
-        public OnlineTaskInfo ReDeployOnlineTask(OnlineTaskInfo taskInfo)
-        {
-            using (var dbScope = _dbScopeFactory.Create())
-            {
-                var db = dbScope.DbContexts.Get<FireProjDbContext>();
-                var taskFromDb = db.OnlineTaskInfos.Find(taskInfo.Id);
-                if (taskFromDb != null)
-                {
-                    taskInfo.OnlineVersion = taskFromDb.OnlineVersion;
-                    taskInfo.OnlineVersion = taskFromDb.OnlineVersion;
-                }
-
-
-                db.SaveChanges();
-                return taskInfo;
-            }
-        }
-
         public void DeployOnlineTask(OnlineTaskInfo onlineTaskInfo)
         {
             var gitlabToken = "D3MR_rnRZK4xWS-CtVho";
@@ -158,7 +140,9 @@ namespace Uoko.FireProj.Concretes
                 {
                     taskFromDb.TriggeredId = triggerId;
                     taskFromDb.DeployStatus = DeployStatus.Deploying;
-
+                    taskFromDb.ModifierName =UserHelper.CurrUserInfo.NickName;
+                    taskFromDb.ModifyId = UserHelper.CurrUserInfo.UserId;
+                    taskFromDb.ModifyDate = DateTime.Now;
 
                     #region 写日志
                     var log = new TaskLogs
@@ -175,6 +159,68 @@ namespace Uoko.FireProj.Concretes
                     db.TaskLogs.Add(log);
                     #endregion
                 }
+
+                dbScope.SaveChanges();
+            }
+        }
+
+        public OnlineTaskDetailDto GetOnlineTaskDetail(int onlineTaskId)
+        {
+
+            using (var dbScope = _dbScopeFactory.CreateReadOnly())
+            {
+                var db = dbScope.DbContexts.Get<FireProjDbContext>();
+
+                var onlineTask = db.OnlineTaskInfos.FirstOrDefault(item => item.Id == onlineTaskId);
+                if (onlineTask == null)
+                {
+                    return null;
+                }
+
+
+                var onlineTasksFromDb = db.TaskInfo
+                                    .Where(task => task.OnlineTaskId == onlineTaskId)
+                                    .OrderByDescending(item => item.Id)
+                                    .ToList();
+                var onlineTasks = TransferTask(onlineTasksFromDb);
+
+                var onlineTaskDetail = new OnlineTaskDetailDto
+                                       {
+                                           OnlineTask = onlineTask,
+                                           TaskBelongOnline = onlineTasks
+                                       };
+            
+                return onlineTaskDetail;
+            }
+
+
+
+        }
+
+        /// <summary>
+        /// 先判断是否有更新的 上线任务
+        /// </summary>
+        /// <param name="onlineTaskId"></param>
+        public void ReDeployOnlineTask(int onlineTaskId)
+        {
+            using (var dbScope = _dbScopeFactory.Create())
+            {
+                var db = dbScope.DbContexts.Get<FireProjDbContext>();
+                var taskFromDb = db.OnlineTaskInfos.Find(onlineTaskId);
+                if (taskFromDb == null)
+                {
+                    throw new TipInfoException("没有找到上线任务信息: " + onlineTaskId);
+                }
+
+                var hasNewOnlineTask = db.OnlineTaskInfos.Any(item => item.ProjectId == taskFromDb.ProjectId
+                                                                      && item.Id > onlineTaskId);
+
+                if (hasNewOnlineTask)
+                {
+                    throw new TipInfoException("已经存在新的上线任务,不能重试.");
+                }
+
+                DeployOnlineTask(taskFromDb);
 
                 dbScope.SaveChanges();
             }
@@ -501,7 +547,7 @@ namespace Uoko.FireProj.Concretes
         }
 
 
-        public IEnumerable<TaskInfoForList> TransferTask(IEnumerable<TaskInfo> tasks)
+        private IEnumerable<TaskInfoForList> TransferTask(IEnumerable<TaskInfo> tasks)
         {
             Dictionary<int, string> projDic;
             var taskInfos = tasks as TaskInfo[] ?? tasks.ToArray();
