@@ -415,7 +415,7 @@ namespace Uoko.FireProj.Concretes
                     ? JsonHelper.FromJson<DeployInfoOnlineDto>(taskDto.DeployInfoOnlineJson)
                     : new DeployInfoOnlineDto();
 
-                if (taskDto.OnlineTaskId.Value > 0)
+                if (taskDto.OnlineTaskId != null)
                 {
                     var onlineTaskInfos = db.OnlineTaskInfos.FirstOrDefault(r => r.Id == taskDto.OnlineTaskId.Value);
                     taskDto.DeployInfoOnlineDto.OnlineVersion = onlineTaskInfos.OnlineVersion;
