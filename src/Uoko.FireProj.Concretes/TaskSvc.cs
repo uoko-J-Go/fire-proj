@@ -467,6 +467,11 @@ namespace Uoko.FireProj.Concretes
                 {
                     var onlineTaskInfos = db.OnlineTaskInfos.FirstOrDefault(r => r.Id == taskDto.OnlineTaskId.Value);
                     taskDto.DeployInfoOnlineDto.OnlineVersion = onlineTaskInfos.OnlineVersion;
+                    taskDto.DeployInfoOnlineDto.DeployIP = onlineTaskInfos.DeployServerIP;
+                    taskDto.DeployInfoOnlineDto.Domain = onlineTaskInfos.Domain;
+                    taskDto.DeployInfoOnlineDto.BuildId = onlineTaskInfos.BuildId;
+                    taskDto.DeployInfoOnlineDto.TriggeredId = onlineTaskInfos.TriggeredId;
+                    taskDto.DeployInfoOnlineDto.DeployStatus = onlineTaskInfos.DeployStatus;
                 }
 
                 //获取测试,通知人Id集合返回

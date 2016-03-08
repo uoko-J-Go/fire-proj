@@ -40,20 +40,20 @@
                         <div class="form-group form-md-line-input">
                             <label class="col-md-2 control-label">任务名</label>
                             <div class="col-md-10">
-                                <input disabled type="text" ng-model="model.TaskName" class="form-control">
+                                <p disabled  class="form-control">{{model.TaskName}}</p>
 
                             </div>
                         </div>
                         <div class="form-group form-md-line-input">
                             <label class="col-md-2 control-label">项目</label>
                             <div class="col-md-10">
-                                <input disabled type="text" ng-model="model.ProjectDto.ProjectName" class="form-control">
+                                <p disabled   class="form-control">{{model.ProjectDto.ProjectName}}</p>
                             </div>
                         </div>
                         <div class="form-group form-md-line-input">
                             <label class="col-md-2 control-label">分支</label>
                             <div class="col-md-10">
-                                <input disabled type="text" ng-model="model.Branch" class="form-control">
+                                <p disabled class="form-control">{{model.Branch}}</p>
                             </div>
                         </div>
                     </div>
@@ -95,21 +95,26 @@
                             <div class="form-group form-md-line-input">
                                 <label class="col-md-2 control-label">部署服务器IP</label>
                                 <div class="col-md-10">
-                                    <input disabled type="text" ng-model="model.DeployInfoIocDto.DeployIP" class="form-control">
+                                    <p disabled class="form-control">{{model.DeployInfoIocDto.DeployIP}}</p>
                                 </div>
                             </div>
                           
                             <div class="form-group form-md-line-input">
                                 <label class="col-md-2 control-label">部署域名</label>
                                 <div class="col-md-10">
-                                    <a  readonly class="text-primary" target="_blank" href="{{model.DeployInfoIocDto.Domain}}">{{model.DeployInfoIocDto.Domain}}</a>
+                                    <p disabled class="form-control">
+                                        <a readonly class="text-primary" target="_blank" href="{{model.DeployInfoIocDto.Domain}}">{{model.DeployInfoIocDto.Domain}}</a>
+                                    </p>
                                 </div>
                             </div>
                             <div class="form-group form-md-line-input">
                                 <label class="col-md-2 control-label">部署状态</label>
                                 <div class="col-md-10" title="{{(model.DeployInfoIocDto.DeployStatus|DeployStatusFilter).Title}}">
-                                    <span ng-class="(model.DeployInfoIocDto.DeployStatus | DeployStatusFilter).IconClass"></span>
-                                    <a ng-click="GotoGitLabBuildPage(model.DeployInfoIocDto.BuildId)" ng-if="model.DeployInfoIocDto.DeployStatus != 0">查看</a>
+                                    <p disabled class="form-control">
+                                        <span ng-class="(model.DeployInfoIocDto.DeployStatus | DeployStatusFilter).IconClass"></span>
+                                        <a ng-click="GotoGitLabBuildPage(model.DeployInfoIocDto.BuildId)" ng-if="model.DeployInfoIocDto.DeployStatus != 0">查看</a>
+                                    </p>
+                                   
                                 </div>
                             </div>
 
@@ -142,7 +147,7 @@
                                 <label class="col-md-2 control-label">备注</label>
                                 <div class="col-md-10">
                                     <div class="form-control-wrap">
-                                        <input readonly type="text" ng-model="model.DeployInfoIocDto.TaskDesc" class="form-control">
+                                        <p disabled class="form-control">{{model.DeployInfoIocDto.TaskDesc}}</p>
                                     </div>
                                 </div>
                             </div>
@@ -166,21 +171,25 @@
                             <div class="form-group form-md-line-input">
                                 <label class="col-md-2 control-label">部署服务器IP</label>
                                 <div class="col-md-10">
-                                    <input disabled type="text" ng-model="model.DeployInfoPreDto.DeployIP" class="form-control">
+                                    <p disabled  class="form-control">{{model.DeployInfoPreDto.DeployIP}}</p>
                                 </div>
                             </div>
                             <div class="form-group form-md-line-input">
                                 <label class="col-md-2 control-label">部署域名</label>
                                 <div class="col-md-10">
-                                    <a readonly class="text-primary" target="_blank" href="{{model.DeployInfoPreDto.Domain}}">{{model.DeployInfoPreDto.Domain}}</a>
+                                    <p disabled class="form-control">
+                                        <a readonly class="text-primary" target="_blank" href="{{model.DeployInfoPreDto.Domain}}">{{model.DeployInfoPreDto.Domain}}</a>
+                                    </p>
                                 </div>
                             </div>
                             <div class="form-group form-md-line-input">
                                 <label class="col-md-2 control-label">部署状态</label>
                                 <div class="col-md-10">
                                      <div class="col-md-10" title="{{(model.DeployInfoPreDto.DeployStatus|DeployStatusFilter).Title}}">
-                                        <span ng-class="(model.DeployInfoPreDto.DeployStatus | DeployStatusFilter).IconClass"></span>
-                                        <a ng-click="GotoGitLabBuildPage(model.DeployInfoPreDto.BuildId)" ng-if="model.DeployInfoPreDto.DeployStatus != 0">查看</a>
+                                         <p disabled class="form-control">
+                                             <span ng-class="(model.DeployInfoPreDto.DeployStatus | DeployStatusFilter).IconClass"></span>
+                                             <a ng-click="GotoGitLabBuildPage(model.DeployInfoPreDto.BuildId)" ng-if="model.DeployInfoPreDto.DeployStatus != 0">查看</a>
+                                         </p>
                                     </div>
                                 </div>
                             </div>
@@ -214,7 +223,7 @@
                                 <label class="col-md-2 control-label">备注</label>
                                 <div class="col-md-10">
                                     <div class="form-control-wrap">
-                                        <input readonly type="text" ng-model="model.DeployInfoPreDto.TaskDesc" class="form-control">
+                                        <p readonly  class="form-control">{{model.DeployInfoPreDto.TaskDesc}}</p>
                                     </div>
                                 </div>
                             </div>
@@ -238,21 +247,25 @@
                             <div class="form-group form-md-line-input">
                                 <label class="col-md-2 control-label">部署服务器IP</label>
                                 <div class="col-md-10">
-                                    <input disabled type="text" ng-model="model.DeployInfoOnlineDto.DeployIP" class="form-control">
+                                    <p disabled   class="form-control">{{model.DeployInfoOnlineDto.DeployIP}}</p>
                                 </div>
                             </div>
                             <div class="form-group form-md-line-input">
                                 <label class="col-md-2 control-label">部署域名</label>
                                 <div class="col-md-10">
-                                    <a readonly class="text-primary" target="_blank" href="{{model.DeployInfoOnlineDto.Domain}}">{{model.DeployInfoOnlineDto.Domain}}</a>
+                                    <p disabled class="form-control">
+                                        <a readonly class="text-primary" target="_blank" href="{{model.DeployInfoOnlineDto.Domain}}">{{model.DeployInfoOnlineDto.Domain}}</a>
+                                    </p>
                                 </div>
                             </div>
                             <div class="form-group form-md-line-input">
                                 <label class="col-md-2 control-label">部署状态</label>
                                 <div class="col-md-10">
                                     <div class="col-md-10" title="{{(model.DeployInfoOnlineDto.DeployStatus|DeployStatusFilter).Title}}">
-                                        <span ng-class="(model.DeployInfoOnlineDto.DeployStatus | DeployStatusFilter).IconClass"></span>
-                                        <a ng-click="GotoGitLabBuildPage(model.DeployInfoOnlineDto.BuildId)" ng-if="model.DeployInfoOnlineDto.DeployStatus != 0">查看</a>
+                                        <p disabled class="form-control">
+                                            <span ng-class="(model.DeployInfoOnlineDto.DeployStatus | DeployStatusFilter).IconClass"></span>
+                                            <a ng-click="GotoGitLabBuildPage(model.DeployInfoOnlineDto.BuildId)" ng-if="model.DeployInfoOnlineDto.DeployStatus != 0">查看</a>
+                                        </p>
                                     </div>
                                  </div>
                             </div>
@@ -286,7 +299,7 @@
                                 <label class="col-md-2 control-label">备注</label>
                                 <div class="col-md-10">
                                     <div class="form-control-wrap">
-                                        <input readonly type="text" ng-model="model.DeployInfoOnlineDto.TaskDesc" class="form-control">
+                                        <p readonly   class="form-control">{{model.DeployInfoOnlineDto.TaskDesc}}</p>
                                     </div>
                                 </div>
                             </div>
