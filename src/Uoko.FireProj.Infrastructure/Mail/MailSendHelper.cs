@@ -19,7 +19,7 @@ namespace Uoko.FireProj.Infrastructure.Mail
         static MailSendHelper()
         {
             //邮件服务器和端口 
-            SmtpClient smtp = new SmtpClient(server, 25);
+            smtp = new SmtpClient(server, 25);
             smtp.UseDefaultCredentials = true;
             //指定发送方式 
             smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
