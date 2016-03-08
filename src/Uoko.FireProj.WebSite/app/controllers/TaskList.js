@@ -12,6 +12,7 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal,TaskSer
     $scope.taskInfos = [];
     $scope.totalItems = 0;//总数
     $scope.queryType = 0; // 所有
+    
 
     //查询项目
     $scope.Query = function (showType) {
@@ -24,6 +25,7 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal,TaskSer
             offset: $scope.pageSize * ($scope.currentPage - 1),
             limit: $scope.pageSize,
             ShowType: $scope.queryType,
+            Search: $scope.search,
         }
 
         TaskService.GetTaskByPage(params,function (data) {
