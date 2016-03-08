@@ -386,16 +386,23 @@ namespace Uoko.FireProj.Concretes
                 var projectEntity = db.Project.FirstOrDefault(r => r.Id == entity.ProjectId);
                 taskDto.ProjectDto = Mapper.Map<Project, ProjectDto>(projectEntity);
 
-
+             
                 taskDto.DeployInfoIocDto = !taskDto.DeployInfoIocJson.IsNullOrEmpty()
                     ? JsonHelper.FromJson<DeployInfoIocDto>(taskDto.DeployInfoIocJson)
                     : new DeployInfoIocDto();
                 taskDto.DeployInfoPreDto = !taskDto.DeployInfoPreJson.IsNullOrEmpty()
                     ? JsonHelper.FromJson<DeployInfoPreDto>(taskDto.DeployInfoPreJson)
                     : new DeployInfoPreDto();
+
                 taskDto.DeployInfoOnlineDto = !taskDto.DeployInfoOnlineJson.IsNullOrEmpty()
                     ? JsonHelper.FromJson<DeployInfoOnlineDto>(taskDto.DeployInfoOnlineJson)
                     : new DeployInfoOnlineDto();
+
+                if (taskDto.OnlineTaskId.Value > 0)
+                {
+                    var onlineTaskInfos = db.OnlineTaskInfos.FirstOrDefault(r => r.Id == taskDto.OnlineTaskId.Value);
+                    taskDto.DeployInfoOnlineDto.OnlineVersion = onlineTaskInfos.OnlineVersion;
+                }
 
                 //获取测试,通知人Id集合返回
                 taskDto.DeployInfoIocDto.CheckUser = AnalysisUser.AnalysisCheckUser(taskDto.DeployInfoIocDto.CheckUserId);

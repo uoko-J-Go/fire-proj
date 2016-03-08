@@ -21,6 +21,8 @@
             $scope.model.DeployInfoIocDto.NoticeUser = AnalysisUser($scope.model.DeployInfoIocDto.NoticeUser, $scope.AllUsers);
             $scope.model.DeployInfoPreDto.CheckUser = AnalysisUser($scope.model.DeployInfoPreDto.CheckUser, $scope.AllUsers);
             $scope.model.DeployInfoPreDto.NoticeUser = AnalysisUser($scope.model.DeployInfoPreDto.NoticeUser, $scope.AllUsers);
+            $scope.model.DeployInfoOnlineDto.CheckUser = AnalysisUser($scope.model.DeployInfoOnlineDto.CheckUser, $scope.AllUsers);
+            $scope.model.DeployInfoOnlineDto.NoticeUser = AnalysisUser($scope.model.DeployInfoOnlineDto.NoticeUser, $scope.AllUsers);
 
             if ($scope.model.DeployInfoIocJson != null) {
                 $scope.currLogTab = 0;

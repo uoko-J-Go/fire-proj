@@ -4,7 +4,8 @@
 }
 @section Css {
     <link href="~/Content/TaskDetail.css" rel="stylesheet" />
-    <link href="~/Metronic/assets/admin/pages/css/timeline-old.css" rel="stylesheet" />
+    @*<link href="~/Metronic/assets/admin/pages/css/timeline-old.css" rel="stylesheet" />*@
+    <link href="~/Metronic/assets/admin/pages/css/timeline.css" rel="stylesheet" />
 }
 <input type="hidden" id="taskIdParam" value="@ViewBag.TaskId"/>
 <input type="hidden" id="userId" value="@ViewBag.UserId" />
@@ -97,22 +98,17 @@
                                     <input disabled type="text" ng-model="model.DeployInfoIocDto.DeployIP" class="form-control">
                                 </div>
                             </div>
-                            <div class="form-group form-md-line-input">
-                                <label class="col-md-2 control-label">部署地址</label>
-                                <div class="col-md-10">
-                                    <input disabled type="text" ng-model="model.DeployInfoIocDto.DeployAddress" class="form-control">
-                                </div>
-                            </div>
+                          
                             <div class="form-group form-md-line-input">
                                 <label class="col-md-2 control-label">部署域名</label>
                                 <div class="col-md-10">
-                                    <input disabled type="text" ng-model="model.DeployInfoIocDto.Domain" class="form-control">
+                                    <a  readonly class="text-primary" target="_blank" href="http://{{model.DeployInfoIocDto.Domain}}">{{model.DeployInfoIocDto.Domain}}</a>
                                 </div>
                             </div>
                             <div class="form-group form-md-line-input">
-                                <label class="col-md-2 control-label">IIS站点名称</label>
+                                <label class="col-md-2 control-label">部署状态</label>
                                 <div class="col-md-10">
-                                    <input disabled type="text" ng-model="model.DeployInfoIocDto.SiteName" class="form-control">
+                                    <input readonly type="text" value="{{(model.DeployInfoIocDto.DeployStatus|DeployStatusFilter).Title}}" class="form-control">
                                 </div>
                             </div>
 
@@ -145,7 +141,14 @@
                                 <label class="col-md-2 control-label">备注</label>
                                 <div class="col-md-10">
                                     <div class="form-control-wrap">
-                                        <textarea disabled ng-model="model.DeployInfoIocDto.TaskDesc"></textarea>
+                                        <input readonly type="text" ng-model="model.DeployInfoIocDto.TaskDesc" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group form-md-line-input">
+                                <label class="col-md-2 control-label"></label>
+                                <div class="col-md-10">
+                                    <div class="form-control-wrap">
                                     </div>
                                 </div>
                             </div>
@@ -166,21 +169,15 @@
                                 </div>
                             </div>
                             <div class="form-group form-md-line-input">
-                                <label class="col-md-2 control-label">部署地址</label>
-                                <div class="col-md-10">
-                                    <input disabled type="text" ng-model="model.DeployInfoPreDto.DeployAddress" class="form-control">
-                                </div>
-                            </div>
-                            <div class="form-group form-md-line-input">
                                 <label class="col-md-2 control-label">部署域名</label>
                                 <div class="col-md-10">
-                                    <input disabled type="text" ng-model="model.DeployInfoPreDto.Domain" class="form-control">
+                                    <a readonly class="text-primary" target="_blank" href="http://{{model.DeployInfoPreDto.Domain}}">{{model.DeployInfoPreDto.Domain}}</a>
                                 </div>
                             </div>
                             <div class="form-group form-md-line-input">
-                                <label class="col-md-2 control-label">IIS站点名称</label>
+                                <label class="col-md-2 control-label">部署状态</label>
                                 <div class="col-md-10">
-                                    <input disabled type="text" ng-model="model.DeployInfoPreDto.SiteName" class="form-control">
+                                    <input disabled type="text" value="{{(model.DeployInfoPreDto.DeployStatus|DeployStatusFilter).Title}}" class="form-control">
                                 </div>
                             </div>
 
@@ -213,7 +210,14 @@
                                 <label class="col-md-2 control-label">备注</label>
                                 <div class="col-md-10">
                                     <div class="form-control-wrap">
-                                        <textarea disabled ng-model="model.DeployInfoPreDto.TaskDesc"></textarea>
+                                        <input readonly type="text" ng-model="model.DeployInfoPreDto.TaskDesc" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group form-md-line-input">
+                                <label class="col-md-2 control-label"></label>
+                                <div class="col-md-10">
+                                    <div class="form-control-wrap">
                                     </div>
                                 </div>
                             </div>
@@ -234,21 +238,15 @@
                                 </div>
                             </div>
                             <div class="form-group form-md-line-input">
-                                <label class="col-md-2 control-label">部署地址</label>
-                                <div class="col-md-10">
-                                    <input disabled type="text" ng-model="model.DeployInfoOnlineDto.DeployAddress" class="form-control">
-                                </div>
-                            </div>
-                            <div class="form-group form-md-line-input">
                                 <label class="col-md-2 control-label">部署域名</label>
                                 <div class="col-md-10">
-                                    <input disabled type="text" ng-model="model.DeployInfoOnlineDto.Domain" class="form-control">
+                                    <a readonly class="text-primary" target="_blank" href="http://{{model.DeployInfoOnlineDto.Domain}}">{{model.DeployInfoOnlineDto.Domain}}</a>
                                 </div>
                             </div>
                             <div class="form-group form-md-line-input">
-                                <label class="col-md-2 control-label">IIS站点名称</label>
+                                <label class="col-md-2 control-label">部署状态</label>
                                 <div class="col-md-10">
-                                    <input disabled type="text" ng-model="model.DeployInfoOnlineDto.SiteName" class="form-control">
+                                    <input disabled type="text" value="{{(model.DeployInfoOnlineDto.DeployStatus|DeployStatusFilter).Title}}" class="form-control">
                                 </div>
                             </div>
 
@@ -281,7 +279,14 @@
                                 <label class="col-md-2 control-label">备注</label>
                                 <div class="col-md-10">
                                     <div class="form-control-wrap">
-                                        <textarea disabled ng-model="model.DeployInfoOnlineDto.TaskDesc"></textarea>
+                                        <input readonly type="text" ng-model="model.DeployInfoOnlineDto.TaskDesc" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group form-md-line-input">
+                                <label class="col-md-2 control-label"></label>
+                                <div class="col-md-10">
+                                    <div class="form-control-wrap">
                                     </div>
                                 </div>
                             </div>
@@ -310,61 +315,53 @@
                     <i class="fa fa-phone"></i>任务记录
                 </div>
             </div>
-            <!-- BEGIN Logs CONTENT-->
-            <div class="portlet light">
-                <div class="portlet-body">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <ul class="timeline">
-                                <li class="timeline-blue" ng-repeat="item in items">
-                                    <div class="timeline-time">
-                                        <span class="date">
-                                            {{item.CreateDate| date : 'yyyy-MM-dd'}}
-                                        </span>
-                                        <span class="time">
-                                            {{item.CreateDate| date : 'HH:MM:ss'}}
-                                        </span>
-                                    </div>
-                                    <div class="timeline-icon">
-                                        <i>{{item.Stage|StageTypeFilter}}</i>
-                                    </div>
-                                    <div class="timeline-body">
-                                        <!--开发-->
-                                        <div ng-if="item.LogType==0">
-                                            <h2>
-                                                <span class="nav-link pull">
-                                                   部署 ==> {{(item.DeployStatus|DeployStatusFilter).Title}}
-                                                    <a ng-if="item.DeployStatus!=0" class="text-danger" href="javascript:;" ng-click="GotoGitLabBuildPage(item.BuildId)"><i class="m-icon-swapright m-icon-white"></i></a>
-                                                </span>
-                                            </h2>
-                                        </div>
-                                        <!--测试-->
-                                        <div ng-if="item.LogType==1">
-                                            <h2>
-                                                <span class="nav-link pull">
-                                                    测试 ==> {{item.QAStatus|QAStatusFilter}}
-                                                </span>
-                                            </h2>
-                                        </div>
-
-                                        <!--Comments-->
-                                        <div class="timeline-content">
-                                            <h4>{{item.Comments}}</h4>
-                                        </div>
-                                        <div class="timeline-footer">
-                                            <span class="nav-link pull-right">
-                                                {{item.CreatorName}}
-                                            </span>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
+        </div>
+            <!-- BEGIN PAGE CONTENT-->
+            <div class="timeline">
+                <!-- TIMELINE ITEM -->
+                <div class="timeline-item" ng-repeat="item in items">
+                    <div class="timeline-badge">
+                        <img ng-if="item.Stage==0" class="timeline-badge-userpic" src="~/Metronic/assets/admin/pages/media/users/IOC.jpg">
+                        <img ng-if="item.Stage==1" class="timeline-badge-userpic" src="~/Metronic/assets/admin/pages/media/users/Pre.jpg">
+                        <img ng-if="item.Stage==2" class="timeline-badge-userpic" src="~/Metronic/assets/admin/pages/media/users/Online.jpg">
+                    </div>
+                   
+                    <div class="timeline-body">
+                        <div class="timeline-body-arrow">
+                        </div>
+                        <div class="timeline-body-head">
+                            <div class="timeline-body-head-caption">
+                                <span class="timeline-body-title font-grey-cascade">{{item.CreatorName}}</span>
+                                <span class="timeline-body-time  font-grey-cascade">{{item.CreateDate| date : 'yyyy-MM-dd HH:mm:ss'}}</span>
+                            </div>
+                         
+                        </div>
+                        <div class="timeline-body-content">
+                            <p>
+                                <!--开发-->
+                                <span ng-if="item.LogType==0">
+                                    <span class="nav-link pull">
+                                        <a ng-if="item.DeployStatus==0" class="text-default"  ng-bind="(item.DeployStatus|DeployStatusFilter).Title"></a>
+                                        <a ng-if="item.DeployStatus==1" class="text-danger"  ng-click="GotoGitLabBuildPage(item.BuildId)" ng-bind="(item.DeployStatus|DeployStatusFilter).Title"></a>
+                                        <a ng-if="item.DeployStatus==2" class="text-success" ng-click="GotoGitLabBuildPage(item.BuildId)" ng-bind="(item.DeployStatus|DeployStatusFilter).Title"></a>
+                                    </span>
+                                </span>
+                                <!--测试-->
+                                <span ng-if="item.LogType==1">
+                                    <span class="nav-link pull">
+                                        {{item.QAStatus|QAStatusFilter}}
+                                    </span>
+                                </span>
+                            </p>
+                            <!--Comments-->
+                            <p class="font-grey-cascade">{{item.Comments}}</p>
                         </div>
                     </div>
                 </div>
+                <!-- END TIMELINE ITEM -->
+               
             </div>
-            <!-- END Logs CONTENT-->
-        </div>
+            <!-- END   PAGE CONTENT-->
         <!-- 任务记录-->
     </div>
 </div>
