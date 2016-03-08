@@ -449,16 +449,23 @@ namespace Uoko.FireProj.Concretes
                 var projectEntity = db.Project.FirstOrDefault(r => r.Id == entity.ProjectId);
                 taskDto.ProjectDto = Mapper.Map<Project, ProjectDto>(projectEntity);
 
-
+             
                 taskDto.DeployInfoIocDto = !taskDto.DeployInfoIocJson.IsNullOrEmpty()
                     ? JsonHelper.FromJson<DeployInfoIocDto>(taskDto.DeployInfoIocJson)
                     : new DeployInfoIocDto();
                 taskDto.DeployInfoPreDto = !taskDto.DeployInfoPreJson.IsNullOrEmpty()
                     ? JsonHelper.FromJson<DeployInfoPreDto>(taskDto.DeployInfoPreJson)
                     : new DeployInfoPreDto();
+
                 taskDto.DeployInfoOnlineDto = !taskDto.DeployInfoOnlineJson.IsNullOrEmpty()
                     ? JsonHelper.FromJson<DeployInfoOnlineDto>(taskDto.DeployInfoOnlineJson)
                     : new DeployInfoOnlineDto();
+
+                if (taskDto.OnlineTaskId != null)
+                {
+                    var onlineTaskInfos = db.OnlineTaskInfos.FirstOrDefault(r => r.Id == taskDto.OnlineTaskId.Value);
+                    taskDto.DeployInfoOnlineDto.OnlineVersion = onlineTaskInfos.OnlineVersion;
+                }
 
                 //获取测试,通知人Id集合返回
                 taskDto.DeployInfoIocDto.CheckUser = AnalysisUser.AnalysisCheckUser(taskDto.DeployInfoIocDto.CheckUserId);
@@ -830,79 +837,48 @@ namespace Uoko.FireProj.Concretes
                 {
                     var db = dbScope.DbContexts.Get<FireProjDbContext>();
                     var entity = db.TaskInfo.FirstOrDefault(r => r.Id == testResult.TaskId);
+                    //日志内容
+                    var log = new TaskLogs
+                    {
+                        TaskId = entity.Id,
+                        LogType = LogType.QA,
+                        Stage = testResult.Stage,
+                        Comments = testResult.Comments,
+                        CreatorId = UserHelper.CurrUserInfo.UserId,
+                        CreatorName = UserHelper.CurrUserInfo.NickName
+                    };
 
-                    var currentUserId = UserHelper.CurrUserInfo.UserId; //临时模拟一个当前用户Id
                     //更改任务记录
                     switch (testResult.Stage)
                     {
                         case StageEnum.IOC:
                             var iocDeployInfo = JsonHelper.FromJson<DeployInfoIoc>(entity.DeployInfoIocJson);
-                            if (!string.IsNullOrEmpty(iocDeployInfo.CheckUserId))
-                            {
-                                var userStatusIds = iocDeployInfo.CheckUserId.Split(',');
-                                var newUserStatusIds = new List<string>();
-                                foreach (var userStatus in userStatusIds)
-                                {
-                                    var userandstate = userStatus.Split('-');
-                                    
-                                    if (currentUserId.Equals(userandstate[0]))
-                                    {
-                                        userandstate[1] = ((int) testResult.QAStatus).ToString();
-                                    }
-
-                                    newUserStatusIds.Add(string.Join("-", userandstate));
-                                }
-                                entity.IocCheckUserId = iocDeployInfo.CheckUserId = string.Join(",", newUserStatusIds);
-                            }
+                            entity.IocCheckUserId = iocDeployInfo.CheckUserId = GetTestNewCheckUserId(iocDeployInfo.CheckUserId, testResult.QAStatus);
                             entity.DeployInfoIocJson = JsonHelper.ToJson(iocDeployInfo);
+
+                            log.DeployInfo = entity.DeployInfoIocJson;
                             break;
                         case StageEnum.PRE:
                             var preDeployInfo = JsonHelper.FromJson<DeployInfoPre>(entity.DeployInfoPreJson);
-                            if (!string.IsNullOrEmpty(preDeployInfo.CheckUserId))
-                            {
-                                var userStatusIds = preDeployInfo.CheckUserId.Split(',');
-                                var newUserStatusIds = new List<string>();
-                                foreach (var userStatus in userStatusIds)
-                                {
-                                    var userandstate = userStatus.Split('-');
-                                   
-                                    if (currentUserId.Equals(userandstate[0]))
-                                    {
-                                        userandstate[1] = ((int)testResult.QAStatus).ToString();
-                                    }
-
-                                    newUserStatusIds.Add(string.Join("-", userandstate));
-                                }
-                                entity.PreCheckUserId = preDeployInfo.CheckUserId = string.Join(",", newUserStatusIds);
-                            }
+                            entity.PreCheckUserId = preDeployInfo.CheckUserId =GetTestNewCheckUserId(preDeployInfo.CheckUserId, testResult.QAStatus);
                             entity.DeployInfoPreJson = JsonHelper.ToJson(preDeployInfo);
+
+                            log.DeployInfo = entity.DeployInfoPreJson;
                             break;
                         case StageEnum.PRODUCTION:
                             var onlineDeployInfo = JsonHelper.FromJson<DeployInfoOnline>(entity.DeployInfoOnlineJson);
-                            if (!string.IsNullOrEmpty(onlineDeployInfo.CheckUserId))
-                            {
-                                var userStatusIds = onlineDeployInfo.CheckUserId.Split(',');
-                                var newUserStatusIds = new List<string>();
-                                foreach (var userStatus in userStatusIds)
-                                {
-                                    var userandstate = userStatus.Split('-');
-                                    
-                                    if (currentUserId.Equals(userandstate[0]))
-                                    {
-                                        userandstate[1] = ((int)testResult.QAStatus).ToString();
-                                    }
-
-                                    newUserStatusIds.Add(string.Join("-", userandstate));
-                                }
-                                entity.OnlineCheckUserId =
-                                    onlineDeployInfo.CheckUserId = string.Join(",", newUserStatusIds);
-                            }
+                            entity.OnlineCheckUserId =onlineDeployInfo.CheckUserId = GetTestNewCheckUserId(onlineDeployInfo.CheckUserId, testResult.QAStatus);
                             entity.DeployInfoOnlineJson = JsonHelper.ToJson(onlineDeployInfo);
+
+                            log.DeployInfo = entity.DeployInfoOnlineJson;
                             break;
                     }
-                    entity.ModifyId = currentUserId;
+                    entity.ModifyId = UserHelper.CurrUserInfo.UserId;
                     entity.ModifyDate = DateTime.Now;
                     entity.ModifierName = UserHelper.CurrUserInfo.NickName;
+
+                    //写日志
+                    db.TaskLogs.Add(log);
                     db.SaveChanges();
                     return entity;
                 }
@@ -911,6 +887,34 @@ namespace Uoko.FireProj.Concretes
             {
                 throw new TipInfoException(ex.Message);
             }
+        }
+        /// <summary>
+        /// 获取测试过后的用户状态结果
+        /// </summary>
+        /// <param name="oldCheckUserId"></param>
+        /// <param name="qaStatus"></param>
+        /// <returns></returns>
+        private string GetTestNewCheckUserId(string oldCheckUserId, QAStatus qaStatus)
+        {
+            if (string.IsNullOrEmpty(oldCheckUserId))
+            {
+                return oldCheckUserId;
+            }
+
+            var userStatusIds = oldCheckUserId.Split(',');
+            var newUserStatusIds = new List<string>();
+            foreach (var userStatus in userStatusIds)
+            {
+                var userandstate = userStatus.Split('-');
+
+                if (UserHelper.CurrUserInfo.UserId.Equals(userandstate[0]))
+                {
+                    userandstate[1] = ((int)qaStatus).ToString();
+                }
+                newUserStatusIds.Add(string.Join("-", userandstate));
+            }
+
+            return string.Join(",", newUserStatusIds);
         }
     }
 }
