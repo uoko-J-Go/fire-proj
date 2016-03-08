@@ -13,10 +13,10 @@ namespace Uoko.FireProj.WebSite.ControllerApi
     [RoutePrefix("api/UserApi")]
     public class UserApiController : ApiController
     {
-        private WebApiProvider apiProvider = (new WebApiProvider(ConfigurationManager.AppSettings["system.api.url"]));
+        private static WebApiProvider apiProvider = (new WebApiProvider(ConfigurationManager.AppSettings["system.api.url"]));
         public IHttpActionResult Get()
         {
-            var result = apiProvider.Get<List<UserDto>>("UserOld/10000/9/ByCompanyDepId");
+            var result = apiProvider.Get<List<UserDto>>("api/UserOld/10000/9/ByCompanyDepId");
             return Ok(result);
         }
     }
