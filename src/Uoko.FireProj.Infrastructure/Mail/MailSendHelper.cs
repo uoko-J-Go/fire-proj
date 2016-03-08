@@ -37,10 +37,10 @@ namespace Uoko.FireProj.Infrastructure.Mail
         /// <returns></returns>
         public static string NotifyTestResult(List<int> toIds, List<int> ccIds, QANotifyMail notify)
         {
-            var subject = string.Format("[{0}] 在 {1} 中 {2}", notify.TestUser, notify.StageName, notify.TestResult);
+            var subject = string.Format("【{0}】  在 {1} 中测试任务【{2}】 {3}", notify.TestUser, notify.StageName,notify.TaskName,notify.TestResult);
             #region body内容组装
             StringBuilder content = new StringBuilder();
-            content.AppendFormat("<h3>[{0}] 在 {1} 中 {2}</h3>", notify.TestUser, notify.StageName, notify.TestResult);
+            content.AppendFormat("<h3>【{0}】  在 {1} 中测试任务【{2}】 {3}</h3>", notify.TestUser, notify.StageName, notify.TaskName, notify.TestResult);
             content.AppendFormat("<p>描述：{0}</p>", notify.Coments);
             content.AppendFormat("测试地址：<a href='{0}'>{1}</a>", notify.TestUrl, notify.TestUrl);
             #endregion
@@ -58,11 +58,12 @@ namespace Uoko.FireProj.Infrastructure.Mail
         /// <returns></returns>
         public static string NotifyDeployResult(List<int> toIds, List<int> ccIds, DeployNotifyMail notify)
         {
-            var subject = string.Format("[{0}] 在 {1} 中 {2}", notify.ProjectName, notify.StageName, notify.DeployStatus);
+            var subject = string.Format("[{0}] 在 {1} 中 {2}", notify.TaskName, notify.StageName, notify.DeployStatus);
 
             #region body内容组装
             StringBuilder content = new StringBuilder();
-            content.AppendFormat("<h3>[{0}] 在 {1} 中 {2}</h3>", notify.ProjectName, notify.StageName, notify.DeployStatus);
+            content.AppendFormat("<h3>[{0}] 在 {1} 中 {2}</h3>", notify.TaskName, notify.StageName, notify.DeployStatus);
+            content.AppendFormat("详细：<a href='{0}'>{1}</a>", notify.GitLabBuildPage, notify.GitLabBuildPage);
             #endregion
 
             var body = content.ToString();

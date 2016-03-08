@@ -8,7 +8,7 @@ namespace Uoko.FireProj.DataAccess.Mail
 {
     public class DeployNotifyMail
     {
-        public string ProjectName { get; set; }
+        public string TaskName { get; set; }
 
         public string DeployStatus { get; set; }
 

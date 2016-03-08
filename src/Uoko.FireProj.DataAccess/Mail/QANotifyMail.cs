@@ -9,7 +9,7 @@ namespace Uoko.FireProj.DataAccess.Mail
 {
     public class QANotifyMail
     {
-        public string ProjectName { get; set; }
+        public string TaskName { get; set; }
 
         public string TestUrl { get; set; }
 

@@ -902,7 +902,7 @@ namespace Uoko.FireProj.Concretes
                 var ccIds = new List<int>();
                 var notify = new QANotifyMail()
                 {
-                    ProjectName=taskDto.ProjectDto.ProjectName,
+                    TaskName=taskDto.TaskName,
                     TestUser=UserHelper.CurrUserInfo.NickName,
                     StageName = testResult.Stage.ToDescription(),
                     Coments = testResult.Comments,
@@ -996,7 +996,7 @@ namespace Uoko.FireProj.Concretes
                     {
                         case StageEnum.IOC:
                             var taskDtoIoc = this.GetTaskById(taskLog.TaskId);
-                            notify.ProjectName = taskDtoIoc.ProjectDto.ProjectName;
+                            notify.TaskName = taskDtoIoc.TaskName;
                             notify.DeployUrl  =string.Format("http://{0}", taskDtoIoc.DeployInfoIocDto.Domain);
                             notify.GitLabBuildPage = taskDtoIoc.ProjectDto.ProjectRepo.Replace(".git", "") + "/builds/" +buildId;
                             if (deployStatus == DeployStatus.DeployFails)
@@ -1016,7 +1016,7 @@ namespace Uoko.FireProj.Concretes
                             break;
                         case StageEnum.PRE:
                             var taskDtoPre = this.GetTaskById(taskLog.TaskId);
-                            notify.ProjectName = taskDtoPre.ProjectDto.ProjectName;
+                            notify.TaskName = taskDtoPre.TaskName;
                             notify.DeployUrl = string.Format("http://{0}", taskDtoPre.DeployInfoPreDto.Domain);
                             notify.GitLabBuildPage = taskDtoPre.ProjectDto.ProjectRepo.Replace(".git", "") + "/builds/" + buildId;
                             if (deployStatus == DeployStatus.DeployFails)
@@ -1036,7 +1036,42 @@ namespace Uoko.FireProj.Concretes
                             break;
                         case StageEnum.PRODUCTION:
                             var onlineTask = db.OnlineTaskInfos.FirstOrDefault(t => t.Id == taskLog.TaskId);
-                            //TODO
+
+                            var taskInfos = db.TaskInfo.Where(t => t.OnlineTaskId == onlineTask.Id).ToList();
+                            notify.TaskName = onlineTask.ProjectName;
+                            notify.DeployUrl = string.Format("http://{0}", onlineTask.Domain);
+                            var project = db.Project.Find(onlineTask.ProjectId);
+                            notify.GitLabBuildPage = project.ProjectRepo.Replace(".git", "") + "/builds/" + buildId;
+                            if (deployStatus == DeployStatus.DeployFails)
+                            {
+                                toIds.Add(onlineTask.CreatorId);
+                            }
+                            else if (deployStatus == DeployStatus.DeploySuccess)
+                            {
+                                toIds.Add(onlineTask.CreatorId);
+
+                                foreach (var task in taskInfos)
+                                {
+                                    var onlineDeployInfo =JsonHelper.FromJson<DeployInfoOnline>(task.DeployInfoOnlineJson);
+                                    var checkUsers = AnalysisUser.AnalysisCheckUser(onlineDeployInfo.CheckUserId);
+
+                                    foreach (var user in checkUsers)
+                                    {
+                                        if (!toIds.Contains(user.Id))
+                                        {
+                                            toIds.Add(user.Id);
+                                        }
+                                    }
+                                    var noticeUsers = AnalysisUser.AnalysisCheckUser(onlineDeployInfo.NoticeUserId);
+                                    foreach (var user in noticeUsers)
+                                    {
+                                        if (!toIds.Contains(user.Id))
+                                        {
+                                            ccIds.Add(user.Id);
+                                        }
+                                    }
+                                }
+                            }
                             break;
                     }
                     MailSendHelper.NotifyDeployResult(toIds, ccIds, notify);
