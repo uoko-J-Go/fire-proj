@@ -831,63 +831,64 @@ namespace Uoko.FireProj.Concretes
         /// <returns></returns>
         public TaskInfo UpdateTestStatus(TestResultDto testResult)
         {
-            try
+            using (var dbScope = _dbScopeFactory.Create())
             {
-                using (var dbScope = _dbScopeFactory.Create())
+                var db = dbScope.DbContexts.Get<FireProjDbContext>();
+                var entity = db.TaskInfo.FirstOrDefault(r => r.Id == testResult.TaskId);
+                //日志内容
+                var log = new TaskLogs
+                          {
+                              TaskId = entity.Id,
+                              LogType = LogType.QA,
+                              Stage = testResult.Stage,
+                              Comments = testResult.Comments,
+                              CreatorId = UserHelper.CurrUserInfo.UserId,
+                              CreatorName = UserHelper.CurrUserInfo.NickName,
+                              CreateDate = DateTime.Now
+                          };
+
+                //更改任务记录
+                switch (testResult.Stage)
                 {
-                    var db = dbScope.DbContexts.Get<FireProjDbContext>();
-                    var entity = db.TaskInfo.FirstOrDefault(r => r.Id == testResult.TaskId);
-                    //日志内容
-                    var log = new TaskLogs
-                    {
-                        TaskId = entity.Id,
-                        LogType = LogType.QA,
-                        Stage = testResult.Stage,
-                        Comments = testResult.Comments,
-                        CreatorId = UserHelper.CurrUserInfo.UserId,
-                        CreatorName = UserHelper.CurrUserInfo.NickName
-                    };
+                    case StageEnum.IOC:
+                        var iocDeployInfo = JsonHelper.FromJson<DeployInfoIoc>(entity.DeployInfoIocJson);
+                        entity.IocCheckUserId =
+                            iocDeployInfo.CheckUserId =
+                                GetTestNewCheckUserId(iocDeployInfo.CheckUserId, testResult.QAStatus);
+                        entity.DeployInfoIocJson = JsonHelper.ToJson(iocDeployInfo);
 
-                    //更改任务记录
-                    switch (testResult.Stage)
-                    {
-                        case StageEnum.IOC:
-                            var iocDeployInfo = JsonHelper.FromJson<DeployInfoIoc>(entity.DeployInfoIocJson);
-                            entity.IocCheckUserId = iocDeployInfo.CheckUserId = GetTestNewCheckUserId(iocDeployInfo.CheckUserId, testResult.QAStatus);
-                            entity.DeployInfoIocJson = JsonHelper.ToJson(iocDeployInfo);
+                        log.DeployInfo = entity.DeployInfoIocJson;
+                        break;
+                    case StageEnum.PRE:
+                        var preDeployInfo = JsonHelper.FromJson<DeployInfoPre>(entity.DeployInfoPreJson);
+                        entity.PreCheckUserId =
+                            preDeployInfo.CheckUserId =
+                                GetTestNewCheckUserId(preDeployInfo.CheckUserId, testResult.QAStatus);
+                        entity.DeployInfoPreJson = JsonHelper.ToJson(preDeployInfo);
 
-                            log.DeployInfo = entity.DeployInfoIocJson;
-                            break;
-                        case StageEnum.PRE:
-                            var preDeployInfo = JsonHelper.FromJson<DeployInfoPre>(entity.DeployInfoPreJson);
-                            entity.PreCheckUserId = preDeployInfo.CheckUserId =GetTestNewCheckUserId(preDeployInfo.CheckUserId, testResult.QAStatus);
-                            entity.DeployInfoPreJson = JsonHelper.ToJson(preDeployInfo);
+                        log.DeployInfo = entity.DeployInfoPreJson;
+                        break;
+                    case StageEnum.PRODUCTION:
+                        var onlineDeployInfo = JsonHelper.FromJson<DeployInfoOnline>(entity.DeployInfoOnlineJson);
+                        entity.OnlineCheckUserId =
+                            onlineDeployInfo.CheckUserId =
+                                GetTestNewCheckUserId(onlineDeployInfo.CheckUserId, testResult.QAStatus);
+                        entity.DeployInfoOnlineJson = JsonHelper.ToJson(onlineDeployInfo);
 
-                            log.DeployInfo = entity.DeployInfoPreJson;
-                            break;
-                        case StageEnum.PRODUCTION:
-                            var onlineDeployInfo = JsonHelper.FromJson<DeployInfoOnline>(entity.DeployInfoOnlineJson);
-                            entity.OnlineCheckUserId =onlineDeployInfo.CheckUserId = GetTestNewCheckUserId(onlineDeployInfo.CheckUserId, testResult.QAStatus);
-                            entity.DeployInfoOnlineJson = JsonHelper.ToJson(onlineDeployInfo);
-
-                            log.DeployInfo = entity.DeployInfoOnlineJson;
-                            break;
-                    }
-                    entity.ModifyId = UserHelper.CurrUserInfo.UserId;
-                    entity.ModifyDate = DateTime.Now;
-                    entity.ModifierName = UserHelper.CurrUserInfo.NickName;
-
-                    //写日志
-                    db.TaskLogs.Add(log);
-                    db.SaveChanges();
-                    return entity;
+                        log.DeployInfo = entity.DeployInfoOnlineJson;
+                        break;
                 }
-            }
-            catch (Exception ex)
-            {
-                throw new TipInfoException(ex.Message);
+                entity.ModifyId = UserHelper.CurrUserInfo.UserId;
+                entity.ModifyDate = DateTime.Now;
+                entity.ModifierName = UserHelper.CurrUserInfo.NickName;
+
+                //写日志
+                db.TaskLogs.Add(log);
+                db.SaveChanges();
+                return entity;
             }
         }
+
         /// <summary>
         /// 获取测试过后的用户状态结果
         /// </summary>
@@ -905,11 +906,13 @@ namespace Uoko.FireProj.Concretes
             var newUserStatusIds = new List<string>();
             foreach (var userStatus in userStatusIds)
             {
-                var userandstate = userStatus.Split('-');
+                var userandstate = userStatus.Split('-')
+                                             .Select(int.Parse)
+                                             .ToList();
 
-                if (UserHelper.CurrUserInfo.UserId.Equals(userandstate[0]))
+                if (UserHelper.CurrUserInfo.UserId ==userandstate[0])
                 {
-                    userandstate[1] = ((int)qaStatus).ToString();
+                    userandstate[1] = ((int) qaStatus);
                 }
                 newUserStatusIds.Add(string.Join("-", userandstate));
             }
