@@ -1066,7 +1066,7 @@ namespace Uoko.FireProj.Concretes
             {
                 var userandstate = userStatus.Split('-');
 
-                if (UserHelper.CurrUserInfo.UserId.Equals(userandstate[0]))
+                if (UserHelper.CurrUserInfo.UserId==int.Parse(userandstate[0]))
                 {
                     userandstate[1] = ((int)qaStatus).ToString();
                 }
