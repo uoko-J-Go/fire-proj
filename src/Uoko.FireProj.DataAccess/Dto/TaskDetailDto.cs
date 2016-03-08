@@ -152,5 +152,10 @@ namespace Uoko.FireProj.DataAccess.Dto
     public class DeployInfoOnlineDto: DeployInfoDto
     {
         public int? OnlineTaskId { get; set; }
+
+        /// <summary>
+        /// 版本号
+        /// </summary>
+        public string OnlineVersion { get; set; }
     }
 }
