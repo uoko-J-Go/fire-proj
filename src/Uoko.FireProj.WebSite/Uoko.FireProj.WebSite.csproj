@@ -405,6 +405,10 @@
     <Content Include="Metronic\assets\admin\layout\scripts\quick-sidebar.js" />
     <Content Include="app\modals\ui-tree.js" />
     <Content Include="Metronic\assets\admin\pages\css\timeline-old.css" />
+    <Content Include="Metronic\assets\admin\pages\css\timeline.css" />
+    <Content Include="Metronic\assets\admin\pages\media\users\IOC.jpg" />
+    <Content Include="Metronic\assets\admin\pages\media\users\Online.jpg" />
+    <Content Include="Metronic\assets\admin\pages\media\users\Pre.jpg" />
     <Content Include="Metronic\assets\global\css\components-md.css" />
     <Content Include="Metronic\assets\global\css\components-rounded.css" />
     <Content Include="Metronic\assets\global\css\components.css" />
@@ -1246,7 +1250,6 @@
     <Folder Include="Metronic\assets\admin\pages\media\pages\" />
     <Folder Include="Metronic\assets\admin\pages\media\profile\" />
     <Folder Include="Metronic\assets\admin\pages\media\search\" />
-    <Folder Include="Metronic\assets\admin\pages\media\users\" />
     <Folder Include="Metronic\assets\admin\pages\media\works\" />
     <Folder Include="Metronic\assets\admin\pages\scripts\" />
   </ItemGroup>

@@ -44,6 +44,21 @@ namespace Uoko.FireProj.WebSite.ControllerApi
             return Ok(result);
         }
 
+        [Route("OnlineTaskDetail/{onlineTaskId}")]
+        public IHttpActionResult GetOnlineTaskDetail(int onlineTaskId)
+        {
+            var result = _taskSvc.GetOnlineTaskDetail(onlineTaskId);
+            return Ok(result);
+        }
+
+
+
+        [Route("RetryDeployOnline/{onlineTaskId}")]
+        public IHttpActionResult RetryDeployOnline(int onlineTaskId)
+        {
+            _taskSvc.ReDeployOnlineTask(onlineTaskId);
+            return Ok();
+        }
 
 
         [Route("DeployOnline")]
