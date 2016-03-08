@@ -2,16 +2,27 @@
   定义全局module
 */
 var fireproj;
-(function () {
+(function() {
     fireproj = angular.module("FireProj", ['ngMessages', 'ui.bootstrap', 'ngTagsInput']);
-    fireproj.config(function (tagsInputConfigProvider) {
-        tagsInputConfigProvider.setDefaults('tagsInput', {
-            minLength: 1
-        }).setDefaults('autoComplete', {
-            minLength: 0,
-            selectFirstMatch: true
-        });
-    });
+    fireproj.config([
+        '$provide', '$httpProvider','tagsInputConfigProvider', function($provide, $httpProvider, tagsInputConfigProvider) {
+            tagsInputConfigProvider.setDefaults('tagsInput', { minLength: 1 }).setDefaults('autoComplete', { minLength: 0, selectFirstMatch: true });
+
+            // alternatively, register the interceptor via an anonymous factory
+            $httpProvider.interceptors.push(function($q) {
+                return {
+                    'responseError': function(rejection) {
+                        if (rejection.data.Message) {
+                            bootbox.alert(rejection.data.Message);
+                        }
+                        return $q.reject(rejection);
+                    }
+                };
+            });
+
+        }
+    ]);
+
 })();
 
 

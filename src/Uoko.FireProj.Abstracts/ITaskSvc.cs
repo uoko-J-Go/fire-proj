@@ -67,5 +67,7 @@ namespace Uoko.FireProj.Abstracts
        PageGridData<TaskInfoForList> GetTasksNeedOnline(TaskNeedOnlineQuery query);
 
        void DeployOnlineTask(OnlineTaskInfo taskFromDb);
+       OnlineTaskDetailDto GetOnlineTaskDetail(int onlineTaskId);
+       void ReDeployOnlineTask(int onlineTaskId);
    }
 }

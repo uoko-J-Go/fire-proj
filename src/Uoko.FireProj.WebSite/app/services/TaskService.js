@@ -46,7 +46,32 @@
         }).error(function(data) {
             //错误处理
         });;
-    }
+    };
+
+
+    this.GetOnlineDetail = function(params, cb) {
+        $http.get("/api/TaskApi/OnlineTaskDetail/" + params.onlineTaskId, { params: params }).success(function(data) {
+            if (data) {
+                data.TaskBelongOnline = transfTaskData(data.TaskBelongOnline);
+            }
+
+            if (cb != undefined) {
+                cb(data);
+            }
+        }).error(function(data) {
+            //错误处理
+        });;
+    };
+
+    this.RetryDeployOnline = function(params, cb) {
+        $http.post("/api/TaskApi/RetryDeployOnline/" + params.onlineTaskId, { params: params }).success(function(data) {
+            if (cb != undefined) {
+                cb(data);
+            }
+        }).error(function(data) {
+            //错误处理
+        });;
+    };
 
 
     this.GetTaskLogsByPage = function (params, successCallBack) {
