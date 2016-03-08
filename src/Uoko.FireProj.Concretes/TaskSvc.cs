@@ -117,7 +117,8 @@ namespace Uoko.FireProj.Concretes
 
             var repoId = project.RepoId;
 
-            var triggers = gitLabApi.Get<List<Trigger>>($"projects/{repoId}/triggers?private_token={gitlabToken}")
+            var triggerUrl = string.Format("projects/{0}/triggers?private_token={1}", repoId, gitlabToken);
+            var triggers = gitLabApi.Get<List<Trigger>>(triggerUrl)
                            ?? new List<Trigger>();
             var trigger = triggers.FirstOrDefault();
             if (trigger == null)
@@ -125,7 +126,7 @@ namespace Uoko.FireProj.Concretes
                 throw new TipInfoException("项目在GitLab上未配置 triggers");
             }
 
-            var onlineTagName = $"{onlineTaskInfo.OnlineVersion}-{onlineTaskInfo.Id}";
+            var onlineTagName = string.Format("{0}-{1}", onlineTaskInfo.OnlineVersion, onlineTaskInfo.Id);
             var buildInfo = new Dictionary<string, object>
                             {
                                 {"slnFile", project.ProjectSlnName},
@@ -146,7 +147,7 @@ namespace Uoko.FireProj.Concretes
                                   variables = buildInfo
                               };
 
-            var triggerUri = $"projects/{repoId}/trigger/builds?private_token={gitlabToken}";
+            var triggerUri = string.Format("projects/{0}/trigger/builds?private_token={1}", repoId, gitlabToken);
             var triggerId = gitLabApi.Post<TriggerRequest, TriggerResponse>(triggerUri, buildRequst).id;
 
             using (var dbScope = _dbScopeFactory.Create())
