@@ -145,6 +145,7 @@ namespace Uoko.FireProj.WebSite.ControllerApi
         public IHttpActionResult UpdateTestStatus([FromBody]TestResultDto testResult)
         {
             var taskInfo = _taskSvc.UpdateTestStatus(testResult);
+            _taskSvc.NotifyTestResult(testResult);
             return Ok();
         }
     }

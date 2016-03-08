@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
+using Uoko.FireProj.DataAccess.Mail;
 using Uoko.FireProj.Infrastructure.Data;
 
 namespace Uoko.FireProj.Infrastructure.Mail
@@ -27,7 +28,46 @@ namespace Uoko.FireProj.Infrastructure.Mail
             //超时时间 
             smtp.Timeout = 10000;
         }
+        /// <summary>
+        /// 发送测试结果通知
+        /// </summary>
+        /// <param name="toIds"></param>
+        /// <param name="ccIds"></param>
+        /// <param name="notify"></param>
+        /// <returns></returns>
+        public static string NotifyTestResult(List<int> toIds, List<int> ccIds, QANotifyMail notify)
+        {
+            var subject = string.Format("[{0}] 在 {1} 中 {2}", notify.TestUser, notify.StageName, notify.TestResult);
+            #region body内容组装
+            StringBuilder content = new StringBuilder();
+            content.AppendFormat("<h3>[{0}] 在 {1} 中 {2}</h3>", notify.TestUser, notify.StageName, notify.TestResult);
+            content.AppendFormat("<p>描述：{0}</p>", notify.Coments);
+            content.AppendFormat("测试地址：<a href='{0}'>{1}</a>", notify.TestUrl, notify.TestUrl);
+            #endregion
 
+            var body = content.ToString();
+            return SendMail(toIds, ccIds, subject, body);
+        }
+
+        /// <summary>
+        /// 发送部署结果通知
+        /// </summary>
+        /// <param name="toIds"></param>
+        /// <param name="ccIds"></param>
+        /// <param name="notify"></param>
+        /// <returns></returns>
+        public static string NotifyDeployResult(List<int> toIds, List<int> ccIds, DeployNotifyMail notify)
+        {
+            var subject = string.Format("[{0}] 在 {1} 中 {2}", notify.ProjectName, notify.StageName, notify.DeployStatus);
+
+            #region body内容组装
+            StringBuilder content = new StringBuilder();
+            content.AppendFormat("<h3>[{0}] 在 {1} 中 {2}</h3>", notify.ProjectName, notify.StageName, notify.DeployStatus);
+            #endregion
+
+            var body = content.ToString();
+            return SendMail(toIds, ccIds, subject, body);
+        }
         /// <summary>
         /// 邮件发送
         /// </summary>
