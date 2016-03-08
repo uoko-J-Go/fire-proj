@@ -903,6 +903,7 @@ namespace Uoko.FireProj.Concretes
                 var notify = new QANotifyMail()
                 {
                     ProjectName=taskDto.ProjectDto.ProjectName,
+                    TestUser=UserHelper.CurrUserInfo.NickName,
                     StageName = testResult.Stage.ToDescription(),
                     Coments = testResult.Comments,
                     IsAllPassed=false
