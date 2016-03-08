@@ -24,18 +24,9 @@ namespace Uoko.FireProj.WebSite.Controllers
         {
             base.OnActionExecuting(context);
             var user = User as ClaimsPrincipal;
-            //var cache = CacheFactory.Build("getStartedCache", settings =>
-            //{
-            //    settings.WithSystemRuntimeCacheHandle("handleName");
-            //});
-            //cache.Add("UserId", user.FindFirst("userid").Value);
-            //cache.Add("NickName", user.FindFirst("NickName").Value);
-
-
-            UserHelper.CurrUserInfo.UserId = int.Parse(user.FindFirst("userid").Value.ToString());
-            UserHelper.CurrUserInfo.NickName = user.FindFirst("NickName").Value;
+            UserHelper.CurrUserInfo= UserHelper.GetUserById(int.Parse(user.FindFirst("userid").Value));
             ViewBag.UserId = UserHelper.CurrUserInfo.UserId;
-            ViewBag.NickName = user.FindFirst("NickName").Value;
+            ViewBag.NickName = UserHelper.CurrUserInfo.NickName;
         }
         public void GetMenuData(string controller, string action)
         {

@@ -130,29 +130,6 @@ namespace Uoko.FireProj.WebSite.ControllerApi
         public IHttpActionResult UpdateTestStatus([FromBody]TestResultDto testResult)
         {
             var taskInfo = _taskSvc.UpdateTestStatus(testResult);
-            //创建日志
-            var log = new TaskLogs
-            {
-                TaskId = taskInfo.Id,
-                LogType = LogType.QA,
-                Stage = testResult.Stage,
-                Comments= testResult.Comments
-            };
-            switch (testResult.Stage)
-            {
-                case StageEnum.IOC:
-                    log.DeployInfo = taskInfo.DeployInfoIocJson;
-                    break;
-                case StageEnum.PRE:
-                    log.DeployInfo = taskInfo.DeployInfoPreJson;
-                    break;
-                case StageEnum.PRODUCTION:
-                    log.DeployInfo = taskInfo.DeployInfoOnlineJson;
-                    break;
-            }
-            log.CreatorId = UserHelper.CurrUserInfo.UserId;
-            log.CreatorName = UserHelper.CurrUserInfo.NickName;
-            _taskLogsSvc.CreateTaskLogs(log);
             return Ok();
         }
     }

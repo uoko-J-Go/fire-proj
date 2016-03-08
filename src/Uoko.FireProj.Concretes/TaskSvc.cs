@@ -117,7 +117,8 @@ namespace Uoko.FireProj.Concretes
 
             var repoId = project.RepoId;
 
-            var triggers = gitLabApi.Get<List<Trigger>>($"projects/{repoId}/triggers?private_token={gitlabToken}")
+            var triggerUrl = string.Format("projects/{0}/triggers?private_token={1}", repoId, gitlabToken);
+            var triggers = gitLabApi.Get<List<Trigger>>(triggerUrl)
                            ?? new List<Trigger>();
             var trigger = triggers.FirstOrDefault();
             if (trigger == null)
@@ -125,7 +126,7 @@ namespace Uoko.FireProj.Concretes
                 throw new TipInfoException("项目在GitLab上未配置 triggers");
             }
 
-            var onlineTagName = $"{onlineTaskInfo.OnlineVersion}-{onlineTaskInfo.Id}";
+            var onlineTagName = string.Format("{0}-{1}", onlineTaskInfo.OnlineVersion, onlineTaskInfo.Id);
             var buildInfo = new Dictionary<string, object>
                             {
                                 {"slnFile", project.ProjectSlnName},
@@ -146,7 +147,7 @@ namespace Uoko.FireProj.Concretes
                                   variables = buildInfo
                               };
 
-            var triggerUri = $"projects/{repoId}/trigger/builds?private_token={gitlabToken}";
+            var triggerUri = string.Format("projects/{0}/trigger/builds?private_token={1}", repoId, gitlabToken);
             var triggerId = gitLabApi.Post<TriggerRequest, TriggerResponse>(triggerUri, buildRequst).id;
 
             using (var dbScope = _dbScopeFactory.Create())
@@ -157,6 +158,22 @@ namespace Uoko.FireProj.Concretes
                 {
                     taskFromDb.TriggeredId = triggerId;
                     taskFromDb.DeployStatus = DeployStatus.Deploying;
+
+
+                    #region 写日志
+                    var log = new TaskLogs
+                    {
+                        TaskId = taskFromDb.Id,
+                        LogType = LogType.Deploy,
+                        Stage = StageEnum.PRODUCTION,
+                        TriggeredId = triggerId,
+                        CreateDate = DateTime.Now,
+                        CreatorId = UserHelper.CurrUserInfo.UserId,
+                        CreatorName = UserHelper.CurrUserInfo.NickName,
+                        DeployInfo=JsonHelper.ToJson(taskFromDb)
+                    };
+                    db.TaskLogs.Add(log);
+                    #endregion
                 }
 
                 dbScope.SaveChanges();
@@ -681,7 +698,7 @@ namespace Uoko.FireProj.Concretes
             }
         }
 
-        public TaskInfo DeployCallback(int triggerId, int buildId, DeployStatus deployStatus)
+        public void DeployCallback(int triggerId, int buildId, DeployStatus deployStatus)
         {
             try
             {
@@ -692,36 +709,9 @@ namespace Uoko.FireProj.Concretes
                     var taskLog = db.TaskLogs.Where(r => r.TriggeredId == triggerId).FirstOrDefault();
                     if (taskLog == null)
                     {
-                        return null;
+                        return ;
                     }
-
-                    var entity = db.TaskInfo.FirstOrDefault(r => r.Id == taskLog.TaskId);
-
-                    //更改任务记录
-                    switch (taskLog.Stage)
-                    {
-                        case StageEnum.IOC:
-                            var iocDeployInfo = JsonHelper.FromJson<DeployInfoIoc>(entity.DeployInfoIocJson);
-                            iocDeployInfo.DeployStatus = deployStatus;
-                            iocDeployInfo.BuildId = buildId;
-                            entity.DeployInfoIocJson = JsonHelper.ToJson(iocDeployInfo);
-                            break;
-                        case StageEnum.PRE:
-                            var preDeployInfo = JsonHelper.FromJson<DeployInfoPre>(entity.DeployInfoPreJson);
-                            preDeployInfo.DeployStatus = deployStatus;
-                            preDeployInfo.BuildId = buildId;
-                            entity.DeployInfoPreJson = JsonHelper.ToJson(preDeployInfo);
-                            break;
-                        case StageEnum.PRODUCTION:
-                            break;
-                    }
-                    entity.ModifyId = 0;
-                    entity.ModifierName = "系统";
-                    entity.ModifyDate = DateTime.Now;
-
-                    #region 写日志
-
-                    //创建日志
+                    //日志内容
                     var log = new TaskLogs
                     {
                         TaskId = taskLog.TaskId,
@@ -729,31 +719,57 @@ namespace Uoko.FireProj.Concretes
                         Stage = taskLog.Stage,
                         TriggeredId = triggerId,
                         CreateDate = DateTime.Now,
-                        CreatorId =0,
+                        CreatorId = 0,
                         CreatorName = "系统",
                     };
+
+                    //更改任务记录
                     switch (taskLog.Stage)
                     {
                         case StageEnum.IOC:
-                            log.DeployInfo = entity.DeployInfoIocJson;
+                            var entityIoc = db.TaskInfo.FirstOrDefault(r => r.Id == taskLog.TaskId);
+                            if (entityIoc == null) return;
+                            var iocDeployInfo = JsonHelper.FromJson<DeployInfoIoc>(entityIoc.DeployInfoIocJson);
+                            iocDeployInfo.DeployStatus = deployStatus;
+                            iocDeployInfo.BuildId = buildId;
+                            entityIoc.DeployInfoIocJson = JsonHelper.ToJson(iocDeployInfo);
+                            entityIoc.ModifyId = 0;
+                            entityIoc.ModifierName = "系统";
+                            entityIoc.ModifyDate = DateTime.Now;
+                            log.DeployInfo = entityIoc.DeployInfoIocJson;
                             break;
                         case StageEnum.PRE:
-                            log.DeployInfo = entity.DeployInfoPreJson;
+                            var entityPre = db.TaskInfo.FirstOrDefault(r => r.Id == taskLog.TaskId);
+                            if (entityPre == null) return;
+                            var preDeployInfo = JsonHelper.FromJson<DeployInfoPre>(entityPre.DeployInfoPreJson);
+                            preDeployInfo.DeployStatus = deployStatus;
+                            preDeployInfo.BuildId = buildId;
+                            entityPre.DeployInfoPreJson = JsonHelper.ToJson(preDeployInfo);
+                            entityPre.ModifyId = 0;
+                            entityPre.ModifierName = "系统";
+                            entityPre.ModifyDate = DateTime.Now;
+                            log.DeployInfo = entityPre.DeployInfoPreJson;
                             break;
                         case StageEnum.PRODUCTION:
-                            log.DeployInfo = entity.DeployInfoOnlineJson;
+                            var entityOnline = db.OnlineTaskInfos.FirstOrDefault(r => r.Id == taskLog.TaskId);
+                            if (entityOnline == null) return;
+                            entityOnline.DeployStatus = deployStatus;
+                            entityOnline.BuildId = buildId;
+                            entityOnline.ModifyId = 0;
+                            entityOnline.ModifierName = "系统";
+                            entityOnline.ModifyDate = DateTime.Now;
+                            log.DeployInfo = JsonHelper.ToJson(entityOnline);
                             break;
                     }
+                
+                    #region 写日志
                     var tTasklogs = db.TaskLogs.Count(t => t.TriggeredId == triggerId);
                     if (tTasklogs < 2) //避免重复
                     {
                          db.TaskLogs.Add(log);  
-                    }
-                  
+                    }        
                     #endregion
-
                     db.SaveChanges();
-                    return entity;
                 }
             }
             catch (Exception ex)
@@ -775,79 +791,48 @@ namespace Uoko.FireProj.Concretes
                 {
                     var db = dbScope.DbContexts.Get<FireProjDbContext>();
                     var entity = db.TaskInfo.FirstOrDefault(r => r.Id == testResult.TaskId);
+                    //日志内容
+                    var log = new TaskLogs
+                    {
+                        TaskId = entity.Id,
+                        LogType = LogType.QA,
+                        Stage = testResult.Stage,
+                        Comments = testResult.Comments,
+                        CreatorId = UserHelper.CurrUserInfo.UserId,
+                        CreatorName = UserHelper.CurrUserInfo.NickName
+                    };
 
-                    var currentUserId = UserHelper.CurrUserInfo.UserId; //临时模拟一个当前用户Id
                     //更改任务记录
                     switch (testResult.Stage)
                     {
                         case StageEnum.IOC:
                             var iocDeployInfo = JsonHelper.FromJson<DeployInfoIoc>(entity.DeployInfoIocJson);
-                            if (!string.IsNullOrEmpty(iocDeployInfo.CheckUserId))
-                            {
-                                var userStatusIds = iocDeployInfo.CheckUserId.Split(',');
-                                var newUserStatusIds = new List<string>();
-                                foreach (var userStatus in userStatusIds)
-                                {
-                                    var userandstate = userStatus.Split('-');
-                                    
-                                    if (currentUserId.Equals(userandstate[0]))
-                                    {
-                                        userandstate[1] = ((int) testResult.QAStatus).ToString();
-                                    }
-
-                                    newUserStatusIds.Add(string.Join("-", userandstate));
-                                }
-                                entity.IocCheckUserId = iocDeployInfo.CheckUserId = string.Join(",", newUserStatusIds);
-                            }
+                            entity.IocCheckUserId = iocDeployInfo.CheckUserId = GetTestNewCheckUserId(iocDeployInfo.CheckUserId, testResult.QAStatus);
                             entity.DeployInfoIocJson = JsonHelper.ToJson(iocDeployInfo);
+
+                            log.DeployInfo = entity.DeployInfoIocJson;
                             break;
                         case StageEnum.PRE:
                             var preDeployInfo = JsonHelper.FromJson<DeployInfoPre>(entity.DeployInfoPreJson);
-                            if (!string.IsNullOrEmpty(preDeployInfo.CheckUserId))
-                            {
-                                var userStatusIds = preDeployInfo.CheckUserId.Split(',');
-                                var newUserStatusIds = new List<string>();
-                                foreach (var userStatus in userStatusIds)
-                                {
-                                    var userandstate = userStatus.Split('-');
-                                   
-                                    if (currentUserId.Equals(userandstate[0]))
-                                    {
-                                        userandstate[1] = ((int)testResult.QAStatus).ToString();
-                                    }
-
-                                    newUserStatusIds.Add(string.Join("-", userandstate));
-                                }
-                                entity.PreCheckUserId = preDeployInfo.CheckUserId = string.Join(",", newUserStatusIds);
-                            }
+                            entity.PreCheckUserId = preDeployInfo.CheckUserId =GetTestNewCheckUserId(preDeployInfo.CheckUserId, testResult.QAStatus);
                             entity.DeployInfoPreJson = JsonHelper.ToJson(preDeployInfo);
+
+                            log.DeployInfo = entity.DeployInfoPreJson;
                             break;
                         case StageEnum.PRODUCTION:
                             var onlineDeployInfo = JsonHelper.FromJson<DeployInfoOnline>(entity.DeployInfoOnlineJson);
-                            if (!string.IsNullOrEmpty(onlineDeployInfo.CheckUserId))
-                            {
-                                var userStatusIds = onlineDeployInfo.CheckUserId.Split(',');
-                                var newUserStatusIds = new List<string>();
-                                foreach (var userStatus in userStatusIds)
-                                {
-                                    var userandstate = userStatus.Split('-');
-                                    
-                                    if (currentUserId.Equals(userandstate[0]))
-                                    {
-                                        userandstate[1] = ((int)testResult.QAStatus).ToString();
-                                    }
-
-                                    newUserStatusIds.Add(string.Join("-", userandstate));
-                                }
-                                entity.OnlineCheckUserId =
-                                    onlineDeployInfo.CheckUserId = string.Join(",", newUserStatusIds);
-                            }
+                            entity.OnlineCheckUserId =onlineDeployInfo.CheckUserId = GetTestNewCheckUserId(onlineDeployInfo.CheckUserId, testResult.QAStatus);
                             entity.DeployInfoOnlineJson = JsonHelper.ToJson(onlineDeployInfo);
+
+                            log.DeployInfo = entity.DeployInfoOnlineJson;
                             break;
                     }
-                    entity.ModifyId = currentUserId;
+                    entity.ModifyId = UserHelper.CurrUserInfo.UserId;
                     entity.ModifyDate = DateTime.Now;
                     entity.ModifierName = UserHelper.CurrUserInfo.NickName;
+
+                    //写日志
+                    db.TaskLogs.Add(log);
                     db.SaveChanges();
                     return entity;
                 }
@@ -856,6 +841,34 @@ namespace Uoko.FireProj.Concretes
             {
                 throw new TipInfoException(ex.Message);
             }
+        }
+        /// <summary>
+        /// 获取测试过后的用户状态结果
+        /// </summary>
+        /// <param name="oldCheckUserId"></param>
+        /// <param name="qaStatus"></param>
+        /// <returns></returns>
+        private string GetTestNewCheckUserId(string oldCheckUserId, QAStatus qaStatus)
+        {
+            if (string.IsNullOrEmpty(oldCheckUserId))
+            {
+                return oldCheckUserId;
+            }
+
+            var userStatusIds = oldCheckUserId.Split(',');
+            var newUserStatusIds = new List<string>();
+            foreach (var userStatus in userStatusIds)
+            {
+                var userandstate = userStatus.Split('-');
+
+                if (UserHelper.CurrUserInfo.UserId.Equals(userandstate[0]))
+                {
+                    userandstate[1] = ((int)qaStatus).ToString();
+                }
+                newUserStatusIds.Add(string.Join("-", userandstate));
+            }
+
+            return string.Join(",", newUserStatusIds);
         }
     }
 }
