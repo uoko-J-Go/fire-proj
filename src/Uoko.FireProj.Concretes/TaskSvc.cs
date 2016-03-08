@@ -10,10 +10,12 @@ using Uoko.FireProj.DataAccess.Dto;
 using Uoko.FireProj.DataAccess.Entity;
 using Uoko.FireProj.DataAccess.Enum;
 using Uoko.FireProj.DataAccess.Gitlab;
+using Uoko.FireProj.DataAccess.Mail;
 using Uoko.FireProj.DataAccess.Query;
 using Uoko.FireProj.Infrastructure.Data;
 using Uoko.FireProj.Infrastructure.Exception;
 using Uoko.FireProj.Infrastructure.Extensions;
+using Uoko.FireProj.Infrastructure.Mail;
 using Uoko.FireProj.Model;
 
 namespace Uoko.FireProj.Concretes
@@ -816,6 +818,7 @@ namespace Uoko.FireProj.Concretes
                     }        
                     #endregion
                     db.SaveChanges();
+
                 }
             }
             catch (Exception ex)
@@ -854,7 +857,7 @@ namespace Uoko.FireProj.Concretes
                         var iocDeployInfo = JsonHelper.FromJson<DeployInfoIoc>(entity.DeployInfoIocJson);
                         entity.IocCheckUserId =
                             iocDeployInfo.CheckUserId =
-                                GetTestNewCheckUserId(iocDeployInfo.CheckUserId, testResult.QAStatus);
+                                GetTestedNewCheckUserId(iocDeployInfo.CheckUserId, testResult.QAStatus);
                         entity.DeployInfoIocJson = JsonHelper.ToJson(iocDeployInfo);
 
                         log.DeployInfo = entity.DeployInfoIocJson;
@@ -863,7 +866,7 @@ namespace Uoko.FireProj.Concretes
                         var preDeployInfo = JsonHelper.FromJson<DeployInfoPre>(entity.DeployInfoPreJson);
                         entity.PreCheckUserId =
                             preDeployInfo.CheckUserId =
-                                GetTestNewCheckUserId(preDeployInfo.CheckUserId, testResult.QAStatus);
+                                GetTestedNewCheckUserId(preDeployInfo.CheckUserId, testResult.QAStatus);
                         entity.DeployInfoPreJson = JsonHelper.ToJson(preDeployInfo);
 
                         log.DeployInfo = entity.DeployInfoPreJson;
@@ -872,7 +875,7 @@ namespace Uoko.FireProj.Concretes
                         var onlineDeployInfo = JsonHelper.FromJson<DeployInfoOnline>(entity.DeployInfoOnlineJson);
                         entity.OnlineCheckUserId =
                             onlineDeployInfo.CheckUserId =
-                                GetTestNewCheckUserId(onlineDeployInfo.CheckUserId, testResult.QAStatus);
+                                GetTestedNewCheckUserId(onlineDeployInfo.CheckUserId, testResult.QAStatus);
                         entity.DeployInfoOnlineJson = JsonHelper.ToJson(onlineDeployInfo);
 
                         log.DeployInfo = entity.DeployInfoOnlineJson;
@@ -889,13 +892,167 @@ namespace Uoko.FireProj.Concretes
             }
         }
 
+
+        public void NotifyTestResult(TestResultDto testResult)
+        {
+            try
+            {
+                var taskDto = this.GetTaskById(testResult.TaskId);
+                var toIds = new List<int>();
+                var ccIds = new List<int>();
+                var notify = new QANotifyMail()
+                {
+                    ProjectName=taskDto.ProjectDto.ProjectName,
+                    StageName = testResult.Stage.ToDescription(),
+                    Coments = testResult.Comments,
+                    IsAllPassed=false
+                };
+                if (UserHelper.CurrUserInfo.UserId != taskDto.CreatorId.Value)
+                {
+                    toIds.Add(taskDto.CreatorId.Value);
+                }
+                switch (testResult.Stage)
+                {
+                    case StageEnum.IOC:
+                        foreach (var user in taskDto.DeployInfoIocDto.CheckUser.Where(t=>t.Id!= UserHelper.CurrUserInfo.UserId))
+                        {
+                            if (!toIds.Contains(user.Id))
+                            {
+                                toIds.Add(user.Id);
+                            }
+                        }
+                        ccIds.AddRange(taskDto.DeployInfoIocDto.NoticeUser.Where(t => t.Id != UserHelper.CurrUserInfo.UserId).Select(t => t.Id));
+                        notify.TestResult =taskDto.DeployInfoIocDto.CheckUser.FirstOrDefault(t => t.Id == UserHelper.CurrUserInfo.UserId).QAStatus.ToDescription();
+                        notify.TestUrl = string.Format("http://{0}", taskDto.DeployInfoIocDto.Domain);
+                        notify.IsAllPassed = taskDto.DeployInfoIocDto.CheckUser.Count ==taskDto.DeployInfoIocDto.CheckUser.Count(t => t.QAStatus == QAStatus.Passed);
+                        break;
+                    case StageEnum.PRE:
+                        foreach (var user in taskDto.DeployInfoPreDto.CheckUser.Where(t => t.Id != UserHelper.CurrUserInfo.UserId))
+                        {
+                            if (!toIds.Contains(user.Id))
+                            {
+                                toIds.Add(user.Id);
+                            }
+                        }
+                        ccIds.AddRange(taskDto.DeployInfoPreDto.NoticeUser.Where(t => t.Id != UserHelper.CurrUserInfo.UserId).Select(t => t.Id));
+                        notify.TestResult = taskDto.DeployInfoPreDto.CheckUser.FirstOrDefault(t => t.Id == UserHelper.CurrUserInfo.UserId).QAStatus.ToDescription();
+                        notify.TestUrl = string.Format("http://{0}", taskDto.DeployInfoPreDto.Domain);
+                        notify.IsAllPassed = taskDto.DeployInfoPreDto.CheckUser.Count == taskDto.DeployInfoPreDto.CheckUser.Count(t => t.QAStatus == QAStatus.Passed);
+                        break;
+                    case StageEnum.PRODUCTION:
+                        foreach (var user in taskDto.DeployInfoOnlineDto.CheckUser.Where(t => t.Id != UserHelper.CurrUserInfo.UserId))
+                        {
+                            if (!toIds.Contains(user.Id))
+                            {
+                                toIds.Add(user.Id);
+                            }
+                        }
+                        ccIds.AddRange(taskDto.DeployInfoOnlineDto.NoticeUser.Where(t => t.Id != UserHelper.CurrUserInfo.UserId).Select(t => t.Id));
+                        notify.TestResult = taskDto.DeployInfoOnlineDto.CheckUser.FirstOrDefault(t => t.Id == UserHelper.CurrUserInfo.UserId).QAStatus.ToDescription();
+                       
+                        notify.IsAllPassed = taskDto.DeployInfoOnlineDto.CheckUser.Count == taskDto.DeployInfoOnlineDto.CheckUser.Count(t => t.QAStatus == QAStatus.Passed);
+                        using (var dbScope = _dbScopeFactory.CreateReadOnly())
+                        {
+                            var db = dbScope.DbContexts.Get<FireProjDbContext>();
+                            var onlineTask = db.OnlineTaskInfos.Find(taskDto.DeployInfoOnlineDto.OnlineTaskId.Value);
+                            if (onlineTask != null)
+                            {
+                                notify.TestUrl = string.Format("http://{0}", onlineTask.Domain);
+                            }
+                        }
+                        break;
+                }
+
+                MailSendHelper.NotifyTestResult(toIds, ccIds, notify);
+            }
+            catch (Exception ex)
+            {
+                throw new TipInfoException(ex.Message);
+            }
+        }
+
+        public void NotifyDeployResult(int triggerId, int buildId, DeployStatus deployStatus)
+        {
+            try
+            {
+                using (var dbScope = _dbScopeFactory.CreateReadOnly())
+                {
+                    var db = dbScope.DbContexts.Get<FireProjDbContext>();
+
+                    var taskLog = db.TaskLogs.Where(r => r.TriggeredId == triggerId).FirstOrDefault();
+                    if (taskLog == null)
+                    {
+                        return;
+                    }
+                    var toIds = new List<int>();
+                    var ccIds = new List<int>();
+                    var notify = new DeployNotifyMail()
+                    {
+                        StageName = taskLog.Stage.ToDescription(),
+                        DeployStatus = deployStatus.ToDescription()
+                    };
+                    switch (taskLog.Stage)
+                    {
+                        case StageEnum.IOC:
+                            var taskDtoIoc = this.GetTaskById(taskLog.TaskId);
+                            notify.ProjectName = taskDtoIoc.ProjectDto.ProjectName;
+                            notify.DeployUrl  =string.Format("http://{0}", taskDtoIoc.DeployInfoIocDto.Domain);
+                            notify.GitLabBuildPage = taskDtoIoc.ProjectDto.ProjectRepo.Replace(".git", "") + "/builds/" +buildId;
+                            if (deployStatus == DeployStatus.DeployFails)
+                            {
+                                if (taskDtoIoc.CreatorId != null)
+                                {
+                                    toIds.Add(taskDtoIoc.CreatorId.Value);
+                                }
+                            }
+                            else if (deployStatus == DeployStatus.DeploySuccess)
+                            {
+                                toIds.Add(taskDtoIoc.CreatorId.Value);
+                                toIds.AddRange(taskDtoIoc.DeployInfoIocDto.CheckUser.Where(t => t.Id != taskDtoIoc.CreatorId.Value).Select(t=>t.Id));
+                                ccIds.AddRange(taskDtoIoc.DeployInfoIocDto.NoticeUser.Select(t => t.Id));
+                            }
+                           
+                            break;
+                        case StageEnum.PRE:
+                            var taskDtoPre = this.GetTaskById(taskLog.TaskId);
+                            notify.ProjectName = taskDtoPre.ProjectDto.ProjectName;
+                            notify.DeployUrl = string.Format("http://{0}", taskDtoPre.DeployInfoPreDto.Domain);
+                            notify.GitLabBuildPage = taskDtoPre.ProjectDto.ProjectRepo.Replace(".git", "") + "/builds/" + buildId;
+                            if (deployStatus == DeployStatus.DeployFails)
+                            {
+                                if (taskDtoPre.CreatorId != null)
+                                {
+                                    toIds.Add(taskDtoPre.CreatorId.Value);
+                                }
+                            }
+                            else if (deployStatus == DeployStatus.DeploySuccess)
+                            {
+                                toIds.Add(taskDtoPre.CreatorId.Value);
+                                toIds.AddRange(taskDtoPre.DeployInfoPreDto.CheckUser.Where(t => t.Id != taskDtoPre.CreatorId.Value).Select(t => t.Id));
+                                ccIds.AddRange(taskDtoPre.DeployInfoPreDto.NoticeUser.Select(t => t.Id));
+                            }
+
+                            break;
+                        case StageEnum.PRODUCTION:
+                            var onlineTask = db.OnlineTaskInfos.FirstOrDefault(t => t.Id == taskLog.TaskId);
+                            //TODO
+                            break;
+                    }
+                    MailSendHelper.NotifyDeployResult(toIds, ccIds, notify);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new TipInfoException(ex.Message);
+            }
+        }
         /// <summary>
         /// 获取测试过后的用户状态结果
         /// </summary>
         /// <param name="oldCheckUserId"></param>
         /// <param name="qaStatus"></param>
         /// <returns></returns>
-        private string GetTestNewCheckUserId(string oldCheckUserId, QAStatus qaStatus)
+        private string GetTestedNewCheckUserId(string oldCheckUserId, QAStatus qaStatus)
         {
             if (string.IsNullOrEmpty(oldCheckUserId))
             {

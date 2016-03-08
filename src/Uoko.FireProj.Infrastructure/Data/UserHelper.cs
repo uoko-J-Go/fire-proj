@@ -37,7 +37,7 @@ namespace Uoko.FireProj.Infrastructure.Data
         {
             if (userIds == null || userIds.Count < 1)
             {
-                return null;
+                return new List<UserDto>();
             }
             return apiProvider.Get<List<UserDto>>(string.Format("api/UserOld?IdList={0}",string.Join(",",userIds)));
         }

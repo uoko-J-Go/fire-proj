@@ -188,10 +188,10 @@ body {
 .form-group.form-md-line-input {
   position: relative;
   margin: 0 0 35px 0;
-  padding-top: 20px;
+  padding-top: 10px;
 }
 .form-horizontal .form-group.form-md-line-input {
-  padding-top: 10px;
+  padding-top: 1px;
   margin-bottom: 20px;
   margin: 0 -15px 20px -15px;
 }

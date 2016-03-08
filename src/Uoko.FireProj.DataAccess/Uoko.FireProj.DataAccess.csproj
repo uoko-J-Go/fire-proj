@@ -93,6 +93,8 @@
     <Compile Include="Gitlab\TriggerResponse.cs" />
     <Compile Include="Gitlab\TriggerRequest.cs" />
     <Compile Include="Gitlab\Trigger.cs" />
+    <Compile Include="Mail\DeployNotifyMail.cs" />
+    <Compile Include="Mail\QANotifyMail.cs" />
     <Compile Include="Migrations\201601140333406_addproject.cs" />
     <Compile Include="Migrations\201601140333406_addproject.Designer.cs">
       <DependentUpon>201601140333406_addproject.cs</DependentUpon>

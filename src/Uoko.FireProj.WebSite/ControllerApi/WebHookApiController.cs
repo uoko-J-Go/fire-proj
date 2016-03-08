@@ -41,13 +41,17 @@ namespace Uoko.FireProj.WebSite.ControllerApi
             if ("failed".Equals(bhRequest.build_status, StringComparison.OrdinalIgnoreCase))
             {
                 _taskSvc.DeployCallback(bhRequest.trigger_request_id, bhRequest.build_id, DeployStatus.DeployFails);
+
+                _taskSvc.NotifyDeployResult(bhRequest.trigger_request_id, bhRequest.build_id, DeployStatus.DeployFails);
             }
             //部署成功
             if ("success".Equals(bhRequest.build_status, StringComparison.OrdinalIgnoreCase))
             {
                 if ("execFakeScript".Equals(bhRequest.build_name, StringComparison.OrdinalIgnoreCase))
                 {
-                    _taskSvc.DeployCallback(bhRequest.trigger_request_id, bhRequest.build_id, DeployStatus.DeploySuccess);
+                     _taskSvc.DeployCallback(bhRequest.trigger_request_id, bhRequest.build_id, DeployStatus.DeploySuccess);
+
+                    _taskSvc.NotifyDeployResult(bhRequest.trigger_request_id, bhRequest.build_id, DeployStatus.DeployFails);
                 }
             }
 
