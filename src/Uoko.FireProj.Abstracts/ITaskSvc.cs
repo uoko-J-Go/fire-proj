@@ -60,7 +60,7 @@ namespace Uoko.FireProj.Abstracts
         /// <param name="buildId"></param>
         /// <param name="deployStatus"></param>
         /// <returns></returns>
-        TaskInfo DeployCallback( int triggerId,int buildId, DeployStatus deployStatus);
+        void DeployCallback( int triggerId,int buildId, DeployStatus deployStatus);
 
         TaskInfo UpdateTestStatus(TestResultDto testResult);
 

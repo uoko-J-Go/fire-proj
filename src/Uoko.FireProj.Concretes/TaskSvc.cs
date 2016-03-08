@@ -158,6 +158,22 @@ namespace Uoko.FireProj.Concretes
                 {
                     taskFromDb.TriggeredId = triggerId;
                     taskFromDb.DeployStatus = DeployStatus.Deploying;
+
+
+                    #region 写日志
+                    var log = new TaskLogs
+                    {
+                        TaskId = taskFromDb.Id,
+                        LogType = LogType.Deploy,
+                        Stage = StageEnum.PRODUCTION,
+                        TriggeredId = triggerId,
+                        CreateDate = DateTime.Now,
+                        CreatorId = UserHelper.CurrUserInfo.UserId,
+                        CreatorName = UserHelper.CurrUserInfo.NickName,
+                        DeployInfo=JsonHelper.ToJson(taskFromDb)
+                    };
+                    db.TaskLogs.Add(log);
+                    #endregion
                 }
 
                 dbScope.SaveChanges();
@@ -675,7 +691,7 @@ namespace Uoko.FireProj.Concretes
             }
         }
 
-        public TaskInfo DeployCallback(int triggerId, int buildId, DeployStatus deployStatus)
+        public void DeployCallback(int triggerId, int buildId, DeployStatus deployStatus)
         {
             try
             {
@@ -686,36 +702,9 @@ namespace Uoko.FireProj.Concretes
                     var taskLog = db.TaskLogs.Where(r => r.TriggeredId == triggerId).FirstOrDefault();
                     if (taskLog == null)
                     {
-                        return null;
+                        return ;
                     }
-
-                    var entity = db.TaskInfo.FirstOrDefault(r => r.Id == taskLog.TaskId);
-
-                    //更改任务记录
-                    switch (taskLog.Stage)
-                    {
-                        case StageEnum.IOC:
-                            var iocDeployInfo = JsonHelper.FromJson<DeployInfoIoc>(entity.DeployInfoIocJson);
-                            iocDeployInfo.DeployStatus = deployStatus;
-                            iocDeployInfo.BuildId = buildId;
-                            entity.DeployInfoIocJson = JsonHelper.ToJson(iocDeployInfo);
-                            break;
-                        case StageEnum.PRE:
-                            var preDeployInfo = JsonHelper.FromJson<DeployInfoPre>(entity.DeployInfoPreJson);
-                            preDeployInfo.DeployStatus = deployStatus;
-                            preDeployInfo.BuildId = buildId;
-                            entity.DeployInfoPreJson = JsonHelper.ToJson(preDeployInfo);
-                            break;
-                        case StageEnum.PRODUCTION:
-                            break;
-                    }
-                    entity.ModifyId = 0;
-                    entity.ModifierName = "系统";
-                    entity.ModifyDate = DateTime.Now;
-
-                    #region 写日志
-
-                    //创建日志
+                    //日志内容
                     var log = new TaskLogs
                     {
                         TaskId = taskLog.TaskId,
@@ -723,31 +712,57 @@ namespace Uoko.FireProj.Concretes
                         Stage = taskLog.Stage,
                         TriggeredId = triggerId,
                         CreateDate = DateTime.Now,
-                        CreatorId =0,
+                        CreatorId = 0,
                         CreatorName = "系统",
                     };
+
+                    //更改任务记录
                     switch (taskLog.Stage)
                     {
                         case StageEnum.IOC:
-                            log.DeployInfo = entity.DeployInfoIocJson;
+                            var entityIoc = db.TaskInfo.FirstOrDefault(r => r.Id == taskLog.TaskId);
+                            if (entityIoc == null) return;
+                            var iocDeployInfo = JsonHelper.FromJson<DeployInfoIoc>(entityIoc.DeployInfoIocJson);
+                            iocDeployInfo.DeployStatus = deployStatus;
+                            iocDeployInfo.BuildId = buildId;
+                            entityIoc.DeployInfoIocJson = JsonHelper.ToJson(iocDeployInfo);
+                            entityIoc.ModifyId = 0;
+                            entityIoc.ModifierName = "系统";
+                            entityIoc.ModifyDate = DateTime.Now;
+                            log.DeployInfo = entityIoc.DeployInfoIocJson;
                             break;
                         case StageEnum.PRE:
-                            log.DeployInfo = entity.DeployInfoPreJson;
+                            var entityPre = db.TaskInfo.FirstOrDefault(r => r.Id == taskLog.TaskId);
+                            if (entityPre == null) return;
+                            var preDeployInfo = JsonHelper.FromJson<DeployInfoPre>(entityPre.DeployInfoPreJson);
+                            preDeployInfo.DeployStatus = deployStatus;
+                            preDeployInfo.BuildId = buildId;
+                            entityPre.DeployInfoPreJson = JsonHelper.ToJson(preDeployInfo);
+                            entityPre.ModifyId = 0;
+                            entityPre.ModifierName = "系统";
+                            entityPre.ModifyDate = DateTime.Now;
+                            log.DeployInfo = entityPre.DeployInfoPreJson;
                             break;
                         case StageEnum.PRODUCTION:
-                            log.DeployInfo = entity.DeployInfoOnlineJson;
+                            var entityOnline = db.OnlineTaskInfos.FirstOrDefault(r => r.Id == taskLog.TaskId);
+                            if (entityOnline == null) return;
+                            entityOnline.DeployStatus = deployStatus;
+                            entityOnline.BuildId = buildId;
+                            entityOnline.ModifyId = 0;
+                            entityOnline.ModifierName = "系统";
+                            entityOnline.ModifyDate = DateTime.Now;
+                            log.DeployInfo = JsonHelper.ToJson(entityOnline);
                             break;
                     }
+                
+                    #region 写日志
                     var tTasklogs = db.TaskLogs.Count(t => t.TriggeredId == triggerId);
                     if (tTasklogs < 2) //避免重复
                     {
                          db.TaskLogs.Add(log);  
-                    }
-                  
+                    }        
                     #endregion
-
                     db.SaveChanges();
-                    return entity;
                 }
             }
             catch (Exception ex)
