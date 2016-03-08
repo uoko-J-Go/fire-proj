@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
+using Uoko.FireProj.Infrastructure.Data;
 
 namespace Uoko.FireProj.Infrastructure.Mail
 {
@@ -25,6 +26,25 @@ namespace Uoko.FireProj.Infrastructure.Mail
             smtp.Credentials = new System.Net.NetworkCredential(username, password);
             //超时时间 
             smtp.Timeout = 10000;
+        }
+
+        /// <summary>
+        /// 邮件发送
+        /// </summary>
+        /// <param name="toIds">接收人Id集合</param>
+        /// <param name="ccIds">抄送人Id集合</param>
+        /// <param name="subject"></param>
+        /// <param name="body"></param>
+        /// <returns></returns>
+        public static string SendMail(List<int> toIds, List<int> ccIds, string subject, string body)
+
+        {
+            var toUsers = UserHelper.GetUserByIds(toIds);
+            var toEmails = string.Join(",", toUsers.Select(t => t.Email));
+            var ccUsers = UserHelper.GetUserByIds(ccIds);
+            var ccEmails = string.Join(",", ccUsers.Select(t => t.Email));
+
+            return SendMail(toEmails,ccEmails,subject,body,null);
         }
         /// <summary>
         /// 邮件发送
@@ -51,7 +71,10 @@ namespace Uoko.FireProj.Infrastructure.Mail
                     //发送给谁 
                     mail.To.Add(to);
                     //抄送给谁 
-                    mail.CC.Add(cc);
+                    if (!string.IsNullOrEmpty(cc))
+                    {
+                        mail.CC.Add(cc);  
+                    }
                     //标题 
                     mail.Subject = subject;
                     //内容编码 
