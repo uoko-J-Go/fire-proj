@@ -70,12 +70,17 @@ String.prototype.Format = function () {
 //根据用户id获取用户名
 var AnalysisUser = function (userInfo, UserAll) {
     $.each(userInfo, function (i, item) {
-        var obj = UserAll.filter(function (user) {
-            return item.Id == user.UserId;
-        })[0];
-        if (obj) {
-            userInfo[i].NickName = obj.NickName;  
-        } 
+       var obj = UserAll.filter(function (user) {
+            return item.UserId == user.UserId;
+       })[0];
+
+       if (obj) {
+           userInfo[i].NickName = obj.NickName;
+           userInfo[i].Email = obj.Email;
+           userInfo[i].UserName = obj.UserName;
+           userInfo[i].LoginName = obj.LoginName;
+        }
+      
     });
     return userInfo;
 }

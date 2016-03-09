@@ -910,41 +910,41 @@ namespace Uoko.FireProj.Concretes
                 switch (testResult.Stage)
                 {
                     case StageEnum.IOC:
-                        foreach (var user in taskDto.DeployInfoIocDto.CheckUser.Where(t=>t.Id!= UserHelper.CurrUserInfo.UserId))
+                        foreach (var user in taskDto.DeployInfoIocDto.CheckUser.Where(t=>t.UserId != UserHelper.CurrUserInfo.UserId))
                         {
-                            if (!toIds.Contains(user.Id))
+                            if (!toIds.Contains(user.UserId))
                             {
-                                toIds.Add(user.Id);
+                                toIds.Add(user.UserId);
                             }
                         }
-                        ccIds.AddRange(taskDto.DeployInfoIocDto.NoticeUser.Where(t => t.Id != UserHelper.CurrUserInfo.UserId).Select(t => t.Id));
-                        notify.TestResult =taskDto.DeployInfoIocDto.CheckUser.FirstOrDefault(t => t.Id == UserHelper.CurrUserInfo.UserId).QAStatus.ToDescription();
+                        ccIds.AddRange(taskDto.DeployInfoIocDto.NoticeUser.Where(t => t.UserId != UserHelper.CurrUserInfo.UserId).Select(t => t.UserId));
+                        notify.TestResult =taskDto.DeployInfoIocDto.CheckUser.FirstOrDefault(t => t.UserId == UserHelper.CurrUserInfo.UserId).QAStatus.ToDescription();
                         notify.TestUrl = taskDto.DeployInfoIocDto.Domain;
                         notify.IsAllPassed = taskDto.DeployInfoIocDto.CheckUser.Count ==taskDto.DeployInfoIocDto.CheckUser.Count(t => t.QAStatus == QAStatus.Passed);
                         break;
                     case StageEnum.PRE:
-                        foreach (var user in taskDto.DeployInfoPreDto.CheckUser.Where(t => t.Id != UserHelper.CurrUserInfo.UserId))
+                        foreach (var user in taskDto.DeployInfoPreDto.CheckUser.Where(t => t.UserId != UserHelper.CurrUserInfo.UserId))
                         {
-                            if (!toIds.Contains(user.Id))
+                            if (!toIds.Contains(user.UserId))
                             {
-                                toIds.Add(user.Id);
+                                toIds.Add(user.UserId);
                             }
                         }
-                        ccIds.AddRange(taskDto.DeployInfoPreDto.NoticeUser.Where(t => t.Id != UserHelper.CurrUserInfo.UserId).Select(t => t.Id));
-                        notify.TestResult = taskDto.DeployInfoPreDto.CheckUser.FirstOrDefault(t => t.Id == UserHelper.CurrUserInfo.UserId).QAStatus.ToDescription();
+                        ccIds.AddRange(taskDto.DeployInfoPreDto.NoticeUser.Where(t => t.UserId != UserHelper.CurrUserInfo.UserId).Select(t => t.UserId));
+                        notify.TestResult = taskDto.DeployInfoPreDto.CheckUser.FirstOrDefault(t => t.UserId == UserHelper.CurrUserInfo.UserId).QAStatus.ToDescription();
                         notify.TestUrl = taskDto.DeployInfoPreDto.Domain;
                         notify.IsAllPassed = taskDto.DeployInfoPreDto.CheckUser.Count == taskDto.DeployInfoPreDto.CheckUser.Count(t => t.QAStatus == QAStatus.Passed);
                         break;
                     case StageEnum.PRODUCTION:
-                        foreach (var user in taskDto.DeployInfoOnlineDto.CheckUser.Where(t => t.Id != UserHelper.CurrUserInfo.UserId))
+                        foreach (var user in taskDto.DeployInfoOnlineDto.CheckUser.Where(t => t.UserId != UserHelper.CurrUserInfo.UserId))
                         {
-                            if (!toIds.Contains(user.Id))
+                            if (!toIds.Contains(user.UserId))
                             {
-                                toIds.Add(user.Id);
+                                toIds.Add(user.UserId);
                             }
                         }
-                        ccIds.AddRange(taskDto.DeployInfoOnlineDto.NoticeUser.Where(t => t.Id != UserHelper.CurrUserInfo.UserId).Select(t => t.Id));
-                        notify.TestResult = taskDto.DeployInfoOnlineDto.CheckUser.FirstOrDefault(t => t.Id == UserHelper.CurrUserInfo.UserId).QAStatus.ToDescription();
+                        ccIds.AddRange(taskDto.DeployInfoOnlineDto.NoticeUser.Where(t => t.UserId != UserHelper.CurrUserInfo.UserId).Select(t => t.UserId));
+                        notify.TestResult = taskDto.DeployInfoOnlineDto.CheckUser.FirstOrDefault(t => t.UserId == UserHelper.CurrUserInfo.UserId).QAStatus.ToDescription();
                        
                         notify.IsAllPassed = taskDto.DeployInfoOnlineDto.CheckUser.Count == taskDto.DeployInfoOnlineDto.CheckUser.Count(t => t.QAStatus == QAStatus.Passed);
                         using (var dbScope = _dbScopeFactory.CreateReadOnly())
@@ -1006,8 +1006,8 @@ namespace Uoko.FireProj.Concretes
                             {
                                 notify.DeployUrl = taskDtoIoc.DeployInfoIocDto.Domain;
                                 toIds.Add(taskDtoIoc.CreatorId.Value);
-                                toIds.AddRange(taskDtoIoc.DeployInfoIocDto.CheckUser.Where(t => t.Id != taskDtoIoc.CreatorId.Value).Select(t=>t.Id));
-                                ccIds.AddRange(taskDtoIoc.DeployInfoIocDto.NoticeUser.Select(t => t.Id));
+                                toIds.AddRange(taskDtoIoc.DeployInfoIocDto.CheckUser.Where(t => t.UserId != taskDtoIoc.CreatorId.Value).Select(t=>t.UserId));
+                                ccIds.AddRange(taskDtoIoc.DeployInfoIocDto.NoticeUser.Select(t => t.UserId));
                             }
                            
                             break;
@@ -1028,8 +1028,8 @@ namespace Uoko.FireProj.Concretes
                             {
                                 notify.DeployUrl = taskDtoPre.DeployInfoPreDto.Domain;
                                 toIds.Add(taskDtoPre.CreatorId.Value);
-                                toIds.AddRange(taskDtoPre.DeployInfoPreDto.CheckUser.Where(t => t.Id != taskDtoPre.CreatorId.Value).Select(t => t.Id));
-                                ccIds.AddRange(taskDtoPre.DeployInfoPreDto.NoticeUser.Select(t => t.Id));
+                                toIds.AddRange(taskDtoPre.DeployInfoPreDto.CheckUser.Where(t => t.UserId != taskDtoPre.CreatorId.Value).Select(t => t.UserId));
+                                ccIds.AddRange(taskDtoPre.DeployInfoPreDto.NoticeUser.Select(t => t.UserId));
                             }
 
                             break;
@@ -1058,17 +1058,17 @@ namespace Uoko.FireProj.Concretes
 
                                     foreach (var user in checkUsers)
                                     {
-                                        if (!toIds.Contains(user.Id))
+                                        if (!toIds.Contains(user.UserId))
                                         {
-                                            toIds.Add(user.Id);
+                                            toIds.Add(user.UserId);
                                         }
                                     }
                                     var noticeUsers = AnalysisUser.AnalysisCheckUser(onlineDeployInfo.NoticeUserId);
                                     foreach (var user in noticeUsers)
                                     {
-                                        if (!ccIds.Contains(user.Id))
+                                        if (!ccIds.Contains(user.UserId))
                                         {
-                                            ccIds.Add(user.Id);
+                                            ccIds.Add(user.UserId);
                                         }
                                     }
                                 }

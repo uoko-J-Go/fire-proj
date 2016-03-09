@@ -23,7 +23,7 @@ namespace Uoko.FireProj.Infrastructure.Extensions
                 var user = item.Split('-');
                 userDtoData.Add(new UserDto
                 {
-                    Id = int.Parse(user[0]),
+                    UserId = int.Parse(user[0]),
                     QAStatus = (QAStatus)int.Parse(user[1])
                 });
             }
@@ -41,7 +41,7 @@ namespace Uoko.FireProj.Infrastructure.Extensions
             {
                 userDtoData.Add(new UserDto
                 {
-                    Id = int.Parse(item),
+                    UserId = int.Parse(item),
                 });
             }
             return userDtoData;

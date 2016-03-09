@@ -9,7 +9,7 @@ namespace Uoko.FireProj.DataAccess.Dto
 {
     public class UserDto
     {
-        public int Id { get; set; }
+        public int UserId { get; set; }
         public string UserName { get; set; }
         public string Name { get; set; }
 
@@ -19,7 +19,7 @@ namespace Uoko.FireProj.DataAccess.Dto
 
         public string LoginName { get; set; }
 
-        public int UserId { get; set; }
+       
 
         /// <summary>
         /// 测试状态

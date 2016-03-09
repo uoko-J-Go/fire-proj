@@ -70,7 +70,7 @@ namespace Uoko.FireProj.Concretes
                         case StageEnum.IOC:
                             taskLogsDto.DeployInfoIocDto = !item.DeployInfo.IsNullOrEmpty() ? JsonHelper.FromJson<DeployInfoIocDto>(item.DeployInfo) : new DeployInfoIocDto();
                             var checkUsers = this.AnalysisCheckUser(taskLogsDto.DeployInfoIocDto.CheckUserId);
-                            var currUser = checkUsers.FirstOrDefault(t => t.Id == item.CreatorId);
+                            var currUser = checkUsers.FirstOrDefault(t => t.UserId == item.CreatorId);
                             if (currUser != null)
                             {
                                 taskLogsDto.QAStatus = currUser.QAStatus;
@@ -81,7 +81,7 @@ namespace Uoko.FireProj.Concretes
                         case StageEnum.PRE:
                             taskLogsDto.DeployInfoPreDto = !item.DeployInfo.IsNullOrEmpty() ? JsonHelper.FromJson<DeployInfoPreDto>(item.DeployInfo) : new DeployInfoPreDto();
                             var checkUsers1 = this.AnalysisCheckUser(taskLogsDto.DeployInfoPreDto.CheckUserId);
-                            var currUser1 = checkUsers1.FirstOrDefault(t => t.Id == item.CreatorId);
+                            var currUser1 = checkUsers1.FirstOrDefault(t => t.UserId == item.CreatorId);
                             if (currUser1 != null)
                             {
                                 taskLogsDto.QAStatus = currUser1.QAStatus;
@@ -92,7 +92,7 @@ namespace Uoko.FireProj.Concretes
                         case StageEnum.PRODUCTION:
                             taskLogsDto.DeployInfoOnlineDto = !item.DeployInfo.IsNullOrEmpty() ? JsonHelper.FromJson<DeployInfoOnlineDto>(item.DeployInfo) : new DeployInfoOnlineDto();
                             var checkUsers2 = this.AnalysisCheckUser(taskLogsDto.DeployInfoPreDto.CheckUserId);
-                            var currUser2 = checkUsers2.FirstOrDefault(t => t.Id == item.CreatorId);
+                            var currUser2 = checkUsers2.FirstOrDefault(t => t.UserId == item.CreatorId);
                             if (currUser2 != null)
                             {
                                 taskLogsDto.QAStatus = currUser2.QAStatus;
@@ -187,7 +187,7 @@ namespace Uoko.FireProj.Concretes
                 var user = item.Split('-');
                 userDtoData.Add(new UserDto
                 {
-                    Id = int.Parse(user[0]),
+                    UserId = int.Parse(user[0]),
                     QAStatus = (QAStatus)int.Parse(user[1])
                 });
             }
