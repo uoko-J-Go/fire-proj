@@ -1063,7 +1063,7 @@ namespace Uoko.FireProj.Concretes
                                             toIds.Add(user.UserId);
                                         }
                                     }
-                                    var noticeUsers = AnalysisUser.AnalysisCheckUser(onlineDeployInfo.NoticeUserId);
+                                    var noticeUsers = AnalysisUser.AnalysisNoticeUser(onlineDeployInfo.NoticeUserId);
                                     foreach (var user in noticeUsers)
                                     {
                                         if (!ccIds.Contains(user.UserId))
