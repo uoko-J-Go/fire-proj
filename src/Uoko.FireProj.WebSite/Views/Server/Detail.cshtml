@@ -36,12 +36,12 @@
                         <i class="fa fa-plus"></i>服务器查看
                     </div>
                     <div class="actions">
-                        <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title="全屏"></a>
+                       
                     </div>
                 </div>
                     <div class="portlet-body form">
                         <div id="bootstrap_alerts_demo"></div>
-                        <form role="form" class="form-horizontal" name="serverForm" novalidate>
+                        <form role="form" class="form form-horizontal" name="serverForm" novalidate>
                             <div class="form-body">
                                 <div class="form-group form-md-line-input">
                                     <label class="col-md-2 control-label" for="form_control_1">服务器名称</label>
@@ -92,13 +92,8 @@
 
                                 </div>
                             </div>
-                            <div class="form-actions">
-                                <div class="row">
-                                    <div class="col-md-offset-2 col-md-10">
-                                        @*<button type="button" class="btn blue btn-lg" ng-disabled="serverForm.$invalid" ng-click="SubmitFrom(model)">提交</button>*@
-                                        <a type="button" class="btn default btn-lg" href="@Url.Action("ServerMgmt","SystemSet")">取消</a>
-                                    </div>
-                                </div>
+                            <div class="form-actions right">
+                                <a class="btn default" href="@Url.Action("ServerMgmt","SystemSet")">返回列表</a>
                             </div>
 
                         </form>

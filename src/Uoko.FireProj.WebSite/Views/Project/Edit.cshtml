@@ -30,12 +30,12 @@
                         <i class="fa fa-plus"></i>项目编辑
                     </div>
                     <div class="actions">
-                        <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title="全屏"></a>
+                       
                     </div>
                 </div>
                 <div class="portlet-body form">
                     <div id="bootstrap_alerts_demo"></div>
-                    <form role="form" class="form-horizontal" name="serverForm" novalidate>
+                    <form role="form" class="form form-horizontal" name="serverForm" novalidate>
                         <div class="form-body">
                             <div class="form-group form-md-line-input">
                                 <label class="col-md-2 control-label" for="form_control_1">项目名称</label>
@@ -78,15 +78,6 @@
                                 </div>
 
                             </div>
-                            @*<div class="form-group form-md-line-input">
-                                <label class="col-md-2 control-label" for="form_control_1">域名生成规则</label>
-                                <div class="col-md-10">
-                                    <input disabled type="text" class="form-control" id="form_control_1" ng-model="model.DomainRule" placeholder="请输入域名生成规则 例如 ids{编号}.uoko.ioc">
-                                    <div class="form-control-focus">
-                                    </div>
-                                    <span class="help-block">域名生成规则是必填</span>
-                                </div>
-                            </div>*@
                             <div class="form-group form-md-line-input">
                                 <label class="col-md-2 control-label" for="form_control_1">项目描述</label>
                                 <div class="col-md-10">
@@ -98,13 +89,9 @@
                             </div>
 
                         </div>
-                        <div class="form-actions">
-                            <div class="row">
-                                <div class="col-md-offset-2 col-md-10">
-                                    <button type="button" class="btn blue btn-lg" ng-disabled="serverForm.$invalid" ng-click="SubmitFrom(model)">提交</button>
-                                    <a type="button" class="btn default btn-lg" href="@Url.Action("Index","Project")">取消</a>
-                                </div>
-                            </div>
+                        <div class="form-actions right">
+                            <a class="btn default" href="@Url.Action("Index","Project")">取消</a>
+                            <a class="btn blue" ng-disabled="serverForm.$invalid" ng-click="SubmitFrom(model)"><i class="fa fa-check"></i> 保存</a>
                         </div>
 
                     </form>

@@ -29,10 +29,10 @@
             <div class="portlet  box blue">
                 <div class="portlet-title">
                     <div class="caption">
-                        <i class="fa fa-book"></i>项目查看
+                        <i class="fa fa-book"></i>项目详细
                     </div>
                     <div class="actions">
-                        <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title="全屏"></a>
+                       
                     </div>
                 </div>
                 <div class="portlet-body form">
@@ -80,15 +80,6 @@
                                 </div>
 
                             </div>
-                            @*<div class="form-group form-md-line-input">
-                                <label class="col-md-2 control-label" for="form_control_1">域名生成规则</label>
-                                <div class="col-md-10">
-                                    <input disabled type="text" class="form-control" id="form_control_1" ng-model="model.DomainRule" placeholder="请输入域名生成规则 例如 ids{编号}.uoko.ioc" required>
-                                    <div class="form-control-focus">
-                                    </div>
-                                    <span class="help-block">域名生成规则是必填</span>
-                                </div>
-                            </div>*@
                             <div class="form-group form-md-line-input">
                                 <label class="col-md-2 control-label" for="form_control_1">项目描述</label>
                                 <div class="col-md-10">
@@ -100,12 +91,8 @@
                             </div>
 
                         </div>
-                        <div class="form-actions">
-                            <div class="row">
-                                <div class="col-md-offset-2 col-md-10">
-                                    <a type="button" class="btn default btn-lg" href="@Url.Action("Index","Project")">取消</a>
-                                </div>
-                            </div>
+                        <div class="form-actions right">
+                             <a type="button" class="btn default " href="@Url.Action("Index","Project")">返回列表</a>
                         </div>
 
                     </form>
