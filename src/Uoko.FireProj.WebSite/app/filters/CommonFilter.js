@@ -70,9 +70,9 @@ fireproj.filter("QAStatusFilter", function () {
             case 0:
                 return "待测试";
             case 1:
-                return "测试未通过";
+                return "未通过";
             case 2:
-                return "测试通过";
+                return "通过";
         }
     }
 });
