@@ -31,13 +31,13 @@
             }
             //测试操作按钮控制
             $scope.IocTestShow = $scope.model.DeployInfoIocDto.DeployStatus==2&&$scope.model.DeployInfoIocDto.CheckUser.filter(function (user) {
-                return user.Id == userId;
+                return user.UserId == userId;
             }).length > 0;
             $scope.PreTestShow = $scope.model.DeployInfoPreDto.DeployStatus == 2&&$scope.model.DeployInfoPreDto.CheckUser.filter(function (user) {
-                return user.Id == userId;
+                return user.UserId == userId;
             }).length > 0;
             $scope.OnlineTestShow = $scope.model.DeployInfoOnlineDto.OnlineTaskId>0&&$scope.model.DeployInfoOnlineDto.CheckUser.filter(function (user) {
-                return user.Id == userId;
+                return user.UserId == userId;
             }).length > 0;
         });
     }
