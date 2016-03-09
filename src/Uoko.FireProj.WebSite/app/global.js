@@ -69,13 +69,11 @@ String.prototype.Format = function () {
 }
 //根据用户id获取用户名
 var AnalysisUser = function (userInfo, UserAll) {
-    var UserData = [];
     $.each(userInfo, function (i, item) {
         var obj = UserAll.filter(function (user) {
             return item.Id == user.UserId;
         })[0];
-        obj.QAStatus = item.QAStatus;
-        UserData.push(obj);
+        userInfo[i].NickName = obj.NickName;
     });
-    return UserData;
+    return userInfo;
 }
