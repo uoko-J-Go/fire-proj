@@ -1,7 +1,7 @@
 ﻿
 
 fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskService, ProjectService, CommonService) {
-
+    $scope.IsSubmiting = false;
     $scope.Project = null;//当前项目对象
     $scope.Server = null;//当前服务器对象
     $scope.Server = null;//当前服务器对象
@@ -49,6 +49,10 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
             bootbox.alert("表单验证未通过");
             return;
         }
+        if ($scope.IsSubmiting) {
+            return;
+        }
+        $scope.IsSubmiting = true;
         var project = $scope.taskInfo.Project;
         if (typeof project == "string") {
             project = JSON.parse(project);
@@ -116,9 +120,11 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
         }
 
         TaskService.CreateTask(taskForSave, function (data) {
-
+            $scope.IsSubmiting = false;
             location.href = "/Task/Index";
             
+        },function(data) {
+            $scope.IsSubmiting = false;
         });
     }
 

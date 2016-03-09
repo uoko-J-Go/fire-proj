@@ -904,10 +904,9 @@ namespace Uoko.FireProj.Concretes
                     TaskUrl=string.Format("{0}/Task/Detail?taskId={1}",_domainUrl.TrimEnd('/'),taskDto.Id),
                     IsAllPassed=false
                 };
-                if (UserHelper.CurrUserInfo.UserId != taskDto.CreatorId.Value)
-                {
-                    toIds.Add(taskDto.CreatorId.Value);
-                }
+
+                toIds.Add(taskDto.CreatorId.Value);
+
                 switch (testResult.Stage)
                 {
                     case StageEnum.IOC:
@@ -920,7 +919,7 @@ namespace Uoko.FireProj.Concretes
                         }
                         ccIds.AddRange(taskDto.DeployInfoIocDto.NoticeUser.Where(t => t.Id != UserHelper.CurrUserInfo.UserId).Select(t => t.Id));
                         notify.TestResult =taskDto.DeployInfoIocDto.CheckUser.FirstOrDefault(t => t.Id == UserHelper.CurrUserInfo.UserId).QAStatus.ToDescription();
-                        notify.TestUrl = string.Format("http://{0}", taskDto.DeployInfoIocDto.Domain);
+                        notify.TestUrl = taskDto.DeployInfoIocDto.Domain;
                         notify.IsAllPassed = taskDto.DeployInfoIocDto.CheckUser.Count ==taskDto.DeployInfoIocDto.CheckUser.Count(t => t.QAStatus == QAStatus.Passed);
                         break;
                     case StageEnum.PRE:
@@ -933,7 +932,7 @@ namespace Uoko.FireProj.Concretes
                         }
                         ccIds.AddRange(taskDto.DeployInfoPreDto.NoticeUser.Where(t => t.Id != UserHelper.CurrUserInfo.UserId).Select(t => t.Id));
                         notify.TestResult = taskDto.DeployInfoPreDto.CheckUser.FirstOrDefault(t => t.Id == UserHelper.CurrUserInfo.UserId).QAStatus.ToDescription();
-                        notify.TestUrl = string.Format("http://{0}", taskDto.DeployInfoPreDto.Domain);
+                        notify.TestUrl = taskDto.DeployInfoPreDto.Domain;
                         notify.IsAllPassed = taskDto.DeployInfoPreDto.CheckUser.Count == taskDto.DeployInfoPreDto.CheckUser.Count(t => t.QAStatus == QAStatus.Passed);
                         break;
                     case StageEnum.PRODUCTION:
@@ -954,7 +953,7 @@ namespace Uoko.FireProj.Concretes
                             var onlineTask = db.OnlineTaskInfos.Find(taskDto.DeployInfoOnlineDto.OnlineTaskId.Value);
                             if (onlineTask != null)
                             {
-                                notify.TestUrl = string.Format("http://{0}", onlineTask.Domain);
+                                notify.TestUrl = onlineTask.Domain;
                             }
                         }
                         break;
@@ -1005,7 +1004,7 @@ namespace Uoko.FireProj.Concretes
                             }
                             else if (deployStatus == DeployStatus.DeploySuccess)
                             {
-                                notify.DeployUrl = string.Format("http://{0}", taskDtoIoc.DeployInfoIocDto.Domain);
+                                notify.DeployUrl = taskDtoIoc.DeployInfoIocDto.Domain;
                                 toIds.Add(taskDtoIoc.CreatorId.Value);
                                 toIds.AddRange(taskDtoIoc.DeployInfoIocDto.CheckUser.Where(t => t.Id != taskDtoIoc.CreatorId.Value).Select(t=>t.Id));
                                 ccIds.AddRange(taskDtoIoc.DeployInfoIocDto.NoticeUser.Select(t => t.Id));
@@ -1027,7 +1026,7 @@ namespace Uoko.FireProj.Concretes
                             }
                             else if (deployStatus == DeployStatus.DeploySuccess)
                             {
-                                notify.DeployUrl = string.Format("http://{0}", taskDtoPre.DeployInfoPreDto.Domain);
+                                notify.DeployUrl = taskDtoPre.DeployInfoPreDto.Domain;
                                 toIds.Add(taskDtoPre.CreatorId.Value);
                                 toIds.AddRange(taskDtoPre.DeployInfoPreDto.CheckUser.Where(t => t.Id != taskDtoPre.CreatorId.Value).Select(t => t.Id));
                                 ccIds.AddRange(taskDtoPre.DeployInfoPreDto.NoticeUser.Select(t => t.Id));
@@ -1049,7 +1048,7 @@ namespace Uoko.FireProj.Concretes
                             }
                             else if (deployStatus == DeployStatus.DeploySuccess)
                             {
-                                notify.DeployUrl = string.Format("http://{0}", onlineTask.Domain);
+                                notify.DeployUrl = onlineTask.Domain;
                                 toIds.Add(onlineTask.CreatorId);
 
                                 foreach (var task in taskInfos)
