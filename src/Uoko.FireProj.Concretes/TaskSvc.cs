@@ -1066,7 +1066,7 @@ namespace Uoko.FireProj.Concretes
                                     var noticeUsers = AnalysisUser.AnalysisCheckUser(onlineDeployInfo.NoticeUserId);
                                     foreach (var user in noticeUsers)
                                     {
-                                        if (!toIds.Contains(user.Id))
+                                        if (!ccIds.Contains(user.Id))
                                         {
                                             ccIds.Add(user.Id);
                                         }
