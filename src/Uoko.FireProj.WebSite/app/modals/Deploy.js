@@ -1,4 +1,5 @@
 ﻿fireproj.controller("DeployController", function ($scope, $http, $uibModalInstance, TaskService, ProjectService, CommonService, param) {
+    $scope.IsSubmiting = false;
     $scope.projectList = [];
     $scope.branchList = [];
     $scope.GetDeployStage=function() {
@@ -36,6 +37,10 @@
             bootbox.alert("表单验证未通过");
             return;
         }
+        if ($scope.IsSubmiting) {
+            return;
+        }
+        $scope.IsSubmiting = true;
         var project = $scope.taskInfo.Project;
         if (typeof project == "string") {
             project = JSON.parse(project);
@@ -104,8 +109,11 @@
         }
 
         TaskService.UpdateTask(taskForSave, function (data) {
+            $scope.IsSubmiting = false;
             $uibModalInstance.close();
             window.location.reload();
+        },function(data) {
+            $scope.IsSubmiting = false;
         });
     }
 
