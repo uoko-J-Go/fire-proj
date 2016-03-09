@@ -1075,7 +1075,12 @@ namespace Uoko.FireProj.Concretes
                             }
                             break;
                     }
-                    MailSendHelper.NotifyDeployResult(toIds, ccIds, notify);
+                    var tTasklogsCount = db.TaskLogs.Count(t => t.TriggeredId == triggerId);
+                    if (tTasklogsCount <= 2) //避免重复
+                    {
+                        MailSendHelper.NotifyDeployResult(toIds, ccIds, notify);
+                    }
+                   
                 }
             }
             catch (Exception ex)
