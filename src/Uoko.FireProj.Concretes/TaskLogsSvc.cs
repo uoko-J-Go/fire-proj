@@ -91,7 +91,7 @@ namespace Uoko.FireProj.Concretes
                             break;
                         case StageEnum.PRODUCTION:
                             taskLogsDto.DeployInfoOnlineDto = !item.DeployInfo.IsNullOrEmpty() ? JsonHelper.FromJson<DeployInfoOnlineDto>(item.DeployInfo) : new DeployInfoOnlineDto();
-                            var checkUsers2 = this.AnalysisCheckUser(taskLogsDto.DeployInfoPreDto.CheckUserId);
+                            var checkUsers2 = this.AnalysisCheckUser(taskLogsDto.DeployInfoOnlineDto.CheckUserId);
                             var currUser2 = checkUsers2.FirstOrDefault(t => t.UserId == item.CreatorId);
                             if (currUser2 != null)
                             {
