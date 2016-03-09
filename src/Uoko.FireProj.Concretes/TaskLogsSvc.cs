@@ -52,7 +52,14 @@ namespace Uoko.FireProj.Concretes
             using (var dbScope = _dbScopeFactory.CreateReadOnly())
             {
                 var db = dbScope.DbContexts.Get<FireProjDbContext>();
-                var entitys = db.TaskLogs.Where(r => r.TaskId == taskId).OrderByDescending(r => r.CreateDate).ToList();
+                var taskInfo = db.TaskInfo.Find(taskId);
+                var taskIds = new List<int>();
+                taskIds.Add(taskId);
+                if (taskInfo != null && taskInfo.OnlineTaskId.HasValue)
+                {
+                    taskIds.Add(taskInfo.OnlineTaskId.Value);
+                }
+                var entitys = db.TaskLogs.Where(r => taskIds.Contains(r.TaskId)).OrderByDescending(r => r.Id).ToList();
                 List<TaskLogsDto> data = new List<TaskLogsDto>();
                 foreach (var item in entitys)
                 {
@@ -69,7 +76,7 @@ namespace Uoko.FireProj.Concretes
                     {
                         case StageEnum.IOC:
                             taskLogsDto.DeployInfoIocDto = !item.DeployInfo.IsNullOrEmpty() ? JsonHelper.FromJson<DeployInfoIocDto>(item.DeployInfo) : new DeployInfoIocDto();
-                            var checkUsers = this.AnalysisCheckUser(taskLogsDto.DeployInfoIocDto.CheckUserId);
+                            var checkUsers = AnalysisUser.AnalysisCheckUser(taskLogsDto.DeployInfoIocDto.CheckUserId);
                             var currUser = checkUsers.FirstOrDefault(t => t.UserId == item.CreatorId);
                             if (currUser != null)
                             {
@@ -80,7 +87,7 @@ namespace Uoko.FireProj.Concretes
                             break;
                         case StageEnum.PRE:
                             taskLogsDto.DeployInfoPreDto = !item.DeployInfo.IsNullOrEmpty() ? JsonHelper.FromJson<DeployInfoPreDto>(item.DeployInfo) : new DeployInfoPreDto();
-                            var checkUsers1 = this.AnalysisCheckUser(taskLogsDto.DeployInfoPreDto.CheckUserId);
+                            var checkUsers1 = AnalysisUser.AnalysisCheckUser(taskLogsDto.DeployInfoPreDto.CheckUserId);
                             var currUser1 = checkUsers1.FirstOrDefault(t => t.UserId == item.CreatorId);
                             if (currUser1 != null)
                             {
@@ -91,12 +98,23 @@ namespace Uoko.FireProj.Concretes
                             break;
                         case StageEnum.PRODUCTION:
                             taskLogsDto.DeployInfoOnlineDto = !item.DeployInfo.IsNullOrEmpty() ? JsonHelper.FromJson<DeployInfoOnlineDto>(item.DeployInfo) : new DeployInfoOnlineDto();
-                            var checkUsers2 = this.AnalysisCheckUser(taskLogsDto.DeployInfoPreDto.CheckUserId);
+                            var checkUsers2 = AnalysisUser.AnalysisCheckUser(taskLogsDto.DeployInfoOnlineDto.CheckUserId);
                             var currUser2 = checkUsers2.FirstOrDefault(t => t.UserId == item.CreatorId);
                             if (currUser2 != null)
                             {
                                 taskLogsDto.QAStatus = currUser2.QAStatus;
                             }
+                            if (item.LogType == LogType.Deploy)
+                            {
+                                var onlineTask = JsonHelper.FromJson<OnlineTaskInfo>(item.DeployInfo);
+                                if (onlineTask != null)
+                                {
+                                   taskLogsDto.BuildId = onlineTask.BuildId;
+                                   taskLogsDto.DeployStatus = onlineTask.DeployStatus; 
+                                }
+                                
+                            }
+                           
                             break;
                         default:
                             break;
@@ -173,25 +191,6 @@ namespace Uoko.FireProj.Concretes
             //        return new PageGridData<TaskLogsDto> { rows = result, total = total };
             //    }
             //}
-        }
-        private List<UserDto> AnalysisCheckUser(string userInfo)
-        {
-            List<UserDto> userDtoData = new List<UserDto>();
-            if (string.IsNullOrEmpty(userInfo))
-            {
-                return userDtoData;
-            }
-            var userList = userInfo.Split(',');
-            foreach (var item in userList)
-            {
-                var user = item.Split('-');
-                userDtoData.Add(new UserDto
-                {
-                    UserId = int.Parse(user[0]),
-                    QAStatus = (QAStatus)int.Parse(user[1])
-                });
-            }
-            return userDtoData;
         }
         public int GetLogTotalByEnvironment(int taskId, StageEnum stage)
         {
