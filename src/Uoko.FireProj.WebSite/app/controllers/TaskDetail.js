@@ -19,10 +19,10 @@
             };
             $scope.model.DeployInfoIocDto.CheckUser = AnalysisUser($scope.model.DeployInfoIocDto.CheckUser,$scope.AllUsers);
             $scope.model.DeployInfoIocDto.NoticeUser = AnalysisUser($scope.model.DeployInfoIocDto.NoticeUser, $scope.AllUsers);
-            //$scope.model.DeployInfoPreDto.CheckUser = AnalysisUser($scope.model.DeployInfoPreDto.CheckUser, $scope.AllUsers);
-            //$scope.model.DeployInfoPreDto.NoticeUser = AnalysisUser($scope.model.DeployInfoPreDto.NoticeUser, $scope.AllUsers);
-            //$scope.model.DeployInfoOnlineDto.CheckUser = AnalysisUser($scope.model.DeployInfoOnlineDto.CheckUser, $scope.AllUsers);
-            //$scope.model.DeployInfoOnlineDto.NoticeUser = AnalysisUser($scope.model.DeployInfoOnlineDto.NoticeUser, $scope.AllUsers);
+            $scope.model.DeployInfoPreDto.CheckUser = AnalysisUser($scope.model.DeployInfoPreDto.CheckUser, $scope.AllUsers);
+            $scope.model.DeployInfoPreDto.NoticeUser = AnalysisUser($scope.model.DeployInfoPreDto.NoticeUser, $scope.AllUsers);
+            $scope.model.DeployInfoOnlineDto.CheckUser = AnalysisUser($scope.model.DeployInfoOnlineDto.CheckUser, $scope.AllUsers);
+            $scope.model.DeployInfoOnlineDto.NoticeUser = AnalysisUser($scope.model.DeployInfoOnlineDto.NoticeUser, $scope.AllUsers);
 
             if ($scope.model.DeployInfoIocJson != null) {
                 $scope.currLogTab = 0;
@@ -31,13 +31,13 @@
             }
             //测试操作按钮控制
             $scope.IocTestShow = $scope.model.DeployInfoIocDto.DeployStatus==2&&$scope.model.DeployInfoIocDto.CheckUser.filter(function (user) {
-                return user.UserId == userId;
+                return user.Id == userId;
             }).length > 0;
             $scope.PreTestShow = $scope.model.DeployInfoPreDto.DeployStatus == 2&&$scope.model.DeployInfoPreDto.CheckUser.filter(function (user) {
-                return user.UserId == userId;
+                return user.Id == userId;
             }).length > 0;
             $scope.OnlineTestShow = $scope.model.DeployInfoOnlineDto.OnlineTaskId>0&&$scope.model.DeployInfoOnlineDto.CheckUser.filter(function (user) {
-                return user.UserId == userId;
+                return user.Id == userId;
             }).length > 0;
         });
     }
