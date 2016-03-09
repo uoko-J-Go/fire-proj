@@ -904,10 +904,9 @@ namespace Uoko.FireProj.Concretes
                     TaskUrl=string.Format("{0}/Task/Detail?taskId={1}",_domainUrl.TrimEnd('/'),taskDto.Id),
                     IsAllPassed=false
                 };
-                if (UserHelper.CurrUserInfo.UserId != taskDto.CreatorId.Value)
-                {
-                    toIds.Add(taskDto.CreatorId.Value);
-                }
+
+                toIds.Add(taskDto.CreatorId.Value);
+
                 switch (testResult.Stage)
                 {
                     case StageEnum.IOC:
