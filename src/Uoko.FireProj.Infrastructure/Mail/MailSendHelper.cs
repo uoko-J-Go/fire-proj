@@ -41,13 +41,13 @@ namespace Uoko.FireProj.Infrastructure.Mail
             #region body内容组装
             StringBuilder content = new StringBuilder();
             content.AppendFormat("<h4>【{0}】  在 {1} 中测试任务【{2}】 {3}</h4>", notify.TestUser, notify.StageName, notify.TaskName, notify.TestResult);
-            content.AppendFormat("<p>描述：{0}</p>", notify.Coments);
+            content.AppendFormat("<div><p>描述：{0}</p></div>", notify.Coments);
             if (notify.IsAllPassed)
             {
-                content.AppendFormat("<p style='color:red;font-size:16px;'>当前环境测试全部通过</p>");
+                content.AppendFormat("<div><p style='color:red;font-size:16px;'>当前环境测试全部通过</p></div>");
             }
-            content.AppendFormat("测试地址：<a href='{0}'>{1}</a>", notify.TestUrl, notify.TestUrl);
-            content.AppendFormat("<a href='{0}'>任务详细</a>", notify.TaskUrl);
+            content.AppendFormat("<div>测试地址：<a href='{0}'>{1}</a></div>", notify.TestUrl, notify.TestUrl);
+            content.AppendFormat("<div><a href='{0}'>任务详细</a></div>", notify.TaskUrl);
             #endregion
 
             var body = content.ToString();
@@ -70,13 +70,13 @@ namespace Uoko.FireProj.Infrastructure.Mail
             content.AppendFormat("<h4>[{0}] 在 {1} 中 {2}</h4>", notify.TaskName, notify.StageName, notify.DeployStatus);
             if (!string.IsNullOrEmpty(notify.DeployUrl))
             {
-                content.AppendFormat("测试地址：<a href='{0}'>{1}</a>", notify.DeployUrl, notify.DeployUrl);
+                content.AppendFormat("<div>测试地址：<a href='{0}'>{1}</a></div>", notify.DeployUrl, notify.DeployUrl);
             }  
             if (!string.IsNullOrEmpty(notify.GitLabBuildPage))
             {
-               content.AppendFormat("部署详细：<a href='{0}'>{1}</a>", notify.GitLabBuildPage, notify.GitLabBuildPage); 
+               content.AppendFormat("<div>部署详细：<a href='{0}'>{1}</a></div>", notify.GitLabBuildPage, notify.GitLabBuildPage); 
             }        
-            content.AppendFormat("<a href='{0}'>任务详细</a>", notify.TaskUrl);
+            content.AppendFormat("<div><a href='{0}'>任务详细</a></div>", notify.TaskUrl);
             #endregion
 
             var body = content.ToString();
