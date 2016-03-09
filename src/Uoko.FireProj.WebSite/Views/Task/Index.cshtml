@@ -100,7 +100,7 @@
                             <td title="{{task.TaskInfo.ModifyDate | date:'yyyy-MM-dd HH:mm:ss'}}">{{task.TaskInfo.ModifierName}}</td>
                             <td>
                                 <div>
-                                    <a class="btn btn-success btn-xs" ng-if="!task.TaskInfo.HasOnlineDeployed && task.TaskInfo.CreatorId == @ViewBag.UserId" ng-click="Deploy(task)">部署到...</a>
+                                    <a class="btn btn-success btn-xs" ng-if="!task.TaskInfo.OnlineTaskId && task.TaskInfo.CreatorId == @ViewBag.UserId" ng-click="Deploy(task)">部署到...</a>
                                 </div>
                             </td>
                         </tr>

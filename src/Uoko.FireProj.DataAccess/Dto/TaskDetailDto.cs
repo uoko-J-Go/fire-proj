@@ -50,7 +50,6 @@ namespace Uoko.FireProj.DataAccess.Dto
         /// </summary>
         public string OnlineCheckUserId { get; set; }
 
-        public bool HasOnlineDeployed { get; set; }
 
         public int? OnlineTaskId { get; set; }
 

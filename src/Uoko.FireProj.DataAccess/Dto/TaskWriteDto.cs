@@ -43,7 +43,6 @@ namespace Uoko.FireProj.DataAccess.Dto
 
         public DeployInfoOnline OnlineDeployInfo { get; set; }
 
-        public bool HasOnlineDeployed { get; set; }
 
         public int? OnlineTaskId { get; set; }
     }
