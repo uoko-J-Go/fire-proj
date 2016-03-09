@@ -73,7 +73,9 @@ var AnalysisUser = function (userInfo, UserAll) {
         var obj = UserAll.filter(function (user) {
             return item.Id == user.UserId;
         })[0];
-        userInfo[i].NickName = obj.NickName;
+        if (obj) {
+            userInfo[i].NickName = obj.NickName;  
+        } 
     });
     return userInfo;
 }
