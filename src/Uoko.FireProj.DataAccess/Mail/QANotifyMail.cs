@@ -11,6 +11,7 @@ namespace Uoko.FireProj.DataAccess.Mail
     {
         public string TaskName { get; set; }
 
+        public string TaskUrl { get; set; }
         public string TestUrl { get; set; }
 
         public string TestUser { get; set; }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using AutoMapper;
 using Mehdime.Entity;
@@ -28,7 +29,7 @@ namespace Uoko.FireProj.Concretes
         private readonly IDbContextScopeFactory _dbScopeFactory;
         private readonly IProjectSvc _projectSvc;
         private readonly IServerSvc _serverSvc;
-
+        private readonly string _domainUrl = ConfigurationManager.AppSettings["domain.url"];
         public TaskSvc(IDbContextScopeFactory dbScopeFactory,IProjectSvc projectSvc,IServerSvc serverSvc)
         {
             _dbScopeFactory = dbScopeFactory;
@@ -911,6 +912,7 @@ namespace Uoko.FireProj.Concretes
                     TestUser=UserHelper.CurrUserInfo.NickName,
                     StageName = testResult.Stage.ToDescription(),
                     Coments = testResult.Comments,
+                    TaskUrl=string.Format("{0}/Task/Detail?taskId={1}",_domainUrl.TrimEnd('/'),taskDto.Id),
                     IsAllPassed=false
                 };
                 if (UserHelper.CurrUserInfo.UserId != taskDto.CreatorId.Value)
@@ -1002,10 +1004,11 @@ namespace Uoko.FireProj.Concretes
                         case StageEnum.IOC:
                             var taskDtoIoc = this.GetTaskById(taskLog.TaskId);
                             notify.TaskName = taskDtoIoc.TaskName;
-                            notify.DeployUrl  =string.Format("http://{0}", taskDtoIoc.DeployInfoIocDto.Domain);
-                            notify.GitLabBuildPage = taskDtoIoc.ProjectDto.ProjectRepo.Replace(".git", "") + "/builds/" +buildId;
+                            notify.TaskUrl = string.Format("{0}/Task/Detail?taskId={1}", _domainUrl.TrimEnd('/'),taskDtoIoc.Id);
+                             
                             if (deployStatus == DeployStatus.DeployFails)
                             {
+                                notify.GitLabBuildPage = taskDtoIoc.ProjectDto.ProjectRepo.Replace(".git", "") + "/builds/" + buildId;
                                 if (taskDtoIoc.CreatorId != null)
                                 {
                                     toIds.Add(taskDtoIoc.CreatorId.Value);
@@ -1013,6 +1016,7 @@ namespace Uoko.FireProj.Concretes
                             }
                             else if (deployStatus == DeployStatus.DeploySuccess)
                             {
+                                notify.DeployUrl = string.Format("http://{0}", taskDtoIoc.DeployInfoIocDto.Domain);
                                 toIds.Add(taskDtoIoc.CreatorId.Value);
                                 toIds.AddRange(taskDtoIoc.DeployInfoIocDto.CheckUser.Where(t => t.Id != taskDtoIoc.CreatorId.Value).Select(t=>t.Id));
                                 ccIds.AddRange(taskDtoIoc.DeployInfoIocDto.NoticeUser.Select(t => t.Id));
@@ -1022,10 +1026,11 @@ namespace Uoko.FireProj.Concretes
                         case StageEnum.PRE:
                             var taskDtoPre = this.GetTaskById(taskLog.TaskId);
                             notify.TaskName = taskDtoPre.TaskName;
-                            notify.DeployUrl = string.Format("http://{0}", taskDtoPre.DeployInfoPreDto.Domain);
-                            notify.GitLabBuildPage = taskDtoPre.ProjectDto.ProjectRepo.Replace(".git", "") + "/builds/" + buildId;
+                            notify.TaskUrl = string.Format("{0}/Task/Detail?taskId={1}", _domainUrl.TrimEnd('/'), taskDtoPre.Id);
+                           
                             if (deployStatus == DeployStatus.DeployFails)
                             {
+                                notify.GitLabBuildPage = taskDtoPre.ProjectDto.ProjectRepo.Replace(".git", "") + "/builds/" + buildId;
                                 if (taskDtoPre.CreatorId != null)
                                 {
                                     toIds.Add(taskDtoPre.CreatorId.Value);
@@ -1033,6 +1038,7 @@ namespace Uoko.FireProj.Concretes
                             }
                             else if (deployStatus == DeployStatus.DeploySuccess)
                             {
+                                notify.DeployUrl = string.Format("http://{0}", taskDtoPre.DeployInfoPreDto.Domain);
                                 toIds.Add(taskDtoPre.CreatorId.Value);
                                 toIds.AddRange(taskDtoPre.DeployInfoPreDto.CheckUser.Where(t => t.Id != taskDtoPre.CreatorId.Value).Select(t => t.Id));
                                 ccIds.AddRange(taskDtoPre.DeployInfoPreDto.NoticeUser.Select(t => t.Id));
@@ -1043,16 +1049,18 @@ namespace Uoko.FireProj.Concretes
                             var onlineTask = db.OnlineTaskInfos.FirstOrDefault(t => t.Id == taskLog.TaskId);
 
                             var taskInfos = db.TaskInfo.Where(t => t.OnlineTaskId == onlineTask.Id).ToList();
+                            notify.TaskUrl = string.Format("{0}/Online/Detail?taskId={1}", _domainUrl.TrimEnd('/'), onlineTask.Id);
                             notify.TaskName = onlineTask.ProjectName;
-                            notify.DeployUrl = string.Format("http://{0}", onlineTask.Domain);
-                            var project = db.Project.Find(onlineTask.ProjectId);
-                            notify.GitLabBuildPage = project.ProjectRepo.Replace(".git", "") + "/builds/" + buildId;
+                           
+                            var project = db.Project.Find(onlineTask.ProjectId);      
                             if (deployStatus == DeployStatus.DeployFails)
                             {
+                                notify.GitLabBuildPage = project.ProjectRepo.Replace(".git", "") + "/builds/" + buildId;
                                 toIds.Add(onlineTask.CreatorId);
                             }
                             else if (deployStatus == DeployStatus.DeploySuccess)
                             {
+                                notify.DeployUrl = string.Format("http://{0}", onlineTask.Domain);
                                 toIds.Add(onlineTask.CreatorId);
 
                                 foreach (var task in taskInfos)

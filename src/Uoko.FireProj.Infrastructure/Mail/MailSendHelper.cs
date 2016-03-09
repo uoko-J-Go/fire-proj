@@ -40,9 +40,14 @@ namespace Uoko.FireProj.Infrastructure.Mail
             var subject = string.Format("【{0}】  在 {1} 中测试任务【{2}】 {3}", notify.TestUser, notify.StageName,notify.TaskName,notify.TestResult);
             #region body内容组装
             StringBuilder content = new StringBuilder();
-            content.AppendFormat("<h3>【{0}】  在 {1} 中测试任务【{2}】 {3}</h3>", notify.TestUser, notify.StageName, notify.TaskName, notify.TestResult);
+            content.AppendFormat("<h4>【{0}】  在 {1} 中测试任务【{2}】 {3}</h4>", notify.TestUser, notify.StageName, notify.TaskName, notify.TestResult);
             content.AppendFormat("<p>描述：{0}</p>", notify.Coments);
+            if (notify.IsAllPassed)
+            {
+                content.AppendFormat("<p style='color:red;font-size:16px;'>当前环境测试全部通过</p>");
+            }
             content.AppendFormat("测试地址：<a href='{0}'>{1}</a>", notify.TestUrl, notify.TestUrl);
+            content.AppendFormat("<a href='{0}'>任务详细</a>", notify.TaskUrl);
             #endregion
 
             var body = content.ToString();
@@ -62,8 +67,16 @@ namespace Uoko.FireProj.Infrastructure.Mail
 
             #region body内容组装
             StringBuilder content = new StringBuilder();
-            content.AppendFormat("<h3>[{0}] 在 {1} 中 {2}</h3>", notify.TaskName, notify.StageName, notify.DeployStatus);
-            content.AppendFormat("详细：<a href='{0}'>{1}</a>", notify.GitLabBuildPage, notify.GitLabBuildPage);
+            content.AppendFormat("<h4>[{0}] 在 {1} 中 {2}</h4>", notify.TaskName, notify.StageName, notify.DeployStatus);
+            if (!string.IsNullOrEmpty(notify.DeployUrl))
+            {
+                content.AppendFormat("测试地址：<a href='{0}'>{1}</a>", notify.DeployUrl, notify.DeployUrl);
+            }  
+            if (!string.IsNullOrEmpty(notify.GitLabBuildPage))
+            {
+               content.AppendFormat("部署详细：<a href='{0}'>{1}</a>", notify.GitLabBuildPage, notify.GitLabBuildPage); 
+            }        
+            content.AppendFormat("<a href='{0}'>任务详细</a>", notify.TaskUrl);
             #endregion
 
             var body = content.ToString();
@@ -80,6 +93,10 @@ namespace Uoko.FireProj.Infrastructure.Mail
         public static string SendMail(List<int> toIds, List<int> ccIds, string subject, string body)
 
         {
+            #region 去掉重复
+            toIds = toIds.Distinct().ToList();
+            ccIds = ccIds.Where(t => !toIds.Contains(t)).ToList(); 
+            #endregion
             var toUsers = UserHelper.GetUserByIds(toIds);
             var toEmails = string.Join(",", toUsers.Select(t => t.Email));
             var ccUsers = UserHelper.GetUserByIds(ccIds);
@@ -121,7 +138,7 @@ namespace Uoko.FireProj.Infrastructure.Mail
                     //内容编码 
                     mail.SubjectEncoding = mail.BodyEncoding = Encoding.UTF8;
                     //发送优先级 
-                    mail.Priority = MailPriority.High;
+                    mail.Priority = MailPriority.Normal;
                     //邮件内容 
                     mail.Body = body;
                     //是否HTML形式发送 
