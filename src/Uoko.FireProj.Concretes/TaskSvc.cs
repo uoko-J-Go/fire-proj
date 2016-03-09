@@ -325,57 +325,46 @@ namespace Uoko.FireProj.Concretes
                 taskInfo.ModifyId = UserHelper.CurrUserInfo.UserId;
                 taskInfo.ModifierName = UserHelper.CurrUserInfo.NickName;
                 var domain = string.Empty;
-                var DeployInfo = string.Empty;
                 switch (taskDto.DeployStage)
                 {
                     case StageEnum.IOC:
                         if (!string.IsNullOrEmpty(taskDto.IocDeployInfo.CheckUserId))
                         {
                             var userIds = taskDto.IocDeployInfo.CheckUserId.Split(',');
-                            var userIdsStatus =
-                                userIds.Select(userId => string.Format("{0}-{1}", userId, (int) QAStatus.Waiting))
-                                       .ToList();
-                            taskInfo.IocCheckUserId =
-                                taskDto.IocDeployInfo.CheckUserId = string.Join(",", userIdsStatus);
+                            var userIdsStatus =userIds.Select(userId => string.Format("{0}-{1}", userId, (int) QAStatus.Waiting)).ToList();
+                            taskInfo.IocCheckUserId =taskDto.IocDeployInfo.CheckUserId = string.Join(",", userIdsStatus);
                         }
                         domain = taskDto.IocDeployInfo.Domain;
                         taskDto.IocDeployInfo.DeployStage = taskDto.DeployStage;
-                        taskDto.IocDeployInfo.DeployAddress = string.Format("https://{0}:8172/msdeploy.axd",
-                            taskDto.IocDeployInfo.DeployIP);
+                        taskDto.IocDeployInfo.DeployAddress = string.Format("https://{0}:8172/msdeploy.axd",taskDto.IocDeployInfo.DeployIP);
                         taskDto.IocDeployInfo.DeployStatus = DeployStatus.Deploying;
-                        taskInfo.DeployInfoIocJson = DeployInfo = JsonHelper.ToJson(taskDto.IocDeployInfo);
+                        taskInfo.DeployInfoIocJson  = JsonHelper.ToJson(taskDto.IocDeployInfo);
                         break;
                     case StageEnum.PRE:
                         if (!string.IsNullOrEmpty(taskDto.PreDeployInfo.CheckUserId))
                         {
                             var userIds = taskDto.PreDeployInfo.CheckUserId.Split(',');
-                            var userIdsStatus =
-                                userIds.Select(userId => string.Format("{0}-{1}", userId, (int) QAStatus.Waiting))
-                                       .ToList();
-                            taskInfo.PreCheckUserId =
-                                taskDto.PreDeployInfo.CheckUserId = string.Join(",", userIdsStatus);
+                            var userIdsStatus =userIds.Select(userId => string.Format("{0}-{1}", userId, (int) QAStatus.Waiting)).ToList();
+                            taskInfo.PreCheckUserId =taskDto.PreDeployInfo.CheckUserId = string.Join(",", userIdsStatus);
                         }
                         domain = taskDto.PreDeployInfo.Domain;
                         taskDto.PreDeployInfo.DeployStage = taskDto.DeployStage;
-                        taskDto.PreDeployInfo.DeployAddress = string.Format("https://{0}:8172/msdeploy.axd",
-                            taskDto.PreDeployInfo.DeployIP);
+                        taskDto.PreDeployInfo.DeployAddress = string.Format("https://{0}:8172/msdeploy.axd",taskDto.PreDeployInfo.DeployIP);
                         taskDto.PreDeployInfo.DeployStatus = DeployStatus.Deploying;
-                        taskInfo.DeployInfoPreJson = DeployInfo = JsonHelper.ToJson(taskDto.PreDeployInfo);
+                        taskInfo.DeployInfoPreJson  = JsonHelper.ToJson(taskDto.PreDeployInfo);
 
 
                         //添加或修改Online信息
                         if (!string.IsNullOrEmpty(taskDto.OnlineDeployInfo.CheckUserId))
                         {
                             var userIds = taskDto.OnlineDeployInfo.CheckUserId.Split(',');
-                            var userIdsStatus =
-                                userIds.Select(userId => string.Format("{0}-{1}", userId, (int) QAStatus.Waiting))
-                                       .ToList();
-                            taskInfo.OnlineCheckUserId =
-                                taskDto.OnlineDeployInfo.CheckUserId = string.Join(",", userIdsStatus);
+                            var userIdsStatus =userIds.Select(userId => string.Format("{0}-{1}", userId, (int) QAStatus.Waiting)).ToList();
+                            taskInfo.OnlineCheckUserId =taskDto.OnlineDeployInfo.CheckUserId = string.Join(",", userIdsStatus);
                         }
                         taskDto.OnlineDeployInfo.DeployStage = StageEnum.PRODUCTION;
+                        taskDto.OnlineDeployInfo.OnlineTaskId = null;
                         taskInfo.DeployInfoOnlineJson = JsonHelper.ToJson(taskDto.OnlineDeployInfo);
-                        
+                        taskInfo.OnlineTaskId = null;
                         break;
                     default:
                         throw new NotSupportedException("暂不支持其他阶段");
