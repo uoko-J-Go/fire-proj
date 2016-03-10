@@ -112,7 +112,7 @@ namespace Uoko.FireProj.Concretes
             }
 
             var onlineTagName = string.Format("{0}-{1}", onlineTaskInfo.OnlineVersion, onlineTaskInfo.Id);
-            var buildInfo = new Dictionary<string, object>
+            var buildInfo = new Dictionary<string, string>
                             {
                                 {"slnFile", project.ProjectSlnName},
                                 {"csProjFile", project.ProjectCsprojName},
@@ -122,7 +122,8 @@ namespace Uoko.FireProj.Concretes
                                 {"useConfig", "Release"},
                                 {"Target", "Online"},
                                 {"mergeFromBranch", "pre"},
-                                {"onlineTagName", onlineTagName}
+                                {"onlineTagName", onlineTagName},
+                                {"FireTaskId",onlineTaskInfo.Id.ToString() }
                             };
 
             var buildRequst = new TriggerRequest()
@@ -527,26 +528,21 @@ namespace Uoko.FireProj.Concretes
         /// 获取需要上线的任务
         /// </summary>
         /// <returns></returns>
-        public PageGridData<TaskInfoForList> GetTasksNeedOnline(TaskNeedOnlineQuery query)
+        public IEnumerable<TaskInfoForList> GetTasksNeedOnline(int projectId)
         {
             using (var dbScope = _dbScopeFactory.CreateReadOnly())
             {
                 var db = dbScope.DbContexts.Get<FireProjDbContext>();
 
                 // 已经上线过 pre，但未上线的任务
-                var taskToBeOnlineQuery = db.TaskInfo
-                                            .Where(task => task.ProjectId == query.ProjectId
+                var tasksFromDb = db.TaskInfo
+                                            .Where(task => task.ProjectId == projectId
                                                            && task.OnlineTaskId == null
-                                                           && task.DeployInfoPreJson != null);
-                var total = taskToBeOnlineQuery.Count();
-
-                var tasksFromDb = taskToBeOnlineQuery.OrderByDescending(task => task.Id)
-                                                     .Skip(query.Offset)
-                                                     .Take(query.Limit)
+                                                           && task.DeployInfoPreJson != null)
+                                            .OrderByDescending(task => task.Id)
                                                      .ToList();
-
                 var tasksToBeOnline = TransferTask(tasksFromDb);
-                return new PageGridData<TaskInfoForList> {rows = tasksToBeOnline, total = total};
+                return tasksToBeOnline;
             }
         }
 
@@ -657,7 +653,7 @@ namespace Uoko.FireProj.Concretes
                         _ref = "master";
                         break;
                 }
-
+  
                 Dictionary<string, string> buildInfo = new Dictionary<string, string>();
                 buildInfo.Add("slnFile", taskDto.ProjectDto.ProjectSlnName);
                 buildInfo.Add("csProjFile", taskDto.ProjectDto.ProjectCsprojName);
