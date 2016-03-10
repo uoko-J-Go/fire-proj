@@ -667,6 +667,7 @@ namespace Uoko.FireProj.Concretes
                 buildInfo.Add("useConfig", "Release");
                 buildInfo.Add("Target", target);
                 buildInfo.Add("mergeFromBranch", taskDto.Branch);
+                buildInfo.Add("FireTaskId ", taskId.ToString());
                 var buildRequst = new TriggerRequest()
                 {
                     token = trigger.token,
@@ -776,8 +777,6 @@ namespace Uoko.FireProj.Concretes
                             iocDeployInfo.DeployStatus = deployStatus;
                             iocDeployInfo.BuildId = buildId;
                             entityIoc.DeployInfoIocJson = JsonHelper.ToJson(iocDeployInfo);
-                            entityIoc.ModifyId = 0;
-                            entityIoc.ModifierName = "系统";
                             entityIoc.ModifyDate = DateTime.Now;
                             log.DeployInfo = entityIoc.DeployInfoIocJson;
                             break;
@@ -788,8 +787,6 @@ namespace Uoko.FireProj.Concretes
                             preDeployInfo.DeployStatus = deployStatus;
                             preDeployInfo.BuildId = buildId;
                             entityPre.DeployInfoPreJson = JsonHelper.ToJson(preDeployInfo);
-                            entityPre.ModifyId = 0;
-                            entityPre.ModifierName = "系统";
                             entityPre.ModifyDate = DateTime.Now;
                             log.DeployInfo = entityPre.DeployInfoPreJson;
                             break;
@@ -798,8 +795,6 @@ namespace Uoko.FireProj.Concretes
                             if (entityOnline == null) return;
                             entityOnline.DeployStatus = deployStatus;
                             entityOnline.BuildId = buildId;
-                            entityOnline.ModifyId = 0;
-                            entityOnline.ModifierName = "系统";
                             entityOnline.ModifyDate = DateTime.Now;
                             log.DeployInfo = JsonHelper.ToJson(entityOnline);
                             break;
