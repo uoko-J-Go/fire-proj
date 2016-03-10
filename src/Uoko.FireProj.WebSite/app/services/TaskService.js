@@ -38,7 +38,7 @@
     this.GetTasksNeedToBeOnline = function(params, cb) {
         $http.get("/api/TaskApi/tasksNeedOnline/" + params.ProjectId, { params: params }).success(function(data) {
 
-            data.rows = transfTaskData(data.rows);
+            data = transfTaskData(data);
 
             if (cb != undefined) {
                 cb(data);
