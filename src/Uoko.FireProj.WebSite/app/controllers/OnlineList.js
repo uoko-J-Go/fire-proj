@@ -4,12 +4,8 @@
     $scope.servers = [];
     $scope.domains = [];
 
-    $scope.pageSize = 10;
-    $scope.currentPage = 1;
-
     $scope.taskInfos = [];
-    $scope.totalItems = 0; //总数
-    $scope.queryType = 0; // 所有
+
     $scope.projectSelected = null;
     $scope.serverSelected = null;
     $scope.onlineVersion = null;
@@ -54,10 +50,7 @@
         };
 
         TaskService.GetTasksNeedToBeOnline(params, function(data) {
-            $scope.totalItems = data.total;
-            var tasks = data.rows;
-
-            $scope.taskInfos = tasks;
+            $scope.taskInfos = data;
         });
     }
 

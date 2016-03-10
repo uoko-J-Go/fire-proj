@@ -1,4 +1,5 @@
-﻿using Uoko.FireProj.DataAccess.Dto;
+﻿using System.Collections.Generic;
+using Uoko.FireProj.DataAccess.Dto;
 using Uoko.FireProj.DataAccess.Entity;
 using Uoko.FireProj.DataAccess.Enum;
 using Uoko.FireProj.DataAccess.Query;
@@ -64,7 +65,7 @@ namespace Uoko.FireProj.Abstracts
 
         TaskInfo UpdateTestStatus(TestResultDto testResult);
 
-       PageGridData<TaskInfoForList> GetTasksNeedOnline(TaskNeedOnlineQuery query);
+       IEnumerable<TaskInfoForList> GetTasksNeedOnline(int projectId);
 
        void DeployOnlineTask(OnlineTaskInfo taskFromDb);
        OnlineTaskDetailDto GetOnlineTaskDetail(int onlineTaskId);

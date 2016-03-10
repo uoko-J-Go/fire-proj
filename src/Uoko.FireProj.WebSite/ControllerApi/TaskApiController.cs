@@ -38,9 +38,9 @@ namespace Uoko.FireProj.WebSite.ControllerApi
         }
 
         [Route("tasksNeedOnline/{projectId}")]
-        public IHttpActionResult GetTasksNeedToBeOnline([FromUri] TaskNeedOnlineQuery query)
+        public IHttpActionResult GetTasksNeedToBeOnline(int projectId)
         {
-            var result = _taskSvc.GetTasksNeedOnline(query);
+            var result = _taskSvc.GetTasksNeedOnline(projectId);
             return Ok(result);
         }
 

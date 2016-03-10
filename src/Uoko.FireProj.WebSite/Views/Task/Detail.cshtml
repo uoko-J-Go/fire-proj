@@ -321,7 +321,7 @@
                 </div>
                 <!--操作按钮-->
                 <div class="form-actions right">
-                    <button type="button" class="btn blue" ng-click="Deploy()" ng-if="model.CreatorId==@ViewBag.UserId"><i class="fa fa-building-o"></i> 部署到...</button>
+                    <button type="button" class="btn blue" ng-click="Deploy()" ng-if="model.CreatorId==@ViewBag.UserId && model.OnlineTaskId==null"><i class="fa fa-building-o"></i> 部署到...</button>
                     <button type="button" class="btn default" ng-click="Cancel()">返回列表</button>
                 </div>
                 <!--操作按钮-->
