@@ -112,7 +112,7 @@ namespace Uoko.FireProj.Concretes
             }
 
             var onlineTagName = string.Format("{0}-{1}", onlineTaskInfo.OnlineVersion, onlineTaskInfo.Id);
-            var buildInfo = new Dictionary<string, object>
+            var buildInfo = new Dictionary<string, string>
                             {
                                 {"slnFile", project.ProjectSlnName},
                                 {"csProjFile", project.ProjectCsprojName},
@@ -122,7 +122,8 @@ namespace Uoko.FireProj.Concretes
                                 {"useConfig", "Release"},
                                 {"Target", "Online"},
                                 {"mergeFromBranch", "pre"},
-                                {"onlineTagName", onlineTagName}
+                                {"onlineTagName", onlineTagName},
+                                {"FireTaskId",onlineTaskInfo.Id.ToString() }
                             };
 
             var buildRequst = new TriggerRequest()
@@ -657,17 +658,19 @@ namespace Uoko.FireProj.Concretes
                         _ref = "master";
                         break;
                 }
-  
-                Hashtable buildInfo = new Hashtable();
-                buildInfo.Add("slnFile", taskDto.ProjectDto.ProjectSlnName);
-                buildInfo.Add("csProjFile", taskDto.ProjectDto.ProjectCsprojName);
-                buildInfo.Add("iisSiteName", iisSiteName);
-                buildInfo.Add("pkgDir", packagDir);
-                buildInfo.Add("msDeployUrl", "https://" + deployIP + ":8172/msdeploy.axd");
-                buildInfo.Add("useConfig", "Release");
-                buildInfo.Add("Target", target);
-                buildInfo.Add("mergeFromBranch", taskDto.Branch);
-                buildInfo.Add("FireTaskId ", taskId.ToString());
+                var buildInfo = new Dictionary<string, string>
+                            {
+                                {"slnFile",  taskDto.ProjectDto.ProjectSlnName},
+                                {"csProjFile", taskDto.ProjectDto.ProjectCsprojName},
+                                {"iisSiteName", iisSiteName},
+                                {"pkgDir", packagDir},
+                                {"msDeployUrl", "https://" + deployIP + ":8172/msdeploy.axd"},
+                                {"useConfig", "Release"},
+                                {"Target", target},
+                                {"mergeFromBranch", taskDto.Branch},
+                                {"FireTaskId",taskId.ToString() }
+                            };
+             
                 var buildRequst = new TriggerRequest()
                 {
                     token = trigger.token,
