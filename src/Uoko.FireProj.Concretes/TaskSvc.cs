@@ -112,7 +112,7 @@ namespace Uoko.FireProj.Concretes
             }
 
             var onlineTagName = string.Format("{0}-{1}", onlineTaskInfo.OnlineVersion, onlineTaskInfo.Id);
-            var buildInfo = new Dictionary<string, object>
+            var buildInfo = new Dictionary<string, string>
                             {
                                 {"slnFile", project.ProjectSlnName},
                                 {"csProjFile", project.ProjectCsprojName},
@@ -122,7 +122,8 @@ namespace Uoko.FireProj.Concretes
                                 {"useConfig", "Release"},
                                 {"Target", "Online"},
                                 {"mergeFromBranch", "pre"},
-                                {"onlineTagName", onlineTagName}
+                                {"onlineTagName", onlineTagName},
+                                {"FireTaskId",onlineTaskInfo.Id.ToString() }
                             };
 
             var buildRequst = new TriggerRequest()
@@ -652,16 +653,19 @@ namespace Uoko.FireProj.Concretes
                         _ref = "master";
                         break;
                 }
-  
-                Hashtable buildInfo = new Hashtable();
-                buildInfo.Add("slnFile", taskDto.ProjectDto.ProjectSlnName);
-                buildInfo.Add("csProjFile", taskDto.ProjectDto.ProjectCsprojName);
-                buildInfo.Add("iisSiteName", iisSiteName);
-                buildInfo.Add("pkgDir", packagDir);
-                buildInfo.Add("msDeployUrl", "https://" + deployIP + ":8172/msdeploy.axd");
-                buildInfo.Add("useConfig", "Release");
-                buildInfo.Add("Target", target);
-                buildInfo.Add("mergeFromBranch", taskDto.Branch);
+                var buildInfo = new Dictionary<string, string>
+                            {
+                                {"slnFile",  taskDto.ProjectDto.ProjectSlnName},
+                                {"csProjFile", taskDto.ProjectDto.ProjectCsprojName},
+                                {"iisSiteName", iisSiteName},
+                                {"pkgDir", packagDir},
+                                {"msDeployUrl", "https://" + deployIP + ":8172/msdeploy.axd"},
+                                {"useConfig", "Release"},
+                                {"Target", target},
+                                {"mergeFromBranch", taskDto.Branch},
+                                {"FireTaskId",taskId.ToString() }
+                            };
+             
                 var buildRequst = new TriggerRequest()
                 {
                     token = trigger.token,
@@ -771,8 +775,6 @@ namespace Uoko.FireProj.Concretes
                             iocDeployInfo.DeployStatus = deployStatus;
                             iocDeployInfo.BuildId = buildId;
                             entityIoc.DeployInfoIocJson = JsonHelper.ToJson(iocDeployInfo);
-                            entityIoc.ModifyId = 0;
-                            entityIoc.ModifierName = "系统";
                             entityIoc.ModifyDate = DateTime.Now;
                             log.DeployInfo = entityIoc.DeployInfoIocJson;
                             break;
@@ -783,8 +785,6 @@ namespace Uoko.FireProj.Concretes
                             preDeployInfo.DeployStatus = deployStatus;
                             preDeployInfo.BuildId = buildId;
                             entityPre.DeployInfoPreJson = JsonHelper.ToJson(preDeployInfo);
-                            entityPre.ModifyId = 0;
-                            entityPre.ModifierName = "系统";
                             entityPre.ModifyDate = DateTime.Now;
                             log.DeployInfo = entityPre.DeployInfoPreJson;
                             break;
@@ -793,8 +793,6 @@ namespace Uoko.FireProj.Concretes
                             if (entityOnline == null) return;
                             entityOnline.DeployStatus = deployStatus;
                             entityOnline.BuildId = buildId;
-                            entityOnline.ModifyId = 0;
-                            entityOnline.ModifierName = "系统";
                             entityOnline.ModifyDate = DateTime.Now;
                             log.DeployInfo = JsonHelper.ToJson(entityOnline);
                             break;
