@@ -18,63 +18,61 @@
 <div class="row" ng-controller="OnlineListController">
     <div class="col-md-12">
         <!-- BEGIN EXAMPLE TABLE PORTLET-->
-        <div class="portlet light">
+        <div class="portlet box blue ">
             <div class="portlet-title">
-
-                <form role="form" class="form form-horizontal" name="form" ng-submit="Fire(form.$valid)" >
-                 <div class="form-body">
-                     <div class="form-group form-md-line-input">
-                         <label class="col-md-2 control-label">项目</label>
-                         <div class="col-md-10">
-                             <select class="form-control" name="project" ng-model="projectSelected" ng-change="Query()" ng-options="project.ProjectName for project in projects track by project.Id" required>
-                             </select>
-                             <div ng-if="form.$submitted || form.project.$touched">
-                                 <span class="error-msg" ng-if="form.project.$error.required">请选择项目</span>
-                             </div>
-                         </div>
-                     </div>
-
-                     <div class="form-group form-md-line-input">
-                         <label class="col-md-2 control-label">部署服务器</label>
-                         <div class="col-md-10">
-                             <select name="server" class="form-control" ng-model="serverSelected" ng-options="server.Name for server in servers track by server.Id" required>
-                             </select>
-                             <div class="" ng-if="form.$submitted || form.server.$touched">
-                                 <span class="error-msg" ng-if="form.server.$error.required">请选择服务器</span>
-                             </div>
-                         </div>
-                     </div>
-
-                     <div class="form-group form-md-line-input">
-                         <label class="col-md-2 control-label">域名</label>
-                         <div class="col-md-10">
-                             <select name="domain" class="form-control" ng-model="domainSelected"  ng-options="domain.Name for domain in domains track by domain.Name" required>
-                             </select>
-                             <div ng-if="form.$submitted || form.domain.$touched">
-                                 <span class="error-msg" ng-if="form.domain.$error.required">域名必选.</span>
-                             </div>
-                         </div>
-                     </div>
-       
-                    <div class="form-group form-md-line-input">
-                        <label class="col-md-2 control-label">
-                            <a target="_blank" href="http://semver.org/lang/zh-CN/">上线版本</a>
-                        </label>
-                        <div class="col-md-10">
-                           <input name="onlineVersion" ng-model="onlineVersion" class="form-control ng-pristine ng-invalid ng-invalid-required ng-touched" placeholder="主版本.次版本.修订版本" required="" type="text">
+                <div class="caption">
+                    <i class="fa fa-github"></i>上线列表
+                </div>
+            </div>
+            <div class="portlet-body">
+                <form role="form" class="form form-horizontal" name="form" ng-submit="Fire(form.$valid)">
+                    <div class="form-body">
+                        <div class="form-group form-md-line-input">
+                            <label class="col-md-2 control-label">项目</label>
+                            <div class="col-md-10">
+                                <select class="form-control" name="project" ng-model="projectSelected" ng-change="Query()" ng-options="project.ProjectName for project in projects track by project.Id" required></select>
+                                <div ng-if="form.$submitted || form.project.$touched">
+                                    <span class="error-msg" ng-if="form.project.$error.required">请选择项目</span>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                           
+
+                        <div class="form-group form-md-line-input">
+                            <label class="col-md-2 control-label">部署服务器</label>
+                            <div class="col-md-10">
+                                <select name="server" class="form-control" ng-model="serverSelected" ng-options="server.Name for server in servers track by server.Id" required></select>
+                                <div class="" ng-if="form.$submitted || form.server.$touched">
+                                    <span class="error-msg" ng-if="form.server.$error.required">请选择服务器</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group form-md-line-input">
+                            <label class="col-md-2 control-label">域名</label>
+                            <div class="col-md-10">
+                                <select name="domain" class="form-control" ng-model="domainSelected" ng-options="domain.Name for domain in domains track by domain.Name" required></select>
+                                <div ng-if="form.$submitted || form.domain.$touched">
+                                    <span class="error-msg" ng-if="form.domain.$error.required">域名必选.</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group form-md-line-input">
+                            <label class="col-md-2 control-label">
+                                <a target="_blank" href="http://semver.org/lang/zh-CN/">上线版本</a>
+                            </label>
+                            <div class="col-md-10">
+                                <input name="onlineVersion" ng-model="onlineVersion" class="form-control ng-pristine ng-invalid ng-invalid-required ng-touched" placeholder="主版本.次版本.修订版本" required="" type="text">
+                            </div>
+                        </div>
+
                     </div>
                     <div class="form-actions right">
-                        <button type="submit" class="btn blue" ng-click="">Fire <i class="fa fa-fire"></i></button>
+                        <button type="submit" class="btn blue" ng-click=""><i class="fa fa-fire"></i>Fire </button>
                     </div>
-                  
+
                 </form>
 
-            </div>
-
-            <div class="portlet-body">
                 <div class="table-responsive">
                     <table class="table table-bordered table-hover table-condensed">
                         <thead>
@@ -125,14 +123,6 @@
                         </tr>
                         </tbody>
                     </table>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="pull-right">
-                            <uib-pagination total-items="totalItems" ng-model="currentPage" ng-change="Query()" first-text="首页" last-text="末页"
-                                            previous-text="上一页" next-text="下一页" items-per-page="pageSize" max-size="5" boundary-links="true" boundary-link-numbers="true" rotate="false"></uib-pagination>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>

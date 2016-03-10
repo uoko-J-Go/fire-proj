@@ -69,8 +69,6 @@
                 <div class="caption">
                     <i class="fa fa-leaf"></i>环境信息
                 </div>
-            </div>
-            <div class="portlet-body form">
                 <ul class="nav nav-tabs">
                     <li ng-class="{'active':currLogTab==0}" ng-if="model.DeployInfoIocJson!=null" ng-click="TabChanged(0)">
                         <a href="#tab_1_1" data-toggle="tab">
@@ -88,6 +86,9 @@
                         </a>
                     </li>
                 </ul>
+            </div>
+            <div class="portlet-body form">
+              
                 <div class="tab-content">
                     <div class="tab-pane fade " ng-class="{'active in':currLogTab==0}" id="tab_1_1" ng-if="model.DeployInfoIocJson!=null">
                         <!-- BEGIN IOC CONTENT-->

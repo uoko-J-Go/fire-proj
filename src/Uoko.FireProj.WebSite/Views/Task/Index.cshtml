@@ -21,29 +21,36 @@
 <div class="row" ng-controller="TaskController">
     <div class="col-md-12">
         <!-- BEGIN EXAMPLE TABLE PORTLET-->
-        <div class="portlet light">
+        <div class="portlet box blue">
             <div class="portlet-title">
-                <div>
-                    <div class="btn-group">
-                        <a href="@Url.Action("Create", "Task")" class="btn green btn">
-                            创建任务 <i class="fa fa-plus"></i>
-                        </a>
-                    </div>
-                </div>
+
                 <div class="caption">
-                    <a href="javascript:;" ng-click="Query('@TaskQuery.QueryType.ShowAll')">全部</a>
-                    <a href="javascript:;" ng-click="Query('@TaskQuery.QueryType.CreatorFocus')">我的</a>
-                    <a href="javascript:;" ng-click="Query('@TaskQuery.QueryType.QaFocus')">@@我的</a>
+                    <i class="fa fa-github"></i>任务列表
+                </div>
+                <div class="tools">
+                    <a href="javascript:;" class="reload" data-original-title="" title="刷新" ng-click="Query()"></a>
                 </div>
                 <div class="actions">
+                    <a href="@Url.Action("Create", "Task")" class="btn btn-default btn-sm">
+                        <i class="fa fa-plus"></i> 创建任务
+                    </a>
                 </div>
             </div>
             <div class="portlet-body">
-                <div class="form-group form-md-line-input form-md-floating-label">
-                    <input type="text" class="form-control" id="form_control_1" ng-model="search" ng-keypress="Query()">
-                    <label for="form_control_1">任务名称</label>
+
+                <div class="row" style="height:24px;line-height:24px;">
+                    <div class="col-md-6 col-sm-6">
+                        <a href="javascript:;" ng-click="Query('@TaskQuery.QueryType.ShowAll')">全部</a>
+                        <a href="javascript:;" ng-click="Query('@TaskQuery.QueryType.CreatorFocus')">我的</a>
+                        <a href="javascript:;" ng-click="Query('@TaskQuery.QueryType.QaFocus')">@@我的</a>
+                    </div>
+                    <div class="col-md-6 col-sm-6">
+                        <label for="form_control_1">任务名称：
+                            <input type="text" class="form-control  input-inline" id="form_control_1" ng-model="search" ng-keypress="Query()">
+                        </label>
+                    </div>  
                 </div>
-                
+
                 <div class="table-responsive">
                     <table class="table table-bordered table-hover table-condensed">
                         <thead>
@@ -88,7 +95,7 @@
                                 <span class="glyphicon glyphicon-ok" ng-if="task.PreTestAllPassed"></span>
                             </td>
                             <td>
-                                <a ng-if="task.OnlineTaskInfo" ng-href="@Url.Action("Detail","Online")?taskId={{task.OnlineTaskInfo.Id}}" ng-bind="task.OnlineTaskInfo.OnlineVersion"></a>
+                                <a ng-if="task.OnlineTaskInfo" ng-href="@Url.Action("Detail", "Online")?taskId={{task.OnlineTaskInfo.Id}}" ng-bind="task.OnlineTaskInfo.OnlineVersion"></a>
                             </td>
                             <td title="{{(task.OnlineTaskInfo.DeployStatus | DeployStatusFilter).Title}}">
                                 <span ng-class="(task.OnlineTaskInfo.DeployStatus | DeployStatusFilter).IconClass" ng-if="task.OnlineTaskInfo"></span>
@@ -96,7 +103,7 @@
                             <td title="{{task.OnlineTestAllPassed ? '测试全部通过' : ''}}">
                                 <span class="glyphicon glyphicon-ok" ng-if="task.OnlineTestAllPassed"></span>
                             </td>
-                                  <td title="{{task.TaskInfo.CreateDate | date:'yyyy-MM-dd HH:mm:ss'}}">{{task.TaskInfo.CreatorName}}</td>
+                            <td title="{{task.TaskInfo.CreateDate | date:'yyyy-MM-dd HH:mm:ss'}}">{{task.TaskInfo.CreatorName}}</td>
                             <td title="{{task.TaskInfo.ModifyDate | date:'yyyy-MM-dd HH:mm:ss'}}">{{task.TaskInfo.ModifierName}}</td>
                             <td>
                                 <div>
