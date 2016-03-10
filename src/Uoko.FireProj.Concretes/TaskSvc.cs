@@ -657,8 +657,8 @@ namespace Uoko.FireProj.Concretes
                         _ref = "master";
                         break;
                 }
-  
-                Hashtable buildInfo = new Hashtable();
+
+                Dictionary<string, string> buildInfo = new Dictionary<string, string>();
                 buildInfo.Add("slnFile", taskDto.ProjectDto.ProjectSlnName);
                 buildInfo.Add("csProjFile", taskDto.ProjectDto.ProjectCsprojName);
                 buildInfo.Add("iisSiteName", iisSiteName);
@@ -667,7 +667,7 @@ namespace Uoko.FireProj.Concretes
                 buildInfo.Add("useConfig", "Release");
                 buildInfo.Add("Target", target);
                 buildInfo.Add("mergeFromBranch", taskDto.Branch);
-                buildInfo.Add("FireTaskId ", taskId.ToString());
+                buildInfo.Add("FireTaskId", taskId.ToString());
                 var buildRequst = new TriggerRequest()
                 {
                     token = trigger.token,
