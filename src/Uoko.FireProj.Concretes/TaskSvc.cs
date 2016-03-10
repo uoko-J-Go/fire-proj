@@ -527,26 +527,21 @@ namespace Uoko.FireProj.Concretes
         /// 获取需要上线的任务
         /// </summary>
         /// <returns></returns>
-        public PageGridData<TaskInfoForList> GetTasksNeedOnline(TaskNeedOnlineQuery query)
+        public IEnumerable<TaskInfoForList> GetTasksNeedOnline(int projectId)
         {
             using (var dbScope = _dbScopeFactory.CreateReadOnly())
             {
                 var db = dbScope.DbContexts.Get<FireProjDbContext>();
 
                 // 已经上线过 pre，但未上线的任务
-                var taskToBeOnlineQuery = db.TaskInfo
-                                            .Where(task => task.ProjectId == query.ProjectId
+                var tasksFromDb = db.TaskInfo
+                                            .Where(task => task.ProjectId == projectId
                                                            && task.OnlineTaskId == null
-                                                           && task.DeployInfoPreJson != null);
-                var total = taskToBeOnlineQuery.Count();
-
-                var tasksFromDb = taskToBeOnlineQuery.OrderByDescending(task => task.Id)
-                                                     .Skip(query.Offset)
-                                                     .Take(query.Limit)
-                                                     .ToList();
-
+                                                           && task.DeployInfoPreJson != null)
+                                            .OrderByDescending(task => task.Id)
+                                            .ToList();
                 var tasksToBeOnline = TransferTask(tasksFromDb);
-                return new PageGridData<TaskInfoForList> {rows = tasksToBeOnline, total = total};
+                return tasksToBeOnline;
             }
         }
 
