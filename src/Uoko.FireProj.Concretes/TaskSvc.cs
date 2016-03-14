@@ -1109,5 +1109,22 @@ namespace Uoko.FireProj.Concretes
 
             return string.Join(",", newUserStatusIds);
         }
+
+        public IEnumerable<TaskDetailDto> CheckOnlineByProjectId(int projectId)
+        {
+            using (var dbScope = _dbScopeFactory.Create())
+            {
+                var db = dbScope.DbContexts.Get<FireProjDbContext>();
+                var data = from online in db.OnlineTaskInfos.AsQueryable()
+                           join task in db.TaskInfo.AsQueryable() on online.Id equals task.OnlineTaskId
+                           where online.ProjectId == projectId && online.DeployStatus != DeployStatus.DeploySuccess
+                           select new TaskDetailDto
+                           {
+                               TaskName = task.TaskName,
+                               Id = task.Id,
+                           };
+                return data.ToList();
+            }
+        }
     }
 }
