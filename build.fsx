@@ -44,19 +44,25 @@ let deploy() =
     RestoreMSSolutionPackages (fun p -> p) slnFile
 
     let pkgDir = getBuildParamEnsure "pkgDir"
+    let iisSiteName = getBuildParamEnsure "iisSiteName"
 
-    pkgProject pkgDir
+    let pkgFullPath = sprintf "%s/%s.zip" pkgDir iisSiteName
+    let setParametersFile = sprintf "%s/%s.SetParameters.xml" pkgDir iisSiteName
+    
+    pkgProject pkgFullPath
 
     let deployUser = getBuildParamEnsure "deployUser" // 系统自身配置
     let deployPwd = getBuildParamEnsure "deployPwd"   // 系统自身配置
-    
     let msDeployUrl = getBuildParamEnsure "msDeployUrl"
-    let iisSiteName = getBuildParamEnsure "iisSiteName"
 
+    let msdeployPath = getBuildParamOrDefault "msdeployPath" @"C:\Program Files (x86)\IIS\Microsoft Web Deploy V3\msdeploy.exe"
+    let msdeployArgs = sprintf @"-source:package=""%s"" -dest:auto,computerName=""%s?site=%s"",userName=""%s"",password=""%s"",authtype=""Basic"",includeAcls=""False"" -verb:sync 
+    -disableLink:AppPoolExtension -disableLink:ContentExtension -disableLink:CertificateExtension 
+    -setParamFile:""%s"" -allowUntrusted -enableRule:AppOffline -setParam:name=""IIS Web Application Name"",value=""%s""" pkgFullPath msDeployUrl iisSiteName deployUser deployPwd setParametersFile iisSiteName
+    
     let exitCode = ExecProcess (fun info ->
-                    info.FileName <- pkgDir + "\Uoko.FireProj.WebSite.deploy.cmd"
-                    info.Arguments <- sprintf "/Y /U:%s /P:%s /A:Basic -allowUntrusted \"-setParam:name='IIS Web Application Name',value='%s'\" \"/M:%s?site=%s" 
-                     deployUser deployPwd iisSiteName msDeployUrl iisSiteName) (TimeSpan.FromMinutes 1.0)
+                    info.FileName <- msdeployPath
+                    info.Arguments <- msdeployArgs) (TimeSpan.FromMinutes 1.0)
     if exitCode <> 0 then failwithf "deploy cmd failed with a non-zero exit code %d."  exitCode
 
 
@@ -120,5 +126,6 @@ Target "BuildSolution" (fun _ ->
     RestoreMSSolutionPackages (fun p -> p) slnFile
     build setParams slnFile
 )
+
 
 RunTargetOrDefault "BuildSolution"
