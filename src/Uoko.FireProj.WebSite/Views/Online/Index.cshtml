@@ -21,7 +21,7 @@
         <div class="portlet box blue ">
             <div class="portlet-title">
                 <div class="caption">
-                    <i class="fa fa-github"></i>上线列表
+                    <i class="fa fa-bullhorn"></i>上线列表
                 </div>
             </div>
             <div class="portlet-body">
@@ -68,7 +68,8 @@
 
                     </div>
                     <div class="form-actions right">
-                        <button type="submit" class="btn blue" ng-click=""><i class="fa fa-fire"></i>Fire </button>
+                        <button ng-if="showFire==false" disabled  class="btn blue" ng-click=""><i class="fa fa-fire"></i>Fire </button>
+                        <button ng-if="showFire==true" type="submit" class="btn blue" ng-click=""><i class="fa fa-fire"></i>Fire </button>
                     </div>
 
                 </form>

@@ -82,5 +82,12 @@ namespace Uoko.FireProj.Abstracts
         /// <param name="buildId"></param>
         /// <param name="deployStatus"></param>
         void NotifyDeployResult(int triggerId, int buildId, DeployStatus deployStatus);
+
+        /// <summary>
+        /// 根据项目Id查询 同项目下已上线任务中未部署成功的
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <returns></returns>
+        IEnumerable<TaskDetailDto> CheckOnlineByProjectId(int projectId);
    }
 }
