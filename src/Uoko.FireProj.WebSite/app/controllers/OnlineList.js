@@ -1,5 +1,5 @@
 ﻿fireproj.controller("OnlineListController", function($scope, $http, $uibModal, TaskService, ProjectService) {
-
+   
     $scope.projects = [];
     $scope.servers = [];
     $scope.domains = [];
@@ -13,7 +13,9 @@
 
     function getProjectList() {
         ProjectService.getAllProject(function(data) {
-            $scope.projects = data;
+            $scope.projects = data.filter(function(proj) {
+                return proj.CreatorId == $("#userId").val();
+            });
         });
     };
 
