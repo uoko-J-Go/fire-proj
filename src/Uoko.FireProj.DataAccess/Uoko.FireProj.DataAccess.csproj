@@ -76,6 +76,7 @@
     <Compile Include="Entity\Dictionary.cs" />
     <Compile Include="Entity\Project.cs" />
     <Compile Include="Entity\DomainResource.cs" />
+    <Compile Include="Entity\RollbackTaskInfo.cs" />
     <Compile Include="Entity\Server.cs" />
     <Compile Include="Entity\Task.cs" />
     <Compile Include="Entity\TaskLogs.cs" />
@@ -89,6 +90,7 @@
     <Compile Include="FluentAPI\DictionaryMap.cs" />
     <Compile Include="FluentAPI\ProjectMap.cs" />
     <Compile Include="FluentAPI\DomainResourceMap.cs" />
+    <Compile Include="FluentAPI\RollbackTaskInfoMap.cs" />
     <Compile Include="FluentAPI\ServerMap.cs" />
     <Compile Include="FluentAPI\TaskLogsMap.cs" />
     <Compile Include="FluentAPI\TaskInfoMap.cs" />
@@ -242,6 +244,10 @@
     <Compile Include="Migrations\201603071450018_projectName-string.Designer.cs">
       <DependentUpon>201603071450018_projectName-string.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201603151224457_addrollback.cs" />
+    <Compile Include="Migrations\201603151224457_addrollback.Designer.cs">
+      <DependentUpon>201603151224457_addrollback.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Query\BaseQuery.cs" />
@@ -364,6 +370,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201603071450018_projectName-string.resx">
       <DependentUpon>201603071450018_projectName-string.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201603151224457_addrollback.resx">
+      <DependentUpon>201603151224457_addrollback.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

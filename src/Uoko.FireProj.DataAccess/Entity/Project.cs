@@ -45,5 +45,10 @@ namespace Uoko.FireProj.DataAccess.Entity
         /// 域名生成规则
         /// </summary>
         public string DomainRule { get; set; }
+
+        /// <summary>
+        /// 项目线上最新版本
+        /// </summary>
+        public string OnlineVersion { get; set; }
     }
 }
