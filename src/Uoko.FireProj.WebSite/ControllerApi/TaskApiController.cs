@@ -148,5 +148,18 @@ namespace Uoko.FireProj.WebSite.ControllerApi
             _taskSvc.NotifyTestResult(testResult);
             return Ok();
         }
+
+        /// <summary>
+        /// 根据项目Id查询 同项目下已上线任务中未部署成功的
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <returns></returns>
+        [Route("{projectId}/CheckOnlineByProjectId")]
+        [HttpGet]
+        public IHttpActionResult CheckOnlineByProjectId(int projectId)
+        {
+            var taskInfo = _taskSvc.CheckOnlineByProjectId(projectId);
+            return Ok(taskInfo);
+        }
     }
 }

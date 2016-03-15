@@ -1,5 +1,5 @@
 ﻿fireproj.controller("OnlineListController", function($scope, $http, $uibModal, TaskService, ProjectService) {
-
+   
     $scope.projects = [];
     $scope.servers = [];
     $scope.domains = [];
@@ -9,11 +9,13 @@
     $scope.projectSelected = null;
     $scope.serverSelected = null;
     $scope.onlineVersion = null;
-
+    $scope.showFire = true;
 
     function getProjectList() {
         ProjectService.getAllProject(function(data) {
-            $scope.projects = data;
+            $scope.projects = data.filter(function(proj) {
+                return proj.CreatorId == $("#userId").val();
+            });
         });
     };
 
@@ -36,7 +38,7 @@
     }
 
     //查询项目
-    $scope.Query = function() {
+    $scope.Query = function () {
 
         var projectId = 0;
         if ($scope.projectSelected) {
@@ -49,9 +51,24 @@
             ProjectId: projectId,
         };
 
-        TaskService.GetTasksNeedToBeOnline(params, function(data) {
+        TaskService.GetTasksNeedToBeOnline(params, function (data) {
             $scope.taskInfos = data;
         });
+        if (projectId > 0) {
+            TaskService.CheckOnlineByProjectId(projectId, function (data) {
+                if (data.length > 0) {
+                    var showInfo = "";
+                    for (var i = 0; i < data.length; i++) {
+                        showInfo += "<a target='_blank' class='text-primary' href='/Task/Detail?taskId=" + data[i].Id + "'>" + data[i].TaskName + "</a></br>";
+                    }
+                    $scope.showFire = false;
+                    bootbox.alert("该项目下存在以下任务未部署成功:</br>" + showInfo + "");
+                }
+                else {
+                    $scope.showFire = true;
+                }
+            });
+        }
     }
 
 

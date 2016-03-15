@@ -44,10 +44,18 @@ fireproj.controller("ProjectController", function ($scope, $http, ProjectService
    };
 
    function zTreeOnClick(event, treeId, treeNode) {
-      $("#ProjectCsprojName").val(getFullPath());
+       if (checkButton=="sln") {
+           $("#ProjectSlnName").val(getFullPath());
+       }
+       else {
+           $("#ProjectCsprojName").val(getFullPath());
+       }
    };
 
-   $scope.showMenu = function () {
+   var checkButton = "";
+
+   $scope.showMenu = function (type) {
+       checkButton = type;
        var cityObj = $("#ProjectCsprojName");
        var cityOffset = $("#ProjectCsprojName").offset();
        $("#menuContent").css({ left: cityOffset.left + "px", top: cityOffset.top + cityObj.outerHeight() + "px" }).slideDown("fast");
@@ -93,11 +101,9 @@ fireproj.controller("ProjectController", function ($scope, $http, ProjectService
         model.ProjectRepo = gitlabInfo.http_url_to_repo;
         model.RepoId = gitlabInfo.id;
         model.ProjectGitlabName = gitlabInfo.name;
-        var projectCsprojName = $("#ProjectCsprojName").val();
 
-        //model.ProjectCsprojName = projectCsprojName.substring(0, projectCsprojName.length - 1);
-
-        model.ProjectCsprojName = projectCsprojName;
+        model.ProjectCsprojName = $("#ProjectCsprojName").val();
+        model.ProjectSlnName = $("#ProjectSlnName").val();
 
         ProjectService.post(model).success(function (data) {
             location.href = "/Project/Index";
@@ -123,9 +129,9 @@ fireproj.controller("ProjectController", function ($scope, $http, ProjectService
             
             var fileList = new Array();
             for (var i = 0; i < data.length; i++) {
-                if ((/\.[^\.]+$/.exec(data[i].name)) == ".sln") {
-                    $scope.model.ProjectSlnName = data[i].name;//项目sln名称
-                }
+                //if ((/\.[^\.]+$/.exec(data[i].name)) == ".sln") {
+                //    $scope.model.ProjectSlnName = data[i].name;//项目sln名称
+                //}
                 if (data[i].type == "tree" && data[i].name != ".nuget" && data[i].name != ".vs") {
                     fileList.push(data[i]);
                 }

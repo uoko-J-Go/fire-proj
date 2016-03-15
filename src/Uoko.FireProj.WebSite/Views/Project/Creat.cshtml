@@ -67,8 +67,12 @@
                                 <div class="form-group form-md-line-input">
                                     <label class="col-md-2 control-label" for="form_control_1">Sln名称</label>
                                     <div class="col-md-10">
-                                        <input disabled type="text" class="form-control" id="form_control_1" ng-model="model.ProjectSlnName" placeholder="选择项目自动带出" required>
-                                        <div class="form-control-focus">
+                                        <input disabled type="text" class="form-control" id="ProjectSlnName" ng-model="model.ProjectSlnName" placeholder="请点击选择">
+                                        <!-- Button trigger modal -->
+                                        <button type="button" class="btn default btn-sm green"  data-toggle="modal" data-target="#myModal" ng-click="showMenu('sln')">
+                                            选择
+                                        </button>
+                                         <div class="form-control-focus">
                                         </div>
                                         <span class="help-block">项目文件是必填</span>
                                     </div>
@@ -78,15 +82,13 @@
                                     <label class="col-md-2 control-label" for="form_control_1">Csproj名称</label>
                                     <div class="col-md-10">
                                         <input disabled type="text" class="form-control" id="ProjectCsprojName" ng-model="model.ProjectCsprojName" placeholder="请点击选择">
-
-                                        &nbsp;<a id="menuBtn" href="#" class="btn default btn-sm green" ng-click="showMenu()">选择</a>
-
+                                        <!-- Button trigger modal -->
+                                        <button type="button" class="btn default btn-sm green" data-toggle="modal" data-target="#myModal" ng-click="showMenu('csproj')">
+                                            选择
+                                        </button>
                                         <div class="form-control-focus">
                                         </div>
                                         <span class="help-block">Csproj是必选</span>
-                                        <div id="menuContent" style="display: none;border:1px solid #808080;">
-                                            <ul id="treeDemo" class="ztree" style="width: 100%;"></ul>
-                                        </div>
                                     </div>
 
                                 </div>
@@ -104,6 +106,27 @@
                             <div class="form-actions right">
                                 <a  class="btn default" href="@Url.Action("Index","Project")">取消</a>
                                 <a  class="btn blue" ng-disabled="serverForm.$invalid" ng-click="SubmitFrom(model)"><i class="fa fa-check"></i> 保存</a>
+                            </div>
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            <h4 class="modal-title" id="myModalLabel">请选择</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div id="menuContent" style="display: none;border:1px solid #808080;">
+                                                <ul id="treeDemo" class="ztree" style="width: 100%;"></ul>
+                                            </div>
+                                        </div>
+                                        @*<div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                            <button type="button" class="btn btn-primary">Save changes</button>
+                                        </div>*@
+                                    </div>
+                                </div>
                             </div>
                         </form>
 			        </div>

@@ -25,7 +25,7 @@
             <div class="portlet-title">
 
                 <div class="caption">
-                    <i class="fa fa-github"></i>任务列表
+                    <i class="fa fa-flag"></i>任务列表
                 </div>
                 <div class="tools">
                     <a href="javascript:;" class="reload" data-original-title="" title="刷新" ng-click="Query()"></a>
@@ -45,12 +45,12 @@
                         <a href="javascript:;" ng-click="Query('@TaskQuery.QueryType.QaFocus')">@@我的</a>
                     </div>
                     <div class="col-md-6 col-sm-6">
-                        <label for="form_control_1">任务名称：
-                            <input type="text" class="form-control  input-inline" id="form_control_1" ng-model="search" ng-keypress="Query()">
-                        </label>
-                    </div>  
+                        <div class="form-group form-md-line-input">
+                            <input type="text" class="form-control" id="form_control_1" placeholder="任务名称" ng-model="search" ng-keypress="Query()">
+                            <span class="help-block">请输入任务名称进行查询</span>
+                        </div>
+                    </div>
                 </div>
-
                 <div class="table-responsive">
                     <table class="table table-bordered table-hover table-condensed">
                         <thead>
@@ -77,7 +77,7 @@
                         </thead>
                         <tbody>
                         <tr ng-repeat="task in taskInfos">
-                            <td><a class="text-primary" href="/Task/Detail?taskId={{task.TaskInfo.Id}}">{{task.TaskInfo.TaskName}}</a> </td>
+                            <td><a  class="text-primary" href="/Task/Detail?taskId={{task.TaskInfo.Id}}">{{task.TaskInfo.TaskName}}</a> </td>
                             <td>{{task.ProjectName}}</td>
                             <td>{{task.TaskInfo.Branch}}</td>
                             <td title="{{(task.DeployInfoIoc.DeployStatus | DeployStatusFilter).Title}}">
