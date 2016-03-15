@@ -46,21 +46,22 @@ namespace Uoko.FireProj.WebSite.Controllers
                                              Controller = "Online",
                                              Action = "Index"
                                          },
+
                                          new MenuTreeVM()
                                          {
-                                             MenuName = "项目",
-                                             MenuLevel = 1,
-                                             Controller = "Project",
-                                             Action = "Index",
-                                         },
-                                         new MenuTreeVM()
-                                         {
-                                             MenuName = "系统设置",
+                                             MenuName = "基础信息",
                                              MenuLevel = 1,
                                              Controller = "SystemSet",
                                              Action = null,
                                              Children = new List<MenuTreeVM>()
                                                         {
+                                                             new MenuTreeVM()
+                                                             {
+                                                                 MenuName = "项目",
+                                                                 MenuLevel = 1,
+                                                                 Controller = "Project",
+                                                                 Action = "Index",
+                                                             },
                                                             new MenuTreeVM()
                                                             {
                                                                 MenuName = "服务器",
