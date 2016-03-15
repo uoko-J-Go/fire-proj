@@ -92,7 +92,8 @@ namespace Uoko.FireProj.Concretes
             var buildInfo = new Dictionary<string, string>
                             {
                                 {"invokeTime", DateTime.Now.ToString("yy-MM-dd HH:mm:ss")},
-                                {"rollbackVersion",taskInfo.FromVersion }
+                                {"rollbackVersion",taskInfo.FromVersion },
+                                {"Target", "Rollback"}
                             };
 
             var buildRequst = new TriggerRequest()
