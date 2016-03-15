@@ -228,6 +228,7 @@
     <Compile Include="Controllers\DictionaryController.cs" />
     <Compile Include="Controllers\OnlineController.cs" />
     <Compile Include="Controllers\ProjectController.cs" />
+    <Compile Include="Controllers\RollBackController.cs" />
     <Compile Include="Controllers\SystemSetController.cs" />
     <Compile Include="Controllers\TaskController.cs" />
     <Compile Include="Controllers\Users.cs" />
@@ -241,6 +242,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="app\controllers\OnlineDetail.js" />
+    <Content Include="app\controllers\Rollback.js" />
     <Content Include="app\controllers\ServerDetail.js" />
     <Content Include="app\controllers\ServerEdit.js" />
     <Content Include="app\controllers\ServerList.js" />
@@ -1238,6 +1240,7 @@
     <Content Include="Views\Task\Detail_bp.cshtml" />
     <None Include="Views\Online\Detail.cshtml" />
     <None Include="Views\Online\Index.cshtml" />
+    <Content Include="Views\Rollback\Index.cshtml" />
     <None Include="Web.Pre.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

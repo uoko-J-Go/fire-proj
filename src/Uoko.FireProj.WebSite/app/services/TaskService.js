@@ -220,4 +220,22 @@
             //错误处理
         });
     };
+    this.GetOnlineTaskRollbackAble = function (projectId, successCallBack) {
+        $http.get("/api/TaskApi/OnlineTasksRollbackAble/{0}".Format(projectId)).success(function (data) {
+            if (successCallBack != undefined) {
+                successCallBack(data);
+            }
+        }).error(function (data) {
+            //错误处理
+        });
+    };
+    this.Rollback = function (rollbackTaskInfo, successCallBack) {
+        $http.post("/api/TaskApi/Rollback", rollbackTaskInfo).success(function (data) {
+            if (successCallBack != undefined) {
+                successCallBack(data);
+            }
+        }).error(function (data) {
+            //错误处理
+        });
+    };
 });
