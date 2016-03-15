@@ -153,7 +153,7 @@ Target "BuildSolution" (fun _ ->
 Target "Rollback" (fun _ ->
     let invokeTime = getBuildParamEnsure "invokeTime" |> System.DateTime.Parse 
     let times = System.DateTime.Now - invokeTime
-    if (System.DateTime.Now - invokeTime) > (System.TimeSpan.FromMinutes 1.0) then failwithf "该次操作已经失效 %s" (invokeTime.ToString "yyyy-MM-dd HH:mm:ss")
+    if (System.DateTime.Now - invokeTime) > (System.TimeSpan.FromMinutes 1.0) then failwithf "该次操作已经失效,截止 %s,请重新发起操作" (invokeTime.AddMinutes(1.0).ToString "yyyy-MM-dd HH:mm:ss")
     
     let rollbackVersion = getBuildParamEnsure "rollbackVersion"
     let pkgDir = getBuildParamEnsure "pkgDir"
