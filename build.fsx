@@ -66,15 +66,14 @@ let deploy() =
     if exitCode <> 0 then failwithf "deploy cmd failed with a non-zero exit code %d."  exitCode
 
 
-let backup() =
-    let onlineTagName = getBuildParamEnsure "onlineTagName"
+let backup onlineVersion =
     let pkgDir = getBuildParamEnsure "pkgDir"
     let iisSiteName = getBuildParamEnsure "iisSiteName"
     let deployUser = getBuildParamEnsure "deployUser" // 系统自身配置
     let deployPwd = getBuildParamEnsure "deployPwd"   // 系统自身配置
     let msDeployUrl = getBuildParamEnsure "msDeployUrl"
     
-    let backupPath = sprintf "%s/backups/%s-before-%s.zip" pkgDir iisSiteName onlineTagName
+    let backupPath = sprintf "%s/backups/%s-before-%s.zip" pkgDir iisSiteName onlineVersion
     
     let sourceArg = sprintf @"-source:iisapp=""%s"",computerName=""%s?site=%s"",userName=""%s"",password=""%s"",authtype=""Basic"",includeAcls=""False""" iisSiteName msDeployUrl iisSiteName deployUser deployPwd
     let destArg = sprintf @"-dest:package=""%s"",computerName=""%s?site=%s"",userName=""%s"",password=""%s"",authtype=""Basic"",includeAcls=""False""" backupPath msDeployUrl iisSiteName deployUser deployPwd
@@ -102,7 +101,7 @@ let ffMergeAndDeploy onBranch =
         let onlineDate = System.DateTime.Today.Date.ToString("yyyy-MM-dd")
         let tagName = getBuildParamEnsure "onlineTagName"
         gitCommand null (sprintf "tag -f -a v-%s-%s -m \"deploy %s to %s\"" tagName onlineDate mergeFromBranch onBranch)
-        backup()
+        backup tagName
                 
     deploy()
 
@@ -152,13 +151,17 @@ Target "BuildSolution" (fun _ ->
 
 
 Target "Rollback" (fun _ ->
-    let onlineTagName = getBuildParamEnsure "onlineTagName"
+    let invokeTime = getBuildParamEnsure "invokeTime" |> System.DateTime.Parse 
+    let times = System.DateTime.Now - invokeTime
+    if (System.DateTime.Now - invokeTime) > (System.TimeSpan.FromMinutes 1.0) then failwithf "该次操作已经失效 %s" (invokeTime.ToString "yyyy-MM-dd HH:mm:ss")
+    
+    let rollbackVersion = getBuildParamEnsure "rollbackVersion"
     let pkgDir = getBuildParamEnsure "pkgDir"
     let iisSiteName = getBuildParamEnsure "iisSiteName"
     let deployUser = getBuildParamEnsure "deployUser" // 系统自身配置
     let deployPwd = getBuildParamEnsure "deployPwd"   // 系统自身配置
     let msDeployUrl = getBuildParamEnsure "msDeployUrl"
-    let backupPath = sprintf "%s/backups/%s-before-%s.zip" pkgDir iisSiteName onlineTagName
+    let backupPath = sprintf "%s/backups/%s-before-%s.zip" pkgDir iisSiteName rollbackVersion
     
     let sourceArg = sprintf @"-source:package=""%s"",computerName=""%s?site=%s"",userName=""%s"",password=""%s"",authtype=""Basic"",includeAcls=""False""" backupPath msDeployUrl iisSiteName deployUser deployPwd
     let destArg = sprintf @"-dest:iisapp=""%s"",computerName=""%s?site=%s"",userName=""%s"",password=""%s"",authtype=""Basic"",includeAcls=""False""" iisSiteName msDeployUrl iisSiteName deployUser deployPwd
@@ -173,7 +176,7 @@ Target "Rollback" (fun _ ->
 )
 
 Target "test" (fun _ ->
-    backup()
+    ()
 )
 
 
