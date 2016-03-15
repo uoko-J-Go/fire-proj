@@ -7,6 +7,7 @@ open Fake
 open Fake.Git
 open System
 
+let msdeployPath = getBuildParamOrDefault "msdeployPath" @"C:\Program Files (x86)\IIS\Microsoft Web Deploy V3\msdeploy.exe"
 
 let getBuildParamEnsure name =
     let value = environVar name
@@ -55,7 +56,6 @@ let deploy() =
     let deployPwd = getBuildParamEnsure "deployPwd"   // 系统自身配置
     let msDeployUrl = getBuildParamEnsure "msDeployUrl"
 
-    let msdeployPath = getBuildParamOrDefault "msdeployPath" @"C:\Program Files (x86)\IIS\Microsoft Web Deploy V3\msdeploy.exe"
     let msdeployArgs = sprintf @"-source:package=""%s"" -dest:auto,computerName=""%s?site=%s"",userName=""%s"",password=""%s"",authtype=""Basic"",includeAcls=""False"" -verb:sync 
     -disableLink:AppPoolExtension -disableLink:ContentExtension -disableLink:CertificateExtension 
     -setParamFile:""%s"" -allowUntrusted -enableRule:AppOffline -setParam:name=""IIS Web Application Name"",value=""%s""" pkgFullPath msDeployUrl iisSiteName deployUser deployPwd setParametersFile iisSiteName
@@ -64,6 +64,28 @@ let deploy() =
                     info.FileName <- msdeployPath
                     info.Arguments <- msdeployArgs) (TimeSpan.FromMinutes 1.0)
     if exitCode <> 0 then failwithf "deploy cmd failed with a non-zero exit code %d."  exitCode
+
+
+let backup() =
+    let onlineTagName = getBuildParamEnsure "onlineTagName"
+    let pkgDir = getBuildParamEnsure "pkgDir"
+    let iisSiteName = getBuildParamEnsure "iisSiteName"
+    let deployUser = getBuildParamEnsure "deployUser" // 系统自身配置
+    let deployPwd = getBuildParamEnsure "deployPwd"   // 系统自身配置
+    let msDeployUrl = getBuildParamEnsure "msDeployUrl"
+    
+    let backupPath = sprintf "%s/backups/%s-before-%s.zip" pkgDir iisSiteName onlineTagName
+    
+    let sourceArg = sprintf @"-source:iisapp=""%s"",computerName=""%s?site=%s"",userName=""%s"",password=""%s"",authtype=""Basic"",includeAcls=""False""" iisSiteName msDeployUrl iisSiteName deployUser deployPwd
+    let destArg = sprintf @"-dest:package=""%s"",computerName=""%s?site=%s"",userName=""%s"",password=""%s"",authtype=""Basic"",includeAcls=""False""" backupPath msDeployUrl iisSiteName deployUser deployPwd
+
+    let backupArgs = sprintf @"-verb:sync -allowUntrusted %s %s" sourceArg destArg
+
+    let exitCode = ExecProcess (fun info ->
+                    info.FileName <- msdeployPath
+                    info.Arguments <- backupArgs) (TimeSpan.FromMinutes 1.0)
+                    
+    if exitCode <> 0 then failwithf "backup failed with a non-zero exit code %d."  exitCode
 
 
 let ensureOnBranch branchNeeded =
@@ -79,7 +101,8 @@ let ffMergeAndDeploy onBranch =
     if onBranch = "master" then
         let onlineDate = System.DateTime.Today.Date.ToString("yyyy-MM-dd")
         let tagName = getBuildParamEnsure "onlineTagName"
-        gitCommand null (sprintf "tag -a v-%s-%s -m \"deploy %s to %s\"" tagName onlineDate mergeFromBranch onBranch)
+        gitCommand null (sprintf "tag -f -a v-%s-%s -m \"deploy %s to %s\"" tagName onlineDate mergeFromBranch onBranch)
+        backup()
                 
     deploy()
 
@@ -88,6 +111,7 @@ let ffMergeAndDeploy onBranch =
     gitCommand null (sprintf "remote set-url --push origin %s" useRunnerAccountUrl)
 
     gitCommand null "push --follow-tags"
+
 
 
 Target "Deploy-To-PRE" (fun _ ->
@@ -99,7 +123,6 @@ Target "Deploy-To-PRE" (fun _ ->
     
     ffMergeAndDeploy branchPre
 )
-
 
 Target "Online" (fun _ ->
     let branchMaster = "master"
@@ -125,6 +148,32 @@ Target "BuildSolution" (fun _ ->
             
     RestoreMSSolutionPackages (fun p -> p) slnFile
     build setParams slnFile
+)
+
+
+Target "Rollback" (fun _ ->
+    let onlineTagName = getBuildParamEnsure "onlineTagName"
+    let pkgDir = getBuildParamEnsure "pkgDir"
+    let iisSiteName = getBuildParamEnsure "iisSiteName"
+    let deployUser = getBuildParamEnsure "deployUser" // 系统自身配置
+    let deployPwd = getBuildParamEnsure "deployPwd"   // 系统自身配置
+    let msDeployUrl = getBuildParamEnsure "msDeployUrl"
+    let backupPath = sprintf "%s/backups/%s-before-%s.zip" pkgDir iisSiteName onlineTagName
+    
+    let sourceArg = sprintf @"-source:package=""%s"",computerName=""%s?site=%s"",userName=""%s"",password=""%s"",authtype=""Basic"",includeAcls=""False""" backupPath msDeployUrl iisSiteName deployUser deployPwd
+    let destArg = sprintf @"-dest:iisapp=""%s"",computerName=""%s?site=%s"",userName=""%s"",password=""%s"",authtype=""Basic"",includeAcls=""False""" iisSiteName msDeployUrl iisSiteName deployUser deployPwd
+
+    let rollbackArgs = sprintf @"-verb:sync -allowUntrusted %s %s" sourceArg destArg
+
+    let exitCode = ExecProcess (fun info ->
+                    info.FileName <- msdeployPath
+                    info.Arguments <- rollbackArgs) (TimeSpan.FromMinutes 1.0)
+                    
+    if exitCode <> 0 then failwithf "rollback cmd failed with a non-zero exit code %d."  exitCode
+)
+
+Target "test" (fun _ ->
+    backup()
 )
 
 
