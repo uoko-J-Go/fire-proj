@@ -60,10 +60,13 @@ let deploy() =
     -disableLink:AppPoolExtension -disableLink:ContentExtension -disableLink:CertificateExtension 
     -setParamFile:""%s"" -allowUntrusted -enableRule:AppOffline -setParam:name=""IIS Web Application Name"",value=""%s""" pkgFullPath msDeployUrl iisSiteName deployUser deployPwd setParametersFile iisSiteName
     
+    let tracing = ProcessHelper.enableProcessTracing
+    ProcessHelper.enableProcessTracing <- false
     let exitCode = ExecProcess (fun info ->
                     info.FileName <- msdeployPath
                     info.Arguments <- msdeployArgs) (TimeSpan.FromMinutes 1.0)
     if exitCode <> 0 then failwithf "deploy cmd failed with a non-zero exit code %d."  exitCode
+    ProcessHelper.enableProcessTracing <- tracing
 
 
 let backup onlineVersion =
@@ -80,11 +83,14 @@ let backup onlineVersion =
 
     let backupArgs = sprintf @"-verb:sync -allowUntrusted %s %s" sourceArg destArg
 
+    let tracing = ProcessHelper.enableProcessTracing
+    ProcessHelper.enableProcessTracing <- false
     let exitCode = ExecProcess (fun info ->
                     info.FileName <- msdeployPath
                     info.Arguments <- backupArgs) (TimeSpan.FromMinutes 1.0)
                     
     if exitCode <> 0 then failwithf "backup failed with a non-zero exit code %d."  exitCode
+    ProcessHelper.enableProcessTracing <- tracing
 
 
 let ensureOnBranch branchNeeded =
@@ -168,15 +174,19 @@ Target "Rollback" (fun _ ->
 
     let rollbackArgs = sprintf @"-verb:sync -allowUntrusted %s %s" sourceArg destArg
 
+    let trace = ProcessHelper.enableProcessTracing
+    ProcessHelper.enableProcessTracing <- false
     let exitCode = ExecProcess (fun info ->
                     info.FileName <- msdeployPath
                     info.Arguments <- rollbackArgs) (TimeSpan.FromMinutes 1.0)
-                    
+    ProcessHelper.enableProcessTracing <- trace
     if exitCode <> 0 then failwithf "rollback cmd failed with a non-zero exit code %d."  exitCode
 )
 
+
 Target "test" (fun _ ->
-    ()
+    printfn "before test------------>%b" ProcessHelper.enableProcessTracing
+    printfn "after test------------>%b" ProcessHelper.enableProcessTracing
 )
 
 
