@@ -156,6 +156,12 @@ namespace Uoko.FireProj.Concretes
             using (var dbScope = _dbScopeFactory.Create())
             {
                 var db = dbScope.DbContexts.Get<FireProjDbContext>();
+                //版本号唯一校验
+                var num = db.OnlineTaskInfos.Where(r => r.OnlineVersion == taskInfo.OnlineVersion && r.ProjectId == taskInfo.ProjectId).Count();
+                if (num > 0)
+                {
+                    throw new TipInfoException("上线版本号不允许重复!");
+                }
                 db.OnlineTaskInfos.Add(taskInfo);
                 db.SaveChanges();
 
