@@ -12,6 +12,7 @@ using Uoko.FireProj.DataAccess.Entity;
 using Uoko.FireProj.DataAccess.Enum;
 using Uoko.FireProj.DataAccess.Gitlab;
 using Uoko.FireProj.DataAccess.Mail;
+using Uoko.FireProj.DataAccess.Migrations;
 using Uoko.FireProj.DataAccess.Query;
 using Uoko.FireProj.Infrastructure.Data;
 using Uoko.FireProj.Infrastructure.Exception;
@@ -37,6 +38,105 @@ namespace Uoko.FireProj.Concretes
             _serverSvc = serverSvc;
         }
 
+        #endregion
+        #region 回滚任务
+
+        public IEnumerable<OnlineTaskInfo> GetOnlineTaskRollbackAble(int projectId)
+        {
+            using (var dbScope = _dbScopeFactory.CreateReadOnly())
+            {
+                var db = dbScope.DbContexts.Get<FireProjDbContext>();
+
+                var result = db.OnlineTaskInfos.Where(t =>t.ProjectId==projectId&&t.DeployStatus==DeployStatus.DeploySuccess).OrderByDescending(t=>t.Id).ToList();
+                result = result.Where(t => t.CreateDate.AddHours(12).CompareTo(DateTime.Now)>0).ToList(); 
+                return result;
+            }
+        }
+        public RollbackTaskInfo CreateRollbackTask(RollbackTaskInfo taskInfo)
+        {
+            using (var dbScope = _dbScopeFactory.Create())
+            {
+                var db = dbScope.DbContexts.Get<FireProjDbContext>();
+                taskInfo.CreatorId = UserHelper.CurrUserInfo.UserId;
+                taskInfo.CreatorName = UserHelper.CurrUserInfo.NickName;
+                taskInfo.CreateDate=DateTime.Now;
+                db.RollbackTaskInfo.Add(taskInfo);
+                db.SaveChanges();
+
+                return taskInfo;
+            }
+        }
+
+        public void DeployRollbackTask(RollbackTaskInfo taskInfo)
+        {
+            var gitlabToken = "D3MR_rnRZK4xWS-CtVho";
+            var gitLabApi = new WebApiProvider("http://gitlab.uoko.ioc:12015/api/v3/");
+
+            var project = _projectSvc.GetProjectById(taskInfo.ProjectId);
+            if (project == null)
+            {
+                throw new TipInfoException("找不到 Project");
+            }
+
+            var repoId = project.RepoId;
+
+            var triggerUrl = string.Format("projects/{0}/triggers?private_token={1}", repoId, gitlabToken);
+            var triggers = gitLabApi.Get<List<Trigger>>(triggerUrl)
+                           ?? new List<Trigger>();
+            var trigger = triggers.FirstOrDefault();
+            if (trigger == null)
+            {
+                throw new TipInfoException("项目在GitLab上未配置 triggers");
+            }
+
+            var buildInfo = new Dictionary<string, string>
+                            {
+                                {"invokeTime", DateTime.Now.ToString("yy-MM-dd HH:mm:ss")},
+                                {"rollbackVersion",taskInfo.FromVersion },
+                                {"Target", "Rollback"}
+                            };
+
+            var buildRequst = new TriggerRequest()
+            {
+                token = trigger.token,
+                @ref = "master",
+                variables = buildInfo
+            };
+
+            var triggerUri = string.Format("projects/{0}/trigger/builds?private_token={1}", repoId, gitlabToken);
+            var triggerId = gitLabApi.Post<TriggerRequest, TriggerResponse>(triggerUri, buildRequst).id;
+
+            using (var dbScope = _dbScopeFactory.Create())
+            {
+                var db = dbScope.DbContexts.Get<FireProjDbContext>();
+                var taskFromDb = db.RollbackTaskInfo.Find(taskInfo.Id);
+                if (taskFromDb != null)
+                {
+                    taskFromDb.TriggeredId = triggerId;
+                    taskFromDb.DeployStatus = DeployStatus.Deploying;
+                    taskFromDb.ModifierName = UserHelper.CurrUserInfo.NickName;
+                    taskFromDb.ModifyId = UserHelper.CurrUserInfo.UserId;
+                    taskFromDb.ModifyDate = DateTime.Now;
+
+                    #region 写日志
+                    var log = new TaskLogs
+                    {
+                        TaskId = taskFromDb.Id,
+                        LogType = LogType.RollBack,
+                        Stage = StageEnum.PRODUCTION,
+                        TriggeredId = triggerId,
+                        CreateDate = DateTime.Now,
+                        CreatorId = UserHelper.CurrUserInfo.UserId,
+                        CreatorName = UserHelper.CurrUserInfo.NickName,
+                        DeployInfo = JsonHelper.ToJson(taskFromDb)
+                    };
+                    db.TaskLogs.Add(log);
+                    #endregion
+                }
+
+                dbScope.SaveChanges();
+            }
+        } 
         #endregion
 
         /// <summary>
@@ -755,7 +855,7 @@ namespace Uoko.FireProj.Concretes
                     var log = new TaskLogs
                     {
                         TaskId = taskLog.TaskId,
-                        LogType = LogType.Deploy,
+                        LogType = taskLog.LogType,
                         Stage = taskLog.Stage,
                         TriggeredId = triggerId,
                         CreateDate = DateTime.Now,
@@ -787,12 +887,32 @@ namespace Uoko.FireProj.Concretes
                             log.DeployInfo = entityPre.DeployInfoPreJson;
                             break;
                         case StageEnum.PRODUCTION:
-                            var entityOnline = db.OnlineTaskInfos.FirstOrDefault(r => r.Id == taskLog.TaskId);
-                            if (entityOnline == null) return;
-                            entityOnline.DeployStatus = deployStatus;
-                            entityOnline.BuildId = buildId;
-                            entityOnline.ModifyDate = DateTime.Now;
-                            log.DeployInfo = JsonHelper.ToJson(entityOnline);
+                            if (taskLog.LogType == LogType.Deploy)
+                            {
+                                var entityOnline = db.OnlineTaskInfos.FirstOrDefault(r => r.Id == taskLog.TaskId);
+                                if (entityOnline == null) return;
+                                var entityProject = db.Project.FirstOrDefault(t => t.Id == entityOnline.ProjectId);
+                                entityOnline.DeployStatus = deployStatus;
+                                entityOnline.BuildId = buildId;
+                                entityOnline.ModifyDate = DateTime.Now;
+                                //更新任务当前的线上版本
+                                entityProject.OnlineVersion = entityOnline.OnlineVersion;
+
+                                log.DeployInfo = JsonHelper.ToJson(entityOnline);
+                            }
+                            else if(taskLog.LogType==LogType.RollBack)
+                            {
+                                var entityRollback = db.RollbackTaskInfo.FirstOrDefault(t => t.Id == taskLog.TaskId);
+                                if (entityRollback == null) return;
+                                var entityProject = db.Project.FirstOrDefault(t => t.Id == entityRollback.ProjectId);
+                                entityRollback.DeployStatus = deployStatus;
+                                entityRollback.BuildId = buildId;
+                                entityRollback.ModifyDate = DateTime.Now;
+                                //更新任务当前的线上版本
+                                entityProject.OnlineVersion = entityRollback.ToVersion;
+                                log.DeployInfo = JsonHelper.ToJson(entityRollback);
+                            }
+                           
                             break;
                     }
                 
@@ -1126,5 +1246,7 @@ namespace Uoko.FireProj.Concretes
                 return data.ToList();
             }
         }
+
+     
     }
 }

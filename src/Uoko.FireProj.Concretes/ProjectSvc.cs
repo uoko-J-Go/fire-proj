@@ -103,6 +103,9 @@ namespace Uoko.FireProj.Concretes
                     ProjectCsprojName = r.ProjectCsprojName,
                     RepoId = r.RepoId,
                     DomainRule = r.DomainRule,
+                    CreatorId = r.CreatorId,
+                    CreatorName = r.CreatorName,
+                    OnlineVersion = r.OnlineVersion
                 });
                 var result = data.ToList();
                 return result;
@@ -124,6 +127,9 @@ namespace Uoko.FireProj.Concretes
                     RepoId = r.RepoId,
                     ProjectCsprojName=r.ProjectCsprojName,
                     DomainRule = r.DomainRule,
+                    CreatorId = r.CreatorId,
+                    CreatorName = r.CreatorName,
+                    OnlineVersion = r.OnlineVersion
                 }).FirstOrDefault();
 
                 return data;
@@ -149,6 +155,9 @@ namespace Uoko.FireProj.Concretes
                         ProjectCsprojName = p.ProjectCsprojName,
                         RepoId = p.RepoId,
                         DomainRule = p.DomainRule,
+                        CreatorId = p.CreatorId,
+                        CreatorName = p.CreatorName,
+                        OnlineVersion = p.OnlineVersion
                     };
                 return data.FirstOrDefault();
             }
@@ -167,6 +176,9 @@ namespace Uoko.FireProj.Concretes
                     ProjectDesc = r.ProjectDesc,
                     ProjectSlnName = r.ProjectSlnName,
                     ProjectCsprojName = r.ProjectCsprojName,
+                    CreatorId = r.CreatorId,
+                    CreatorName = r.CreatorName,
+                    OnlineVersion = r.OnlineVersion,
                     RepoId = r.RepoId,
                 });
                 if (!string.IsNullOrEmpty(query.Search))

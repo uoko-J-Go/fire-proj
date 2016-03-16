@@ -36,7 +36,23 @@ namespace Uoko.FireProj.WebSite.ControllerApi
             var result = _taskSvc.GetTaskPage(query);
             return Ok(result);
         }
+        [Route("OnlineTasksRollbackAble/{projectId}")]
+        public IHttpActionResult GetOnlineTaskRollbackAble(int projectId)
+        {
+            var result = _taskSvc.GetOnlineTaskRollbackAble(projectId);
+            return Ok(result);
+        }
+        [Route("Rollback")]
+        [HttpPost]
+        public IHttpActionResult Rollback([FromBody] RollbackTaskInfo rollbackTask)
+        {
+            // 创建完成回滚任务
+            var taskFromDb = _taskSvc.CreateRollbackTask(rollbackTask);
+            // 进行任务的部署
+            _taskSvc.DeployRollbackTask(taskFromDb);
 
+            return Ok();
+        }
         [Route("tasksNeedOnline/{projectId}")]
         public IHttpActionResult GetTasksNeedToBeOnline(int projectId)
         {

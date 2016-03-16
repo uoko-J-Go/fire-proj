@@ -46,7 +46,13 @@ namespace Uoko.FireProj.WebSite.Controllers
                                              Controller = "Online",
                                              Action = "Index"
                                          },
-
+                                          new MenuTreeVM()
+                                         {
+                                             MenuName = "紧急回滚",
+                                             MenuLevel = 1,
+                                             Controller = "Rollback",
+                                             Action = "Index"
+                                         },
                                          new MenuTreeVM()
                                          {
                                              MenuName = "基础信息",

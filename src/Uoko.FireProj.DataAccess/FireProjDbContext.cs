@@ -25,6 +25,8 @@ namespace Uoko.FireProj.Model
 
         public DbSet<OnlineTaskInfo> OnlineTaskInfos { get; set; }
 
+        public DbSet<RollbackTaskInfo> RollbackTaskInfo { get; set; }
+
         #endregion
 
 
@@ -37,6 +39,7 @@ namespace Uoko.FireProj.Model
             modelBuilder.Configurations.Add(new TaskLogsMap());
             modelBuilder.Configurations.Add(new ServerMap());
             modelBuilder.Configurations.Add(new OnlineTaskInfoMap());
+            modelBuilder.Configurations.Add(new RollbackTaskInfoMap());
         }
     }
 

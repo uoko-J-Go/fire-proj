@@ -1,0 +1,78 @@
+﻿@{
+    ViewBag.Title = "紧急回滚";
+}
+
+<input type="hidden" id="userId" value="@ViewBag.UserId" />
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <i class="fa fa-home"></i>
+            <a href="@Url.Action(" Index", "Task" )">首页</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="@Url.Action(" Index", "Rollback" )">紧急回滚</a>
+        </li>
+    </ul>
+</div>
+
+<div class="row" ng-controller="RollbackController">
+    <div class="col-md-12">
+        <!-- BEGIN EXAMPLE TABLE PORTLET-->
+        <div class="portlet box blue ">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-bullhorn"></i>紧急回滚
+                </div>
+            </div>
+            <div class="portlet-body">
+                <form role="form" class="form form-horizontal" name="form" ng-submit="Rollback(form.$valid)">
+                    <div class="form-body">
+                        <div class="form-group form-md-line-input">
+                            <label class="col-md-2 control-label">项目</label>
+                            <div class="col-md-10">
+                                <select class="form-control" name="project" ng-model="projectSelected" ng-change="GetOnlineTaskRollbackAble()" ng-options="project.ProjectName for project in projects track by project.Id" required></select>
+                                <div ng-if="form.$submitted || form.project.$touched">
+                                    <span class="error-msg" ng-if="form.project.$error.required">请选择项目</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group form-md-line-input" ng-show="projectSelected.OnlineVersion">
+                            <label class="col-md-2 control-label">
+                                当前版本
+                            </label>
+                            <div class="col-md-10 value">
+                                <span ng-bind="projectSelected.OnlineVersion"></span> 
+                            </div>
+                        </div>
+
+                        <div class="form-group form-md-line-input">
+                            <label class="col-md-2 control-label">回滚版本</label>
+                            <div class="col-md-10">
+                                <select name="onlineVersion" class="form-control" ng-model="taskSelected" ng-options="task.OnlineVersion for task in onlineTasks track by task.Id" required></select>
+                                <div class="" ng-if="form.$submitted || form.onlineVersion.$touched">
+                                    <span class="error-msg" ng-if="form.onlineVersion.$error.required">请选择回滚版本</span>
+                                </div>
+                            </div>
+                        </div> 
+
+                    </div>
+                    <div class="form-actions right">
+                        <button ng-disabled="form.$invalid"  type="submit" class="btn blue"><i class="fa fa-angle-left"></i>回 滚 </button>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+        <!-- END EXAMPLE TABLE PORTLET-->
+
+    </div>
+</div>
+
+@section Scripts {
+<script src="~/app/services/ProjectService.js"></script>
+<script src="~/app/services/TaskService.js"></script>
+<script src="~/app/filters/CommonFilter.js"></script>
+<script src="~/app/controllers/Rollback.js"></script>
+}

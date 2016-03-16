@@ -8,7 +8,17 @@ namespace Uoko.FireProj.DataAccess.Enum
 {
     public enum LogType
     {
+        /// <summary>
+        /// 部署
+        /// </summary>
         Deploy = 0,
+        /// <summary>
+        /// 测试
+        /// </summary>
         QA = 1,
+        /// <summary>
+        /// 回滚
+        /// </summary>
+        RollBack=2
     }
 }
