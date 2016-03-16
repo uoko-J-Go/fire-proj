@@ -31,7 +31,7 @@
                         <div class="form-group form-md-line-input">
                             <label class="col-md-2 control-label">项目</label>
                             <div class="col-md-10">
-                                <select class="form-control" name="project" ng-model="projectSelected" ng-change="GetOnlineTaskRollbackAble()" ng-options="project.ProjectName for project in projects track by project.Id" required></select>
+                                <select class="form-control" name="project" ng-model="projectSelected"  ng-options="project.ProjectName for project in projects track by project.Id" required></select>
                                 <div ng-if="form.$submitted || form.project.$touched">
                                     <span class="error-msg" ng-if="form.project.$error.required">请选择项目</span>
                                 </div>

@@ -106,7 +106,8 @@ namespace Uoko.FireProj.Abstracts
         /// 获取可以回滚的任务
         /// </summary>
         /// <param name="projectId"></param>
+        /// <param name="serverId"></param>
         /// <returns></returns>
-       IEnumerable<OnlineTaskInfo> GetOnlineTaskRollbackAble(int projectId);
+        IEnumerable<OnlineTaskInfo> GetOnlineTaskRollbackAble(int projectId, int serverId);
     }
 }

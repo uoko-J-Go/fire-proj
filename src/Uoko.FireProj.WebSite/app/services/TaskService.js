@@ -220,8 +220,8 @@
             //错误处理
         });
     };
-    this.GetOnlineTaskRollbackAble = function (projectId, successCallBack) {
-        $http.get("/api/TaskApi/OnlineTasksRollbackAble/{0}".Format(projectId)).success(function (data) {
+    this.GetOnlineTaskRollbackAble = function (projectId,serverId, successCallBack) {
+        $http.get("/api/TaskApi/OnlineTasksRollbackAble/{0}/{1}".Format(projectId, serverId)).success(function (data) {
             if (successCallBack != undefined) {
                 successCallBack(data);
             }

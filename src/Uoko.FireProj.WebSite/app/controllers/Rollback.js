@@ -36,7 +36,10 @@
         if ($scope.projectSelected) {
             projectId = $scope.projectSelected.Id;
         }
-        TaskService.GetOnlineTaskRollbackAble(projectId,function (data) {
+        if ($scope.serverSelected) {
+            serverId = $scope.serverSelected.Id;
+        }
+        TaskService.GetOnlineTaskRollbackAble(projectId, serverId, function (data) {
             $scope.onlineTasks = data;
         });
 
@@ -91,6 +94,7 @@
     };
      $scope.$watch('projectSelected + serverSelected', function() {
          $scope.getDomain($scope.projectSelected, $scope.serverSelected);
+         $scope.GetOnlineTaskRollbackAble();
      }, true);
      $scope.init = function () {
          $scope.getProjectList();

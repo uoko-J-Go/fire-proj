@@ -41,14 +41,14 @@ namespace Uoko.FireProj.Concretes
         #endregion
         #region 回滚任务
 
-        public IEnumerable<OnlineTaskInfo> GetOnlineTaskRollbackAble(int projectId)
+        public IEnumerable<OnlineTaskInfo> GetOnlineTaskRollbackAble(int projectId, int serverId)
         {
             using (var dbScope = _dbScopeFactory.CreateReadOnly())
             {
                 var db = dbScope.DbContexts.Get<FireProjDbContext>();
 
-                var result = db.OnlineTaskInfos.Where(t =>t.ProjectId==projectId&&t.DeployStatus==DeployStatus.DeploySuccess).OrderByDescending(t=>t.Id).ToList();
-                result = result.Where(t => t.CreateDate.AddHours(12).CompareTo(DateTime.Now)>0).ToList(); 
+                var result = db.OnlineTaskInfos.Where(t => t.ProjectId == projectId && t.DeployStatus == DeployStatus.DeploySuccess && t.DeployServerId == serverId).OrderByDescending(t => t.Id).ToList();
+                result = result.Where(t => t.CreateDate.AddHours(12).CompareTo(DateTime.Now) > 0).ToList();
                 return result;
             }
         }

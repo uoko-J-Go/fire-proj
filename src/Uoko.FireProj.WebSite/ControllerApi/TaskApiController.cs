@@ -36,10 +36,10 @@ namespace Uoko.FireProj.WebSite.ControllerApi
             var result = _taskSvc.GetTaskPage(query);
             return Ok(result);
         }
-        [Route("OnlineTasksRollbackAble/{projectId}")]
-        public IHttpActionResult GetOnlineTaskRollbackAble(int projectId)
+        [Route("OnlineTasksRollbackAble/{projectId}/{serverId}")]
+        public IHttpActionResult GetOnlineTaskRollbackAble(int projectId, int serverId)
         {
-            var result = _taskSvc.GetOnlineTaskRollbackAble(projectId);
+            var result = _taskSvc.GetOnlineTaskRollbackAble(projectId, serverId);
             return Ok(result);
         }
         [Route("Rollback")]
