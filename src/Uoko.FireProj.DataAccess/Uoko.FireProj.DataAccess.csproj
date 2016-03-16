@@ -248,6 +248,10 @@
     <Compile Include="Migrations\201603151224457_addrollback.Designer.cs">
       <DependentUpon>201603151224457_addrollback.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201603160732459_update-rollbacktaskinfo.cs" />
+    <Compile Include="Migrations\201603160732459_update-rollbacktaskinfo.Designer.cs">
+      <DependentUpon>201603160732459_update-rollbacktaskinfo.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Query\BaseQuery.cs" />
@@ -373,6 +377,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201603151224457_addrollback.resx">
       <DependentUpon>201603151224457_addrollback.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201603160732459_update-rollbacktaskinfo.resx">
+      <DependentUpon>201603160732459_update-rollbacktaskinfo.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

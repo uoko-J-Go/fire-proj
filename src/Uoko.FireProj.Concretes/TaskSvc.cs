@@ -77,7 +77,11 @@ namespace Uoko.FireProj.Concretes
             {
                 throw new TipInfoException("找不到 Project");
             }
-
+            var deployServer = _serverSvc.GetServerById(taskInfo.DeployServerId);
+            if (deployServer == null)
+            {
+                throw new TipInfoException("没有 server 信息");
+            }
             var repoId = project.RepoId;
 
             var triggerUrl = string.Format("projects/{0}/triggers?private_token={1}", repoId, gitlabToken);
@@ -93,6 +97,9 @@ namespace Uoko.FireProj.Concretes
                             {
                                 {"invokeTime", DateTime.Now.ToString("yy-MM-dd HH:mm:ss")},
                                 {"rollbackVersion",taskInfo.FromVersion },
+                                {"iisSiteName", taskInfo.SiteName},
+                                {"pkgDir", deployServer.PackageDir},
+                                {"msDeployUrl", "https://" + taskInfo.DeployServerIP + ":8172/msdeploy.axd"},
                                 {"Target", "Rollback"}
                             };
 
@@ -891,25 +898,35 @@ namespace Uoko.FireProj.Concretes
                             {
                                 var entityOnline = db.OnlineTaskInfos.FirstOrDefault(r => r.Id == taskLog.TaskId);
                                 if (entityOnline == null) return;
-                                var entityProject = db.Project.FirstOrDefault(t => t.Id == entityOnline.ProjectId);
+                                
                                 entityOnline.DeployStatus = deployStatus;
                                 entityOnline.BuildId = buildId;
                                 entityOnline.ModifyDate = DateTime.Now;
-                                //更新任务当前的线上版本
-                                entityProject.OnlineVersion = entityOnline.OnlineVersion;
-
+                                if (deployStatus == DeployStatus.DeploySuccess)
+                                {
+                                    //更新任务当前的线上版本
+                                    var entityProject = db.Project.FirstOrDefault(t => t.Id == entityOnline.ProjectId);
+                                    entityProject.OnlineVersion = entityOnline.OnlineVersion;
+                                }
+                              
                                 log.DeployInfo = JsonHelper.ToJson(entityOnline);
                             }
                             else if(taskLog.LogType==LogType.RollBack)
                             {
                                 var entityRollback = db.RollbackTaskInfo.FirstOrDefault(t => t.Id == taskLog.TaskId);
                                 if (entityRollback == null) return;
-                                var entityProject = db.Project.FirstOrDefault(t => t.Id == entityRollback.ProjectId);
+                              
                                 entityRollback.DeployStatus = deployStatus;
                                 entityRollback.BuildId = buildId;
                                 entityRollback.ModifyDate = DateTime.Now;
-                                //更新任务当前的线上版本
-                                entityProject.OnlineVersion = entityRollback.ToVersion;
+                                if (deployStatus == DeployStatus.DeploySuccess)
+                                {
+                                    //更新任务当前的线上版本
+                                    var entityProject = db.Project.FirstOrDefault(t => t.Id == entityRollback.ProjectId);    
+                                    entityProject.OnlineVersion = entityRollback.ToVersion;
+                                }
+
+                               
                                 log.DeployInfo = JsonHelper.ToJson(entityRollback);
                             }
                            

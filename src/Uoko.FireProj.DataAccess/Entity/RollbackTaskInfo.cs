@@ -29,6 +29,29 @@ namespace Uoko.FireProj.DataAccess.Entity
         /// 目标版本
         /// </summary>
         public string ToVersion { get; set; }
+
+
+        public int DeployServerId { get; set; }
+
+        /// <summary>
+        /// 部署服务器IP地址
+        /// </summary>
+        public string DeployServerIP { get; set; }
+
+        /// <summary>
+        /// 部署机器名称
+        /// </summary>
+        public string DeployServerName { get; set; }
+
+        /// <summary>
+        /// 部署域名
+        /// </summary>
+        public string Domain { get; set; }
+
+        /// <summary>
+        /// IIS站点名称
+        /// </summary>
+        public string SiteName { get; set; }
         /// <summary>
         /// 任务状态
         /// </summary>
