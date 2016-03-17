@@ -234,7 +234,7 @@ namespace Uoko.FireProj.Concretes
                 throw new TipInfoException("项目在GitLab上未配置 triggers");
             }
 
-            var onlineTagName = string.Format("{0}-{1}", onlineTaskInfo.OnlineVersion, onlineTaskInfo.Id);
+            var onlineTagName = string.Format("{0}", onlineTaskInfo.OnlineVersion);
             var buildInfo = new Dictionary<string, string>
                             {
                                 {"slnFile", project.ProjectSlnName},
