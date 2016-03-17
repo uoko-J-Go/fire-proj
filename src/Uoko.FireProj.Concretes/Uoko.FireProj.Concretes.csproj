@@ -29,7 +29,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Pre|AnyCPU'">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'fire.pre.uoko.ioc|AnyCPU' ">
     <OutputPath>bin\Pre\</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'fire.uoko.ioc|AnyCPU'">
