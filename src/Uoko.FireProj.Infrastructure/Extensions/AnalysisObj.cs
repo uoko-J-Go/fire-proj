@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,7 +9,7 @@ using Uoko.FireProj.DataAccess.Enum;
 
 namespace Uoko.FireProj.Infrastructure.Extensions
 {
-    public class AnalysisUser
+    public class AnalysisObj
     {
         public static List<UserDto> AnalysisCheckUser(string userInfo)
         {
@@ -45,6 +46,24 @@ namespace Uoko.FireProj.Infrastructure.Extensions
                 });
             }
             return userDtoData;
+        }
+
+        /// <summary>
+        /// 获取域名主体
+        /// </summary>
+        /// <param name="domain"></param>
+        /// <returns></returns>
+        public static string AnalysisDomain(string domain)
+        {
+           var isUseWebConfigTrans = ConfigurationManager.AppSettings["IsUseWebConfigTrans"];
+            if (isUseWebConfigTrans == "true")
+            {
+                Uri url = new Uri(domain);
+                return url.Authority;
+            }
+            else {
+                return "Release";
+            }
         }
     }
 }

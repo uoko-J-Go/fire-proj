@@ -242,7 +242,7 @@ namespace Uoko.FireProj.Concretes
                                 {"iisSiteName", onlineTaskInfo.SiteName},
                                 {"pkgDir", deployServer.PackageDir},
                                 {"msDeployUrl", "https://" + onlineTaskInfo.DeployServerIP + ":8172/msdeploy.axd"},
-                                {"useConfig", "Release"},
+                                {"useConfig", AnalysisObj.AnalysisDomain(onlineTaskInfo.Domain)},
                                 {"Target", "Online"},
                                 {"mergeFromBranch", "pre"},
                                 {"onlineTagName", onlineTagName},
@@ -589,18 +589,18 @@ namespace Uoko.FireProj.Concretes
                 }
 
                 //获取测试,通知人Id集合返回
-                taskDto.DeployInfoIocDto.CheckUser = AnalysisUser.AnalysisCheckUser(taskDto.DeployInfoIocDto.CheckUserId);
+                taskDto.DeployInfoIocDto.CheckUser = AnalysisObj.AnalysisCheckUser(taskDto.DeployInfoIocDto.CheckUserId);
                 taskDto.DeployInfoIocDto.NoticeUser =
-                    AnalysisUser.AnalysisNoticeUser(taskDto.DeployInfoIocDto.NoticeUserId);
+                    AnalysisObj.AnalysisNoticeUser(taskDto.DeployInfoIocDto.NoticeUserId);
 
-                taskDto.DeployInfoPreDto.CheckUser = AnalysisUser.AnalysisCheckUser(taskDto.DeployInfoPreDto.CheckUserId);
+                taskDto.DeployInfoPreDto.CheckUser = AnalysisObj.AnalysisCheckUser(taskDto.DeployInfoPreDto.CheckUserId);
                 taskDto.DeployInfoPreDto.NoticeUser =
-                    AnalysisUser.AnalysisNoticeUser(taskDto.DeployInfoPreDto.NoticeUserId);
+                    AnalysisObj.AnalysisNoticeUser(taskDto.DeployInfoPreDto.NoticeUserId);
 
                 taskDto.DeployInfoOnlineDto.CheckUser =
-                    AnalysisUser.AnalysisCheckUser(taskDto.DeployInfoOnlineDto.CheckUserId);
+                    AnalysisObj.AnalysisCheckUser(taskDto.DeployInfoOnlineDto.CheckUserId);
                 taskDto.DeployInfoOnlineDto.NoticeUser =
-                    AnalysisUser.AnalysisNoticeUser(taskDto.DeployInfoOnlineDto.NoticeUserId);
+                    AnalysisObj.AnalysisNoticeUser(taskDto.DeployInfoOnlineDto.NoticeUserId);
 
                 return taskDto;
             }
@@ -736,6 +736,7 @@ namespace Uoko.FireProj.Concretes
                 var iisSiteName = string.Empty;
                 var deployIP = string.Empty;
                 var packagDir = string.Empty;
+                var domain = string.Empty;
                 var _ref = taskDto.Branch;
                 switch (deployStage)
                 {
@@ -743,6 +744,7 @@ namespace Uoko.FireProj.Concretes
                         target = "Deploy-To-IOC";
                         iisSiteName = taskDto.DeployInfoIocDto.SiteName;
                         deployIP = taskDto.DeployInfoIocDto.DeployIP;
+                        domain = taskDto.DeployInfoIocDto.Domain;
                         using (var dbScope = _dbScopeFactory.CreateReadOnly())
                         {
                             var db = dbScope.DbContexts.Get<FireProjDbContext>();
@@ -755,6 +757,7 @@ namespace Uoko.FireProj.Concretes
                         target = "Deploy-To-PRE";
                         iisSiteName = taskDto.DeployInfoPreDto.SiteName;
                         deployIP = taskDto.DeployInfoPreDto.DeployIP;
+                        domain = taskDto.DeployInfoPreDto.Domain;
                         using (var dbScope = _dbScopeFactory.CreateReadOnly())
                         {
                             var db = dbScope.DbContexts.Get<FireProjDbContext>();
@@ -767,6 +770,7 @@ namespace Uoko.FireProj.Concretes
                         target = "Online";
                         iisSiteName = taskDto.DeployInfoOnlineDto.SiteName;
                         deployIP = taskDto.DeployInfoOnlineDto.DeployIP;
+                        domain = taskDto.DeployInfoOnlineDto.Domain;
                         using (var dbScope = _dbScopeFactory.CreateReadOnly())
                         {
                             var db = dbScope.DbContexts.Get<FireProjDbContext>();
@@ -783,7 +787,7 @@ namespace Uoko.FireProj.Concretes
                 buildInfo.Add("iisSiteName", iisSiteName);
                 buildInfo.Add("pkgDir", packagDir);
                 buildInfo.Add("msDeployUrl", "https://" + deployIP + ":8172/msdeploy.axd");
-                buildInfo.Add("useConfig", "fire.uoko.ioc");
+                buildInfo.Add("useConfig", AnalysisObj.AnalysisDomain(domain));
                 buildInfo.Add("Target", target);
                 buildInfo.Add("mergeFromBranch", taskDto.Branch);
                 buildInfo.Add("FireTaskId", taskId.ToString());
@@ -1198,7 +1202,7 @@ namespace Uoko.FireProj.Concretes
                                 foreach (var task in taskInfos)
                                 {
                                     var onlineDeployInfo =JsonHelper.FromJson<DeployInfoOnline>(task.DeployInfoOnlineJson);
-                                    var checkUsers = AnalysisUser.AnalysisCheckUser(onlineDeployInfo.CheckUserId);
+                                    var checkUsers = AnalysisObj.AnalysisCheckUser(onlineDeployInfo.CheckUserId);
 
                                     foreach (var user in checkUsers)
                                     {
@@ -1207,7 +1211,7 @@ namespace Uoko.FireProj.Concretes
                                             toIds.Add(user.UserId);
                                         }
                                     }
-                                    var noticeUsers = AnalysisUser.AnalysisNoticeUser(onlineDeployInfo.NoticeUserId);
+                                    var noticeUsers = AnalysisObj.AnalysisNoticeUser(onlineDeployInfo.NoticeUserId);
                                     foreach (var user in noticeUsers)
                                     {
                                         if (!ccIds.Contains(user.UserId))
