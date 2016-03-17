@@ -1242,10 +1242,10 @@
     <None Include="Views\Online\Detail.cshtml" />
     <None Include="Views\Online\Index.cshtml" />
     <Content Include="Views\Rollback\Index.cshtml" />
-    <None Include="Web.fire.uoko.ioc.config">
+    <None Include="Web.fire.pre.uoko.ioc.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
-    <None Include="Web.Pre.config">
+    <None Include="Web.fire.uoko.ioc.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
@@ -1295,7 +1295,7 @@
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Pre|AnyCPU'">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'fire.pre.uoko.ioc|AnyCPU' ">
     <OutputPath>bin\</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'fire.uoko.ioc|AnyCPU'">
