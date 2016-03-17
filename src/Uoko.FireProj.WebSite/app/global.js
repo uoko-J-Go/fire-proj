@@ -25,7 +25,12 @@ var fireproj;
 
 })();
 
-
+//全局数据
+var  Global= {
+    UserId: $("#userId").val(),
+    GitLabUrl: $("#gitlabUrl").val(),
+    GitLabToken: $("#gitlabToken").val()
+}
 //表单提交成功事件通用操作
 var formSubmitSuccessClick = function (operation) {
     bootbox.alert("操作成功", function (data) {

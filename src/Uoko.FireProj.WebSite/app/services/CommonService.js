@@ -1,7 +1,7 @@
 ﻿fireproj.service("CommonService", function ($http) {
 
     this.getProjectBranch = function (id, successCallBack) {
-        $http.get("http://gitlab.uoko.ioc:12015/api/v3/projects/{0}/repository/branches?private_token=D3MR_rnRZK4xWS-CtVho".Format(id)).success(function (data) {
+        $http.get("{0}/api/v3/projects/{1}/repository/branches?private_token={2}".Format(Global.GitLabUrl,id,Global.GitLabToken)).success(function (data) {
             if (successCallBack != undefined) {
             //排除pre和master分支
                 data=data.filter(function (branch) {
@@ -15,7 +15,6 @@
         });
     };
     this.getAllUsers = function (successCallBack) {
-        //$http.get("http://gitlab.uoko.ioc:12015/api/v3/users?private_token=D3MR_rnRZK4xWS-CtVho").success(function (data) {
         $http.get("/api/UserApi").success(function (data) {
             if (successCallBack != undefined) {
                 successCallBack(data);
@@ -25,7 +24,7 @@
         });
     };
     this.getSingleUser = function (userId,successCallBack) {
-        $http.get("http://gitlab.uoko.ioc:12015/api/v3/users/{0}/?private_token=D3MR_rnRZK4xWS-CtVho".Format(userId)).success(function (data) {
+        $http.get("{0}/api/v3/users/{1}/?private_token={2}".Format(Global.GitLabUrl, userId, Global.GitLabToken)).success(function (data) {
             if (successCallBack != undefined) {
                 successCallBack(data);
             }
@@ -34,40 +33,12 @@
         });
     };
     this.getProjectTriggers = function (id, successCallBack) {
-        $http.get("http://gitlab.uoko.ioc:12015/api/v3/projects/{0}/triggers?private_token=D3MR_rnRZK4xWS-CtVho".Format(id)).success(function (data) {
+        $http.get("{0}/api/v3/projects/{1}/triggers?private_token={2}".Format(Global.GitLabUrl, id, Global.GitLabToken)).success(function (data) {
             if (successCallBack != undefined) {
                 successCallBack(data);
             }
         }).error(function (data) {
             //错误处理
         });
-    };
-    //触发项目
-    this.TriggerBuild = function (buildInfo, successCallBack) {
-        var params = {
-            "slnFile": buildInfo.ProjectSlnName,
-            "csProjFile": buildInfo.ProjectCsprojName,
-            "iisSiteName": buildInfo.SiteName,
-            "pkgDir": buildInfo.PackageDir,
-            "msDeployUrl": "https://" + buildInfo.DeployIP + ":8172/msdeploy.axd",
-            "useConfig": "Release", //taskInfo.DeployEnvironmentName,
-            "Target": buildInfo.Target//"Deploy-To-IOC"
-        };
-        this.getProjectTriggers(buildInfo.RepoId, function (data) {
-            var triggers = data;
-            if (triggers.length <= 0) {
-                console.error("无Trigger 请到GitLab中配置");
-                return;
-            }
-            $http.post("http://gitlab.uoko.ioc:12015/api/v3/projects/{0}/trigger/builds?private_token=D3MR_rnRZK4xWS-CtVho".Format(buildInfo.RepoId ), { token: triggers[0].token, ref: buildInfo.Branch, variables: params }).success(function (data) {
-                if (successCallBack != undefined) {
-                    successCallBack(data);
-                }
-            }).error(function (data) {
-                //错误处理
-            });
-
-        });
-       
     };
 });

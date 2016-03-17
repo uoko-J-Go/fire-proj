@@ -45,11 +45,11 @@
 
     //获取gitlab所有项目信息
     this.getGitlbProject = function () {
-        return $http.get("http://gitlab.uoko.ioc:12015/api/v3/projects?private_token=JX4Gb7W_gfp7PdzpBjpG");
+        return $http.get("{0}/api/v3/projects?private_token={1}".Format(Global.GitLabUrl,Global.GitLabToken));
     };
 
     this.getGitLabSln = function (projectId,successCallBack) {
-        $http.get("http://gitlab.uoko.ioc:12015/api/v3/projects/" + projectId + "/repository/tree?private_token=JX4Gb7W_gfp7PdzpBjpG").success(function (data) {
+        $http.get("{0}/api/v3/projects/{1}/repository/tree?private_token={2}".Format(Global.GitLabUrl, projectId, Global.GitLabToken)).success(function (data) {
             if (successCallBack != undefined) {
                 successCallBack(data);
             }
@@ -59,7 +59,7 @@
     };
 
     this.getGitChildFile = function (projectId, path,successCallBack) {
-        $http.get("http://gitlab.uoko.ioc:12015/api/v3/projects/" + projectId + "/repository/tree?private_token=JX4Gb7W_gfp7PdzpBjpG&path=" + path + "").success(function (data) {
+        $http.get("{0}/api/v3/projects/{1}/repository/tree?private_token={2}&path={3}".Format(Global.GitLabUrl, projectId, Global.GitLabToken, path)).success(function (data) {
             if (successCallBack != undefined) {
                 successCallBack(data);
             }

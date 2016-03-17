@@ -11,6 +11,8 @@ namespace Uoko.FireProj.Infrastructure.Data
     public class UserHelper
     {
         private static string systemSetApiUrl = ConfigurationManager.AppSettings["systemset.api.url"];
+        public static string GitLabUrl = ConfigurationManager.AppSettings["gitlab.url"];
+        public static string GitLabToken = ConfigurationManager.AppSettings["gitlab.token"];
         private static WebApiProvider apiProvider;
         public static UserDto CurrUserInfo = new UserDto();
         static UserHelper()

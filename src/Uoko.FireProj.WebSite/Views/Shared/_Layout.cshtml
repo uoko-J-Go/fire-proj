@@ -46,134 +46,137 @@
 <!-- BEGIN BODY -->
 <body class="page-md page-header-fixed page-quick-sidebar-over-content page-full-width">
 
-    <!-- BEGIN HEADER -->
-    <div class="page-header md-shadow-z-1-i navbar navbar-fixed-top">
-        <div class="container">
-            <!-- BEGIN HEADER INNER -->
-            <div class="page-header-inner">
-                <!-- BEGIN LOGO -->
-                <div class="navbar-header">
-                    <a href="@Url.Action("Index", "Task")" class="navbar-brand">Fire</a>
-                    <a href="javascript:;" class="menu-toggler responsive-toggler" data-toggle="collapse" data-target=".navbar-collapse"></a>
-                </div>
+<input type="hidden" id="userId" value="@ViewBag.UserId" />
+<input type="hidden" id="gitlabUrl" value="@ViewBag.GitLabUrl"/>
+<input type="hidden" id="gitlabToken" value="@ViewBag.GitLabToken"/>
+<!-- BEGIN HEADER -->
+<div class="page-header md-shadow-z-1-i navbar navbar-fixed-top">
+    <div class="container">
+        <!-- BEGIN HEADER INNER -->
+        <div class="page-header-inner">
+            <!-- BEGIN LOGO -->
+            <div class="navbar-header">
+                <a href="@Url.Action("Index", "Task")" class="navbar-brand">Fire</a>
+                <a href="javascript:;" class="menu-toggler responsive-toggler" data-toggle="collapse" data-target=".navbar-collapse"></a>
+            </div>
 
-                <div class="hor-menu hidden-sm hidden-xs">
-                    <ul class="nav navbar-nav">
+            <div class="hor-menu hidden-sm hidden-xs">
+                <ul class="nav navbar-nav">
 
-                        @if (menuList != null)
+                    @if (menuList != null)
+                    {
+                        foreach (var item in menuList)
                         {
-                            foreach (var item in menuList)
+                            if (item.IsActive)
                             {
-                                if (item.IsActive)
+                                if (item.Children != null
+                                    && item.Children.Count > 0)
                                 {
-                                    if (item.Children != null
-                                        && item.Children.Count > 0)
-                                    {
-                                        <li class="classic-menu-dropdown active">
-                                            <a data-toggle="dropdown" href="javascript:;" data-hover="megamenu-dropdown" data-close-others="true">
-                                                @item.MenuName<i class="fa fa-angle-down"></i>
-                                                <span class="selected">
+                                    <li class="classic-menu-dropdown active">
+                                        <a data-toggle="dropdown" href="javascript:;" data-hover="megamenu-dropdown" data-close-others="true">
+                                            @item.MenuName<i class="fa fa-angle-down"></i>
+                                            <span class="selected">
                                                 </span>
-                                            </a>
-                                            <ul class="dropdown-menu pull-left">
-                                                @foreach (var subItem in item.Children)
-                                                {
-                                                    <li class="">
-                                                        <a href="@Url.Action(subItem.Action, subItem.Controller)">
-                                                            @subItem.MenuName
-                                                        </a>
-                                                    </li>
-                                                }
-                                            </ul>
-                                        </li>
-                                    }
-                                    else
-                                    {
-                                        <li class="classic-menu-dropdown active">
-                                            <a href="@Url.Action(item.Action, item.Controller)">
-                                                @item.MenuName
-                                                <span class="selected">
-                                                </span>
-                                            </a>
-                                        </li>
-                                    }
-
+                                        </a>
+                                        <ul class="dropdown-menu pull-left">
+                                            @foreach (var subItem in item.Children)
+                                            {
+                                                <li class="">
+                                                    <a href="@Url.Action(subItem.Action, subItem.Controller)">
+                                                        @subItem.MenuName
+                                                    </a>
+                                                </li>
+                                            }
+                                        </ul>
+                                    </li>
                                 }
                                 else
                                 {
-                                    if (item.Children != null
-                                        && item.Children.Count > 0)
-                                    {
-                                        <li class="classic-menu-dropdown">
-                                            <a data-toggle="dropdown" href="javascript:;" data-hover="megamenu-dropdown" data-close-others="true">
-                                                @item.MenuName<i class="fa fa-angle-down"></i>
-                                            </a>
-                                            <ul class="dropdown-menu pull-left">
-                                                @foreach (var subItem in item.Children)
-                                                {
-                                                    <li class="">
-                                                        <a href="@Url.Action(subItem.Action, subItem.Controller)">
-                                                            @subItem.MenuName
-                                                        </a>
-                                                    </li>
-                                                }
-                                            </ul>
-                                        </li>
-                                    }
-                                    else
-                                    {
-                                        <li class="classic-menu-dropdown ">
-                                            <a href="@Url.Action(item.Action, item.Controller)">
-                                                @item.MenuName
-                                            </a>
-                                        </li>
-                                    }
-
+                                    <li class="classic-menu-dropdown active">
+                                        <a href="@Url.Action(item.Action, item.Controller)">
+                                            @item.MenuName
+                                            <span class="selected">
+                                                </span>
+                                        </a>
+                                    </li>
                                 }
 
                             }
-                        }
-
-                    </ul>
-                </div>
-                <!-- END LOGO -->
-                <!-- END RESPONSIVE MENU TOGGLER -->
-                <!-- BEGIN PAGE TOP -->
-                <div class="page-top">
-                    <!-- BEGIN TOP NAVIGATION MENU -->
-                    <div class="top-menu">
-                        <ul class="nav navbar-nav pull-right">
-
-                            <!-- BEGIN USER LOGIN DROPDOWN -->
-                            <!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
-                            <li class="dropdown dropdown-user">
-                                <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                                    @*<img alt="" class="img-circle" src="~/Metronic/assets/admin/layout2/img/avatar3_small.jpg" />*@
-                                    <span class="username username-hide-on-mobile">
-                                        @ViewBag.NickName
-                                    </span>
-                                    <i class="fa fa-angle-down"></i>
-                                </a>
-                                <ul class="dropdown-menu dropdown-menu-default">
-                                    <li>
-                                        <a href="@Url.Action("LogOut", "SystemSet")">
-                                            <i class="icon-key"></i> 注 销
+                            else
+                            {
+                                if (item.Children != null
+                                    && item.Children.Count > 0)
+                                {
+                                    <li class="classic-menu-dropdown">
+                                        <a data-toggle="dropdown" href="javascript:;" data-hover="megamenu-dropdown" data-close-others="true">
+                                            @item.MenuName<i class="fa fa-angle-down"></i>
+                                        </a>
+                                        <ul class="dropdown-menu pull-left">
+                                            @foreach (var subItem in item.Children)
+                                            {
+                                                <li class="">
+                                                    <a href="@Url.Action(subItem.Action, subItem.Controller)">
+                                                        @subItem.MenuName
+                                                    </a>
+                                                </li>
+                                            }
+                                        </ul>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="classic-menu-dropdown ">
+                                        <a href="@Url.Action(item.Action, item.Controller)">
+                                            @item.MenuName
                                         </a>
                                     </li>
-                                </ul>
-                            </li>
-                            <!-- END USER LOGIN DROPDOWN -->
-                        </ul>
-                    </div>
-                    <!-- END TOP NAVIGATION MENU -->
-                </div>
-                <!-- END PAGE TOP -->
-            </div>
-            <!-- END HEADER INNER -->
-        </div>
+                                }
 
+                            }
+
+                        }
+                    }
+
+                </ul>
+            </div>
+            <!-- END LOGO -->
+            <!-- END RESPONSIVE MENU TOGGLER -->
+            <!-- BEGIN PAGE TOP -->
+            <div class="page-top">
+                <!-- BEGIN TOP NAVIGATION MENU -->
+                <div class="top-menu">
+                    <ul class="nav navbar-nav pull-right">
+
+                        <!-- BEGIN USER LOGIN DROPDOWN -->
+                        <!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
+                        <li class="dropdown dropdown-user">
+                            <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                                @*<img alt="" class="img-circle" src="~/Metronic/assets/admin/layout2/img/avatar3_small.jpg" />*@
+                                <span class="username username-hide-on-mobile">
+                                        @ViewBag.NickName
+                                    </span>
+                                <i class="fa fa-angle-down"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-default">
+                                <li>
+                                    <a href="@Url.Action("LogOut", "SystemSet")">
+                                        <i class="icon-key"></i> 注 销
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <!-- END USER LOGIN DROPDOWN -->
+                    </ul>
+                </div>
+                <!-- END TOP NAVIGATION MENU -->
+            </div>
+            <!-- END PAGE TOP -->
+        </div>
+        <!-- END HEADER INNER -->
     </div>
-    <!-- END HEADER -->
+
+</div>
+<!-- END HEADER -->
 
 <div class="clearfix">
 
