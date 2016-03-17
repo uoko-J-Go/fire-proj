@@ -56,8 +56,7 @@
                                 <div class="form-group form-md-line-input">
                                     <label class="col-md-2 control-label" for="form_control_1">GitLab地址</label>
                                     <div class="col-md-10">
-                                        <select class="form-control" id="form_control_1" ng-model="model.Project" ng-change="GetProjectInfo(model.Project)">
-                                            <option ng-repeat="project in ProjectList" value="{{project}}" ng-selected="project.id == model.ProjectId">{{project.name}}</option>
+                                        <select class="form-control" id="form_control_1" ng-model="model.Project" ng-change="GetProjectInfo(model.Project)" ng-options="project.name for project in ProjectList track by project.id" required>  
                                         </select>
                                         <div class="form-control-focus">
                                         </div>

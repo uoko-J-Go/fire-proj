@@ -95,9 +95,6 @@ fireproj.controller("ProjectController", function ($scope, $http, ProjectService
     //声明表单提交事件
     $scope.SubmitFrom = function (model) {
         var gitlabInfo = model.Project;
-        if (typeof gitlabInfo == 'string') {
-            gitlabInfo = JSON.parse(gitlabInfo);
-        }
         model.ProjectRepo = gitlabInfo.http_url_to_repo;
         model.RepoId = gitlabInfo.id;
         model.ProjectGitlabName = gitlabInfo.name;
@@ -121,9 +118,6 @@ fireproj.controller("ProjectController", function ($scope, $http, ProjectService
 
     //选择项目change事件
     $scope.GetProjectInfo = function (project) {
-        if (typeof project == 'string') {
-            project = JSON.parse(project);
-        }
         projectId = project.id;
         ProjectService.getGitLabSln(project.id, function (data) {
             

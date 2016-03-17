@@ -13,7 +13,7 @@
                     <i class="fa fa-angle-right"></i>
                 </li>
                 <li>
-                    <a href="#">项目管理</a>
+                    <a href="@Url.Action("Index", "Project")">项目管理</a>
                     <i class="fa fa-angle-right"></i>
                 </li>
                 <li>
@@ -49,8 +49,7 @@
                             <div class="form-group form-md-line-input">
                                 <label class="col-md-2 control-label" for="form_control_1">GitLab地址</label>
                                 <div class="col-md-10">
-                                    <select disabled class="form-control" id="form_control_1" ng-model="model.Project" ng-change="GetProjectInfo(model.Project)">
-                                        <option ng-repeat="project in ProjectList" value="{{project}}" ng-selected="project.id == model.RepoId">{{project.name}}</option>
+                                    <select disabled class="form-control" id="form_control_1" ng-model="model.Project" ng-change="GetProjectInfo(model.Project)" ng-options="project.name for project in ProjectList track by project.id">
                                     </select>
                                     <div class="form-control-focus">
                                     </div>
