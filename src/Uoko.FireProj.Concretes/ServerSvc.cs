@@ -88,7 +88,7 @@ namespace Uoko.FireProj.Concretes
                 {
                     var db = dbScope.DbContexts.Get<FireProjDbContext>();
                     //根据实际情况修改
-                    db.Update(entity, t => new { t.Name, t.IP, t.ServerDesc, t.ModifyId, t.ModifierName, t.ModifyDate, t.PackageDir });
+                    db.Update(entity, t => new { t.Name, t.IP, t.ServerDesc, t.ModifyId, t.ModifierName, t.ModifyDate, t.PackageDir, t.StageType });
 
                     //修改域名有主键则修改,无主键新增
                     var domainList = Mapper.Map<List<DomainResourceDto>, List<DomainResource>>(server.IISData);
