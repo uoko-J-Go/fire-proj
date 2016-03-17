@@ -85,8 +85,13 @@ namespace Uoko.FireProj.WebSite.Controllers
                                                         }
                                          }
                                      };
+            var topMenuController = controller;
+            if (topMenuController.Equals("Project",StringComparison.CurrentCultureIgnoreCase))
+            {
+                topMenuController = "SystemSet";
+            }
             var activeMenu = nodes.FirstOrDefault(t => t.MenuLevel == 1
-                                                       && controller == t.Controller
+                                                       && topMenuController == t.Controller
                                                        );
             if (activeMenu != null)
             {
