@@ -59,7 +59,7 @@
     <Compile Include="Data\UserHelper.cs" />
     <Compile Include="Data\WebApiProvider.cs" />
     <Compile Include="Exception\TipInfoException.cs" />
-    <Compile Include="Extensions\AnalysisUser.cs" />
+    <Compile Include="Extensions\AnalysisObj.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Extensions\JsonHelper.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />

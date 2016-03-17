@@ -7,16 +7,18 @@
             $scope.environmentList = data.filter(function (env) {
                 return env.Id != 2;
             });
-            $scope.GetProjectList();
+            //绑定环境
+            $scope.taskInfo.DeployStage = $scope.environmentList.filter(function (env) {
+                return param.stage != undefined ? (env.Id == param.stage) : (env.Id == 0);
+            })[0];
+            $scope.GetServerData();
         });
     }
     $scope.AllUsers = [];
     $scope.GetAllUser = function () {
         CommonService.getAllUsers(function (data) {
             $scope.AllUsers = data;
-
-            $scope.GetDeployStage();
-           
+            $scope.GetTaskInfo();
         });
     }
     $scope.loadTags = function (query) {
@@ -28,8 +30,10 @@
     $scope.GetProjectList = function () {
         ProjectService.getAllProject(function (data) {
             $scope.projectList = data;
-
-            $scope.GetTaskInfo();
+            //绑定项目
+            $scope.taskInfo.Project = $scope.taskInfo.ProjectDto;
+            $scope.GetDeployStage();
+            $scope.getBranch();//加载分支list
         });
     };
     $scope.Save = function (isValid) {
@@ -42,17 +46,9 @@
         }
         $scope.IsSubmiting = true;
         var project = $scope.taskInfo.Project;
-        if (typeof project == "string") {
-            project = JSON.parse(project);
-        }
         var server = $scope.taskInfo.Server;
-        if (typeof server == "string") {
-            server = JSON.parse(server);
-        }
         var domainInfo = $scope.taskInfo.DomainInfo;
-        if (typeof domainInfo == "string") {
-            domainInfo = JSON.parse(domainInfo);
-        }
+
         var checkUserIds = [];
         var noticeUserIds = [];
         if ($scope.taskInfo.CheckUsers != null && $scope.taskInfo.CheckUsers.length > 0) {
@@ -69,9 +65,9 @@
         var taskForSave = {
             Id: param.taskId,
             TaskName: $scope.taskInfo.TaskName,
-            Branch: $scope.taskInfo.Branch,
+            Branch: $scope.taskInfo.Branch.name,
             ProjectId: project.Id,
-            DeployStage: $scope.taskInfo.DeployStage
+            DeployStage: $scope.taskInfo.DeployStage.Id
         };
         if (taskForSave.DeployStage == 0) {
             taskForSave.IocDeployInfo = $scope.taskInfo.DeployInfo;
@@ -118,16 +114,15 @@
     }
 
     //发布环境change事件,获取IOC环境的服务器List
-    $scope.GetServerData = function (environmentId) {
+    $scope.GetServerData = function () {
+        var environmentId = $scope.taskInfo.DeployStage.Id;
         TaskService.GetResourceList(environmentId, function (data) {
             $scope.ServerList = data;
-
-            $scope.taskInfo.Branch = $scope.taskInfo.Branch;
             var obj
             if (environmentId == 0) {
                 obj = $scope.taskInfo.DeployInfoIocDto;
             }
-            else {
+            else if (environmentId == 1) {
                 obj = $scope.taskInfo.DeployInfoPreDto;
 
                 //绑定上线信息相关人
@@ -135,71 +130,64 @@
                 $scope.taskInfo.OnlineCheckUsers = AnalysisUser($scope.taskInfo.DeployInfoOnlineDto.CheckUser, $scope.AllUsers);
                 $scope.taskInfo.OnlineNoticeUsers = AnalysisUser($scope.taskInfo.DeployInfoOnlineDto.NoticeUser, $scope.AllUsers);
             }
-            //绑定服务器
-            $scope.taskInfo.DeployIP = obj.DeployIP;
-            var _server = $scope.ServerList.filter(function (server) {
-                return server.IP == $scope.taskInfo.DeployIP;
-            })[0];
-            $scope.taskInfo.Server = JSON.stringify(_server);
-            //绑定域名
-            $scope.taskInfo.DeployIP = obj.Domain;
+
             //绑定测试,通知人
             $scope.taskInfo.CheckUsers = AnalysisUser(obj.CheckUser, $scope.AllUsers);
             $scope.taskInfo.NoticeUsers = AnalysisUser(obj.NoticeUser, $scope.AllUsers);
+
             //备注
             $scope.taskInfo.DeployInfo = {
                 TaskDesc: obj.TaskDesc
             };
 
-
-            $scope.$watch('taskInfo.DeployStage + taskInfo.Server', function () {
+            //绑定服务器
+            $scope.taskInfo.Server = $scope.ServerList.filter(function (server) {
+                return server.IP == obj.DeployIP;
+            })[0];
+            $scope.$watch('taskInfo.Project.Id +taskInfo.DeployStage.Id + taskInfo.Server.Id', function () {
                 $scope.GetDomain($scope.taskInfo.Project, $scope.taskInfo.Server);
             });
         });
     }
     //部署服务器change事件
     $scope.GetDomain = function (project, server) {
-        if (typeof project == "string") {
-            project = JSON.parse(project);
+        if (!project || !server) {
+            return;
         }
-        if (typeof server == "string") {
-            server = JSON.parse(server);
-        }
-        if (project != undefined && project != "") {
-            if (server == undefined) {
-                server = { Id: 0 };
+        TaskService.GetDomain(project.Id, server.Id, param.taskId, function (data) {
+            $scope.DomainList = data;
+            
+            var environmentId = $scope.taskInfo.DeployStage.Id;
+            var obj
+            if (environmentId == 0) {
+                obj = $scope.taskInfo.DeployInfoIocDto;
             }
-            TaskService.GetDomain(project.Id, server.Id, param.taskId, function (data) {
-                $scope.DomainList = data;
-                //域名ng-select
-                var _domain = $scope.DomainList.filter(function (server) {
-                    return server.Name == $scope.taskInfo.DeployIP;
-                })[0];
-                $scope.taskInfo.DomainInfo = JSON.stringify(_domain);
-
-            });
-        }
+            else if (environmentId == 1) {
+                obj = $scope.taskInfo.DeployInfoPreDto;
+            }      
+            //绑定域名
+            $scope.taskInfo.DomainInfo = $scope.DomainList.filter(function (server) {
+                return server.Name == obj.Domain;
+            })[0];  
+        });
     }
     //根据项目Id或者分支列表
-    $scope.getBranch = function (RepoId) {
-        CommonService.getProjectBranch(RepoId, function (data) {
-            $scope.branchList = data;
-        });
+    $scope.getBranch = function () {
+        if ($scope.taskInfo.Project) {
+            CommonService.getProjectBranch($scope.taskInfo.Project.RepoId, function (data) {
+                $scope.branchList = data;
+                $scope.taskInfo.Branch = $scope.branchList.filter(function(branch) {
+                    return branch.name == $scope.taskInfo.Branch;
+                })[0];
+            });
+        }   
     }
 
     //获得任务详情
     $scope.GetTaskInfo = function () {
         TaskService.GetTaskInfo(param.taskId, function (data) {
-            $scope.taskInfo = data;  
-            $scope.getBranch(data.ProjectDto.RepoId);//加载分支list
-            $scope.taskInfo.Project = data.ProjectDto;
-
-            if (param.stage != undefined) {
-                $scope.taskInfo.DeployStage = param.stage;
-            } else {
-                $scope.taskInfo.DeployStage = 0;
-            }
-            $scope.GetServerData($scope.taskInfo.DeployStage);
+            $scope.taskInfo = data;
+            $scope.GetProjectList();
         });
     }
 
@@ -211,7 +199,7 @@
         $scope.GetAllUser(); 
        
     }
-
+ 
     $scope.Init();
 
 

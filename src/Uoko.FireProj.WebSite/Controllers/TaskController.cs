@@ -52,6 +52,5 @@ namespace Uoko.FireProj.WebSite.Controllers
 
             return Json(null,JsonRequestBehavior.AllowGet);
         }
-
     }
 }

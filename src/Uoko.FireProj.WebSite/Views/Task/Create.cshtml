@@ -48,8 +48,7 @@
                     <div class="form-group form-md-line-input">
                         <label class="col-md-2 control-label">项目</label>
                         <div class="col-md-10">
-                            <select class="form-control" name="project" ng-model="taskInfo.Project" ng-change="getBranch(taskInfo.Project)" required>
-                                <option ng-repeat="project in projectList" value="{{project}}" ng-selected="project.Id==taskInfo.Project.Id">{{project.ProjectName}}</option>
+                            <select class="form-control" name="project" ng-model="taskInfo.Project" ng-change="getBranch()" ng-options="project.ProjectName for project in projectList track by project.Id" required>
                             </select>
                             <div ng-if="form.$submitted || form.project.$touched">
                                 <span class="error-msg" ng-if="form.project.$error.required">项目必选.</span>
@@ -59,8 +58,7 @@
                     <div class="form-group form-md-line-input">
                         <label class="col-md-2 control-label">分支</label>
                         <div class="col-md-10">
-                            <select name="branch" class="form-control" ng-model="taskInfo.Branch" required>
-                                <option ng-repeat="branch in branchList" value="{{branch.name}}" ng-selected="branch.name == taskInfo.Branch">{{branch.name}}</option>
+                            <select name="branch" class="form-control" ng-model="taskInfo.Branch" ng-options="branch.name for branch in branchList track by branch.name" required>
                             </select>
                             <div ng-if="form.$submitted || form.branch.$touched">
                                 <span class="error-msg" ng-if="form.branch.$error.required">分支必选.</span>
@@ -70,8 +68,7 @@
                      <div class="form-group form-md-line-input">
                          <label class="col-md-2 control-label">发布环境</label>
                          <div class="col-md-10">
-                             <select name="deployenvironment" class="form-control" ng-model="taskInfo.DeployStage" ng-change="GetServerData(taskInfo.DeployStage)" required>
-                                 <option ng-repeat="environment in environmentList" value="{{environment.Id}}" >{{environment.Name}}</option>
+                             <select name="deployenvironment" class="form-control" ng-model="taskInfo.DeployStage" ng-change="GetServerData()" ng-options="environment.Name for environment in environmentList track by environment.Id" required>
                              </select>
                              <div ng-if="form.$submitted || form.deployenvironment.$touched">
                                  <span class="error-msg" ng-if="form.deployenvironment.$error.required">项目必选.</span>
@@ -82,8 +79,7 @@
                     <div class="form-group form-md-line-input">
                         <label class="col-md-2 control-label">部署服务器</label>
                         <div class="col-md-10">
-                            <select name="deployenvironment" class="form-control" ng-model="taskInfo.Server"  required>
-                                <option ng-repeat="server in ServerList" value="{{server}}"  >{{server.Name}}</option>
+                            <select name="deployenvironment" class="form-control" ng-model="taskInfo.Server" ng-options="server.Name for server in ServerList track by server.Id" required>
                             </select>
                             <div ng-if="form.$submitted || form.deployenvironment.$touched">
                                 <span class="error-msg" ng-if="form.deployenvironment.$error.required">部署服务器必选</span>
@@ -93,8 +89,7 @@
                     <div class="form-group form-md-line-input">
                         <label class="col-md-2 control-label">域名</label>
                         <div class="col-md-10">
-                            <select name="domain" class="form-control" ng-model="taskInfo.DomainInfo"  required>
-                                <option ng-repeat="domain in DomainList" value="{{domain}}" >{{domain.Name}}</option>
+                            <select name="domain" class="form-control" ng-model="taskInfo.DomainInfo" ng-options="domain.Name for domain in DomainList track by domain.Id"  required>
                             </select>
                             <div ng-if="form.$submitted || form.domain.$touched">
                                 <span class="error-msg" ng-if="form.domain.$error.required">域名必选.</span>
@@ -122,7 +117,7 @@
                          </div>
                      </div>
 
-                     <div class="form-group form-md-line-input" ng-if="taskInfo.DeployStage==1">
+                     <div class="form-group form-md-line-input" ng-if="taskInfo.DeployStage.Id==1">
                          <label class="col-md-2 control-label">上线验收人员</label>
                          <div class="col-md-10">
                              <div class="form-control-wrap">
@@ -132,7 +127,7 @@
                              </div>
                          </div>
                      </div>
-                     <div class="form-group form-md-line-input" ng-if="taskInfo.DeployStage==1">
+                     <div class="form-group form-md-line-input" ng-if="taskInfo.DeployStage.Id==1">
                          <label class="col-md-2 control-label">上线相关人员</label>
                          <div class="col-md-10">
                              <div class="form-control-wrap">

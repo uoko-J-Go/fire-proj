@@ -8,8 +8,8 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
     $scope.taskInfo = {
         TaskName: "",
         Project: null,
-        Branch: "",
-        DeployStage: "",
+        Branch: null,
+        DeployStage: null,
         Server: null,
         DomainInfo: null,
         CheckUsers:[],
@@ -54,17 +54,9 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
         }
         $scope.IsSubmiting = true;
         var project = $scope.taskInfo.Project;
-        if (typeof project == "string") {
-            project = JSON.parse(project);
-        }
         var server = $scope.taskInfo.Server;
-        if (typeof server == "string") {
-            server = JSON.parse(server);
-        }
         var domainInfo = $scope.taskInfo.DomainInfo;
-        if (typeof domainInfo == "string") {
-            domainInfo = JSON.parse(domainInfo);
-        }
+
         var checkUserIds = [];
         var noticeUserIds = [];
         if ($scope.taskInfo.CheckUsers != null && $scope.taskInfo.CheckUsers.length > 0) {
@@ -80,9 +72,9 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
         
         var taskForSave= {
             TaskName:$scope.taskInfo.TaskName,
-            Branch:$scope.taskInfo.Branch,
+            Branch:$scope.taskInfo.Branch.name,
             ProjectId: project.Id,
-            DeployStage: $scope.taskInfo.DeployStage
+            DeployStage: $scope.taskInfo.DeployStage.Id
         }
         if (taskForSave.DeployStage == 0) {
             taskForSave.IocDeployInfo = $scope.taskInfo.DeployInfo;
@@ -129,34 +121,24 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
     }
 
     //发布环境change事件,获取IOC环境的服务器List
-    $scope.GetServerData = function (environmentId) {
-        TaskService.GetResourceList(environmentId, function (data) {
+    $scope.GetServerData = function () {
+        TaskService.GetResourceList($scope.taskInfo.DeployStage.Id, function (data) {
             $scope.ServerList = data;
         });
     }
     //部署服务器change事件
     $scope.GetDomain = function (project, server) {
-        if (typeof project == "string") {
-            project = JSON.parse(project);
+       
+        if (!project || !server) {
+            return;
         }
-        if (typeof server == "string") {
-            server = JSON.parse(server);
-        }
-        if (project != undefined && project!= "") {
-            if (server == undefined) {
-                server = { Id: 0 };
-            }
-            TaskService.GetDomain(project.Id, server.Id,0, function (data) {
-                $scope.DomainList = data;
-            });
-        }   
+        TaskService.GetDomain(project.Id, server.Id, 0, function (data) {
+            $scope.DomainList = data;
+        });
     }
     //根据项目Id或者分支列表
-    $scope.getBranch = function (project) {
-        if (typeof project == "string") {
-            project = JSON.parse(project);
-        }
-        CommonService.getProjectBranch(project.RepoId, function (data) {
+    $scope.getBranch = function () {
+        CommonService.getProjectBranch($scope.taskInfo.Project.RepoId, function (data) {
             $scope.branchList = data;
         });
     }
@@ -168,7 +150,7 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
     $scope.Init = function () {
         $scope.GetProjectList();
         $scope.GetAllUser();
-        $scope.$watch('taskInfo.Project + taskInfo.DeployStage + taskInfo.Server', function () {
+        $scope.$watch('taskInfo.Project.Id + taskInfo.DeployStage.Id + taskInfo.Server.Id', function () {
             $scope.GetDomain($scope.taskInfo.Project, $scope.taskInfo.Server);
         });
     }
