@@ -95,7 +95,7 @@
     }
 
 
-    $scope.$watch('projectSelected + serverSelected', function() {
+    $scope.$watch('projectSelected.Id + serverSelected.Id', function () {
         getDomain($scope.projectSelected, $scope.serverSelected);
     }, true);
 
