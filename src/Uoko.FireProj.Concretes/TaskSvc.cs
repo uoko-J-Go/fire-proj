@@ -783,7 +783,7 @@ namespace Uoko.FireProj.Concretes
                 buildInfo.Add("iisSiteName", iisSiteName);
                 buildInfo.Add("pkgDir", packagDir);
                 buildInfo.Add("msDeployUrl", "https://" + deployIP + ":8172/msdeploy.axd");
-                buildInfo.Add("useConfig", "Release");
+                buildInfo.Add("useConfig", "fire.uoko.ioc");
                 buildInfo.Add("Target", target);
                 buildInfo.Add("mergeFromBranch", taskDto.Branch);
                 buildInfo.Add("FireTaskId", taskId.ToString());

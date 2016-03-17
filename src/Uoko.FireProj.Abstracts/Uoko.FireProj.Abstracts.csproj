@@ -32,6 +32,9 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Pre|AnyCPU'">
     <OutputPath>bin\Pre\</OutputPath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'fire.uoko.ioc|AnyCPU'">
+    <OutputPath>bin\fire.uoko.ioc\</OutputPath>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
