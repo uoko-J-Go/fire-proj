@@ -59,7 +59,7 @@ namespace Uoko.FireProj.Concretes
                     var onlineLog= db.TaskLogs.Where(r => r.TaskId == taskInfo.OnlineTaskId.Value && r.LogType == LogType.Online).ToList();
                     entitys.AddRange(onlineLog);
                 }
-              
+                entitys = entitys.OrderByDescending(t => t.Id).ToList();
                 List<TaskLogsDto> data = new List<TaskLogsDto>();
                 foreach (var item in entitys)
                 {
