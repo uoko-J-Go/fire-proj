@@ -17,8 +17,12 @@ namespace Uoko.FireProj.DataAccess.Enum
         /// </summary>
         QA = 1,
         /// <summary>
+        /// 上线
+        /// </summary>
+        Online=2,
+        /// <summary>
         /// 回滚
         /// </summary>
-        RollBack=2
+        RollBack=3
     }
 }

@@ -97,7 +97,7 @@
         var url = $scope.projectSelected.ProjectRepo.replace(".git", "") + "/builds/" + buildId;
         window.open(url, "_blank");
     }
-     $scope.$watch('projectSelected + serverSelected', function() {
+     $scope.$watch('projectSelected.Id + serverSelected.Id', function() {
          $scope.getDomain($scope.projectSelected, $scope.serverSelected);
          $scope.GetOnlineTaskRollbackAble();
      }, true);

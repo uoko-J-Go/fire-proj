@@ -360,7 +360,7 @@
                         <div class="timeline-body-content">
                             <p>
                                 <!--开发-->
-                                <span ng-if="item.LogType==0">
+                                <span ng-if="item.LogType==0||item.LogType==2">
                                     <span class="nav-link pull">
                                         <a ng-if="item.DeployStatus==0" class="text-default"  ng-bind="(item.DeployStatus|DeployStatusFilter).Title"></a>
                                         <a ng-if="item.DeployStatus==1" class="text-danger"  ng-click="GotoGitLabBuildPage(item.BuildId)" ng-bind="(item.DeployStatus|DeployStatusFilter).Title"></a>

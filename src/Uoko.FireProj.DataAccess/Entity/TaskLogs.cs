@@ -14,17 +14,17 @@ namespace Uoko.FireProj.DataAccess.Entity
     {
         /// <summary>
         /// 任务Id
-        /// 当Stage=PRODUCTION的时候 对应OnlineTaskInfo中的Id
-        /// 当Stage=IOC,PRE的时候，对应TaskInfo中的Id
         /// 
-        /// 当LogType=2 时对应RollbackInfo中的Id
+        /// 当LogType=0,1的时候，对应TaskInfo中的Id
+        /// 当LogType=2的时候 对应OnlineTaskInfo中的Id
+        /// 当LogType=3 时对应RollbackInfo中的Id
         /// </summary>
         public int TaskId { get; set; }
 
         /// <summary>
         /// 历史当前部署信息
-        /// 当Stage=PRODUCTION的时候对应OnlineTaskInfo的Json
-        /// 当LogType=2 时对应RollbackInfo的Json
+        /// 当LogType=2的时候对应OnlineTaskInfo的Json
+        /// 当LogType=3时对应RollbackInfo的Json
         /// </summary>
         public string DeployInfo { get; set; }
 
