@@ -37,20 +37,14 @@ namespace Uoko.FireProj.Infrastructure.Data
         public TResponse Post<TRequest, TResponse>(string requestUrl, TRequest dto)
         {
             var result = PostAsync(requestUrl, dto).Result;
-            EnsureSuccess(result);
+            result.EnsureSuccessStatusCode();
             return result.Content.ReadAsAsync<TResponse>().Result;
         }
         public TResponse Get<TResponse>(string requestUrl)
         {
             var result = GetAsync(requestUrl).Result;
-            EnsureSuccess(result);
+            result.EnsureSuccessStatusCode();
             return result.Content.ReadAsAsync<TResponse>().Result;
-        }
-        private void EnsureSuccess(HttpResponseMessage response)
-        {
-            if (response.IsSuccessStatusCode)
-                return;
-            throw new System.Exception(string.Format("Api调用异常，StateCode:{0}", (int)response.StatusCode));
         }
     }
 }
