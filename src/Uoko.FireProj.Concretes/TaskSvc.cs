@@ -275,7 +275,7 @@ namespace Uoko.FireProj.Concretes
                     var log = new TaskLogs
                     {
                         TaskId = taskFromDb.Id,
-                        LogType = LogType.Deploy,
+                        LogType = LogType.Online,
                         Stage = StageEnum.PRODUCTION,
                         TriggeredId = triggerId,
                         CreateDate = DateTime.Now,
@@ -844,6 +844,7 @@ namespace Uoko.FireProj.Concretes
                             log.DeployInfo = entity.DeployInfoPreJson;
                             break;
                         case StageEnum.PRODUCTION:
+                            log.LogType=LogType.Online;
                             log.DeployInfo = entity.DeployInfoOnlineJson;
                             break;
                     }
@@ -910,7 +911,7 @@ namespace Uoko.FireProj.Concretes
                             log.DeployInfo = entityPre.DeployInfoPreJson;
                             break;
                         case StageEnum.PRODUCTION:
-                            if (taskLog.LogType == LogType.Deploy)
+                            if (taskLog.LogType == LogType.Online)
                             {
                                 var entityOnline = db.OnlineTaskInfos.FirstOrDefault(r => r.Id == taskLog.TaskId);
                                 if (entityOnline == null) return;

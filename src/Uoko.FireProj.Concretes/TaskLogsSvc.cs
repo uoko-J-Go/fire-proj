@@ -53,13 +53,13 @@ namespace Uoko.FireProj.Concretes
             {
                 var db = dbScope.DbContexts.Get<FireProjDbContext>();
                 var taskInfo = db.TaskInfo.Find(taskId);
-                var taskIds = new List<int>();
-                taskIds.Add(taskId);
+                var entitys = db.TaskLogs.Where(r => r.TaskId==taskId&&r.LogType!=LogType.Online&&r.LogType!=LogType.RollBack).ToList();
                 if (taskInfo != null && taskInfo.OnlineTaskId.HasValue)
                 {
-                    taskIds.Add(taskInfo.OnlineTaskId.Value);
+                    var onlineLog= db.TaskLogs.Where(r => r.TaskId == taskInfo.OnlineTaskId.Value && r.LogType == LogType.Online).ToList();
+                    entitys.AddRange(onlineLog);
                 }
-                var entitys = db.TaskLogs.Where(r => taskIds.Contains(r.TaskId)).OrderByDescending(r => r.Id).ToList();
+              
                 List<TaskLogsDto> data = new List<TaskLogsDto>();
                 foreach (var item in entitys)
                 {
@@ -104,7 +104,7 @@ namespace Uoko.FireProj.Concretes
                             {
                                 taskLogsDto.QAStatus = currUser2.QAStatus;
                             }
-                            if (item.LogType == LogType.Deploy)
+                            if (item.LogType == LogType.Online)
                             {
                                 var onlineTask = JsonHelper.FromJson<OnlineTaskInfo>(item.DeployInfo);
                                 if (onlineTask != null)
