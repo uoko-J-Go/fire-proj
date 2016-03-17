@@ -76,7 +76,7 @@ namespace Uoko.FireProj.Concretes
                     {
                         case StageEnum.IOC:
                             taskLogsDto.DeployInfoIocDto = !item.DeployInfo.IsNullOrEmpty() ? JsonHelper.FromJson<DeployInfoIocDto>(item.DeployInfo) : new DeployInfoIocDto();
-                            var checkUsers = AnalysisUser.AnalysisCheckUser(taskLogsDto.DeployInfoIocDto.CheckUserId);
+                            var checkUsers = AnalysisObj.AnalysisCheckUser(taskLogsDto.DeployInfoIocDto.CheckUserId);
                             var currUser = checkUsers.FirstOrDefault(t => t.UserId == item.CreatorId);
                             if (currUser != null)
                             {
@@ -87,7 +87,7 @@ namespace Uoko.FireProj.Concretes
                             break;
                         case StageEnum.PRE:
                             taskLogsDto.DeployInfoPreDto = !item.DeployInfo.IsNullOrEmpty() ? JsonHelper.FromJson<DeployInfoPreDto>(item.DeployInfo) : new DeployInfoPreDto();
-                            var checkUsers1 = AnalysisUser.AnalysisCheckUser(taskLogsDto.DeployInfoPreDto.CheckUserId);
+                            var checkUsers1 = AnalysisObj.AnalysisCheckUser(taskLogsDto.DeployInfoPreDto.CheckUserId);
                             var currUser1 = checkUsers1.FirstOrDefault(t => t.UserId == item.CreatorId);
                             if (currUser1 != null)
                             {
@@ -98,7 +98,7 @@ namespace Uoko.FireProj.Concretes
                             break;
                         case StageEnum.PRODUCTION:
                             taskLogsDto.DeployInfoOnlineDto = !item.DeployInfo.IsNullOrEmpty() ? JsonHelper.FromJson<DeployInfoOnlineDto>(item.DeployInfo) : new DeployInfoOnlineDto();
-                            var checkUsers2 = AnalysisUser.AnalysisCheckUser(taskLogsDto.DeployInfoOnlineDto.CheckUserId);
+                            var checkUsers2 = AnalysisObj.AnalysisCheckUser(taskLogsDto.DeployInfoOnlineDto.CheckUserId);
                             var currUser2 = checkUsers2.FirstOrDefault(t => t.UserId == item.CreatorId);
                             if (currUser2 != null)
                             {
