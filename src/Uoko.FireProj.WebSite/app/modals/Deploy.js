@@ -10,7 +10,8 @@
             //绑定环境
             $scope.taskInfo.DeployStage = $scope.environmentList.filter(function (env) {
                 return param.stage != undefined ? (env.Id == param.stage) : (env.Id == 0);
-            });        
+            })[0];
+            $scope.GetServerData();
         });
     }
     $scope.AllUsers = [];
