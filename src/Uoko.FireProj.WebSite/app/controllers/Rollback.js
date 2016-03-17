@@ -32,14 +32,10 @@
         }
     }
     $scope.GetOnlineTaskRollbackAble= function () {
-        var projectId = 0;
-        if ($scope.projectSelected) {
-            projectId = $scope.projectSelected.Id;
-        }
-        if ($scope.serverSelected) {
-            serverId = $scope.serverSelected.Id;
-        }
-        TaskService.GetOnlineTaskRollbackAble(projectId, serverId, function (data) {
+        if (!$scope.projectSelected || !$scope.serverSelected) {
+            return;
+        }      
+        TaskService.GetOnlineTaskRollbackAble($scope.projectSelected.Id, $scope.serverSelected.Id, function (data) {
             $scope.onlineTasks = data;
         });
 
@@ -81,7 +77,7 @@
 
                     TaskService.Rollback(rollbackTaskInfo, function (data) {
                         $scope.IsSubmiting = false;
-                        window.location.reload();
+                        $scope.GetRollBackInfo();
 
                     }, function (data) {
                         $scope.IsSubmiting = false;
@@ -92,6 +88,15 @@
             }
         });
     };
+    $scope.GetRollBackInfo=function() {
+        TaskService.GetRollBackInfoByProjectId($scope.projectSelected.Id, function (data) {
+            $scope.rollbackTaskInfo = data;
+        });
+    }
+    $scope.GotoGitLabBuildPage = function (buildId) {
+        var url = $scope.projectSelected.ProjectRepo.replace(".git", "") + "/builds/" + buildId;
+        window.open(url, "_blank");
+    }
      $scope.$watch('projectSelected + serverSelected', function() {
          $scope.getDomain($scope.projectSelected, $scope.serverSelected);
          $scope.GetOnlineTaskRollbackAble();
