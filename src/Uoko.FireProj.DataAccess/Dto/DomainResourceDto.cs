@@ -7,7 +7,7 @@ using Uoko.FireProj.DataAccess.Enum;
 
 namespace Uoko.FireProj.DataAccess.Dto
 {
-   public class DomainResourceDto
+    public class DomainResourceDto
     {
         public int Id { get; set; }
         /// <summary>
@@ -50,5 +50,9 @@ namespace Uoko.FireProj.DataAccess.Dto
         /// </summary>
         public string ServerName { get; set; }
 
+        /// <summary>
+        /// 环境类型
+        /// </summary>
+        public StageEnum? StageType { get; set; }
     }
 }
