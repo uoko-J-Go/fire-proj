@@ -716,8 +716,8 @@ namespace Uoko.FireProj.Concretes
         /// <returns></returns>
         public TaskInfo BeginDeploy(int taskId, StageEnum deployStage)
         {
-            try
-            {
+                var gitlabToken = "D3MR_rnRZK4xWS-CtVho";
+                var gitLabApi = new WebApiProvider("http://gitlab.uoko.ioc:12015/api/v3/");
                 var taskDto = this.GetTaskById(taskId);
                 var triggers =
                     gitLabApi.Get<List<Trigger>>(string.Format("projects/{0}/triggers?private_token={1}",
@@ -857,11 +857,6 @@ namespace Uoko.FireProj.Concretes
                     return entity;
                 }
             }
-            catch (Exception ex)
-            {
-                throw new TipInfoException(ex.Message);
-            }
-        }
 
         public void DeployCallback(int triggerId, int buildId, DeployStatus deployStatus)
         {
