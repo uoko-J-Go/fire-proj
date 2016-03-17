@@ -7,7 +7,7 @@ fireproj.controller("ProjectController", function ($scope, $http, ProjectService
         ProjectService.getById(projectId).success(function (data) {
             $scope.model = data;
             $.each($scope.ProjectList, function (i, value) {
-                if (value.id === $scope.model.ProjectId) {
+                if (value.id === $scope.model.RepoId) {
                     $scope.model.Project = value;
                 }
             });
@@ -19,9 +19,6 @@ fireproj.controller("ProjectController", function ($scope, $http, ProjectService
     //声明表单提交事件
     $scope.SubmitFrom = function (model) {
         var gitlabInfo =model.Project;
-        if (typeof gitlabInfo == 'string') {
-            gitlabInfo = JSON.parse(gitlabInfo);
-        }  
         model.ProjectRepo = gitlabInfo.http_url_to_repo;
         model.RepoId = gitlabInfo.id;
         model.ProjectGitlabName = gitlabInfo.name;

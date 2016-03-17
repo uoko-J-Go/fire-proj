@@ -10,7 +10,7 @@
 
         ProjectService.getAllProject(function(data) {
             $scope.projects = data.filter(function(proj) {
-                return proj.CreatorId == $("#userId").val();
+                return proj.CreatorId ==Global.UserId;
             });
         });
 

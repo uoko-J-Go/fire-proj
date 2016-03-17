@@ -1,6 +1,6 @@
 ﻿fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskService, ProjectService,CommonService) {
     var taskId = $("#taskIdParam").val();
-    var userId = $("#userId").val();
+    var userId = Global.UserId;
     $scope.AllUsers = [];
     $scope.GetAllUser = function () {
         CommonService.getAllUsers(function (data) {

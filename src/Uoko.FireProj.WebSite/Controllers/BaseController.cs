@@ -27,6 +27,9 @@ namespace Uoko.FireProj.WebSite.Controllers
             UserHelper.CurrUserInfo= UserHelper.GetUserById(int.Parse(user.FindFirst("userid").Value));
             ViewBag.UserId = UserHelper.CurrUserInfo.UserId;
             ViewBag.NickName = UserHelper.CurrUserInfo.NickName;
+            ViewBag.GitLabUrl = UserHelper.GitLabUrl;
+            ViewBag.GitLabToken = UserHelper.GitLabToken;
+
         }
         public void GetMenuData(string controller, string action)
         {

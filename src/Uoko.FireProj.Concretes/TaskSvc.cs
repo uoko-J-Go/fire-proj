@@ -31,6 +31,9 @@ namespace Uoko.FireProj.Concretes
         private readonly IProjectSvc _projectSvc;
         private readonly IServerSvc _serverSvc;
         private readonly string _domainUrl = ConfigurationManager.AppSettings["domain.url"];
+        private string gitlabToken = UserHelper.GitLabToken;
+        private WebApiProvider gitLabApi = new WebApiProvider(string.Format("{0}/api/v3/", UserHelper.GitLabUrl));
+
         public TaskSvc(IDbContextScopeFactory dbScopeFactory,IProjectSvc projectSvc,IServerSvc serverSvc)
         {
             _dbScopeFactory = dbScopeFactory;
@@ -79,8 +82,7 @@ namespace Uoko.FireProj.Concretes
 
         public void DeployRollbackTask(RollbackTaskInfo taskInfo)
         {
-            var gitlabToken = "D3MR_rnRZK4xWS-CtVho";
-            var gitLabApi = new WebApiProvider("http://gitlab.uoko.ioc:12015/api/v3/");
+           
 
             var project = _projectSvc.GetProjectById(taskInfo.ProjectId);
             if (project == null)
@@ -208,9 +210,6 @@ namespace Uoko.FireProj.Concretes
 
         public void DeployOnlineTask(OnlineTaskInfo onlineTaskInfo)
         {
-            var gitlabToken = "D3MR_rnRZK4xWS-CtVho";
-            var gitLabApi = new WebApiProvider("http://gitlab.uoko.ioc:12015/api/v3/");
-
             var project = _projectSvc.GetProjectById(onlineTaskInfo.ProjectId);
             if (project == null)
             {
@@ -857,7 +856,7 @@ namespace Uoko.FireProj.Concretes
                     db.SaveChanges();
                     return entity;
                 }
-        }
+            }
 
         public void DeployCallback(int triggerId, int buildId, DeployStatus deployStatus)
         {

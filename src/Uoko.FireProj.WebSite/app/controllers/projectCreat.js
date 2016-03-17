@@ -17,7 +17,7 @@ fireproj.controller("ProjectController", function ($scope, $http, ProjectService
    var projectId;
    function getAsyncUrl(treeId, treeNode) {
        if (typeof treeNode == "undefined") {
-           return "http://gitlab.uoko.ioc:12015/api/v3/projects/" + projectId + "/repository/tree?private_token=JX4Gb7W_gfp7PdzpBjpG";
+           return "{0}/api/v3/projects/{1}/repository/tree?private_token={2}".Format(Global.GitLabUrl, projectId, Global.GitLabToken);
        }
        else {
            var path = "";
@@ -28,7 +28,7 @@ fireproj.controller("ProjectController", function ($scope, $http, ProjectService
                    path += node[i].name + "/";
                }
            }
-           return "http://gitlab.uoko.ioc:12015/api/v3/projects/" + projectId + "/repository/tree?private_token=JX4Gb7W_gfp7PdzpBjpG&path=" + path + "";
+           return "{0}/api/v3/projects/{1}/repository/tree?private_token={2}&path={3}".Format(Global.GitLabUrl, projectId, Global.GitLabToken, path);
        }
    };
 
@@ -95,9 +95,6 @@ fireproj.controller("ProjectController", function ($scope, $http, ProjectService
     //声明表单提交事件
     $scope.SubmitFrom = function (model) {
         var gitlabInfo = model.Project;
-        if (typeof gitlabInfo == 'string') {
-            gitlabInfo = JSON.parse(gitlabInfo);
-        }
         model.ProjectRepo = gitlabInfo.http_url_to_repo;
         model.RepoId = gitlabInfo.id;
         model.ProjectGitlabName = gitlabInfo.name;
@@ -121,9 +118,6 @@ fireproj.controller("ProjectController", function ($scope, $http, ProjectService
 
     //选择项目change事件
     $scope.GetProjectInfo = function (project) {
-        if (typeof project == 'string') {
-            project = JSON.parse(project);
-        }
         projectId = project.id;
         ProjectService.getGitLabSln(project.id, function (data) {
             
