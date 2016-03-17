@@ -139,7 +139,7 @@ namespace Uoko.FireProj.Concretes
                 {
                     data = data.Where(t => t.Name.Contains(query.Search)||t.IP.Contains(query.Search));
                 }
-                var result = data.OrderBy(t => t.Id).Skip(query.Offset).Take(query.Limit).ToList();
+                var result = data.OrderBy(t => t.IP).Skip(query.Offset).Take(query.Limit).ToList();
                 var total = data.Count();
                 return new PageGridData<ServerDto> { rows = result, total = total };
             }
