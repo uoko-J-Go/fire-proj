@@ -2,6 +2,10 @@
     $scope.IsSubmiting = false;
     $scope.projectList = [];
     $scope.branchList = [];
+    $scope.taskInfo = {
+        Project: null,
+        Server: null
+    };//避免watch异常
     $scope.GetDeployStage=function() {
         TaskService.GetEnvironment(function (data) {
             $scope.environmentList = data.filter(function (env) {
@@ -144,9 +148,7 @@
             $scope.taskInfo.Server = $scope.ServerList.filter(function (server) {
                 return server.IP == obj.DeployIP;
             })[0];
-            $scope.$watch('taskInfo.Project.Id +taskInfo.DeployStage.Id + taskInfo.Server.Id', function () {
-                $scope.GetDomain($scope.taskInfo.Project, $scope.taskInfo.Server);
-            });
+          
         });
     }
     //部署服务器change事件
@@ -199,7 +201,11 @@
         $scope.GetAllUser(); 
        
     }
- 
+
+    $scope.$watch('taskInfo.Project.Id +taskInfo.DeployStage.Id + taskInfo.Server.Id', function () {
+             $scope.GetDomain($scope.taskInfo.Project, $scope.taskInfo.Server);
+    });
+
     $scope.Init();
 
 
