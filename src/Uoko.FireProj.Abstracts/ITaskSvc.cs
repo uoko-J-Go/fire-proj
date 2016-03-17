@@ -109,5 +109,11 @@ namespace Uoko.FireProj.Abstracts
         /// <param name="serverId"></param>
         /// <returns></returns>
         IEnumerable<OnlineTaskInfo> GetOnlineTaskRollbackAble(int projectId, int serverId);
+        /// <summary>
+        /// 获取项目的历史回滚任务
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <returns></returns>
+        IEnumerable<RollbackTaskInfo> GetRollBackInfoByProjectId(int projectId);
     }
 }

@@ -41,6 +41,16 @@ namespace Uoko.FireProj.Concretes
         #endregion
         #region 回滚任务
 
+        public IEnumerable<RollbackTaskInfo> GetRollBackInfoByProjectId(int projectId)
+        {
+            using (var dbScope = _dbScopeFactory.CreateReadOnly())
+            {
+                var db = dbScope.DbContexts.Get<FireProjDbContext>();
+                var result = db.RollbackTaskInfo.Where(t => t.ProjectId == projectId).OrderByDescending(t => t.Id).ToList();
+
+                return result;
+            }
+        }
         public IEnumerable<OnlineTaskInfo> GetOnlineTaskRollbackAble(int projectId, int serverId)
         {
             using (var dbScope = _dbScopeFactory.CreateReadOnly())
@@ -1210,7 +1220,7 @@ namespace Uoko.FireProj.Concretes
                             break;
                     }
                     var tTasklogsCount = db.TaskLogs.Count(t => t.TriggeredId == triggerId);
-                    if (tTasklogsCount <= 2) //避免重复
+                    if (taskLog.LogType!=LogType.RollBack&&tTasklogsCount <= 2) //避免重复,回滚不发送邮件
                     {
                         MailSendHelper.NotifyDeployResult(toIds, ccIds, notify);
                     }

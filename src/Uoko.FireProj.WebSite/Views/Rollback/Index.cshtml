@@ -22,7 +22,7 @@
         <div class="portlet box blue ">
             <div class="portlet-title">
                 <div class="caption">
-                    <i class="fa fa-bullhorn"></i>紧急回滚
+                    <i class="fa fa-cc-discover"></i>紧急回滚
                 </div>
             </div>
             <div class="portlet-body">
@@ -31,7 +31,7 @@
                         <div class="form-group form-md-line-input">
                             <label class="col-md-2 control-label">项目</label>
                             <div class="col-md-10">
-                                <select class="form-control" name="project" ng-model="projectSelected"  ng-options="project.ProjectName for project in projects track by project.Id" required></select>
+                                <select class="form-control" name="project" ng-model="projectSelected" ng-change="GetRollBackInfo()"  ng-options="project.ProjectName for project in projects track by project.Id" required></select>
                                 <div ng-if="form.$submitted || form.project.$touched">
                                     <span class="error-msg" ng-if="form.project.$error.required">请选择项目</span>
                                 </div>
@@ -60,8 +60,8 @@
                             <label class="col-md-2 control-label">
                                 当前版本
                             </label>
-                            <div class="col-md-10 value">
-                                <span ng-bind="projectSelected.OnlineVersion"></span> 
+                            <div class="col-md-10 ">
+                                <span ng-bind="projectSelected.OnlineVersion" style="height:30px; line-height:30px; width:100px; overflow:hidden;"></span> 
                             </div>
                         </div>
 
@@ -82,7 +82,38 @@
                     </div>
 
                 </form>
-
+                <div class="table-responsive" ng-show="projectSelected">
+                    <table class="table table-bordered table-hover table-condensed">
+                        <thead>
+                            <tr>
+                                <th>项目</th>
+                                <th>回滚版本</th>
+                                <th>目标版本</th>
+                                <th>服务器</th>
+                                <th>域名</th>
+                                <th>状态</th>
+                                <th>发起人</th>
+                                <th>发起时间</th>
+                            </tr>
+                           
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="task in rollbackTaskInfo">
+                                <td><a class="text-primary" href="/Project/Detail?id={{task.ProjectId}}">{{task.ProjectName}}</a> </td>
+                                <td>{{task.FromVersion}}</td>
+                                <td>{{task.ToVersion}}</td>
+                                <td title="{{task.DeployServerName}}">{{task.DeployServerIP}}</td>
+                                <td>{{task.Domain}}</td>
+                                <td title="{{(task.DeployStatus | DeployStatusFilter).Title}}">
+                                    <span ng-class="(task.DeployStatus | DeployStatusFilter).IconClass" ></span>
+                                    <a ng-click="GotoGitLabBuildPage(task.BuildId)" ng-if="task.DeployStatus != 0">查看</a>
+                                </td>
+                                <td>{{task.CreatorName}}</td>
+                                <td title="">{{task.CreateDate | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
         <!-- END EXAMPLE TABLE PORTLET-->

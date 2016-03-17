@@ -238,4 +238,14 @@
             //错误处理
         });
     };
+
+    this.GetRollBackInfoByProjectId = function (projectId, successCallBack) {
+        $http.get("/api/TaskApi/RollBackInfo/{0}".Format(projectId)).success(function (data) {
+            if (successCallBack != undefined) {
+                successCallBack(data);
+            }
+        }).error(function (data) {
+            //错误处理
+        });
+    };
 });
