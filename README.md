@@ -234,7 +234,7 @@
 
 #### 配置WebHook(Settings=>Web Hooks)
  
- 1. 在 URL中 添加 地址  http://fire.uoko.ioc/api/WebHookApi/BuildCallback  
+ 1. 在 URL中 添加 地址  http://fire.uoko.com/api/WebHookApi/BuildCallback  
  2. 在Trigger中只选择 Build events
  3. SSL verification 默认选中
  4. 点击 按钮 Add Web Hook
