@@ -1238,7 +1238,7 @@ namespace Uoko.FireProj.Concretes
                            select new TaskDetailDto
                            {
                                TaskName = task.TaskName,
-                               Id = task.Id,
+                               OnlineTaskId = online.Id
                            };
                 return data.ToList();
             }
