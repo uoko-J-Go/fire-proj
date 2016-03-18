@@ -132,7 +132,7 @@ namespace Uoko.FireProj.DataAccess.Dto
 
 
     /// <summary>
-    /// IOC部署dto
+    /// TEST部署dto
     /// </summary>
     public class DeployInfoIocDto: DeployInfoDto
     {

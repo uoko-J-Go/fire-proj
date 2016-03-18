@@ -69,7 +69,7 @@ fireproj.controller("TaskController", function ($scope, $http, $uibModal, TaskSe
         });
     }
 
-    //发布环境change事件,获取IOC环境的服务器List
+    //发布环境change事件,获取TEST环境的服务器List
     $scope.GetServerData = function (environmentId) {
         TaskService.GetResourceList(environmentId, function (data) {
             $scope.ServerList = data;

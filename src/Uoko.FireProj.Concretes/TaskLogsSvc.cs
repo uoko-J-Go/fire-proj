@@ -74,7 +74,7 @@ namespace Uoko.FireProj.Concretes
                     
                     switch (item.Stage)
                     {
-                        case StageEnum.IOC:
+                        case StageEnum.TEST:
                             taskLogsDto.DeployInfoIocDto = !item.DeployInfo.IsNullOrEmpty() ? JsonHelper.FromJson<DeployInfoIocDto>(item.DeployInfo) : new DeployInfoIocDto();
                             var checkUsers = AnalysisObj.AnalysisCheckUser(taskLogsDto.DeployInfoIocDto.CheckUserId);
                             var currUser = checkUsers.FirstOrDefault(t => t.UserId == item.CreatorId);

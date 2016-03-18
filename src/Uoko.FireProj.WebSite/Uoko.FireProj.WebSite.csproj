@@ -408,7 +408,7 @@
     <Content Include="app\modals\ui-tree.js" />
     <Content Include="Metronic\assets\admin\pages\css\timeline-old.css" />
     <Content Include="Metronic\assets\admin\pages\css\timeline.css" />
-    <Content Include="Metronic\assets\admin\pages\media\users\IOC.jpg" />
+    <Content Include="Metronic\assets\admin\pages\media\users\TEST.jpg" />
     <Content Include="Metronic\assets\admin\pages\media\users\Online.jpg" />
     <Content Include="Metronic\assets\admin\pages\media\users\Pre.jpg" />
     <Content Include="Metronic\assets\global\css\components-md.css" />
