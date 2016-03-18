@@ -43,7 +43,7 @@ namespace Uoko.FireProj.WebSite.Controllers
 
         public ActionResult Seed()
         {
-
+            throw new Exception("WTF");
             using (var dbScope = new DbContextScopeFactory().CreateReadOnly())
             {
                 var db = dbScope.DbContexts.Get<FireProjDbContext>();

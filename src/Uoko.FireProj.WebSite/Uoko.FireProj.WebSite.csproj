@@ -235,7 +235,6 @@
     <Compile Include="Controllers\RollBackController.cs" />
     <Compile Include="Controllers\SystemSetController.cs" />
     <Compile Include="Controllers\TaskController.cs" />
-    <Compile Include="Controllers\Users.cs" />
     <Compile Include="Filter\LogApiExceptionAttribute.cs" />
     <Compile Include="Filter\LogExceptionAttribute.cs" />
     <Compile Include="Global.asax.cs">
