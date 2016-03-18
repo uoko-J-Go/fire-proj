@@ -64,7 +64,7 @@ let deploy() =
     ProcessHelper.enableProcessTracing <- false
     let exitCode = ExecProcess (fun info ->
                     info.FileName <- msdeployPath
-                    info.Arguments <- msdeployArgs) (TimeSpan.FromMinutes 1.0)
+                    info.Arguments <- msdeployArgs) (TimeSpan.FromMinutes 5.0)
     if exitCode <> 0 then failwithf "deploy cmd failed with a non-zero exit code %d."  exitCode
     ProcessHelper.enableProcessTracing <- tracing
 
@@ -87,7 +87,7 @@ let backup onlineVersion =
     ProcessHelper.enableProcessTracing <- false
     let exitCode = ExecProcess (fun info ->
                     info.FileName <- msdeployPath
-                    info.Arguments <- backupArgs) (TimeSpan.FromMinutes 1.0)
+                    info.Arguments <- backupArgs) (TimeSpan.FromMinutes 5.0)
                     
     if exitCode <> 0 then failwithf "backup failed with a non-zero exit code %d."  exitCode
     ProcessHelper.enableProcessTracing <- tracing
@@ -178,7 +178,7 @@ Target "Rollback" (fun _ ->
     ProcessHelper.enableProcessTracing <- false
     let exitCode = ExecProcess (fun info ->
                     info.FileName <- msdeployPath
-                    info.Arguments <- rollbackArgs) (TimeSpan.FromMinutes 1.0)
+                    info.Arguments <- rollbackArgs) (TimeSpan.FromMinutes 5.0)
     ProcessHelper.enableProcessTracing <- trace
     if exitCode <> 0 then failwithf "rollback cmd failed with a non-zero exit code %d."  exitCode
 )

@@ -1,5 +1,6 @@
 ﻿using System.Web;
 using System.Web.Mvc;
+using Uoko.FireProj.WebSite.Filter;
 
 namespace Uoko.FireProj.WebSite
 {
@@ -7,7 +8,7 @@ namespace Uoko.FireProj.WebSite
     {
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
-            filters.Add(new HandleErrorAttribute());
+            filters.Add(new LogExceptionAttribute());
             filters.Add(new AuthorizeAttribute());
         }
     }

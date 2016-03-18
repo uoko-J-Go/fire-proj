@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
+using Uoko.FireProj.WebSite.Filter;
 using UOKO.WebAPI.Tools;
 
 namespace Uoko.FireProj.WebSite.App_Start
@@ -16,6 +17,8 @@ namespace Uoko.FireProj.WebSite.App_Start
             config.Filters.Add(new ModelStateEnsureValidFilterAttribute());
             // 异常统一结果返回
             config.Filters.Add(new UnifyExceptionFilter());
+
+            config.Filters.Add(new LogApiExceptionAttribute()); 
 
             // Web API 路由
             config.MapHttpAttributeRoutes();
