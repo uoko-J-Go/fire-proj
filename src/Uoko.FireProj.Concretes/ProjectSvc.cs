@@ -30,61 +30,40 @@ namespace Uoko.FireProj.Concretes
 
         public int CreatProject(ProjectDto dto)
         {
-            try
+            var entity = Mapper.Map<ProjectDto, Project>(dto);
+            entity.CreateDate = DateTime.Now;
+            using (var dbScope = _dbScopeFactory.Create())
             {
-                var entity = Mapper.Map<ProjectDto, Project>(dto);
-                entity.CreateDate = DateTime.Now;
-                using (var dbScope = _dbScopeFactory.Create())
-                {
-                    var db = dbScope.DbContexts.Get<FireProjDbContext>();
-                    var data = db.Project.Add(entity);
-                    db.SaveChanges();
-                }
-                return entity.Id;
+                var db = dbScope.DbContexts.Get<FireProjDbContext>();
+                var data = db.Project.Add(entity);
+                db.SaveChanges();
             }
-            catch (Exception ex)
-            {
-                throw new TipInfoException(ex.Message);
-            }
+            return entity.Id;
         }
 
         public void DeleteProject(int projectId)
         {
-            try
+            using (var dbScope = _dbScopeFactory.Create())
             {
-                using (var dbScope = _dbScopeFactory.Create())
-                {
-                    var db = dbScope.DbContexts.Get<FireProjDbContext>();
-                    
+                var db = dbScope.DbContexts.Get<FireProjDbContext>();
 
-                    Project entity = new Project() { Id = projectId };
-                    db.Project.Attach(entity);
-                    db.Project.Remove(entity);
-                    db.SaveChanges();
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new TipInfoException(ex.Message);
+
+                Project entity = new Project() { Id = projectId };
+                db.Project.Attach(entity);
+                db.Project.Remove(entity);
+                db.SaveChanges();
             }
         }
 
         public void EditProject(ProjectDto dto)
         {
-            try
+            var entity = Mapper.Map<ProjectDto, Project>(dto);
+            entity.CreateDate = DateTime.Now;
+            using (var dbScope = _dbScopeFactory.Create())
             {
-                var entity = Mapper.Map<ProjectDto, Project>(dto);
-                entity.CreateDate = DateTime.Now;
-                using (var dbScope = _dbScopeFactory.Create())
-                {
-                    var db = dbScope.DbContexts.Get<FireProjDbContext>();
-                    db.Update(entity, r => new { r.ProjectDesc, r.ProjectName, r.ProjectRepo,ProjectId = r.RepoId, r.ProjectSlnName });
-                    db.SaveChanges();
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new TipInfoException(ex.Message);
+                var db = dbScope.DbContexts.Get<FireProjDbContext>();
+                db.Update(entity, r => new { r.ProjectDesc, r.ProjectName, r.ProjectRepo, ProjectId = r.RepoId, r.ProjectSlnName });
+                db.SaveChanges();
             }
         }
 

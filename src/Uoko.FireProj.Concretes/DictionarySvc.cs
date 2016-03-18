@@ -27,63 +27,41 @@ namespace Uoko.FireProj.Concretes
 
         public void CreatDictionary(DictionaryDto dto)
         {
-            try
+            var entity = Mapper.Map<DictionaryDto, Dictionary>(dto);
+            entity.CreateDate = DateTime.Now;
+            using (var dbScope = _dbScopeFactory.Create())
             {
-                var entity = Mapper.Map<DictionaryDto, Dictionary>(dto);
-                entity.CreateDate = DateTime.Now;
-                using (var dbScope = _dbScopeFactory.Create())
-                {
-                    var db = dbScope.DbContexts.Get<FireProjDbContext>();
-                    db.Dictionary.Add(entity);
-                    db.SaveChanges();
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new TipInfoException(ex.Message);
+                var db = dbScope.DbContexts.Get<FireProjDbContext>();
+                db.Dictionary.Add(entity);
+                db.SaveChanges();
             }
         }
 
         public void DeleteDictionary(int id)
         {
-            try
+            using (var dbScope = _dbScopeFactory.Create())
             {
-                using (var dbScope = _dbScopeFactory.Create())
+                var db = dbScope.DbContexts.Get<FireProjDbContext>();
+                var result = db.Dictionary.Where(r => r.ParentId == id).Count();
+                if (result > 0)
                 {
-                    var db = dbScope.DbContexts.Get<FireProjDbContext>();
-                    var result = db.Dictionary.Where(r => r.ParentId == id).Count();
-                    if (result > 0)
-                    {
-                        throw new TipInfoException("还有子集,无法删除!");
-                    }
-                    Dictionary entity = new Dictionary() { Id = id };
-                    db.Dictionary.Attach(entity);
-                    db.Dictionary.Remove(entity);
-                    db.SaveChanges();
+                    throw new TipInfoException("还有子集,无法删除!");
                 }
-            }
-            catch (Exception ex)
-            {
-                throw new TipInfoException(ex.Message);
+                Dictionary entity = new Dictionary() { Id = id };
+                db.Dictionary.Attach(entity);
+                db.Dictionary.Remove(entity);
+                db.SaveChanges();
             }
         }
 
         public void EditDictionary(DictionaryDto dto)
         {
-            try
+            var entity = Mapper.Map<DictionaryDto, Dictionary>(dto);
+            using (var dbScope = _dbScopeFactory.Create())
             {
-                var entity = Mapper.Map<DictionaryDto, Dictionary>(dto);
-
-                using (var dbScope = _dbScopeFactory.Create())
-                {
-                    var db = dbScope.DbContexts.Get<FireProjDbContext>();
-                    db.Update(entity, r => new { r.Description, ModifyBy = r.ModifyId, r.ModifyDate, r.Name, r.ParentId, r.Value });
-                    db.SaveChanges();
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new TipInfoException(ex.Message);
+                var db = dbScope.DbContexts.Get<FireProjDbContext>();
+                db.Update(entity, r => new { r.Description, ModifyBy = r.ModifyId, r.ModifyDate, r.Name, r.ParentId, r.Value });
+                db.SaveChanges();
             }
         }
 
