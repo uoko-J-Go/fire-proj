@@ -16,6 +16,8 @@ namespace Uoko.FireProj.Infrastructure.Mail
         private static string server = ConfigurationManager.AppSettings["mail.server"]?? "smtp.exmail.qq.com";
         private static string username = ConfigurationManager.AppSettings["mail.username"] ?? "uoko-et-notify@uoko.com";
         private static string password = ConfigurationManager.AppSettings["mail.password"] ?? "Uoko2016";
+        private static string emailNotifyEnabled = ConfigurationManager.AppSettings["emailNotify.Enabled"] ?? "false";//邮件通知是否可用
+       
         static MailSendHelper()
         {
             //邮件服务器和端口 
@@ -153,7 +155,10 @@ namespace Uoko.FireProj.Infrastructure.Mail
                         }
 
                     }
-                    smtp.Send(mail);
+                    if ("true".Equals(emailNotifyEnabled,StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        smtp.Send(mail);
+                    }                
                     return "Ok";
                 }
                    
