@@ -59,7 +59,7 @@
                 if (data.length > 0) {
                     var showInfo = "";
                     for (var i = 0; i < data.length; i++) {
-                        showInfo += "<a target='_blank' class='text-primary' href='/Task/Detail?taskId=" + data[i].Id + "'>" + data[i].TaskName + "</a></br>";
+                        showInfo += "<a target='_blank' class='text-primary' href='/Online/Detail?taskId=" + data[i].OnlineTaskId + "'>" + data[i].TaskName + "</a></br>";
                     }
                     $scope.showFire = false;
                     bootbox.alert("该项目下存在以下任务未部署成功:</br>" + showInfo + "");
