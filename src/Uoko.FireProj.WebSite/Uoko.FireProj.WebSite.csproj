@@ -1242,10 +1242,10 @@
     <None Include="Views\Online\Detail.cshtml" />
     <None Include="Views\Online\Index.cshtml" />
     <Content Include="Views\Rollback\Index.cshtml" />
-    <None Include="Web.fire.pre.uoko.ioc.config">
+    <None Include="Web.fire.pre.uoko.com.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
-    <None Include="Web.fire.uoko.ioc.config">
+    <None Include="Web.fire.uoko.com.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
@@ -1295,10 +1295,10 @@
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'fire.pre.uoko.ioc|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'fire.pre.uoko.com|AnyCPU' ">
     <OutputPath>bin\</OutputPath>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'fire.uoko.ioc|AnyCPU'">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'fire.uoko.com|AnyCPU' ">
     <OutputPath>bin\</OutputPath>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
@@ -1318,7 +1318,7 @@
           <IISUrl>http://localhost:45135/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>True</UseCustomServer>
-          <CustomServerUrl>http://fire.uoko.ioc/</CustomServerUrl>
+          <CustomServerUrl>http://fire.uoko.com/</CustomServerUrl>
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
