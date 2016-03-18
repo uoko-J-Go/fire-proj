@@ -1190,8 +1190,8 @@
     <Content Include="Metronic\assets\global\plugins\jstree\README.md" />
     <Content Include="Metronic\assets\global\plugins\zTree\css\awesomeStyle\awesome.less" />
     <Content Include="Metronic\assets\global\plugins\zTree\css\awesomeStyle\fa.less" />
-    <None Include="Properties\PublishProfiles\qingpan.pubxml" />
-    <None Include="Properties\PublishProfiles\ioc.pubxml" />
+    <None Include="Properties\PublishProfiles\fire.uoko.com.pubxml" />
+    <None Include="Properties\PublishProfiles\fire.pre.uoko.com.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
