@@ -30,25 +30,17 @@ namespace Uoko.FireProj.Concretes
 
         public void CreateTaskLogs(TaskLogs entity)
         {
-            try
+            using (var dbScope = _dbScopeFactory.Create())
             {
-                using (var dbScope = _dbScopeFactory.Create())
-                {
-                    var db = dbScope.DbContexts.Get<FireProjDbContext>();
-                    db.TaskLogs.Add(entity);
-                    db.SaveChanges();
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new TipInfoException(ex.Message);
+                var db = dbScope.DbContexts.Get<FireProjDbContext>();
+                db.TaskLogs.Add(entity);
+                db.SaveChanges();
             }
         }
 
 
         public List<TaskLogsDto> GetTaskLogsByTaskId(int taskId)
         {
-          
             using (var dbScope = _dbScopeFactory.CreateReadOnly())
             {
                 var db = dbScope.DbContexts.Get<FireProjDbContext>();

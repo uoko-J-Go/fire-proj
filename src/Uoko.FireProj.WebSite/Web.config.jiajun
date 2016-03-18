@@ -16,16 +16,16 @@
     <add key="webpages:Enabled" value="*" />
     <add key="ClientValidationEnabled" value="*" />
     <add key="UnobtrusiveJavaScriptEnabled" value="*" />
-    <add key="mail.server" value="*"/>
-    <add key="mail.username" value="*"/>
-    <add key="mail.password" value="*"/>
+    <add key="mail.server" value="*" />
+    <add key="mail.username" value="*" />
+    <add key="mail.password" value="*" />
 
-    <add key="gitlab.url" value="*"/>
-    <add key="gitlab.token" value="*"/>
+    <add key="gitlab.url" value="*" />
+    <add key="gitlab.token" value="*" />
     <add key="systemset.api.url" value="*" />
     <add key="sso.url" value="*" />
     <add key="domain.url" value="*" />
-    <add key="emailNotify.Enabled" value="*"/>
+    <add key="emailNotify.Enabled" value="*" />
     <add key="IsUseWebConfigTrans" value="*" />
   </appSettings>
   <system.web>

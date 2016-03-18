@@ -17,7 +17,7 @@
 
   <connectionStrings>
     <add name="FireProjDbContext"
-      connectionString="Server=120.26.127.146;Database=UOKO_FireProj;User Id=ioc;Password=P@ssw0rd;"
+      connectionString="Server=120.26.127.146;Database=UOKO_Fire_Production;User Id=ioc;Password=P@ssw0rd;"
       xdt:Transform="SetAttributes" xdt:Locator="Match(name)"/>
   </connectionStrings>
 

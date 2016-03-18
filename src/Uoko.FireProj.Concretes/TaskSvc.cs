@@ -12,7 +12,6 @@ using Uoko.FireProj.DataAccess.Entity;
 using Uoko.FireProj.DataAccess.Enum;
 using Uoko.FireProj.DataAccess.Gitlab;
 using Uoko.FireProj.DataAccess.Mail;
-using Uoko.FireProj.DataAccess.Migrations;
 using Uoko.FireProj.DataAccess.Query;
 using Uoko.FireProj.Infrastructure.Data;
 using Uoko.FireProj.Infrastructure.Exception;
@@ -82,8 +81,6 @@ namespace Uoko.FireProj.Concretes
 
         public void DeployRollbackTask(RollbackTaskInfo taskInfo)
         {
-           
-
             var project = _projectSvc.GetProjectById(taskInfo.ProjectId);
             if (project == null)
             {
@@ -292,7 +289,6 @@ namespace Uoko.FireProj.Concretes
 
         public OnlineTaskDetailDto GetOnlineTaskDetail(int onlineTaskId)
         {
-
             using (var dbScope = _dbScopeFactory.CreateReadOnly())
             {
                 var db = dbScope.DbContexts.Get<FireProjDbContext>();
@@ -318,9 +314,6 @@ namespace Uoko.FireProj.Concretes
             
                 return onlineTaskDetail;
             }
-
-
-
         }
 
         /// <summary>
@@ -854,106 +847,99 @@ namespace Uoko.FireProj.Concretes
 
         public void DeployCallback(int triggerId, int buildId, DeployStatus deployStatus)
         {
-            try
+            using (var dbScope = _dbScopeFactory.Create())
             {
-                using (var dbScope = _dbScopeFactory.Create())
+                var db = dbScope.DbContexts.Get<FireProjDbContext>();
+
+                var taskLog = db.TaskLogs.Where(r => r.TriggeredId == triggerId).FirstOrDefault();
+                if (taskLog == null)
                 {
-                    var db = dbScope.DbContexts.Get<FireProjDbContext>();
-
-                    var taskLog = db.TaskLogs.Where(r => r.TriggeredId == triggerId).FirstOrDefault();
-                    if (taskLog == null)
-                    {
-                        return ;
-                    }
-                    //日志内容
-                    var log = new TaskLogs
-                    {
-                        TaskId = taskLog.TaskId,
-                        LogType = taskLog.LogType,
-                        Stage = taskLog.Stage,
-                        TriggeredId = triggerId,
-                        CreateDate = DateTime.Now,
-                        CreatorId = 0,
-                        CreatorName = "系统",
-                    };
-
-                    //更改任务记录
-                    switch (taskLog.Stage)
-                    {
-                        case StageEnum.TEST:
-                            var entityIoc = db.TaskInfo.FirstOrDefault(r => r.Id == taskLog.TaskId);
-                            if (entityIoc == null) return;
-                            var iocDeployInfo = JsonHelper.FromJson<DeployInfoIoc>(entityIoc.DeployInfoIocJson);
-                            iocDeployInfo.DeployStatus = deployStatus;
-                            iocDeployInfo.BuildId = buildId;
-                            entityIoc.DeployInfoIocJson = JsonHelper.ToJson(iocDeployInfo);
-                            entityIoc.ModifyDate = DateTime.Now;
-                            log.DeployInfo = entityIoc.DeployInfoIocJson;
-                            break;
-                        case StageEnum.PRE:
-                            var entityPre = db.TaskInfo.FirstOrDefault(r => r.Id == taskLog.TaskId);
-                            if (entityPre == null) return;
-                            var preDeployInfo = JsonHelper.FromJson<DeployInfoPre>(entityPre.DeployInfoPreJson);
-                            preDeployInfo.DeployStatus = deployStatus;
-                            preDeployInfo.BuildId = buildId;
-                            entityPre.DeployInfoPreJson = JsonHelper.ToJson(preDeployInfo);
-                            entityPre.ModifyDate = DateTime.Now;
-                            log.DeployInfo = entityPre.DeployInfoPreJson;
-                            break;
-                        case StageEnum.PRODUCTION:
-                            if (taskLog.LogType == LogType.Online)
-                            {
-                                var entityOnline = db.OnlineTaskInfos.FirstOrDefault(r => r.Id == taskLog.TaskId);
-                                if (entityOnline == null) return;
-                                
-                                entityOnline.DeployStatus = deployStatus;
-                                entityOnline.BuildId = buildId;
-                                entityOnline.ModifyDate = DateTime.Now;
-                                if (deployStatus == DeployStatus.DeploySuccess)
-                                {
-                                    //更新任务当前的线上版本
-                                    var entityProject = db.Project.FirstOrDefault(t => t.Id == entityOnline.ProjectId);
-                                    entityProject.OnlineVersion = entityOnline.OnlineVersion;
-                                }
-                              
-                                log.DeployInfo = JsonHelper.ToJson(entityOnline);
-                            }
-                            else if(taskLog.LogType==LogType.RollBack)
-                            {
-                                var entityRollback = db.RollbackTaskInfo.FirstOrDefault(t => t.Id == taskLog.TaskId);
-                                if (entityRollback == null) return;
-                              
-                                entityRollback.DeployStatus = deployStatus;
-                                entityRollback.BuildId = buildId;
-                                entityRollback.ModifyDate = DateTime.Now;
-                                if (deployStatus == DeployStatus.DeploySuccess)
-                                {
-                                    //更新任务当前的线上版本
-                                    var entityProject = db.Project.FirstOrDefault(t => t.Id == entityRollback.ProjectId);    
-                                    entityProject.OnlineVersion = entityRollback.ToVersion;
-                                }
-
-                               
-                                log.DeployInfo = JsonHelper.ToJson(entityRollback);
-                            }
-                           
-                            break;
-                    }
-                
-                    #region 写日志
-                    var tTasklogs = db.TaskLogs.Count(t => t.TriggeredId == triggerId);
-                    if (tTasklogs < 2) //避免重复
-                    {
-                         db.TaskLogs.Add(log);  
-                    }        
-                    #endregion
-                    db.SaveChanges();
-
+                    return;
                 }
-            }
-            catch (Exception ex)
-            {
-                throw new TipInfoException(ex.Message);
+                //日志内容
+                var log = new TaskLogs
+                {
+                    TaskId = taskLog.TaskId,
+                    LogType = taskLog.LogType,
+                    Stage = taskLog.Stage,
+                    TriggeredId = triggerId,
+                    CreateDate = DateTime.Now,
+                    CreatorId = 0,
+                    CreatorName = "系统",
+                };
+
+                //更改任务记录
+                switch (taskLog.Stage)
+                {
+                    case StageEnum.TEST:
+                        var entityIoc = db.TaskInfo.FirstOrDefault(r => r.Id == taskLog.TaskId);
+                        if (entityIoc == null) return;
+                        var iocDeployInfo = JsonHelper.FromJson<DeployInfoIoc>(entityIoc.DeployInfoIocJson);
+                        iocDeployInfo.DeployStatus = deployStatus;
+                        iocDeployInfo.BuildId = buildId;
+                        entityIoc.DeployInfoIocJson = JsonHelper.ToJson(iocDeployInfo);
+                        entityIoc.ModifyDate = DateTime.Now;
+                        log.DeployInfo = entityIoc.DeployInfoIocJson;
+                        break;
+                    case StageEnum.PRE:
+                        var entityPre = db.TaskInfo.FirstOrDefault(r => r.Id == taskLog.TaskId);
+                        if (entityPre == null) return;
+                        var preDeployInfo = JsonHelper.FromJson<DeployInfoPre>(entityPre.DeployInfoPreJson);
+                        preDeployInfo.DeployStatus = deployStatus;
+                        preDeployInfo.BuildId = buildId;
+                        entityPre.DeployInfoPreJson = JsonHelper.ToJson(preDeployInfo);
+                        entityPre.ModifyDate = DateTime.Now;
+                        log.DeployInfo = entityPre.DeployInfoPreJson;
+                        break;
+                    case StageEnum.PRODUCTION:
+                        if (taskLog.LogType == LogType.Online)
+                        {
+                            var entityOnline = db.OnlineTaskInfos.FirstOrDefault(r => r.Id == taskLog.TaskId);
+                            if (entityOnline == null) return;
+
+                            entityOnline.DeployStatus = deployStatus;
+                            entityOnline.BuildId = buildId;
+                            entityOnline.ModifyDate = DateTime.Now;
+                            if (deployStatus == DeployStatus.DeploySuccess)
+                            {
+                                //更新任务当前的线上版本
+                                var entityProject = db.Project.FirstOrDefault(t => t.Id == entityOnline.ProjectId);
+                                entityProject.OnlineVersion = entityOnline.OnlineVersion;
+                            }
+
+                            log.DeployInfo = JsonHelper.ToJson(entityOnline);
+                        }
+                        else if (taskLog.LogType == LogType.RollBack)
+                        {
+                            var entityRollback = db.RollbackTaskInfo.FirstOrDefault(t => t.Id == taskLog.TaskId);
+                            if (entityRollback == null) return;
+
+                            entityRollback.DeployStatus = deployStatus;
+                            entityRollback.BuildId = buildId;
+                            entityRollback.ModifyDate = DateTime.Now;
+                            if (deployStatus == DeployStatus.DeploySuccess)
+                            {
+                                //更新任务当前的线上版本
+                                var entityProject = db.Project.FirstOrDefault(t => t.Id == entityRollback.ProjectId);
+                                entityProject.OnlineVersion = entityRollback.ToVersion;
+                            }
+
+
+                            log.DeployInfo = JsonHelper.ToJson(entityRollback);
+                        }
+
+                        break;
+                }
+
+                #region 写日志
+                var tTasklogs = db.TaskLogs.Count(t => t.TriggeredId == triggerId);
+                if (tTasklogs < 2) //避免重复
+                {
+                    db.TaskLogs.Add(log);
+                }
+                #endregion
+                db.SaveChanges();
+
             }
         }
 
@@ -1025,202 +1011,189 @@ namespace Uoko.FireProj.Concretes
 
         public void NotifyTestResult(TestResultDto testResult)
         {
-            try
+            var taskDto = this.GetTaskById(testResult.TaskId);
+            var toIds = new List<int>();
+            var ccIds = new List<int>();
+            var notify = new QANotifyMail()
             {
-                var taskDto = this.GetTaskById(testResult.TaskId);
-                var toIds = new List<int>();
-                var ccIds = new List<int>();
-                var notify = new QANotifyMail()
-                {
-                    TaskName=taskDto.TaskName,
-                    TestUser=UserHelper.CurrUserInfo.NickName,
-                    StageName = testResult.Stage.ToDescription(),
-                    Coments = testResult.Comments,
-                    TaskUrl=string.Format("{0}/Task/Detail?taskId={1}",_domainUrl.TrimEnd('/'),taskDto.Id),
-                    IsAllPassed=false
-                };
+                TaskName = taskDto.TaskName,
+                TestUser = UserHelper.CurrUserInfo.NickName,
+                StageName = testResult.Stage.ToDescription(),
+                Coments = testResult.Comments,
+                TaskUrl = string.Format("{0}/Task/Detail?taskId={1}", _domainUrl.TrimEnd('/'), taskDto.Id),
+                IsAllPassed = false
+            };
 
-                toIds.Add(taskDto.CreatorId.Value);
+            toIds.Add(taskDto.CreatorId.Value);
 
-                switch (testResult.Stage)
-                {
-                    case StageEnum.TEST:
-                        foreach (var user in taskDto.DeployInfoIocDto.CheckUser.Where(t=>t.UserId != UserHelper.CurrUserInfo.UserId))
-                        {
-                            if (!toIds.Contains(user.UserId))
-                            {
-                                toIds.Add(user.UserId);
-                            }
-                        }
-                        ccIds.AddRange(taskDto.DeployInfoIocDto.NoticeUser.Where(t => t.UserId != UserHelper.CurrUserInfo.UserId).Select(t => t.UserId));
-                        notify.TestResult =taskDto.DeployInfoIocDto.CheckUser.FirstOrDefault(t => t.UserId == UserHelper.CurrUserInfo.UserId).QAStatus.ToDescription();
-                        notify.TestUrl = taskDto.DeployInfoIocDto.Domain;
-                        notify.IsAllPassed = taskDto.DeployInfoIocDto.CheckUser.Count ==taskDto.DeployInfoIocDto.CheckUser.Count(t => t.QAStatus == QAStatus.Passed);
-                        break;
-                    case StageEnum.PRE:
-                        foreach (var user in taskDto.DeployInfoPreDto.CheckUser.Where(t => t.UserId != UserHelper.CurrUserInfo.UserId))
-                        {
-                            if (!toIds.Contains(user.UserId))
-                            {
-                                toIds.Add(user.UserId);
-                            }
-                        }
-                        ccIds.AddRange(taskDto.DeployInfoPreDto.NoticeUser.Where(t => t.UserId != UserHelper.CurrUserInfo.UserId).Select(t => t.UserId));
-                        notify.TestResult = taskDto.DeployInfoPreDto.CheckUser.FirstOrDefault(t => t.UserId == UserHelper.CurrUserInfo.UserId).QAStatus.ToDescription();
-                        notify.TestUrl = taskDto.DeployInfoPreDto.Domain;
-                        notify.IsAllPassed = taskDto.DeployInfoPreDto.CheckUser.Count == taskDto.DeployInfoPreDto.CheckUser.Count(t => t.QAStatus == QAStatus.Passed);
-                        break;
-                    case StageEnum.PRODUCTION:
-                        foreach (var user in taskDto.DeployInfoOnlineDto.CheckUser.Where(t => t.UserId != UserHelper.CurrUserInfo.UserId))
-                        {
-                            if (!toIds.Contains(user.UserId))
-                            {
-                                toIds.Add(user.UserId);
-                            }
-                        }
-                        ccIds.AddRange(taskDto.DeployInfoOnlineDto.NoticeUser.Where(t => t.UserId != UserHelper.CurrUserInfo.UserId).Select(t => t.UserId));
-                        notify.TestResult = taskDto.DeployInfoOnlineDto.CheckUser.FirstOrDefault(t => t.UserId == UserHelper.CurrUserInfo.UserId).QAStatus.ToDescription();
-                       
-                        notify.IsAllPassed = taskDto.DeployInfoOnlineDto.CheckUser.Count == taskDto.DeployInfoOnlineDto.CheckUser.Count(t => t.QAStatus == QAStatus.Passed);
-                        using (var dbScope = _dbScopeFactory.CreateReadOnly())
-                        {
-                            var db = dbScope.DbContexts.Get<FireProjDbContext>();
-                            var onlineTask = db.OnlineTaskInfos.Find(taskDto.DeployInfoOnlineDto.OnlineTaskId.Value);
-                            if (onlineTask != null)
-                            {
-                                notify.TestUrl = onlineTask.Domain;
-                            }
-                        }
-                        break;
-                }
-
-                MailSendHelper.NotifyTestResult(toIds, ccIds, notify);
-            }
-            catch (Exception ex)
+            switch (testResult.Stage)
             {
-                throw new TipInfoException(ex.Message);
+                case StageEnum.TEST:
+                    foreach (var user in taskDto.DeployInfoIocDto.CheckUser.Where(t => t.UserId != UserHelper.CurrUserInfo.UserId))
+                    {
+                        if (!toIds.Contains(user.UserId))
+                        {
+                            toIds.Add(user.UserId);
+                        }
+                    }
+                    ccIds.AddRange(taskDto.DeployInfoIocDto.NoticeUser.Where(t => t.UserId != UserHelper.CurrUserInfo.UserId).Select(t => t.UserId));
+                    notify.TestResult = taskDto.DeployInfoIocDto.CheckUser.FirstOrDefault(t => t.UserId == UserHelper.CurrUserInfo.UserId).QAStatus.ToDescription();
+                    notify.TestUrl = taskDto.DeployInfoIocDto.Domain;
+                    notify.IsAllPassed = taskDto.DeployInfoIocDto.CheckUser.Count == taskDto.DeployInfoIocDto.CheckUser.Count(t => t.QAStatus == QAStatus.Passed);
+                    break;
+                case StageEnum.PRE:
+                    foreach (var user in taskDto.DeployInfoPreDto.CheckUser.Where(t => t.UserId != UserHelper.CurrUserInfo.UserId))
+                    {
+                        if (!toIds.Contains(user.UserId))
+                        {
+                            toIds.Add(user.UserId);
+                        }
+                    }
+                    ccIds.AddRange(taskDto.DeployInfoPreDto.NoticeUser.Where(t => t.UserId != UserHelper.CurrUserInfo.UserId).Select(t => t.UserId));
+                    notify.TestResult = taskDto.DeployInfoPreDto.CheckUser.FirstOrDefault(t => t.UserId == UserHelper.CurrUserInfo.UserId).QAStatus.ToDescription();
+                    notify.TestUrl = taskDto.DeployInfoPreDto.Domain;
+                    notify.IsAllPassed = taskDto.DeployInfoPreDto.CheckUser.Count == taskDto.DeployInfoPreDto.CheckUser.Count(t => t.QAStatus == QAStatus.Passed);
+                    break;
+                case StageEnum.PRODUCTION:
+                    foreach (var user in taskDto.DeployInfoOnlineDto.CheckUser.Where(t => t.UserId != UserHelper.CurrUserInfo.UserId))
+                    {
+                        if (!toIds.Contains(user.UserId))
+                        {
+                            toIds.Add(user.UserId);
+                        }
+                    }
+                    ccIds.AddRange(taskDto.DeployInfoOnlineDto.NoticeUser.Where(t => t.UserId != UserHelper.CurrUserInfo.UserId).Select(t => t.UserId));
+                    notify.TestResult = taskDto.DeployInfoOnlineDto.CheckUser.FirstOrDefault(t => t.UserId == UserHelper.CurrUserInfo.UserId).QAStatus.ToDescription();
+
+                    notify.IsAllPassed = taskDto.DeployInfoOnlineDto.CheckUser.Count == taskDto.DeployInfoOnlineDto.CheckUser.Count(t => t.QAStatus == QAStatus.Passed);
+                    using (var dbScope = _dbScopeFactory.CreateReadOnly())
+                    {
+                        var db = dbScope.DbContexts.Get<FireProjDbContext>();
+                        var onlineTask = db.OnlineTaskInfos.Find(taskDto.DeployInfoOnlineDto.OnlineTaskId.Value);
+                        if (onlineTask != null)
+                        {
+                            notify.TestUrl = onlineTask.Domain;
+                        }
+                    }
+                    break;
             }
+
+            MailSendHelper.NotifyTestResult(toIds, ccIds, notify);
+
         }
 
         public void NotifyDeployResult(int triggerId, int buildId, DeployStatus deployStatus)
         {
-            try
+            using (var dbScope = _dbScopeFactory.CreateReadOnly())
             {
-                using (var dbScope = _dbScopeFactory.CreateReadOnly())
+                var db = dbScope.DbContexts.Get<FireProjDbContext>();
+
+                var taskLog = db.TaskLogs.Where(r => r.TriggeredId == triggerId).FirstOrDefault();
+                if (taskLog == null)
                 {
-                    var db = dbScope.DbContexts.Get<FireProjDbContext>();
-
-                    var taskLog = db.TaskLogs.Where(r => r.TriggeredId == triggerId).FirstOrDefault();
-                    if (taskLog == null)
-                    {
-                        return;
-                    }
-                    var toIds = new List<int>();
-                    var ccIds = new List<int>();
-                    var notify = new DeployNotifyMail()
-                    {
-                        StageName = taskLog.Stage.ToDescription(),
-                        DeployStatus = deployStatus.ToDescription()
-                    };
-                    switch (taskLog.Stage)
-                    {
-                        case StageEnum.TEST:
-                            var taskDtoIoc = this.GetTaskById(taskLog.TaskId);
-                            notify.TaskName = taskDtoIoc.TaskName;
-                            notify.TaskUrl = string.Format("{0}/Task/Detail?taskId={1}", _domainUrl.TrimEnd('/'),taskDtoIoc.Id);
-                             
-                            if (deployStatus == DeployStatus.DeployFails)
-                            {
-                                notify.GitLabBuildPage = taskDtoIoc.ProjectDto.ProjectRepo.Replace(".git", "") + "/builds/" + buildId;
-                                if (taskDtoIoc.CreatorId != null)
-                                {
-                                    toIds.Add(taskDtoIoc.CreatorId.Value);
-                                }
-                            }
-                            else if (deployStatus == DeployStatus.DeploySuccess)
-                            {
-                                notify.DeployUrl = taskDtoIoc.DeployInfoIocDto.Domain;
-                                toIds.Add(taskDtoIoc.CreatorId.Value);
-                                toIds.AddRange(taskDtoIoc.DeployInfoIocDto.CheckUser.Where(t => t.UserId != taskDtoIoc.CreatorId.Value).Select(t=>t.UserId));
-                                ccIds.AddRange(taskDtoIoc.DeployInfoIocDto.NoticeUser.Select(t => t.UserId));
-                            }
-                           
-                            break;
-                        case StageEnum.PRE:
-                            var taskDtoPre = this.GetTaskById(taskLog.TaskId);
-                            notify.TaskName = taskDtoPre.TaskName;
-                            notify.TaskUrl = string.Format("{0}/Task/Detail?taskId={1}", _domainUrl.TrimEnd('/'), taskDtoPre.Id);
-                           
-                            if (deployStatus == DeployStatus.DeployFails)
-                            {
-                                notify.GitLabBuildPage = taskDtoPre.ProjectDto.ProjectRepo.Replace(".git", "") + "/builds/" + buildId;
-                                if (taskDtoPre.CreatorId != null)
-                                {
-                                    toIds.Add(taskDtoPre.CreatorId.Value);
-                                }
-                            }
-                            else if (deployStatus == DeployStatus.DeploySuccess)
-                            {
-                                notify.DeployUrl = taskDtoPre.DeployInfoPreDto.Domain;
-                                toIds.Add(taskDtoPre.CreatorId.Value);
-                                toIds.AddRange(taskDtoPre.DeployInfoPreDto.CheckUser.Where(t => t.UserId != taskDtoPre.CreatorId.Value).Select(t => t.UserId));
-                                ccIds.AddRange(taskDtoPre.DeployInfoPreDto.NoticeUser.Select(t => t.UserId));
-                            }
-
-                            break;
-                        case StageEnum.PRODUCTION:
-                            var onlineTask = db.OnlineTaskInfos.FirstOrDefault(t => t.Id == taskLog.TaskId);
-
-                            var taskInfos = db.TaskInfo.Where(t => t.OnlineTaskId == onlineTask.Id).ToList();
-                            notify.TaskUrl = string.Format("{0}/Online/Detail?taskId={1}", _domainUrl.TrimEnd('/'), onlineTask.Id);
-                            notify.TaskName = onlineTask.ProjectName;
-                           
-                            var project = db.Project.Find(onlineTask.ProjectId);      
-                            if (deployStatus == DeployStatus.DeployFails)
-                            {
-                                notify.GitLabBuildPage = project.ProjectRepo.Replace(".git", "") + "/builds/" + buildId;
-                                toIds.Add(onlineTask.CreatorId);
-                            }
-                            else if (deployStatus == DeployStatus.DeploySuccess)
-                            {
-                                notify.DeployUrl = onlineTask.Domain;
-                                toIds.Add(onlineTask.CreatorId);
-
-                                foreach (var task in taskInfos)
-                                {
-                                    var onlineDeployInfo =JsonHelper.FromJson<DeployInfoOnline>(task.DeployInfoOnlineJson);
-                                    var checkUsers = AnalysisObj.AnalysisCheckUser(onlineDeployInfo.CheckUserId);
-
-                                    foreach (var user in checkUsers)
-                                    {
-                                        if (!toIds.Contains(user.UserId))
-                                        {
-                                            toIds.Add(user.UserId);
-                                        }
-                                    }
-                                    var noticeUsers = AnalysisObj.AnalysisNoticeUser(onlineDeployInfo.NoticeUserId);
-                                    foreach (var user in noticeUsers)
-                                    {
-                                        if (!ccIds.Contains(user.UserId))
-                                        {
-                                            ccIds.Add(user.UserId);
-                                        }
-                                    }
-                                }
-                            }
-                            break;
-                    }
-                    var tTasklogsCount = db.TaskLogs.Count(t => t.TriggeredId == triggerId);
-                    if (taskLog.LogType!=LogType.RollBack&&tTasklogsCount <= 2) //避免重复,回滚不发送邮件
-                    {
-                        MailSendHelper.NotifyDeployResult(toIds, ccIds, notify);
-                    }
-                   
+                    return;
                 }
-            }
-            catch (Exception ex)
-            {
-                throw new TipInfoException(ex.Message);
+                var toIds = new List<int>();
+                var ccIds = new List<int>();
+                var notify = new DeployNotifyMail()
+                {
+                    StageName = taskLog.Stage.ToDescription(),
+                    DeployStatus = deployStatus.ToDescription()
+                };
+                switch (taskLog.Stage)
+                {
+                    case StageEnum.TEST:
+                        var taskDtoIoc = this.GetTaskById(taskLog.TaskId);
+                        notify.TaskName = taskDtoIoc.TaskName;
+                        notify.TaskUrl = string.Format("{0}/Task/Detail?taskId={1}", _domainUrl.TrimEnd('/'), taskDtoIoc.Id);
+
+                        if (deployStatus == DeployStatus.DeployFails)
+                        {
+                            notify.GitLabBuildPage = taskDtoIoc.ProjectDto.ProjectRepo.Replace(".git", "") + "/builds/" + buildId;
+                            if (taskDtoIoc.CreatorId != null)
+                            {
+                                toIds.Add(taskDtoIoc.CreatorId.Value);
+                            }
+                        }
+                        else if (deployStatus == DeployStatus.DeploySuccess)
+                        {
+                            notify.DeployUrl = taskDtoIoc.DeployInfoIocDto.Domain;
+                            toIds.Add(taskDtoIoc.CreatorId.Value);
+                            toIds.AddRange(taskDtoIoc.DeployInfoIocDto.CheckUser.Where(t => t.UserId != taskDtoIoc.CreatorId.Value).Select(t => t.UserId));
+                            ccIds.AddRange(taskDtoIoc.DeployInfoIocDto.NoticeUser.Select(t => t.UserId));
+                        }
+
+                        break;
+                    case StageEnum.PRE:
+                        var taskDtoPre = this.GetTaskById(taskLog.TaskId);
+                        notify.TaskName = taskDtoPre.TaskName;
+                        notify.TaskUrl = string.Format("{0}/Task/Detail?taskId={1}", _domainUrl.TrimEnd('/'), taskDtoPre.Id);
+
+                        if (deployStatus == DeployStatus.DeployFails)
+                        {
+                            notify.GitLabBuildPage = taskDtoPre.ProjectDto.ProjectRepo.Replace(".git", "") + "/builds/" + buildId;
+                            if (taskDtoPre.CreatorId != null)
+                            {
+                                toIds.Add(taskDtoPre.CreatorId.Value);
+                            }
+                        }
+                        else if (deployStatus == DeployStatus.DeploySuccess)
+                        {
+                            notify.DeployUrl = taskDtoPre.DeployInfoPreDto.Domain;
+                            toIds.Add(taskDtoPre.CreatorId.Value);
+                            toIds.AddRange(taskDtoPre.DeployInfoPreDto.CheckUser.Where(t => t.UserId != taskDtoPre.CreatorId.Value).Select(t => t.UserId));
+                            ccIds.AddRange(taskDtoPre.DeployInfoPreDto.NoticeUser.Select(t => t.UserId));
+                        }
+
+                        break;
+                    case StageEnum.PRODUCTION:
+                        var onlineTask = db.OnlineTaskInfos.FirstOrDefault(t => t.Id == taskLog.TaskId);
+
+                        var taskInfos = db.TaskInfo.Where(t => t.OnlineTaskId == onlineTask.Id).ToList();
+                        notify.TaskUrl = string.Format("{0}/Online/Detail?taskId={1}", _domainUrl.TrimEnd('/'), onlineTask.Id);
+                        notify.TaskName = onlineTask.ProjectName;
+
+                        var project = db.Project.Find(onlineTask.ProjectId);
+                        if (deployStatus == DeployStatus.DeployFails)
+                        {
+                            notify.GitLabBuildPage = project.ProjectRepo.Replace(".git", "") + "/builds/" + buildId;
+                            toIds.Add(onlineTask.CreatorId);
+                        }
+                        else if (deployStatus == DeployStatus.DeploySuccess)
+                        {
+                            notify.DeployUrl = onlineTask.Domain;
+                            toIds.Add(onlineTask.CreatorId);
+
+                            foreach (var task in taskInfos)
+                            {
+                                var onlineDeployInfo = JsonHelper.FromJson<DeployInfoOnline>(task.DeployInfoOnlineJson);
+                                var checkUsers = AnalysisObj.AnalysisCheckUser(onlineDeployInfo.CheckUserId);
+
+                                foreach (var user in checkUsers)
+                                {
+                                    if (!toIds.Contains(user.UserId))
+                                    {
+                                        toIds.Add(user.UserId);
+                                    }
+                                }
+                                var noticeUsers = AnalysisObj.AnalysisNoticeUser(onlineDeployInfo.NoticeUserId);
+                                foreach (var user in noticeUsers)
+                                {
+                                    if (!ccIds.Contains(user.UserId))
+                                    {
+                                        ccIds.Add(user.UserId);
+                                    }
+                                }
+                            }
+                        }
+                        break;
+                }
+                var tTasklogsCount = db.TaskLogs.Count(t => t.TriggeredId == triggerId);
+                if (taskLog.LogType != LogType.RollBack && tTasklogsCount <= 2) //避免重复,回滚不发送邮件
+                {
+                    MailSendHelper.NotifyDeployResult(toIds, ccIds, notify);
+                }
+
             }
         }
         /// <summary>
@@ -1270,7 +1243,5 @@ namespace Uoko.FireProj.Concretes
                 return data.ToList();
             }
         }
-
-     
     }
 }
