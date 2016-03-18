@@ -15,9 +15,7 @@ namespace Uoko.FireProj.WebSite.Filter
         {
             if (!filterContext.ExceptionHandled)
             {
-                string controllerName = (string)filterContext.RouteData.Values["controller"];
-                string actionName = (string)filterContext.RouteData.Values["action"];
-                logger.Error(filterContext.Exception,string.Format("Controller:{0}| Action:{1}| Message:{2}", controllerName, actionName, filterContext.Exception.Message));
+                logger.Error(filterContext.Exception);
                 base.OnException(filterContext);
             }
         }
