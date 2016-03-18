@@ -72,7 +72,7 @@
                 <ul class="nav nav-tabs">
                     <li ng-class="{'active':currLogTab==0}" ng-if="model.DeployInfoIocJson!=null" ng-click="TabChanged(0)">
                         <a href="#tab_1_1" data-toggle="tab">
-                            IOC
+                            TEST
                         </a>
                     </li>
                     <li ng-class="{'active':currLogTab==1}" ng-if="model.DeployInfoPreJson!=null" ng-click="TabChanged(1)">
@@ -91,7 +91,7 @@
               
                 <div class="tab-content">
                     <div class="tab-pane fade " ng-class="{'active in':currLogTab==0}" id="tab_1_1" ng-if="model.DeployInfoIocJson!=null">
-                        <!-- BEGIN IOC CONTENT-->
+                        <!-- BEGIN TEST CONTENT-->
                         <div class="form">
                             <div class="form-group form-md-line-input">
                                 <label class="col-md-2 control-label">部署服务器IP</label>
@@ -164,7 +164,7 @@
                                 <button type="button" class="btn red"   ng-click="TestFails(0)"><i class="fa fa-times"></i> 测试不通过</button>
                             </div>
                         </div>
-                        <!-- END IOC CONTENT-->
+                        <!-- END TEST CONTENT-->
                     </div>
                     <div class="tab-pane fade" ng-class="{'active in':currLogTab==1}" id="tab_1_2" ng-if="model.DeployInfoPreJson!=null">
                         <!-- BEGIN Pre CONTENT-->
@@ -342,7 +342,7 @@
                 <!-- TIMELINE ITEM -->
                 <div class="timeline-item" ng-repeat="item in items">
                     <div class="timeline-badge">
-                        <img ng-if="item.Stage==0" class="timeline-badge-userpic" src="~/Metronic/assets/admin/pages/media/users/IOC.jpg">
+                        <img ng-if="item.Stage==0" class="timeline-badge-userpic" src="~/Metronic/assets/admin/pages/media/users/TEST.jpg">
                         <img ng-if="item.Stage==1" class="timeline-badge-userpic" src="~/Metronic/assets/admin/pages/media/users/Pre.jpg">
                         <img ng-if="item.Stage==2" class="timeline-badge-userpic" src="~/Metronic/assets/admin/pages/media/users/Online.jpg">
                     </div>

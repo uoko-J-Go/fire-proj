@@ -54,7 +54,7 @@
                             <td><a class="text-primary" target="_blank" href="/Task/Detail?taskId={{item.TaskId}}">{{item.TaskName}}</a></td>
                             <td>
                                 <div>
-                                    <a ng-if="item.TaskId && item.StageType==0" class="btn btn-success btn-xs" ng-click="ReleaseDomain(item.TaskId)">释放域名</a>
+                                    <a ng-if="item.TaskId" class="btn btn-success btn-xs" ng-click="ReleaseDomain(item.TaskId)">释放域名</a>
                                 </div>
                             </td>
                         </tr>

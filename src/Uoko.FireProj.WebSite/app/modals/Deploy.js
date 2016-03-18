@@ -117,7 +117,7 @@
         });
     }
 
-    //发布环境change事件,获取IOC环境的服务器List
+    //发布环境change事件,获取TEST环境的服务器List
     $scope.GetServerData = function () {
         var environmentId = $scope.taskInfo.DeployStage.Id;
         TaskService.GetResourceList(environmentId, function (data) {

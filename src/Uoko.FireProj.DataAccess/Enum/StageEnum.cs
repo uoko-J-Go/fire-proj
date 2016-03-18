@@ -13,10 +13,10 @@ namespace Uoko.FireProj.DataAccess.Enum
     public enum StageEnum
     {
         /// <summary>
-        /// IOC环境
+        /// Test环境
         /// </summary>
-        [Description("IOC环境")]
-        IOC = 0,
+        [Description("Test环境")]
+        TEST = 0,
 
         /// <summary>
         /// Pre环境
