@@ -1250,8 +1250,8 @@
     <Content Include="Views\Server\Edit.cshtml" />
     <Content Include="Views\Server\Detail.cshtml" />
     <Content Include="Views\Task\Detail_bp.cshtml" />
-    <None Include="Views\Online\Detail.cshtml" />
-    <None Include="Views\Online\Index.cshtml" />
+    <Content Include="Views\Online\Detail.cshtml" />
+    <Content Include="Views\Online\Index.cshtml" />
     <Content Include="Views\Rollback\Index.cshtml" />
     <None Include="Web.fire.pre.uoko.com.config">
       <DependentUpon>Web.config</DependentUpon>
