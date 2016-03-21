@@ -51,9 +51,7 @@
                             <div class="form-group form-md-line-input">
                                 <label class="col-md-2 control-label" for="form_control_1">GitLab地址</label>
                                 <div class="col-md-10">
-                                    <select disabled class="form-control" id="form_control_1" ng-model="model.Project" ng-change="GetProjectInfo(model.Project)">
-                                        <option ng-repeat="project in ProjectList" value="{{project}}" ng-selected="project.id == model.ProjectId">{{project.name}}</option>
-                                    </select>
+                                    <input disabled type="text" class="form-control" id="form_control_1" ng-model="model.ProjectRepo"  required>
                                     <div class="form-control-focus">
                                     </div>
                                     <span class="help-block">项目地址是必填</span>

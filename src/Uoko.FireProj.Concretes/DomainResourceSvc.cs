@@ -87,6 +87,7 @@ namespace Uoko.FireProj.Concretes
                                ServerName = parServer.Name,
                                SiteName = domainresource.SiteName,
                                StageType = parServer.StageType,
+                               TaskCreatorId = parTask.CreatorId,
                            };
                 var result = data.OrderBy(r => r.Id).Skip(query.Offset).Take(query.Limit).ToList();
                 var total = data.Count();

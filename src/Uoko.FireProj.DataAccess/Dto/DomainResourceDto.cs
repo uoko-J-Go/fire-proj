@@ -54,5 +54,10 @@ namespace Uoko.FireProj.DataAccess.Dto
         /// 环境类型
         /// </summary>
         public StageEnum? StageType { get; set; }
+
+        /// <summary>
+        /// 任务创建人Id
+        /// </summary>
+        public int? TaskCreatorId { get; set; }
     }
 }

@@ -17,10 +17,17 @@
 
     }
     ///释放资源操作
-    $scope.ReleaseDomain = function (taskId) {
-        TaskService.ReleaseDomain(taskId, function (data) {
-            formSubmitSuccessClick("refresh");
-        });
+    $scope.ReleaseDomain = function (task) {
+        var userId = $("#userId").val();
+        if (userId != task.TaskCreatorId) {
+            bootbox.alert("只有该任务创建人才允许进行此操作!<a target='_blank' class='text-primary' href='/Task/Detail?taskId=" + task.TaskId + "'>查看</a>");
+        }
+        else {
+            TaskService.ReleaseDomain(task.TaskId, function (data) {
+                formSubmitSuccessClick("refresh");
+            });
+        }
+    
     }
     $scope.Init = function () {
         $scope.Query();

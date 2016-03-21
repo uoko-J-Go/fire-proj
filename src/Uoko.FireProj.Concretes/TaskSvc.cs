@@ -281,6 +281,13 @@ namespace Uoko.FireProj.Concretes
                     };
                     db.TaskLogs.Add(log);
                     #endregion
+                    #region 释放域名占用
+                    var domain = db.DomainResource.Where(r => r.ProjectId == taskFromDb.ProjectId);
+                    foreach (var item in domain)
+                    {
+                        item.TaskId = null;
+                    }
+                    #endregion
                 }
 
                 dbScope.SaveChanges();
