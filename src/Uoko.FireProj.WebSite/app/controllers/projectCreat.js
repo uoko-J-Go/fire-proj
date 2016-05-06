@@ -119,6 +119,7 @@ fireproj.controller("ProjectController", function ($scope, $http, ProjectService
 
     //选择项目change事件
     $scope.GetProjectInfo = function (project) {
+        $scope.showSln = project;
         projectId = project.id;
         ProjectService.getGitLabSln(project.id, function (data) {
             

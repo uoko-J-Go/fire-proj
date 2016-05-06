@@ -45,7 +45,7 @@
 
     //获取gitlab所有项目信息
     this.getGitlbProject = function () {
-        return $http.get("{0}/api/v3/projects/all?private_token={1}".Format(Global.GitLabUrl,Global.GitLabToken));
+        return $http.get("{0}/api/v3/projects/all?private_token={1}&per_page=10000".Format(Global.GitLabUrl, Global.GitLabToken));
     };
 
     this.getGitLabSln = function (projectId,successCallBack) {

@@ -5,6 +5,9 @@
 @section Css {
 
 <link href="~/Metronic/assets/global/plugins/zTree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-select/0.16.1/select.min.css" rel="stylesheet" />
+
+   
 }
 
 <div class="col-md-12">
@@ -56,8 +59,20 @@
                                 <div class="form-group form-md-line-input">
                                     <label class="col-md-2 control-label" for="form_control_1">GitLab地址</label>
                                     <div class="col-md-10">
-                                        <select class="form-control" id="form_control_1" ng-model="model.Project" ng-change="GetProjectInfo(model.Project)" ng-options="project.name for project in ProjectList track by project.id" required>  
-                                        </select>
+                                        @*<select class="form-control" id="form_control_1" ng-model="model.Project" ng-change="GetProjectInfo(model.Project)" ng-options="project.name for project in ProjectList track by project.id" required>  
+                                        </select>*@
+
+                                      
+
+                                        <ui-select ng-model="model.Project" ng-change="GetProjectInfo(model.Project)">
+                                            <ui-select-match>
+                                                <span ng-bind="$select.selected.name"></span>
+                                            </ui-select-match>
+                                            <ui-select-choices repeat="item in (ProjectList | filter: $select.search) track by item.id">
+                                                <span ng-bind="item.name"></span>
+                                            </ui-select-choices>
+                                        </ui-select>
+
                                         <div class="form-control-focus">
                                         </div>
                                         <span class="help-block">项目地址是必填</span>
@@ -68,7 +83,7 @@
                                     <div class="col-md-10">
                                         <input disabled type="text" class="form-control" id="ProjectSlnName" ng-model="model.ProjectSlnName" placeholder="请点击选择">
                                         <!-- Button trigger modal -->
-                                        <button type="button" class="btn default btn-sm green"    ng-click="showMenu('sln')" ng-disabled="model.Project==null">
+                                        <button type="button" class="btn default btn-sm green"    ng-click="showMenu('sln')" ng-disabled="!showSln">
                                             选择
                                         </button>
                                          <div class="form-control-focus">
@@ -82,7 +97,7 @@
                                     <div class="col-md-10">
                                         <input disabled type="text" class="form-control" id="ProjectCsprojName" ng-model="model.ProjectCsprojName" placeholder="请点击选择">
                                         <!-- Button trigger modal -->
-                                        <button type="button" class="btn default btn-sm green"  ng-click="showMenu('csproj')"  ng-disabled="model.Project==null">
+                                        <button type="button" class="btn default btn-sm green"  ng-click="showMenu('csproj')"  ng-disabled="!showSln">
                                             选择
                                         </button>
                                         <div class="form-control-focus">
@@ -138,6 +153,8 @@
 <script src="~/app/controllers/ProjectCreat.js"></script>
 <script src="~/app/services/ProjectService.js"></script>
 <script src="~/Metronic/assets/global/plugins/zTree/js/jquery.ztree.core-3.5.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-select/0.16.1/select.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.18/angular-sanitize.js"></script>
 
 }
 
