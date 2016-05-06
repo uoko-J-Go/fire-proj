@@ -68,7 +68,7 @@
                                     <div class="col-md-10">
                                         <input disabled type="text" class="form-control" id="ProjectSlnName" ng-model="model.ProjectSlnName" placeholder="请点击选择">
                                         <!-- Button trigger modal -->
-                                        <button type="button" class="btn default btn-sm green"  data-toggle="modal" data-target="#myModal" ng-click="showMenu('sln')">
+                                        <button type="button" class="btn default btn-sm green"    ng-click="showMenu('sln')" ng-disabled="model.Project==null">
                                             选择
                                         </button>
                                          <div class="form-control-focus">
@@ -82,7 +82,7 @@
                                     <div class="col-md-10">
                                         <input disabled type="text" class="form-control" id="ProjectCsprojName" ng-model="model.ProjectCsprojName" placeholder="请点击选择">
                                         <!-- Button trigger modal -->
-                                        <button type="button" class="btn default btn-sm green" data-toggle="modal" data-target="#myModal" ng-click="showMenu('csproj')">
+                                        <button type="button" class="btn default btn-sm green"  ng-click="showMenu('csproj')"  ng-disabled="model.Project==null">
                                             选择
                                         </button>
                                         <div class="form-control-focus">
@@ -108,7 +108,7 @@
                             </div>
 
                             <!-- Modal -->
-                            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" >
                                 <div class="modal-dialog" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header">
@@ -116,14 +116,10 @@
                                             <h4 class="modal-title" id="myModalLabel">请选择</h4>
                                         </div>
                                         <div class="modal-body">
-                                            <div id="menuContent" style="display: none;border:1px solid #808080;">
+                                            <div id="menuContent" style="border:1px solid #808080;">
                                                 <ul id="treeDemo" class="ztree" style="width: 100%;"></ul>
                                             </div>
                                         </div>
-                                        @*<div class="modal-footer">
-                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                            <button type="button" class="btn btn-primary">Save changes</button>
-                                        </div>*@
                                     </div>
                                 </div>
                             </div>
