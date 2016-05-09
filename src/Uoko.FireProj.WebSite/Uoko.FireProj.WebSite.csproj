@@ -284,6 +284,7 @@
     <Content Include="Content\Images\logo.png" />
     <Content Include="Content\ng-tags-input.bootstrap.min.css" />
     <Content Include="Content\ng-tags-input.min.css" />
+    <Content Include="Content\select.min.css" />
     <Content Include="Content\TaskEdit.css" />
     <Content Include="Content\TaskDetail.css" />
     <Content Include="Content\tree-grid-directive.js" />
@@ -729,6 +730,8 @@
     <Content Include="Metronic\assets\global\img\social\youtube.png" />
     <Content Include="Metronic\assets\global\img\syncfusion-icons-white.png" />
     <Content Include="Metronic\assets\global\img\syncfusion-icons.png" />
+    <Content Include="Metronic\assets\global\plugins\angular-ui-select\angular-sanitize.js" />
+    <Content Include="Metronic\assets\global\plugins\angular-ui-select\select.min.js" />
     <Content Include="Metronic\assets\global\plugins\bootbox\bootbox.min.js" />
     <Content Include="Metronic\assets\global\plugins\bootstrap-hover-dropdown\bootstrap-hover-dropdown.js" />
     <Content Include="Metronic\assets\global\plugins\bootstrap-hover-dropdown\bootstrap-hover-dropdown.min.js" />
