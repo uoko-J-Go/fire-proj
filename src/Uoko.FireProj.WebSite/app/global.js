@@ -3,7 +3,7 @@
 */
 var fireproj;
 (function() {
-    fireproj = angular.module("FireProj", ['ngMessages', 'ui.bootstrap', 'ngTagsInput']);
+    fireproj = angular.module("FireProj", ['ngMessages', 'ui.bootstrap', 'ngTagsInput', 'ngSanitize', 'ui.select']);
     fireproj.config([
         '$provide', '$httpProvider','tagsInputConfigProvider', function($provide, $httpProvider, tagsInputConfigProvider) {
             tagsInputConfigProvider.setDefaults('tagsInput', { minLength: 1 }).setDefaults('autoComplete', { minLength: 0, selectFirstMatch: true });

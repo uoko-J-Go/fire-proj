@@ -3,7 +3,7 @@
     return function(value) {
         switch (value) {
         case 0:
-            return "TEST";
+            return "Test";
         case 1:
             return "Pre";
         case 2:

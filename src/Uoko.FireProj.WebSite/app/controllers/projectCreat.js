@@ -11,7 +11,7 @@ fireproj.controller("ProjectController", function ($scope, $http, ProjectService
            dataFilter: ajaxDataFilter,
        },
        callback: {
-           onClick: zTreeOnClick
+           onDblClick: zTreeOnDblClick
        }
    };
    var projectId;
@@ -36,40 +36,41 @@ fireproj.controller("ProjectController", function ($scope, $http, ProjectService
        if (responseData) {
            for (var i = 0; i < responseData.length; i++) {
                if (responseData[i].type == "tree") {
-                   responseData[i].isParent = "true";
+                   responseData[i].isParent = true;
                }
            }
        }
        return responseData;
    };
 
-   function zTreeOnClick(event, treeId, treeNode) {
-       if (checkButton=="sln") {
-           $("#ProjectSlnName").val(getFullPath());
+   function zTreeOnDblClick(event, treeId, treeNode) {
+       if (treeNode.isParent) {
+           return;
+       }
+       var fullpath = getFullPath();
+       if (checkButton == "sln") {
+           if (!/\.(sln)/i.test(fullpath)) {
+               alert("请选择正确的解决方案文件");
+               return;
+           }
+           $("#ProjectSlnName").val(fullpath);
+          
        }
        else {
-           $("#ProjectCsprojName").val(getFullPath());
+           if (!/\.(csproj|xproj)/i.test(fullpath)) {
+               alert("请选择正确的项目文件");
+               return;
+           }
+           $("#ProjectCsprojName").val(fullpath);
        }
+       $('#myModal').modal('hide');
    };
 
    var checkButton = "";
 
    $scope.showMenu = function (type) {
        checkButton = type;
-       var cityObj = $("#ProjectCsprojName");
-       var cityOffset = $("#ProjectCsprojName").offset();
-       $("#menuContent").css({ left: cityOffset.left + "px", top: cityOffset.top + cityObj.outerHeight() + "px" }).slideDown("fast");
-
-       $("body").bind("mousedown", onBodyDown);
-   }
-   function hideMenu() {
-       $("#menuContent").fadeOut("fast");
-       $("body").unbind("mousedown", onBodyDown);
-   }
-   function onBodyDown(event) {
-       if (!(event.target.id == "menuBtn" || event.target.id == "menuContent" || $(event.target).parents("#menuContent").length > 0)) {
-           hideMenu();
-       }
+       $('#myModal').modal('show');
    }
    function getFullPath() {
        var path = "";
@@ -118,6 +119,7 @@ fireproj.controller("ProjectController", function ($scope, $http, ProjectService
 
     //选择项目change事件
     $scope.GetProjectInfo = function (project) {
+        $scope.showSln = project;
         projectId = project.id;
         ProjectService.getGitLabSln(project.id, function (data) {
             

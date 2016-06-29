@@ -4,9 +4,11 @@
 
 ## 应用步骤
 ### 一、代码迁移至GitLab，建立必要分支
-    使用该系统必须先将代码管理工具改为GitLab，并建立分支master（默认不用建立）、pre分支，另外就是建立开发分支（如 dev ,平时在开发时均使用开发分支进行开发）
+    使用该系统必须先将代码管理工具改为GitLab，并建立分支master（默认不用建立）、pre分支(必须建立，上线集成所用)，
+    其次大家根据自己的需要，构建相应的开发分支（建议开发分支的模型为feature-branch模型）
 ### 二、项目中添加对应的CI文件
-  在Git项目的根目录下添加 .gitlab-ci.yml和 build.fsx
+> 在Git项目的根目录下添加 .gitlab-ci.yml 和 build.fsx 文件，文件可完全从 fire 项目中 copy，如果需要额外定制功能，可执行扩展。 
+  
   - .gitlab-ci.yml文件内容
   
 <pre><code>    

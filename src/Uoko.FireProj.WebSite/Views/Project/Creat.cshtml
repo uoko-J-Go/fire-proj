@@ -56,8 +56,16 @@
                                 <div class="form-group form-md-line-input">
                                     <label class="col-md-2 control-label" for="form_control_1">GitLab地址</label>
                                     <div class="col-md-10">
-                                        <select class="form-control" id="form_control_1" ng-model="model.Project" ng-change="GetProjectInfo(model.Project)" ng-options="project.name for project in ProjectList track by project.id" required>  
-                                        </select>
+
+                                        <ui-select ng-model="model.Project" ng-change="GetProjectInfo(model.Project)" required>
+                                            <ui-select-match>
+                                                <span ng-bind="$select.selected.name"></span>
+                                            </ui-select-match>
+                                            <ui-select-choices repeat="item in (ProjectList | filter: $select.search) track by item.id">
+                                                <span ng-bind="item.name"></span>
+                                            </ui-select-choices>
+                                        </ui-select>
+
                                         <div class="form-control-focus">
                                         </div>
                                         <span class="help-block">项目地址是必填</span>
@@ -68,7 +76,7 @@
                                     <div class="col-md-10">
                                         <input disabled type="text" class="form-control" id="ProjectSlnName" ng-model="model.ProjectSlnName" placeholder="请点击选择">
                                         <!-- Button trigger modal -->
-                                        <button type="button" class="btn default btn-sm green"  data-toggle="modal" data-target="#myModal" ng-click="showMenu('sln')">
+                                        <button type="button" class="btn default btn-sm green"    ng-click="showMenu('sln')" ng-disabled="!showSln">
                                             选择
                                         </button>
                                          <div class="form-control-focus">
@@ -82,7 +90,7 @@
                                     <div class="col-md-10">
                                         <input disabled type="text" class="form-control" id="ProjectCsprojName" ng-model="model.ProjectCsprojName" placeholder="请点击选择">
                                         <!-- Button trigger modal -->
-                                        <button type="button" class="btn default btn-sm green" data-toggle="modal" data-target="#myModal" ng-click="showMenu('csproj')">
+                                        <button type="button" class="btn default btn-sm green"  ng-click="showMenu('csproj')"  ng-disabled="!showSln">
                                             选择
                                         </button>
                                         <div class="form-control-focus">
@@ -108,7 +116,7 @@
                             </div>
 
                             <!-- Modal -->
-                            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" >
                                 <div class="modal-dialog" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header">
@@ -116,14 +124,10 @@
                                             <h4 class="modal-title" id="myModalLabel">请选择</h4>
                                         </div>
                                         <div class="modal-body">
-                                            <div id="menuContent" style="display: none;border:1px solid #808080;">
+                                            <div id="menuContent" style="border:1px solid #808080;">
                                                 <ul id="treeDemo" class="ztree" style="width: 100%;"></ul>
                                             </div>
                                         </div>
-                                        @*<div class="modal-footer">
-                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                            <button type="button" class="btn btn-primary">Save changes</button>
-                                        </div>*@
                                     </div>
                                 </div>
                             </div>
@@ -142,6 +146,7 @@
 <script src="~/app/controllers/ProjectCreat.js"></script>
 <script src="~/app/services/ProjectService.js"></script>
 <script src="~/Metronic/assets/global/plugins/zTree/js/jquery.ztree.core-3.5.min.js"></script>
+
 
 }
 
