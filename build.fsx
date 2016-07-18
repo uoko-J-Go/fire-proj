@@ -36,6 +36,7 @@ let pkgProject pkgDir =
                         "DeployOnBuild", "True"
                         "Configuration", useConfig
                         "PackageLocation", pkgDir
+                        "ExcludeXmlAssemblyFiles", "False"
                     ]
                 NodeReuse = false
         }
