@@ -6,6 +6,7 @@
 open Fake
 open Fake.Git
 open System
+open System.IO
 
 let msdeployPath = getBuildParamOrDefault "msdeployPath" @"C:\Program Files (x86)\IIS\Microsoft Web Deploy V3\msdeploy.exe"
 
@@ -20,7 +21,7 @@ let slnFile =
     |> List.head
     |> getBuildParamOrDefault "slnFile"
 
-
+let nugetPkgOutputPath = (FileInfo slnFile).Directory.FullName @@ "/packages"
 
 let pkgProject pkgDir =
     let useConfig = getBuildParamEnsure "useConfig"
@@ -29,20 +30,24 @@ let pkgProject pkgDir =
         {
             defaults with
                 Verbosity = Some(Quiet)
-                Targets = ["Build"]
+                Targets = ["ReBuild"]
                 Properties =
                     [
                         "DeployOnBuild", "True"
                         "Configuration", useConfig
                         "PackageLocation", pkgDir
                     ]
+                NodeReuse = false
         }
     
     (getBuildParamEnsure "csProjFile") |> build setParams
 
     
 let deploy() =
-    RestoreMSSolutionPackages (fun p -> p) slnFile
+    RestoreMSSolutionPackages (fun p -> {
+        p with
+            OutputPath = nugetPkgOutputPath
+    }) slnFile
 
     let pkgDir = getBuildParamEnsure "pkgDir"
     let iisSiteName = getBuildParamEnsure "iisSiteName"
@@ -144,14 +149,18 @@ Target "BuildSolution" (fun _ ->
         {
             defaults with
                 Verbosity = Some(Quiet)
-                Targets = ["Build"]
+                Targets = ["ReBuild"]
                 Properties =
                     [
                         "Configuration","Release"
                     ]
+                NodeReuse = false
         }
-            
-    RestoreMSSolutionPackages (fun p -> p) slnFile
+                
+    RestoreMSSolutionPackages (fun p -> {
+        p with
+            OutputPath = nugetPkgOutputPath
+    }) slnFile
     build setParams slnFile
 )
 
