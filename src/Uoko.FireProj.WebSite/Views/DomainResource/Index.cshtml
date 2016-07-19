@@ -1,0 +1,84 @@
+﻿
+@{
+    ViewBag.Title = "域名资源管理";
+}
+
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <i class="fa fa-home"></i>
+            <a href="@Url.Action("Index","Task")">首页</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="@Url.Action("DomainResourceMgmt", "SystemSet")">域名管理</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="#">域名列表</a>
+        </li>
+    </ul>
+</div>
+<div ng-controller="DomainController">
+    <!-- Grid -->
+    <div class="portlet box blue">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="fa fa-list"></i>域名列表
+            </div>
+            <div class="tools">
+                <a href="javascript:;" class="reload" data-original-title="" title="刷新" ng-click="Query()"></a>
+            </div>
+        </div>
+        <div class="portlet-body">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>域名</th>
+                            <th>站点名称</th>
+                            <th>所属服务器</th>
+                            <th>所属项目</th>
+                            <th>占用任务</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="item in items">
+                            <td>
+                                <a class="text-primary" target="_blank" href="http://{{item.Name}}">{{item.Name}}</a>
+                            </td>
+                            <td>{{item.SiteName}}</td>
+                            <td><a class="text-primary" target="_blank" href="/SystemSet/Detail/{{item.ServerId}}">{{item.ServerName}}</a></td>
+                            <td><a class="text-primary" target="_blank" href="/Project/Detail/{{item.ProjectId}}">{{item.ProjectName}}</a></td>
+                            <td><a class="text-primary" target="_blank" href="/Task/Detail?taskId={{item.TaskId}}">{{item.TaskName}}</a></td>
+                            <td>
+                                <div>
+                                    <a ng-if="item.TaskId" class="btn btn-success btn-xs" ng-click="ReleaseDomain(item)">释放域名</a>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="pull-right">
+                        <uib-pagination total-items="totalItems" ng-model="currentPage" ng-change="Query()" first-text="首页" last-text="末页"
+                                        previous-text="上一页" next-text="下一页" items-per-page="pageSize" max-size="5" boundary-links="true" boundary-link-numbers="true" rotate="false"></uib-pagination>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Grid -->
+</div>
+<input type="hidden" id="userId" value="@ViewBag.UserId" />
+
+@section Scripts {
+<script src="~/app/controllers/DomainList.js"></script>
+<script src="~/app/services/DomainServer.js"></script>
+<script src="~/app/filters/CommonFilter.js"></script>
+<script src="~/app/services/TaskService.js"></script>
+}
+

@@ -1,0 +1,128 @@
+﻿@{
+    ViewBag.Title = "紧急回滚";
+}
+
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <i class="fa fa-home"></i>
+            <a href="@Url.Action(" Index", "Task" )">首页</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="@Url.Action(" Index", "Rollback" )">紧急回滚</a>
+        </li>
+    </ul>
+</div>
+
+<div class="row" ng-controller="RollbackController">
+    <div class="col-md-12">
+        <!-- BEGIN EXAMPLE TABLE PORTLET-->
+        <div class="portlet box blue ">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-cc-discover"></i>紧急回滚
+                </div>
+            </div>
+            <div class="portlet-body">
+                <form role="form" class="form form-horizontal" name="form" ng-submit="Rollback(form.$valid)">
+                    <div class="form-body">
+                        <div class="form-group form-md-line-input">
+                            <label class="col-md-2 control-label">项目</label>
+                            <div class="col-md-10">
+                                <select class="form-control" name="project" ng-model="projectSelected" ng-change="GetRollBackInfo()"  ng-options="project.ProjectName for project in projects track by project.Id" required></select>
+                                <div ng-if="form.$submitted || form.project.$touched">
+                                    <span class="error-msg" ng-if="form.project.$error.required">请选择项目</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group form-md-line-input">
+                            <label class="col-md-2 control-label">部署服务器</label>
+                            <div class="col-md-10">
+                                <select name="server" class="form-control" ng-model="serverSelected" ng-options="server.Name for server in servers track by server.Id" required></select>
+                                <div class="" ng-if="form.$submitted || form.server.$touched">
+                                    <span class="error-msg" ng-if="form.server.$error.required">请选择服务器</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group form-md-line-input">
+                            <label class="col-md-2 control-label">域名</label>
+                            <div class="col-md-10">
+                                <select name="domain" class="form-control" ng-model="domainSelected" ng-options="domain.Name for domain in domains track by domain.Name" required></select>
+                                <div ng-if="form.$submitted || form.domain.$touched">
+                                    <span class="error-msg" ng-if="form.domain.$error.required">域名必选.</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group form-md-line-input" ng-show="projectSelected.OnlineVersion">
+                            <label class="col-md-2 control-label">
+                                当前版本
+                            </label>
+                            <div class="col-md-10 ">
+                                <span ng-bind="projectSelected.OnlineVersion" style="height:30px; line-height:30px; width:100px; overflow:hidden;"></span> 
+                            </div>
+                        </div>
+
+                        <div class="form-group form-md-line-input">
+                            <label class="col-md-2 control-label">回滚版本</label>
+                            <div class="col-md-10">
+                                <select name="onlineVersion" class="form-control" ng-model="taskSelected" ng-options="task.OnlineVersion for task in onlineTasks track by task.Id" required></select>
+                                <div class="" ng-if="form.$submitted || form.onlineVersion.$touched">
+                                    <span class="error-msg" ng-if="form.onlineVersion.$error.required">请选择回滚版本</span>
+                                </div>
+                                <span class="error-msg">回滚版本指的是回滚到该版本发布之前的状态,而不是该版本,请注意!!!</span>
+                            </div>
+                        </div> 
+
+                    </div>
+                    <div class="form-actions right">
+                        <button ng-disabled="form.$invalid"  type="submit" class="btn blue"><i class="fa fa-angle-left"></i>回 滚 </button>
+                    </div>
+
+                </form>
+                <div class="table-responsive" ng-show="projectSelected">
+                    <table class="table table-bordered table-hover table-condensed">
+                        <thead>
+                            <tr>
+                                <th>项目</th>
+                                <th>回滚版本</th>
+                                <th>目标版本</th>
+                                <th>服务器</th>
+                                <th>域名</th>
+                                <th>状态</th>
+                                <th>发起人</th>
+                                <th>发起时间</th>
+                            </tr>
+                           
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="task in rollbackTaskInfo">
+                                <td><a class="text-primary" href="/Project/Detail?id={{task.ProjectId}}">{{task.ProjectName}}</a> </td>
+                                <td>{{task.FromVersion}}</td>
+                                <td>{{task.ToVersion}}</td>
+                                <td title="{{task.DeployServerName}}">{{task.DeployServerIP}}</td>
+                                <td>{{task.Domain}}</td>
+                                <td title="{{(task.DeployStatus | DeployStatusFilter).Title}}">
+                                    <span ng-class="(task.DeployStatus | DeployStatusFilter).IconClass" ></span>
+                                    <a ng-click="GotoGitLabBuildPage(task.BuildId)" ng-if="task.DeployStatus != 0">查看</a>
+                                </td>
+                                <td>{{task.CreatorName}}</td>
+                                <td title="">{{task.CreateDate | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- END EXAMPLE TABLE PORTLET-->
+
+    </div>
+</div>
+
+@section Scripts {
+<script src="~/app/services/ProjectService.js"></script>
+<script src="~/app/services/TaskService.js"></script>
+<script src="~/app/filters/CommonFilter.js"></script>
+<script src="~/app/controllers/Rollback.js"></script>
+}

@@ -1,0 +1,89 @@
+﻿
+@{
+    ViewBag.Title = "服务器管理";
+}
+
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <i class="fa fa-home"></i>
+            <a href="@Url.Action("Index","Task")">首页</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="@Url.Action("ServerMgmt", "SystemSet")">服务器</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="#">服务器列表</a>
+        </li>
+    </ul>
+</div>
+<div ng-controller="ServerController">
+    <!-- Grid -->
+    <div class="portlet box blue">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="fa fa-cog"></i>服务器列表
+            </div>
+            <div class="tools">
+                <a href="javascript:;" class="reload" data-original-title="" title="刷新" ng-click="Query()"></a>
+            </div>
+            <div class="actions">
+                <a id="sample_editable_1_new" class="btn btn-default btn-sm" href="@Url.Action("Creat","SystemSet")">
+                    <i class="fa fa-plus"></i> 新 增 
+                </a>
+            </div>
+        </div>
+        <div class="portlet-body">
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>服务器名称</th>
+                            <th>服务器IP</th>
+                            <th>环境</th>
+                            <th>存储路径</th>
+                            <th>描述</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="item in items">
+                            <td>{{item.Name}}</td>
+                            <td>{{item.IP}}</td>
+                            <td>{{item.StageType|StageTypeFilter}}</td>
+                            <td>{{item.PackageDir}}</td>
+                            <td>{{item.ServerDesc}}</td>
+                            <td >
+                                <div >
+                                    <a class="btn btn-success btn-xs" href="/SystemSet/Edit/{{item.Id}}">编辑</a>
+                                    @*<a class="btn btn-success btn-xs" ng-click="delete(item)">删除</a>*@
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="pull-right">
+                        <uib-pagination total-items="totalItems" ng-model="currentPage" ng-change="Query()" first-text="首页" last-text="末页"
+                                        previous-text="上一页" next-text="下一页" items-per-page="pageSize" max-size="5" boundary-links="true" boundary-link-numbers="true" rotate="false"></uib-pagination>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Grid -->
+</div>
+
+
+@section Scripts {
+<script src="~/app/controllers/ServerList.js"></script>
+<script src="~/app/services/ServerServer.js"></script>
+<script src="~/app/filters/CommonFilter.js"></script>
+
+}
+

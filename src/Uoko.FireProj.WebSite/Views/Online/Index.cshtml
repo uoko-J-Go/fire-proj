@@ -1,0 +1,146 @@
+﻿@{
+    ViewBag.Title = "上线列表";
+}
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <i class="fa fa-home"></i>
+            <a href="@Url.Action("Index", "Task")">首页</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="@Url.Action("Index", "Online")">上线列表</a>
+        </li>
+    </ul>
+</div>
+
+<div class="row" ng-controller="OnlineListController">
+    <div class="col-md-12">
+        <!-- BEGIN EXAMPLE TABLE PORTLET-->
+        <div class="portlet box blue ">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-bullhorn"></i>上线列表
+                </div>
+            </div>
+            <div class="portlet-body">
+                <form role="form" class="form form-horizontal" name="form" ng-submit="Fire(form.$valid)">
+                    <div class="form-body">
+                        <div class="form-group form-md-line-input">
+                            <label class="col-md-2 control-label">项目</label>
+                            <div class="col-md-10">
+                                <select class="form-control" name="project" ng-model="projectSelected" ng-change="Query()" ng-options="project.ProjectName for project in projects track by project.Id" required></select>
+                                <div ng-if="form.$submitted || form.project.$touched">
+                                    <span class="error-msg" ng-if="form.project.$error.required">请选择项目</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group form-md-line-input">
+                            <label class="col-md-2 control-label">部署服务器</label>
+                            <div class="col-md-10">
+                                <select name="server" class="form-control" ng-model="serverSelected" ng-options="server.Name for server in servers track by server.Id" required></select>
+                                <div class="" ng-if="form.$submitted || form.server.$touched">
+                                    <span class="error-msg" ng-if="form.server.$error.required">请选择服务器</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group form-md-line-input">
+                            <label class="col-md-2 control-label">域名</label>
+                            <div class="col-md-10">
+                                <select name="domain" class="form-control" ng-model="domainSelected" ng-options="domain.Name for domain in domains track by domain.Name" required></select>
+                                <div ng-if="form.$submitted || form.domain.$touched">
+                                    <span class="error-msg" ng-if="form.domain.$error.required">域名必选.</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group form-md-line-input" ng-show="projectSelected.OnlineVersion">
+                            <label class="col-md-2 control-label">
+                                当前版本
+                            </label>
+                            <div class="col-md-10 value">
+                                <span ng-bind="projectSelected.OnlineVersion"></span>
+                            </div>
+                        </div>
+                        <div class="form-group form-md-line-input">
+                            <label class="col-md-2 control-label">
+                                <a target="_blank" href="http://semver.org/lang/zh-CN/">上线版本</a>
+                            </label>
+                            <div class="col-md-10">
+                                <input name="onlineVersion" ng-model="onlineVersion" class="form-control ng-pristine ng-invalid ng-invalid-required ng-touched" placeholder="主版本.次版本.修订版本" required="" type="text">
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="form-actions right">
+                        <button ng-if="showFire==false" disabled  class="btn blue" ng-click=""><i class="fa fa-fire"></i>Fire </button>
+                        <button ng-if="showFire==true" type="submit" class="btn blue" ng-click=""><i class="fa fa-fire"></i>Fire </button>
+                    </div>
+
+                </form>
+
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover table-condensed">
+                        <thead>
+                        <tr>
+                            <th rowspan="2">任务名称</th>
+                            <th rowspan="2">分支</th>
+                            <th colspan="2">Test</th>
+                            <th colspan="2">Pre</th>
+                            <th colspan="2">Online</th>
+                            <th rowspan="2">发起人</th>
+                            <th rowspan="2">最后操作人</th>
+                        </tr>
+                        <tr>
+                            <th>部署</th>
+                            <th>测试</th>
+                            <th>部署</th>
+                            <th>测试</th>
+                            <th>部署</th>
+                            <th>测试</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="task in taskInfos">
+                            <td><a class="text-primary" href="/Task/Detail?taskId={{task.TaskInfo.Id}}">{{task.TaskInfo.TaskName}}</a> </td>
+                            <td>{{task.TaskInfo.Branch}}</td>
+                            <td title="{{(task.DeployInfoIoc.DeployStatus | DeployStatusFilter).Title}}">
+                                <div ng-if="task.DeployInfoIoc">
+                                    <span ng-class="(task.DeployInfoIoc.DeployStatus | DeployStatusFilter).IconClass" ></span>
+                                </div>
+                            </td>
+                            <td title="{{task.IocTestAllPassed ? '测试全部通过' : ''}}">
+                                <span class="glyphicon glyphicon-ok" ng-if="task.IocTestAllPassed"></span>
+                            </td>
+                            <td title="{{(task.DeployInfoPre.DeployStatus | DeployStatusFilter).Title}}">
+                                <span ng-class="(task.DeployInfoPre.DeployStatus | DeployStatusFilter).IconClass" ng-if="task.DeployInfoPre" ></span>
+                            </td>
+                            <td title="{{task.PreTestAllPassed ? '测试全部通过' : ''}}">
+                                <span class="glyphicon glyphicon-ok" ng-if="task.PreTestAllPassed"></span>
+                            </td>
+                            <td title="{{(task.OnlineTaskInfo.DeployStatus | DeployStatusFilter).Title}}">
+                                <span ng-class="(task.OnlineTaskInfo.DeployStatus | DeployStatusFilter).IconClass" ng-if="task.OnlineTaskInfo"></span>
+                            </td>
+                            <td title="{{task.OnlineTestAllPassed ? '测试全部通过' : ''}}">
+                                <span class="glyphicon glyphicon-ok" ng-if="task.OnlineTestAllPassed"></span>
+                            </td>
+                            <td title="{{task.TaskInfo.CreateDate | date:'yyyy-MM-dd HH:mm:ss'}}">{{task.TaskInfo.CreatorName}}</td>
+                            <td title="{{task.TaskInfo.ModifyDate | date:'yyyy-MM-dd HH:mm:ss'}}">{{task.TaskInfo.ModifierName}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- END EXAMPLE TABLE PORTLET-->
+
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/app/services/ProjectService.js"></script>
+    <script src="~/app/services/TaskService.js"></script>
+    <script src="~/app/filters/CommonFilter.js"></script>
+    <script src="~/app/controllers/OnlineList.js"></script>
+}

@@ -1,0 +1,35 @@
+﻿/*.form-control-wrap .tags { float:left;list-style:none }
+.form-control-wrap .tags li{ float:left; height:60px;padding:10px 20px; position:relative;cursor:pointer; }
+.form-control-wrap .tags li img{width:60px;height:60px;}*/
+.form-control-wrap textarea{ border: 1px solid #808080;width:100%;margin:5px;}
+label.detail{ color: red;}
+.left-panel {
+  float: left;
+}
+
+.left-panel img {
+  width: 48px;
+  height: 48px;
+  vertical-align: middle;
+}
+
+.right-panel {
+  float: left;
+  margin-left: 5px;
+  margin-top: 7px;
+}
+
+.right-panel span:first-child {
+  font-size: 16px;
+}
+
+.right-panel span:nth-child(2) {
+  font-size: 14px;
+  color: gray;
+}
+
+.right-panel span:last-child {
+  display: block;
+  font-size: 14px;
+  font-style: italic;
+}

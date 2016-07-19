@@ -1,0 +1,88 @@
+﻿
+@{
+    ViewBag.Title = "任务记录";
+}
+
+@section Css {
+   
+}
+<div class="col-md-12">
+    <div ng-controller="TaskController">
+        <!-- BEGIN  HEADER-->
+        <div class="page-bar">
+            <ul class="page-breadcrumb">
+                <li>
+                    <i class="fa fa-home"></i>
+                    <a href="/">主页</a>
+                    <i class="fa fa-angle-right"></i>
+                </li>
+                <li>
+                    <a href="@Url.Action("Index","Task")">我的任务</a>
+                    <i class="fa fa-angle-right"></i>
+                </li>
+                <li>
+                    <a href="#">任务记录</a>
+                </li>
+            </ul>
+        </div>
+        <!-- END  HEADER-->
+        <!-- BEGIN  TABLE -->
+        <div class="portlet box blue">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-tasks"></i>任务:{{taskInfo.TaskName}}-记录列表
+                </div>
+
+            </div>
+            <div class="portlet-body">
+                <div class="table-toolbar">
+                    <div class="row">
+                        <div class="col-md-6">
+                           
+                        </div>
+
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>操作环境</th>
+                                <th>操作内容</th>
+                                <th>记录类型</th>
+                                <th>操作人</th>
+                                <th>操作时间</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="item in items">
+
+                                <td>{{item.Stage|StageTypeFilter}}</td>
+                                <td>{{item.LogsDesc}}</td>
+                                <td>{{item.TaskLogsType}}</td>
+                                <td>{{item.CreateBy}}</td>
+                                <td>{{item.CreateDate}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="pull-right">
+                            <uib-pagination total-items="totalItems" ng-model="currentPage" ng-change="Query()" first-text="首页" last-text="末页"
+                                            previous-text="上一页" next-text="下一页" items-per-page="pageSize" max-size="5" boundary-links="true" boundary-link-numbers="true" rotate="false"></uib-pagination>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END  TABLE -->
+        <input type="hidden" id="id" value="@Html.ViewContext.RouteData.Values["id"]" />
+    </div>
+</div>
+@section Scripts {
+<script src="~/app/services/TaskService.js"></script>
+<script src="~/app/filters/CommonFilter.js"></script>
+<script src="~/app/controllers/TaskLogs.js"></script>
+}
+

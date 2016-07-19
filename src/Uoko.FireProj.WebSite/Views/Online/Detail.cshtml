@@ -1,0 +1,160 @@
+﻿@{
+    ViewBag.Title = "上线任务详情";
+}
+
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <i class="fa fa-home"></i>
+            <a href="@Url.Action("Index", "Task")">首页</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="#">上线详细</a>
+        </li>
+    </ul>
+</div>
+
+<div class="row" ng-controller="OnlineDetailController">
+    <div class="col-md-12">
+
+        <input id="onlineTaskId" name="onlineTaskId" value="@Model" type="hidden">
+
+        <!-- BEGIN EXAMPLE TABLE PORTLET-->
+        <div class="portlet box blue">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-fire"></i>上线详情
+                </div>
+            </div>
+
+            <div class="portlet-body">
+
+                <div>
+                    <div class="row static-info">
+
+                        <div class="col-md-2 name">
+                            项目名称:
+                        </div>
+                        <div class="col-md-2 value">
+                            <span ng-bind="onlineDetails.OnlineTask.ProjectName"></span>
+                        </div>
+                        <div class="col-md-2 name">
+                            部署域名:
+                        </div>
+                        <div class="col-md-2 value">
+                            <a ng-href="{{onlineDetails.OnlineTask.Domain}}" ng-bind="onlineDetails.OnlineTask.Domain" target="_blank"></a>
+                        </div>
+                        <div class="col-md-2 name">
+                            上线版本:
+                        </div>
+                        <div class="col-md-2 value">
+                            <span ng-bind="onlineDetails.OnlineTask.OnlineVersion"></span>
+                        </div>
+                    </div>
+                    <div class="row static-info">
+                        <div class="col-md-2 name">
+                            部署服务器:
+                        </div>
+                        <div class="col-md-2 value">
+                            <span ng-bind="onlineDetails.OnlineTask.DeployServerName"></span>
+                        </div>
+                        <div class="col-md-2 name">
+                            服务器 IP:
+                        </div>
+                        <div class="col-md-2 value">
+                            <span ng-bind="onlineDetails.OnlineTask.DeployServerIP"></span>
+                        </div>
+                        <div class="col-md-2 name">
+                            部署状态:
+                        </div>
+                        <div class="col-md-2 value" title="{{(onlineDetails.OnlineTask.DeployStatus | DeployStatusFilter).Title}}">
+                            <span ng-class="(onlineDetails.OnlineTask.DeployStatus | DeployStatusFilter).IconClass" ng-if="onlineDetails.OnlineTask"></span>
+                            <a ng-href="{{buildInfoLink}}" target="_blank" ng-if="onlineDetails.OnlineTask.DeployStatus != 0">查看</a>
+                            <a href="javascript:;" ng-click="retryDeploy()" ng-if="onlineDetails.OnlineTask.DeployStatus == 1" >重试</a>
+                        </div>
+                    </div>
+                    <div class="row static-info">
+                        <div class="col-md-2 name">
+                            创建信息:
+                        </div>
+                        <div class="col-md-4 value">
+                            <span ng-bind="onlineDetails.OnlineTask.CreatorName"></span> -
+                            <span ng-bind="onlineDetails.OnlineTask.CreateDate | date:'yyyy-MM-dd HH:mm:ss'"></span>
+                        </div>
+                        <div class="col-md-2 name">
+                            修改信息:
+                        </div>
+                        <div class="col-md-4 value">
+                               <span ng-bind="onlineDetails.OnlineTask.ModifierName"></span> -
+                            <span ng-bind="onlineDetails.OnlineTask.ModifyDate | date:'yyyy-MM-dd HH:mm:ss'"></span>
+                        </div>
+                    </div>
+                </div>
+              
+
+
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover table-condensed">
+                        <thead>
+                        <tr>
+                            <th rowspan="2">任务名称</th>
+                            <th rowspan="2">分支</th>
+                            <th colspan="2">TEST</th>
+                            <th colspan="2">Pre</th>
+                            <th colspan="2">Online</th>
+                            <th rowspan="2">发起人</th>
+                            <th rowspan="2">最后操作人</th>
+                        </tr>
+                        <tr>
+                            <th>部署</th>
+                            <th>测试</th>
+                            <th>部署</th>
+                            <th>测试</th>
+                            <th>部署</th>
+                            <th>测试</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="task in onlineDetails.TaskBelongOnline">
+                            <td><a class="text-primary" href="/Task/Detail?taskId={{task.TaskInfo.Id}}">{{task.TaskInfo.TaskName}}</a> </td>
+                            <td>{{task.TaskInfo.Branch}}</td>
+                            <td title="{{(task.DeployInfoIoc.DeployStatus | DeployStatusFilter).Title}}">
+                                <div ng-if="task.DeployInfoIoc">
+                                    <span ng-class="(task.DeployInfoIoc.DeployStatus | DeployStatusFilter).IconClass"></span>
+                                </div>
+                            </td>
+                            <td title="{{task.IocTestAllPassed ? '测试全部通过' : ''}}">
+                                <span class="glyphicon glyphicon-ok" ng-if="task.IocTestAllPassed"></span>
+                            </td>
+                            <td title="{{(task.DeployInfoPre.DeployStatus | DeployStatusFilter).Title}}">
+                                <span ng-class="(task.DeployInfoPre.DeployStatus | DeployStatusFilter).IconClass" ng-if="task.DeployInfoPre"></span>
+                            </td>
+                            <td title="{{task.PreTestAllPassed ? '测试全部通过' : ''}}">
+                                <span class="glyphicon glyphicon-ok" ng-if="task.PreTestAllPassed"></span>
+                            </td>
+                            <td title="{{(task.OnlineTaskInfo.DeployStatus | DeployStatusFilter).Title}}">
+                                <span ng-class="(task.OnlineTaskInfo.DeployStatus | DeployStatusFilter).IconClass" ng-if="task.OnlineTaskInfo"></span>
+                            </td>
+                            <td title="{{task.OnlineTestAllPassed ? '测试全部通过' : ''}}">
+                                <span class="glyphicon glyphicon-ok" ng-if="task.OnlineTestAllPassed"></span>
+                            </td>
+                            <td title="{{task.TaskInfo.CreateDate | date:'yyyy-MM-dd HH:mm:ss'}}">{{task.TaskInfo.CreatorName}}</td>
+                            <td title="{{task.TaskInfo.ModifyDate | date:'yyyy-MM-dd HH:mm:ss'}}">{{task.TaskInfo.ModifierName}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- END EXAMPLE TABLE PORTLET-->
+
+    </div>
+</div>
+
+@section Scripts {
+        <script src="~/app/services/ProjectService.js"></script>
+    <script src="~/app/services/TaskService.js"></script>
+    <script src="~/app/filters/CommonFilter.js"></script>
+    <script src="~/app/controllers/OnlineDetail.js"></script>
+}

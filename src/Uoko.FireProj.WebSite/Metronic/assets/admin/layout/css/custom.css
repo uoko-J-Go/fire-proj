@@ -1,0 +1,36 @@
+.modal-dialog{padding-top:60px;}
+
+input.ng-touched.ng-invalid{border:1px solid red}
+select.ng-touched.ng-invalid{border:1px solid red}
+span.error-msg{color:red}
+textarea{ border: 1px solid #808080;width:100%;margin:5px;}
+.left-panel {
+  float: left;
+}
+
+.left-panel img {
+  width: 48px;
+  height: 48px;
+  vertical-align: middle;
+}
+
+.right-panel {
+  float: left;
+  margin-left: 5px;
+  margin-top: 7px;
+}
+
+.right-panel span:first-child {
+  font-size: 16px;
+}
+
+.right-panel span:nth-child(2) {
+  font-size: 14px;
+  color: gray;
+}
+
+.right-panel span:last-child {
+  display: block;
+  font-size: 14px;
+  font-style: italic;
+}

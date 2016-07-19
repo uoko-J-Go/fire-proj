@@ -1,0 +1,417 @@
+﻿
+@{
+    ViewBag.Title = "任务详细";
+}
+@section Css {
+    <link href="~/Content/TaskDetail.css" rel="stylesheet" />
+    @*<link href="~/Metronic/assets/admin/pages/css/timeline-old.css" rel="stylesheet" />*@
+    <link href="~/Metronic/assets/admin/pages/css/timeline.css" rel="stylesheet" />
+}
+
+<input type="hidden" id="taskIdParam" value="@ViewBag.TaskId" />
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <i class="fa fa-home"></i>
+            <a href="@Url.Action("Index","Task")">首页</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="@Url.Action("Index", "Task")">我的任务</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="#">任务详细</a>
+        </li>
+    </ul>
+</div>
+<div class="row" ng-controller="TaskController">
+    <div class="col-md-12">
+        <!-- 基本信息-->
+        <div class="portlet box blue">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-file-text-o"></i>基本信息
+                </div>
+            </div>
+            <div class="portlet-body form">
+                <div class="form-body">
+                    <div class="row">
+                        <div class="form-group form-md-line-input">
+                            <label class="col-md-2 control-label">任务名</label>
+                            <div class="col-md-10">
+                                <p disabled  class="form-control">{{model.TaskName}}</p>
+
+                            </div>
+                        </div>
+                        <div class="form-group form-md-line-input">
+                            <label class="col-md-2 control-label">项目</label>
+                            <div class="col-md-10">
+                                <p disabled   class="form-control">{{model.ProjectDto.ProjectName}}</p>
+                            </div>
+                        </div>
+                        <div class="form-group form-md-line-input">
+                            <label class="col-md-2 control-label">分支</label>
+                            <div class="col-md-10">
+                                <p disabled class="form-control">{{model.Branch}}</p>
+                            </div>
+                        </div>
+                        <div class="form-group form-md-line-input">
+                            <label class="col-md-2 control-label">发起人</label>
+                            <div class="col-md-10">
+                                <p disabled class="form-control">{{model.CreatorName}}</p>
+                            </div>
+                        </div>
+                        <div class="form-group form-md-line-input">
+                            <label class="col-md-2 control-label">最后操作人</label>
+                            <div class="col-md-10">
+                                <p disabled class="form-control">{{model.ModifierName}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- 基本信息-->
+        <!-- 环境tab-->
+        <div class="portlet box blue">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-leaf"></i>环境信息
+                </div>
+                <ul class="nav nav-tabs">
+                    <li ng-class="{'active':currLogTab==0}" ng-if="model.DeployInfoIocJson!=null" ng-click="TabChanged(0)">
+                        <a href="#tab_1_1" data-toggle="tab">
+                            TEST
+                        </a>
+                    </li>
+                    <li ng-class="{'active':currLogTab==1}" ng-if="model.DeployInfoPreJson!=null" ng-click="TabChanged(1)">
+                        <a href="#tab_1_2" data-toggle="tab">
+                            Pre
+                        </a>
+                    </li>
+                    <li ng-class="{'active':currLogTab==2}" ng-if="model.DeployInfoOnlineJson!=null&&model.OnlineTaskId!=null&&model.OnlineTaskId>0" ng-click="TabChanged(2)">
+                        <a href="#tab_1_3" data-toggle="tab">
+                            Online
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="portlet-body form">
+              
+                <div class="tab-content">
+                    <div class="tab-pane fade " ng-class="{'active in':currLogTab==0}" id="tab_1_1" ng-if="model.DeployInfoIocJson!=null">
+                        <!-- BEGIN TEST CONTENT-->
+                        <div class="form">
+                            <div class="form-group form-md-line-input">
+                                <label class="col-md-2 control-label">部署服务器IP</label>
+                                <div class="col-md-10">
+                                    <p disabled class="form-control">{{model.DeployInfoIocDto.DeployIP}}</p>
+                                </div>
+                            </div>
+                          
+                            <div class="form-group form-md-line-input">
+                                <label class="col-md-2 control-label">部署域名</label>
+                                <div class="col-md-10">
+                                    <p disabled class="form-control">
+                                        <a readonly class="text-primary" target="_blank" href="{{model.DeployInfoIocDto.Domain}}">{{model.DeployInfoIocDto.Domain}}</a>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="form-group form-md-line-input">
+                                <label class="col-md-2 control-label">部署状态</label>
+                                <div class="col-md-10" title="{{(model.DeployInfoIocDto.DeployStatus|DeployStatusFilter).Title}}">
+                                    <p disabled class="form-control">
+                                        <span ng-class="(model.DeployInfoIocDto.DeployStatus | DeployStatusFilter).IconClass"></span>
+                                        <a ng-click="GotoGitLabBuildPage(model.DeployInfoIocDto.BuildId)" ng-if="model.DeployInfoIocDto.DeployStatus != 0">查看</a>
+                                    </p>
+                                   
+                                </div>
+                            </div>
+
+                            <div class="form-group form-md-line-input">
+                                <label class="col-md-2 control-label">验收人员</label>
+                                <div class="col-md-10">
+                                    <div class="portlet-body">
+                                        <a href="javascript:;" class="icon-btn blue" ng-repeat="checkUser in model.DeployInfoIocDto.CheckUser">
+                                            <div> {{checkUser.NickName}}</div>
+                                            <span ng-if="checkUser.QAStatus==0" class="badge badge-default">{{checkUser.QAStatus|QAStatusFilter}}</span>
+                                            <span ng-if="checkUser.QAStatus==1" class="badge badge-danger"> {{checkUser.QAStatus|QAStatusFilter}}</span>
+                                            <span ng-if="checkUser.QAStatus==2" class="badge badge-success">{{checkUser.QAStatus|QAStatusFilter}}</span>
+                                        </a>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group form-md-line-input">
+                                <label class="col-md-2 control-label">相关人员</label>
+                                <div class="col-md-10">
+                                    <div class="portlet-body">
+                                        <a href="javascript:;" class="icon-btn blue" ng-repeat="checkUser in model.DeployInfoIocDto.NoticeUser">
+                                            <div>{{checkUser.NickName}}</div>
+                                        </a>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group form-md-line-input">
+                                <label class="col-md-2 control-label">备注</label>
+                                <div class="col-md-10">
+                                    <div class="form-control-wrap">
+                                        <p disabled class="form-control">{{model.DeployInfoIocDto.TaskDesc}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group form-md-line-input">
+                                <label class="col-md-2 control-label"></label>
+                                <div class="col-md-10">
+                                    <div class="form-control-wrap">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-actions right" ng-if="IocTestShow">
+                                <button type="button" class="btn green"  ng-click="TestPassed(0)"><i class="fa fa-check"></i> 测试通过</button>
+                                <button type="button" class="btn red"   ng-click="TestFails(0)"><i class="fa fa-times"></i> 测试不通过</button>
+                            </div>
+                        </div>
+                        <!-- END TEST CONTENT-->
+                    </div>
+                    <div class="tab-pane fade" ng-class="{'active in':currLogTab==1}" id="tab_1_2" ng-if="model.DeployInfoPreJson!=null">
+                        <!-- BEGIN Pre CONTENT-->
+                        <div>
+                            <div class="form-group form-md-line-input">
+                                <label class="col-md-2 control-label">部署服务器IP</label>
+                                <div class="col-md-10">
+                                    <p disabled  class="form-control">{{model.DeployInfoPreDto.DeployIP}}</p>
+                                </div>
+                            </div>
+                            <div class="form-group form-md-line-input">
+                                <label class="col-md-2 control-label">部署域名</label>
+                                <div class="col-md-10">
+                                    <p disabled class="form-control">
+                                        <a readonly class="text-primary" target="_blank" href="{{model.DeployInfoPreDto.Domain}}">{{model.DeployInfoPreDto.Domain}}</a>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="form-group form-md-line-input">
+                                <label class="col-md-2 control-label">部署状态</label>
+                                <div class="col-md-10">
+                                     <div class="col-md-10" title="{{(model.DeployInfoPreDto.DeployStatus|DeployStatusFilter).Title}}">
+                                         <p disabled class="form-control">
+                                             <span ng-class="(model.DeployInfoPreDto.DeployStatus | DeployStatusFilter).IconClass"></span>
+                                             <a ng-click="GotoGitLabBuildPage(model.DeployInfoPreDto.BuildId)" ng-if="model.DeployInfoPreDto.DeployStatus != 0">查看</a>
+                                         </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group form-md-line-input">
+                                <label class="col-md-2 control-label">验收人员</label>
+                                <div class="col-md-10">
+                                    <div class="portlet-body">
+                                        <a href="javascript:;" class="icon-btn blue" ng-repeat="checkUser in model.DeployInfoPreDto.CheckUser">
+                                            <div> {{checkUser.NickName}}</div>
+                                            <span ng-if="checkUser.QAStatus==0" class="badge badge-default">{{checkUser.QAStatus|QAStatusFilter}}</span>
+                                            <span ng-if="checkUser.QAStatus==1" class="badge badge-danger"> {{checkUser.QAStatus|QAStatusFilter}}</span>
+                                            <span ng-if="checkUser.QAStatus==2" class="badge badge-success">{{checkUser.QAStatus|QAStatusFilter}}</span>
+                                        </a>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group form-md-line-input">
+                                <label class="col-md-2 control-label">相关人员</label>
+                                <div class="col-md-10">
+                                    <div class="portlet-body">
+                                        <a href="javascript:;" class="icon-btn blue" ng-repeat="checkUser in model.DeployInfoPreDto.NoticeUser">
+                                            <div>{{checkUser.NickName}}</div>
+                                        </a>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group form-md-line-input">
+                                <label class="col-md-2 control-label">备注</label>
+                                <div class="col-md-10">
+                                    <div class="form-control-wrap">
+                                        <p readonly  class="form-control">{{model.DeployInfoPreDto.TaskDesc}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group form-md-line-input">
+                                <label class="col-md-2 control-label"></label>
+                                <div class="col-md-10">
+                                    <div class="form-control-wrap">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-actions right" ng-if="PreTestShow">
+                                <button type="button" class="btn green"  ng-click="TestPassed(1)"><i class="fa fa-check"></i> 测试通过</button>
+                                <button type="button" class="btn red"   ng-click="TestFails(1)"><i class="fa fa-times"></i> 测试不通过</button>
+                            </div>
+                        </div>
+                        <!-- END Pre CONTENT-->
+                    </div>
+                    <div class="tab-pane fade" ng-class="{'active in':currLogTab==2}" id="tab_1_3" ng-if="model.DeployInfoOnlineJson!=null&&model.OnlineTaskId!=null&&model.OnlineTaskId>0">
+                        <!-- BEGIN Online CONTENT-->
+                        <div>
+                            <div class="form-group form-md-line-input">
+                                <label class="col-md-2 control-label">部署服务器IP</label>
+                                <div class="col-md-10">
+                                    <p disabled   class="form-control">{{model.DeployInfoOnlineDto.DeployIP}}</p>
+                                </div>
+                            </div>
+                            <div class="form-group form-md-line-input">
+                                <label class="col-md-2 control-label">部署域名</label>
+                                <div class="col-md-10">
+                                    <p disabled class="form-control">
+                                        <a readonly class="text-primary" target="_blank" href="{{model.DeployInfoOnlineDto.Domain}}">{{model.DeployInfoOnlineDto.Domain}}</a>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="form-group form-md-line-input">
+                                <label class="col-md-2 control-label">部署状态</label>
+                                <div class="col-md-10">
+                                    <div class="col-md-10" title="{{(model.DeployInfoOnlineDto.DeployStatus|DeployStatusFilter).Title}}">
+                                        <p disabled class="form-control">
+                                            <span ng-class="(model.DeployInfoOnlineDto.DeployStatus | DeployStatusFilter).IconClass"></span>
+                                            <a ng-click="GotoGitLabBuildPage(model.DeployInfoOnlineDto.BuildId)" ng-if="model.DeployInfoOnlineDto.DeployStatus != 0">查看</a>
+                                        </p>
+                                    </div>
+                                 </div>
+                            </div>
+
+                            <div class="form-group form-md-line-input">
+                                <label class="col-md-2 control-label">验收人员</label>
+                                <div class="col-md-10">
+                                    <div class="portlet-body">
+                                        <a href="javascript:;" class="icon-btn blue" ng-repeat="checkUser in model.DeployInfoOnlineDto.CheckUser">
+                                            <div> {{checkUser.NickName}}</div>
+                                            <span ng-if="checkUser.QAStatus==0" class="badge badge-default">{{checkUser.QAStatus|QAStatusFilter}}</span>
+                                            <span ng-if="checkUser.QAStatus==1" class="badge badge-danger"> {{checkUser.QAStatus|QAStatusFilter}}</span>
+                                            <span ng-if="checkUser.QAStatus==2" class="badge badge-success">{{checkUser.QAStatus|QAStatusFilter}}</span>
+                                        </a>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group form-md-line-input">
+                                <label class="col-md-2 control-label">相关人员</label>
+                                <div class="col-md-10">
+                                    <div class="portlet-body">
+                                        <a href="javascript:;" class="icon-btn blue" ng-repeat="checkUser in model.DeployInfoOnlineDto.NoticeUser">
+                                            <div>{{checkUser.NickName}}</div>
+                                        </a>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group form-md-line-input">
+                                <label class="col-md-2 control-label">备注</label>
+                                <div class="col-md-10">
+                                    <div class="form-control-wrap">
+                                        <p readonly   class="form-control">{{model.DeployInfoOnlineDto.TaskDesc}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group form-md-line-input">
+                                <label class="col-md-2 control-label"></label>
+                                <div class="col-md-10">
+                                    <div class="form-control-wrap">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-actions right" ng-if="OnlineTestShow">
+                                <button type="button" class="btn green"  ng-click="TestPassed(2)"><i class="fa fa-check"></i> 测试通过</button>
+                                <button type="button" class="btn red"  ng-click="TestFails(2)"><i class="fa fa-times"></i> 测试不通过</button>
+                            </div>
+                        </div>
+                        <!-- END Online CONTENT-->
+                    </div>
+                </div>
+                <!--操作按钮-->
+                <div class="form-actions right">
+                    <button type="button" class="btn blue" ng-click="Deploy()" ng-if="model.CreatorId==@ViewBag.UserId && model.OnlineTaskId==null"><i class="fa fa-building-o"></i> 部署到...</button>
+                    <button type="button" class="btn default" ng-click="Cancel()">返回列表</button>
+                </div>
+                <!--操作按钮-->
+            </div>
+        </div>
+        <!-- 环境tab-->
+       
+        <!-- 任务记录-->
+        <div class="portlet box blue">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-phone"></i>任务记录
+                </div>
+            </div>
+        </div>
+            <!-- BEGIN PAGE CONTENT-->
+            <div class="timeline">
+                <!-- TIMELINE ITEM -->
+                <div class="timeline-item" ng-repeat="item in items">
+                    <div class="timeline-badge">
+                        <img ng-if="item.Stage==0" class="timeline-badge-userpic" src="~/Metronic/assets/admin/pages/media/users/TEST.jpg">
+                        <img ng-if="item.Stage==1" class="timeline-badge-userpic" src="~/Metronic/assets/admin/pages/media/users/Pre.jpg">
+                        <img ng-if="item.Stage==2" class="timeline-badge-userpic" src="~/Metronic/assets/admin/pages/media/users/Online.jpg">
+                    </div>
+                   
+                    <div class="timeline-body">
+                        <div class="timeline-body-arrow">
+                        </div>
+                        <div class="timeline-body-head">
+                            <div class="timeline-body-head-caption">
+                                <span class="timeline-body-title font-grey-cascade">{{item.CreatorName}}</span>
+                                <span class="timeline-body-time  font-grey-cascade">{{item.CreateDate| date : 'yyyy-MM-dd HH:mm:ss'}}</span>
+                            </div>
+                         
+                        </div>
+                        <div class="timeline-body-content">
+                            <p>
+                                <!--开发-->
+                                <span ng-if="item.LogType==0||item.LogType==2">
+                                    <span class="nav-link pull">
+                                        <a ng-if="item.DeployStatus==0" class="text-default"  ng-bind="(item.DeployStatus|DeployStatusFilter).Title"></a>
+                                        <a ng-if="item.DeployStatus==1" class="text-danger"  ng-click="GotoGitLabBuildPage(item.BuildId)" ng-bind="(item.DeployStatus|DeployStatusFilter).Title"></a>
+                                        <a ng-if="item.DeployStatus==2" class="text-success" ng-click="GotoGitLabBuildPage(item.BuildId)" ng-bind="(item.DeployStatus|DeployStatusFilter).Title"></a>
+                                    </span>
+                                </span>
+                                <!--测试-->
+                                <span ng-if="item.LogType==1">
+                                    <span ng-if="item.QAStatus==0" class="text-default">
+                                        {{item.QAStatus|QAStatusFilter}}
+                                    </span>
+                                    <span ng-if="item.QAStatus==1" class="text-danger">
+                                        {{item.QAStatus|QAStatusFilter}}
+                                    </span>
+                                    <span ng-if="item.QAStatus==2" class="text-success">
+                                        {{item.QAStatus|QAStatusFilter}}
+                                    </span>
+                                </span>
+                            </p>
+                            <!--Comments-->
+                            <p class="font-grey-cascade">{{item.Comments}}</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- END TIMELINE ITEM -->
+               
+            </div>
+            <!-- END   PAGE CONTENT-->
+        <!-- 任务记录-->
+    </div>
+</div>
+@section Scripts {
+    <script src="~/app/services/CommonService.js"></script>
+    <script src="~/app/services/ProjectService.js"></script>
+    <script src="~/app/services/TaskService.js"></script>
+    <script src="~/app/filters/CommonFilter.js"></script>
+    <script src="~/app/controllers/TaskDetail.js"></script>
+    <script src="~/app/modals/Deploy.js"></script>
+    <script src="~/app/modals/TestDailog.js"></script>
+    
+}
+
