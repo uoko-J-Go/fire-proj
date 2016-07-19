@@ -100,7 +100,10 @@ let backup onlineVersion =
 
 
 let ensureOnBranch branchNeeded =
-    gitCommand null (sprintf "branch -D %s"  branchNeeded)
+
+    if (getLocalBranches null |> List.exists ((=) branchNeeded)) then
+        gitCommand null (sprintf "branch -D %s"  branchNeeded)
+        
     gitCommand null (sprintf "checkout -t origin/%s"  branchNeeded)
     let branchName = getBranchName null
     if branchName <> branchNeeded then failwithf "you need do this only on [%s] branch,but now you are on [%s]" branchNeeded branchName
